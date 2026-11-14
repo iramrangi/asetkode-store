@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Live: Starter Kit Payment Gateway Midtrans &amp; Mayar — Ddev</title>
+  <style>
+    :root {
+      --bg:#f8fafc; --surface:#fff; --text:#0f172a; --muted:#64748b;
+      --border:#e2e8f0; --primary:#4f46e5; --primary-d:#4338ca; --success:#16a34a; --warning:#d97706; --danger:#dc2626;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .container { max-width:1180px; margin:0 auto; padding:0 20px; }
+    .topbar { background:#0f172a; color:#fff; padding:16px 0; }
+    .topbar-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .badge-ddev { background:var(--primary); padding:6px 11px; border-radius:8px; font-weight:800; font-size:13px; }
+    .sandbox-pill { background:rgba(34,197,94,.2); color:#86efac; padding:5px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+
+    .main-grid { display:grid; grid-template-columns:1fr 1.25fr; gap:22px; margin-top:24px; align-items:start; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px; }
+    .card h2 { font-size:17px; margin-bottom:14px; }
+    .mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .mode-card { border:2px solid var(--border); border-radius:11px; padding:12px; cursor:pointer; background:#fff; text-align:left; }
+    .mode-card.active { border-color:var(--primary); background:#eef2ff; }
+    .mode-card strong { display:block; font-size:14px; }
+    .mode-card small { color:var(--muted); font-size:12px; }
+
+    .presets { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    .preset-btn { border:1px solid var(--border); background:#f8fafc; padding:6px 11px; border-radius:8px; font-size:12px; cursor:pointer; font-weight:600; }
+    .preset-btn.active { background:#0f172a; color:#fff; border-color:#0f172a; }
+
+    .form-group { margin-bottom:12px; }
+    .form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:4px; }
+    .input { width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:14px; }
+    .btn { border:none; padding:11px 16px; border-radius:9px; font-weight:700; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+    .btn-primary { background:var(--primary); color:#fff; width:100%; }
+    .btn-primary:hover { background:var(--primary-d); }
+    .btn-success { background:var(--success); color:#fff; }
+    .btn-outline { background:#fff; border:1px solid var(--border); color:var(--text); }
+
+    .status-pill { padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; display:inline-block; }
+    .st-pending { background:#fef3c7; color:#b45309; }
+    .st-paid { background:#dcfce7; color:#15803d; }
+    .st-expired { background:#fee2e2; color:#b91c1c; }
+
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; }
+    pre { background:#0f172a; color:#a5f3fc; padding:14px; border-radius:10px; font-size:12px; overflow-x:auto; max-height:260px; }
+
+    .modal-bg { position:fixed; inset:0; background:rgba(15,23,42,.65); display:none; align-items:center; justify-content:center; z-index:50; padding:16px; }
+    .modal-bg.open { display:flex; }
+    .modal { background:#fff; border-radius:16px; max-width:430px; width:100%; padding:24px; }
+    .modal-head { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .va-box { background:#f8fafc; border:1px dashed var(--border); padding:12px; border-radius:10px; margin:12px 0; text-align:center; }
+    .footer { text-align:center; padding:28px 20px; color:var(--muted); font-size:13px; margin-top:28px; border-top:1px solid var(--border); }
+    .footer a { color:var(--primary); font-weight:600; }
+    @media (max-width:860px) { .main-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <span class="badge-ddev">Ddev</span>
+        <div>
+          <strong>Payment Gateway Sandbox Simulator</strong>
+          <small style="color:#94a3b8;display:block;font-size:12px;">Simulasi Midtrans Snap &amp; Mayar Payment Link + Webhook JSON</small>
+        </div>
+      </div>
+      <span class="sandbox-pill">SANDBOX MODE • HTTP 200 OK</span>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section class="card">
+      <h2>1. Pilih Gateway &amp; Buat Checkout</h2>
+      <div class="mode-grid">
+        <button type="button" class="mode-card active" data-gw="midtrans">
+          <strong>Midtrans Snap</strong>
+          <small>QRIS, BCA/BNI/BRI VA</small>
+        </button>
+        <button type="button" class="mode-card" data-gw="mayar">
+          <strong>Mayar Payment Link</strong>
+          <small>QRIS, GoPay, OVO, DANA</small>
+        </button>
+      </div>
+
+      <label style="font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:6px;">Pilih Paket Produk Contoh:</label>
+      <div class="presets">
+        <button type="button" class="preset-btn active" data-name="Lisensi Script Kasir PHP" data-price="99000">Script Kasir (Rp 99rb)</button>
+        <button type="button" class="preset-btn" data-name="Starter Kit SaaS Laravel" data-price="249000">Starter SaaS (Rp 249rb)</button>
+        <button type="button" class="preset-btn" data-name="Jasa Setup Server VPS" data-price="450000">Setup VPS (Rp 450rb)</button>
+      </div>
+
+      <form id="simForm">
+        <div class="form-group">
+          <label>Nama Produk</label>
+          <input type="text" id="prodName" class="input" value="Lisensi Script Kasir PHP" required>
+        </div>
+        <div class="form-group">
+          <label>Nominal Pembayaran (Rp)</label>
+          <input type="number" id="prodAmount" class="input" value="99000" min="1000" required>
+        </div>
+        <div class="form-group">
+          <label>Nama Pembeli</label>
+          <input type="text" id="custName" class="input" value="Andi Pratama" required>
+        </div>
+        <div class="form-group">
+          <label>Email Pembeli</label>
+          <input type="email" id="custEmail" class="input" value="andi@contoh.id" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="openPayModalBtn">Buat Transaksi &amp; Buka Checkout</button>
+      </form>
+    </section>
+
+    <section style="display:grid;gap:20px;">
+      <div class="card" style="overflow-x:auto;">
+        <h2>2. Status Transaksi Real-Time</h2>
+        <table>
+          <thead>
+            <tr><th>Order ID</th><th>Gateway</th><th>Produk</th><th>Nominal</th><th>Status</th><th>Aksi</th></tr>
+          </thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <h2 style="margin:0;">3. Log Webhook JSON (webhook.php)</h2>
+          <button type="button" class="btn btn-outline" style="padding:5px 10px;font-size:12px;" id="clearLogBtn">Bersihkan Log</button>
+        </div>
+        <pre id="webhookLogView">// Klik "Bayar Sukses (Webhook 200 OK)" pada modal pembayaran untuk melihat payload JSON webhook...</pre>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Checkout -->
+  <div class="modal-bg" id="checkoutModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <strong id="modalGatewayTitle">Midtrans Snap Sandbox</strong>
+          <div style="font-size:12px;color:var(--muted);" id="modalOrderId">ORD-001</div>
+        </div>
+        <span class="status-pill st-pending" id="modalStatusPill">PENDING</span>
+      </div>
+
+      <div style="margin:14px 0;text-align:center;">
+        <div style="font-size:12px;color:var(--muted);">Total Tagihan</div>
+        <div style="font-size:24px;font-weight:800;color:var(--primary);" id="modalAmount">Rp 99.000</div>
+      </div>
+
+      <div class="va-box" id="modalMethodBox"></div>
+
+      <div style="display:grid;gap:8px;margin-top:16px;">
+        <button type="button" class="btn btn-success" id="simSuccessBtn">Bayar Sukses (Webhook 200 OK)</button>
+        <button type="button" class="btn btn-outline" id="simExpireBtn">Simulasi Kedaluwarsa</button>
+        <button type="button" class="btn btn-outline" id="closeModalBtn">Tutup Modal</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Demo Starter Kit Payment Gateway PHP — Disediakan oleh <strong>Ddev</strong> (<a href="https://asetkode.blogspot.com" target="_blank" rel="noopener">https://asetkode.blogspot.com</a>)
+  </footer>
+
+  <script>
+    let currentGateway = 'midtrans';
+    let currentOrder = null;
+    let transactions = [
+      { id: 'PAY-MID-2026111401', gw: 'midtrans', prod: 'Starter Kit SaaS Laravel', amount: 249000, status: 'paid' },
+      { id: 'PAY-MYR-2026111402', gw: 'mayar', prod: 'Lisensi Script Kasir PHP', amount: 99000, status: 'pending' }
+    ];
+    let logs = [];
+    const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+
+    document.querySelectorAll('.mode-card').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.mode-card').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        currentGateway = btn.dataset.gw;
+      };
+    });
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.preset-btn').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('prodName').value = btn.dataset.name;
+        document.getElementById('prodAmount').value = btn.dataset.price;
+      };
+    });
+
+    function qrSvg() {
+      let r = '';
+      for (let y = 0; y < 9; y++) for (let x = 0; x < 9; x++) {
+        if ((x < 3 && y < 3) || (x < 3 && y > 5) || (x > 5 && y < 3) || ((x + y * 3) % 2 === 0)) {
+          r += `<rect x="${x*13}" y="${y*13}" width="11" height="11" rx="2" fill="#0f172a"/>`;
+        }
+      }
+      return `<svg width="117" height="117" viewBox="0 0 117 117" xmlns="http://www.w3.org/2000/svg">${r}</svg>`;
+    }
+
+    function openPaymentModal(tx) {
+      currentOrder = tx;
+      document.getElementById('modalGatewayTitle').textContent = tx.gw === 'midtrans' ? 'Midtrans Snap Checkout' : 'Mayar Payment Link';
+      document.getElementById('modalOrderId').textContent = tx.id;
+      document.getElementById('modalAmount').textContent = rp(tx.amount);
+      const pill = document.getElementById('modalStatusPill');
+      pill.className = 'status-pill st-' + tx.status;
+      pill.textContent = tx.status.toUpperCase();
+
+      const box = document.getElementById('modalMethodBox');
+      if (tx.gw === 'midtrans') {
+        box.innerHTML = `<div style="font-size:12px;font-weight:700;margin-bottom:6px;">BCA Virtual Account &amp; QRIS</div>
+          <div style="font-family:monospace;font-size:16px;font-weight:800;margin-bottom:8px;">8077 0812 3456 7890</div>
+          ${qrSvg()}`;
+      } else {
+        box.innerHTML = `<div style="font-size:12px;font-weight:700;margin-bottom:6px;">Mayar QRIS Instant Payment</div>
+          ${qrSvg()}
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Link: https://mayar.club/pay/${tx.id}</div>`;
+      }
+      document.getElementById('checkoutModal').classList.add('open');
+    }
+
+    function renderTx() {
+      document.getElementById('txBody').innerHTML = transactions.map((t, i) => `
+        <tr>
+          <td><strong>${t.id}</strong></td>
+          <td>${t.gw.toUpperCase()}</td>
+          <td>${t.prod}</td>
+          <td>${rp(t.amount)}</td>
+          <td><span class="status-pill st-${t.status}">${t.status.toUpperCase()}</span></td>
+          <td><button class="btn btn-outline" style="padding:4px 9px;font-size:12px;" onclick="reopenModal(${i})">Buka</button></td>
+        </tr>
+      `).join('');
+    }
+    window.reopenModal = (idx) => openPaymentModal(transactions[idx]);
+
+    function appendWebhookLog(tx, statusType) {
+      const payload = tx.gw === 'midtrans'
+        ? {
+            transaction_time: new Date().toISOString(),
+            transaction_status: statusType === 'paid' ? 'settlement' : 'expire',
+            status_code: '200',
+            signature_key: 'sha512_verified_' + Math.random().toString(36).slice(2, 10),
+            payment_type: 'qris',
+            order_id: tx.id,
+            gross_amount: tx.amount + '.00',
+            fraud_status: 'accept'
+          }
+        : {
+            event: statusType === 'paid' ? 'payment.received' : 'payment.expired',
+            data: {
+              id: 'myr_' + Math.random().toString(36).slice(2, 10),
+              status: statusType === 'paid' ? 'SUCCESS' : 'EXPIRED',
+              amount: tx.amount,
+              description: `${tx.prod} [${tx.id}]`,
+              paidAt: new Date().toISOString()
+            }
+          };
+
+      logs.unshift(`// [POST /webhook.php?gateway=${tx.gw}] -> HTTP 200 OK\n` + JSON.stringify(payload, null, 2));
+      document.getElementById('webhookLogView').textContent = logs.join('\n\n');
+    }
+
+    document.getElementById('simForm').onsubmit = (e) => {
+      e.preventDefault();
+      const prefix = currentGateway === 'midtrans' ? 'PAY-MID-' : 'PAY-MYR-';
+      const tx = {
+        id: prefix + Math.floor(100000 + Math.random() * 900000),
+        gw: currentGateway,
+        prod: document.getElementById('prodName').value,
+        amount: Number(document.getElementById('prodAmount').value),
+        status: 'pending'
+      };
+      transactions.unshift(tx);
+      renderTx();
+      openPaymentModal(tx);
+    };
+
+    document.getElementById('simSuccessBtn').onclick = () => {
+      if (!currentOrder) return;
+      currentOrder.status = 'paid';
+      document.getElementById('modalStatusPill').className = 'status-pill st-paid';
+      document.getElementById('modalStatusPill').textContent = 'PAID (200 OK)';
+      appendWebhookLog(currentOrder, 'paid');
+      renderTx();
+    };
+
+    document.getElementById('simExpireBtn').onclick = () => {
+      if (!currentOrder) return;
+      currentOrder.status = 'expired';
+      document.getElementById('modalStatusPill').className = 'status-pill st-expired';
+      document.getElementById('modalStatusPill').textContent = 'EXPIRED';
+      appendWebhookLog(currentOrder, 'expired');
+      renderTx();
+    };
+
+    document.getElementById('closeModalBtn').onclick = () => document.getElementById('checkoutModal').classList.remove('open');
+    document.getElementById('clearLogBtn').onclick = () => {
+      logs = [];
+      document.getElementById('webhookLogView').textContent = '// Log dibersihkan.';
+    };
+
+    renderTx();
+  </script>
+</body>
+</html>

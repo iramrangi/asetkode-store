@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Analitik — Ddev Admin UI Kit</title>
+  <script>
+    (function(){try{var t=localStorage.getItem('ddev_admin_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+  </script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Navigasi Utama">
+      <div class="sidebar-brand">
+        <div class="brand-logo">D</div>
+        <div class="brand-text">
+          <span class="brand-name">Ddev Admin</span>
+          <span class="brand-sub">Analytics UI Kit</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Menu Utama</div>
+        <a href="index.html" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span>Dashboard Analitik</span>
+        </a>
+        <a href="tables.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+          <span>Tabel Data CRUD</span>
+        </a>
+        <a href="forms.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <span>Komponen Form</span>
+        </a>
+
+        <div class="nav-section-label">Operasional</div>
+        <a href="invoice.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Faktur / Invoice</span>
+        </a>
+        <a href="auth.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span>Halaman Login / Daftar</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="auth.html" class="sidebar-user">
+          <div class="avatar">AD</div>
+          <div class="sidebar-user-info">
+            <div style="font-weight:600;font-size:13px">Admin Ddev</div>
+            <div style="font-size:11px;color:var(--text-muted)">Super Administrator</div>
+          </div>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main-wrap">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn" id="sidebarToggle" title="Buka/Tutup Sidebar" aria-label="Buka atau tutup sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="topbar-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" placeholder="Cari laporan, pelanggan, atau faktur..." aria-label="Pencarian cepat">
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" data-theme-toggle aria-label="Ganti Tema"></button>
+          <button class="icon-btn" id="notifBtn" aria-label="Notifikasi" title="Notifikasi">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-dot" id="notifDot"></span>
+          </button>
+          <a href="invoice.html" class="btn btn-primary btn-sm">Buat Invoice</a>
+
+          <div class="notif-popover" id="notifPopover">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <strong>Notifikasi Terbaru</strong>
+              <button class="btn btn-ghost btn-sm" id="markReadBtn">Tandai dibaca</button>
+            </div>
+            <div class="notif-item">
+              <div style="font-weight:600;font-size:13px">Pembayaran Masuk #TRX-2601</div>
+              <div style="font-size:12px;color:var(--text-muted)">Raka Pratama melunasi Paket Enterprise.</div>
+            </div>
+            <div class="notif-item">
+              <div style="font-weight:600;font-size:13px">Laporan Bulanan Siap</div>
+              <div style="font-size:12px;color:var(--text-muted)">Ringkasan pendapatan November tersedia.</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Ringkasan Analitik Bisnis</h1>
+            <p class="page-subtitle">Pantau performa pendapatan, transaksi aktif, dan pertumbuhan pelanggan secara real-time.</p>
+          </div>
+          <div class="header-actions">
+            <a href="tables.html" class="btn btn-outline">Kelola Data</a>
+            <a href="forms.html" class="btn btn-primary">+ Tambah Pengaturan</a>
+          </div>
+        </div>
+
+        <!-- KPI Grid -->
+        <section class="kpi-grid" aria-label="Statistik Utama">
+          <article class="kpi-card">
+            <div class="kpi-top">
+              <span>Total Pendapatan</span>
+              <span class="kpi-icon primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </span>
+            </div>
+            <div class="kpi-value" id="kpiRevenue">Rp 77.780.000</div>
+            <div class="kpi-trend"><span class="trend-up">+16,4%</span> dibanding bulan lalu</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-top">
+              <span>Total Transaksi</span>
+              <span class="kpi-icon success">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </span>
+            </div>
+            <div class="kpi-value" id="kpiOrders">1.294</div>
+            <div class="kpi-trend"><span class="trend-up">+9,2%</span> konversi minggu ini</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-top">
+              <span>Pelanggan Aktif</span>
+              <span class="kpi-icon info">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
+            </div>
+            <div class="kpi-value">842</div>
+            <div class="kpi-trend"><span class="trend-up">+48 akun</span> baru bergabung</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-top">
+              <span>Tagihan Tertunda</span>
+              <span class="kpi-icon warning">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </span>
+            </div>
+            <div class="kpi-value">Rp 1.240.000</div>
+            <div class="kpi-trend"><span class="trend-down">-4,1%</span> lebih cepat dilunasi</div>
+          </article>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="charts-grid">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Tren Pendapatan &amp; Operasional</h2>
+                <div style="font-size:12px;color:var(--text-muted)">Arahkan kursor ke titik grafik untuk melihat detail bulanan</div>
+              </div>
+              <select id="chartPeriod" class="select" style="width:auto;min-width:130px" aria-label="Pilih rentang bulan">
+                <option value="6">6 Bulan Terakhir</option>
+                <option value="12">12 Bulan Terakhir</option>
+              </select>
+            </div>
+            <div class="chart-box" id="lineChartBox"></div>
+            <div style="display:flex;gap:18px;margin-top:10px;font-size:12px;color:var(--text-muted)">
+              <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:var(--primary)"></span>Pendapatan Kotor</span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#10b981"></span>Biaya Operasional</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Distribusi Paket</h2>
+              <span class="badge badge-primary">Live</span>
+            </div>
+            <div class="donut-layout">
+              <div id="donutChartBox"></div>
+              <div class="donut-legend" id="donutLegend"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Second Row: Weekly Bar + Recent Transactions -->
+        <section class="charts-grid" style="grid-template-columns:1fr 1.6fr">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Transaksi Mingguan</h2>
+              <span class="badge badge-success">+12,8%</span>
+            </div>
+            <div class="chart-box" id="barChartBox"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Transaksi Terbaru</h2>
+              <a href="tables.html" class="btn btn-outline btn-sm">Lihat Semua</a>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" style="min-width:520px">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Pelanggan</th>
+                    <th>Paket</th>
+                    <th>Nominal</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentTransactionsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer-note">
+        Dikembangkan oleh <strong>Ddev</strong> &bull; <a href="https://asetkode.blogspot.com" target="_blank" rel="noopener" style="color:var(--primary)">https://asetkode.blogspot.com</a>
+      </footer>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Live: Mini POS Kasir PHP &amp; Struk 58mm — Ddev</title>
+  <style>
+    :root {
+      --bg:#f1f5f9; --surface:#fff; --text:#0f172a; --muted:#64748b;
+      --border:#cbd5e1; --primary:#2563eb; --primary-d:#1d4ed8; --success:#16a34a; --warning:#f59e0b; --danger:#dc2626;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.45; }
+    .topbar { background:#0f172a; color:#fff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .logo { background:var(--primary); padding:6px 10px; border-radius:8px; font-weight:800; font-size:12px; }
+    .nav-tabs { display:flex; gap:8px; }
+    .nav-btn { border:1px solid #334155; background:transparent; color:#cbd5e1; padding:7px 14px; border-radius:8px; cursor:pointer; font-weight:600; font-size:13px; }
+    .nav-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    .container { max-width:1240px; margin:0 auto; padding:20px; }
+    .panel { display:none; }
+    .panel.active { display:block; }
+
+    .pos-grid { display:grid; grid-template-columns:1.35fr 1fr; gap:20px; align-items:start; }
+    .card { background:var(--surface); border:1px solid #e2e8f0; border-radius:12px; padding:16px; box-shadow:0 2px 6px rgba(15,23,42,.04); }
+    .search-row { display:grid; grid-template-columns:1.6fr 1fr; gap:10px; margin-bottom:14px; }
+    .input { width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:13px; }
+    .prod-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(175px, 1fr)); gap:12px; }
+    .prod-item { border:1px solid #e2e8f0; border-radius:10px; padding:12px; background:#fff; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; gap:8px; transition:all .14s; }
+    .prod-item:hover { border-color:var(--primary); transform:translateY(-2px); box-shadow:0 6px 14px rgba(37,99,235,.08); }
+    .prod-item.empty { opacity:.5; cursor:not-allowed; }
+    .cat-badge { font-size:10px; font-weight:700; color:var(--primary); background:#eff6ff; padding:2px 7px; border-radius:999px; display:inline-block; align-self:flex-start; }
+    .prod-name { font-size:13px; font-weight:700; }
+    .prod-code { font-size:11px; color:var(--muted); }
+    .prod-foot { display:flex; justify-content:space-between; align-items:center; border-top:1px solid #f1f5f9; padding-top:8px; }
+    .prod-price { font-weight:800; color:var(--primary); font-size:14px; }
+    .stock-tag { font-size:11px; padding:2px 6px; border-radius:6px; background:#f1f5f9; color:#334155; font-weight:600; }
+    .stock-tag.low { background:#fef3c7; color:#b45309; }
+
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:9px 6px; border-bottom:1px solid #e2e8f0; text-align:left; }
+    .qty-box { display:inline-flex; align-items:center; gap:5px; }
+    .qty-box button { width:24px; height:24px; border:1px solid var(--border); background:#fff; border-radius:6px; cursor:pointer; font-weight:700; }
+
+    .summary-box { background:#f8fafc; padding:12px; border-radius:10px; margin:12px 0; display:grid; gap:6px; }
+    .s-row { display:flex; justify-content:space-between; font-size:13px; }
+    .s-total { font-size:18px; font-weight:800; color:var(--primary); border-top:1px dashed var(--border); padding-top:8px; }
+    .quick-cash { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 12px; }
+    .chip-btn { border:1px solid var(--border); background:#fff; padding:5px 10px; border-radius:7px; font-size:12px; cursor:pointer; font-weight:600; }
+    .change-box { display:flex; justify-content:space-between; align-items:center; background:#dcfce7; color:#166534; padding:10px 14px; border-radius:9px; font-weight:700; margin-bottom:12px; }
+    .btn { border:none; padding:11px 16px; border-radius:9px; font-weight:700; font-size:14px; cursor:pointer; }
+    .btn-primary { background:var(--primary); color:#fff; width:100%; }
+    .btn-primary:hover { background:var(--primary-d); }
+    .btn-outline { background:#fff; border:1px solid var(--border); color:var(--text); }
+
+    /* Modal Struk 58mm */
+    .modal-bg { position:fixed; inset:0; background:rgba(15,23,42,.65); display:none; align-items:center; justify-content:center; z-index:50; padding:16px; }
+    .modal-bg.open { display:flex; }
+    .receipt-modal { background:#fff; border-radius:14px; padding:20px; max-width:340px; width:100%; }
+    .thermal-paper { font-family:'Courier New',monospace; font-size:12px; border:1px dashed #94a3b8; padding:12px; background:#fff; margin-bottom:14px; }
+    .t-line { border-top:1px dashed #000; margin:6px 0; }
+    .t-row { display:flex; justify-content:space-between; }
+
+    /* Laporan */
+    .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:14px; margin-bottom:18px; }
+    .kpi { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; }
+    .kpi small { color:var(--muted); font-size:12px; }
+    .kpi strong { display:block; font-size:22px; margin-top:4px; }
+    .footer { text-align:center; padding:24px; color:var(--muted); font-size:13px; }
+    .footer a { color:var(--primary); font-weight:600; }
+    @media (max-width:880px) { .pos-grid, .search-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">Ddev</span>
+      <div>
+        <strong>Toko Ddev Mart — Mini POS PHP</strong>
+        <small style="color:#94a3b8;display:block;font-size:12px;">Demo Kasir Cepat, Potong Stok Otomatis &amp; Struk Thermal 58mm</small>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-btn active" data-tab="pos">Layar Kasir</button>
+      <button class="nav-btn" data-tab="report">Ringkasan Omzet Harian</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="tab-pos" class="panel active">
+      <div class="pos-grid">
+        <div class="card">
+          <div class="search-row">
+            <input type="text" id="searchBox" class="input" placeholder="Scan barcode / cari barang (contoh: Beras, 8991001004)...">
+            <select id="catBox" class="input">
+              <option value="">Semua Kategori</option>
+              <option value="Sembako">Sembako</option>
+              <option value="Makanan">Makanan</option>
+              <option value="Minuman">Minuman</option>
+              <option value="Kebutuhan Rumah">Kebutuhan Rumah</option>
+            </select>
+          </div>
+          <div class="prod-grid" id="prodGrid"></div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <h3 style="font-size:16px;">Keranjang Transaksi</h3>
+            <button class="chip-btn" style="color:var(--danger);" onclick="clearCart()">Reset</button>
+          </div>
+          <div style="max-height:240px;overflow-y:auto;">
+            <table>
+              <thead><tr><th>Barang</th><th>Qty</th><th style="text-align:right;">Subtotal</th><th></th></tr></thead>
+              <tbody id="cartBody"></tbody>
+            </table>
+          </div>
+
+          <div class="summary-box">
+            <div class="s-row"><span>Subtotal</span><strong id="lblSub">Rp 0</strong></div>
+            <div class="s-row" style="align-items:center;">
+              <span>Diskon (Rp)</span>
+              <input type="number" id="discInput" class="input" style="width:120px;padding:4px 8px;text-align:right;" value="0" min="0" oninput="calcTotals()">
+            </div>
+            <div class="s-row s-total"><span>TOTAL BAYAR</span><span id="lblTotal">Rp 0</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+            <div>
+              <label style="font-size:12px;font-weight:700;">Metode Bayar</label>
+              <select id="payMethod" class="input" onchange="calcTotals()">
+                <option value="Tunai">Tunai</option>
+                <option value="QRIS">QRIS</option>
+                <option value="Transfer">Transfer</option>
+              </select>
+            </div>
+            <div id="cashInputWrap">
+              <label style="font-size:12px;font-weight:700;">Uang Diterima</label>
+              <input type="number" id="cashInput" class="input" value="0" min="0" oninput="calcTotals()">
+            </div>
+          </div>
+
+          <div class="quick-cash" id="quickCashRow">
+            <button class="chip-btn" onclick="setExactCash()">Uang Pas</button>
+            <button class="chip-btn" onclick="setCash(20000)">20rb</button>
+            <button class="chip-btn" onclick="setCash(50000)">50rb</button>
+            <button class="chip-btn" onclick="setCash(100000)">100rb</button>
+          </div>
+
+          <div class="change-box">
+            <span>Kembalian</span>
+            <strong id="lblChange" style="font-size:18px;">Rp 0</strong>
+          </div>
+
+          <button class="btn btn-primary" onclick="checkoutPos()">Bayar &amp; Pratinjau Struk 58mm</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-report" class="panel">
+      <div class="kpi-grid">
+        <div class="kpi"><small>Omzet Hari Ini</small><strong id="repRevenue">Rp 0</strong></div>
+        <div class="kpi"><small>Total Transaksi</small><strong id="repCount">0 Struk</strong></div>
+        <div class="kpi"><small>Estimasi Laba Kotor</small><strong id="repProfit" style="color:var(--success);">Rp 0</strong></div>
+      </div>
+      <div class="card" style="overflow-x:auto;">
+        <h3 style="margin-bottom:12px;">Riwayat Transaksi Hari Ini</h3>
+        <table>
+          <thead><tr><th>No. Invoice</th><th>Metode</th><th>Item</th><th>Total</th><th>Kembalian</th><th>Struk</th></tr></thead>
+          <tbody id="repBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Struk Thermal 58mm -->
+  <div class="modal-bg" id="receiptModal">
+    <div class="receipt-modal">
+      <div class="thermal-paper" id="receiptPaper"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="btn btn-primary" onclick="window.print()">Cetak</button>
+        <button class="btn btn-outline" onclick="document.getElementById('receiptModal').classList.remove('open')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Demo Interaktif Mini POS PHP PDO — Disediakan oleh <strong>Ddev</strong> (<a href="https://asetkode.blogspot.com" target="_blank" rel="noopener">https://asetkode.blogspot.com</a>)
+  </footer>
+
+  <script>
+    const INVENTORY = [
+      { id:1, code:'8991001001', name:'Beras Pandan Wangi 5kg', cat:'Sembako', buy:64000, price:74000, stock:24, unit:'sak' },
+      { id:2, code:'8991001002', name:'Minyak Goreng 2 Liter', cat:'Sembako', buy:31000, price:36500, stock:32, unit:'pouch' },
+      { id:3, code:'8991001003', name:'Gula Pasir 1kg', cat:'Sembako', buy:14500, price:17500, stock:40, unit:'bks' },
+      { id:4, code:'8991001004', name:'Indomie Goreng Original', cat:'Makanan', buy:2600, price:3500, stock:120, unit:'bks' },
+      { id:5, code:'8991001005', name:'Telur Ayam 1kg', cat:'Sembako', buy:25000, price:29000, stock:18, unit:'kg' },
+      { id:6, code:'8991001006', name:'Kopi Kapal Api Mix (10s)', cat:'Minuman', buy:13500, price:16500, stock:28, unit:'rcg' },
+      { id:7, code:'8991001007', name:'Air Mineral 600ml', cat:'Minuman', buy:2500, price:4000, stock:72, unit:'btl' },
+      { id:8, code:'8991001008', name:'Teh Pucuk Harum 350ml', cat:'Minuman', buy:2800, price:4500, stock:48, unit:'btl' },
+      { id:9, code:'8991001009', name:'Roti Tawar Kupas 350gr', cat:'Makanan', buy:12000, price:15500, stock:14, unit:'bks' },
+      { id:10, code:'8991001010', name:'Sabun Cair Lifebuoy 400ml', cat:'Kebutuhan Rumah', buy:18000, price:23500, stock:9, unit:'pouch' }
+    ];
+
+    let cart = [];
+    let transactions = [
+      {
+        inv: 'TRX-20261114-0001', method: 'Tunai',
+        items: [{ name:'Beras Pandan Wangi 5kg', price:74000, buy:64000, qty:1 }, { name:'Minyak Goreng 2 Liter', price:36500, buy:31000, qty:1 }],
+        subtotal: 110500, disc: 0, total: 110500, cash: 120000, change: 9500, time: '09:15:20'
+      },
+      {
+        inv: 'TRX-20261114-0002', method: 'QRIS',
+        items: [{ name:'Indomie Goreng Original', price:3500, buy:2600, qty:6 }, { name:'Air Mineral 600ml', price:4000, buy:2500, qty:8 }],
+        subtotal: 53000, disc: 0, total: 53000, cash: 53000, change: 0, time: '10:42:05'
+      }
+    ];
+
+    const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+
+    function renderInventory() {
+      const q = document.getElementById('searchBox').value.trim().toLowerCase();
+      const cat = document.getElementById('catBox').value;
+      const list = INVENTORY.filter(p =>
+        (!q || p.name.toLowerCase().includes(q) || p.code.includes(q)) &&
+        (!cat || p.cat === cat)
+      );
+      document.getElementById('prodGrid').innerHTML = list.map(p => `
+        <div class="prod-item ${p.stock <= 0 ? 'empty' : ''}" onclick="addToCart(${p.id})">
+          <div>
+            <span class="cat-badge">${p.cat}</span>
+            <div class="prod-name" style="margin-top:4px;">${p.name}</div>
+            <div class="prod-code">${p.code}</div>
+          </div>
+          <div class="prod-foot">
+            <span class="prod-price">${rp(p.price)}</span>
+            <span class="stock-tag ${p.stock <= 10 ? 'low' : ''}">Stok: ${p.stock}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.addToCart = (id) => {
+      const p = INVENTORY.find(x => x.id === id);
+      if (!p || p.stock <= 0) return alert('Stok habis!');
+      const ex = cart.find(c => c.id === id);
+      if (ex) {
+        if (ex.qty >= p.stock) return alert('Stok tersisa ' + p.stock);
+        ex.qty++;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, buy: p.buy, qty: 1 });
+      }
+      renderCart();
+    };
+
+    window.chgQty = (id, delta) => {
+      const p = INVENTORY.find(x => x.id === id);
+      const c = cart.find(x => x.id === id);
+      if (!c) return;
+      c.qty += delta;
+      if (c.qty <= 0) cart = cart.filter(x => x.id !== id);
+      else if (c.qty > p.stock) c.qty = p.stock;
+      renderCart();
+    };
+
+    window.clearCart = () => {
+      cart = [];
+      document.getElementById('discInput').value = 0;
+      document.getElementById('cashInput').value = 0;
+      renderCart();
+    };
+
+    function getTotals() {
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const disc = Math.min(subtotal, Math.max(0, Number(document.getElementById('discInput').value || 0)));
+      const total = Math.max(0, subtotal - disc);
+      const method = document.getElementById('payMethod').value;
+      const cash = method === 'Tunai' ? Number(document.getElementById('cashInput').value || 0) : total;
+      const change = Math.max(0, cash - total);
+      return { subtotal, disc, total, cash, change, method };
+    }
+
+    window.calcTotals = () => {
+      const t = getTotals();
+      const isTunai = t.method === 'Tunai';
+      document.getElementById('cashInputWrap').style.display = isTunai ? '' : 'none';
+      document.getElementById('quickCashRow').style.display = isTunai ? 'flex' : 'none';
+      document.getElementById('lblSub').textContent = rp(t.subtotal);
+      document.getElementById('lblTotal').textContent = rp(t.total);
+      document.getElementById('lblChange').textContent = rp(t.change);
+    };
+
+    window.setExactCash = () => { document.getElementById('cashInput').value = getTotals().total; calcTotals(); };
+    window.setCash = (v) => { document.getElementById('cashInput').value = v; calcTotals(); };
+
+    function renderCart() {
+      const tbody = document.getElementById('cartBody');
+      if (!cart.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px;">Belum ada barang dipilih</td></tr>';
+      } else {
+        tbody.innerHTML = cart.map(c => `
+          <tr>
+            <td><strong style="font-size:12px;">${c.name}</strong><br><small style="color:var(--muted);">${rp(c.price)}</small></td>
+            <td><div class="qty-box"><button onclick="chgQty(${c.id},-1)">-</button><span>${c.qty}</span><button onclick="chgQty(${c.id},1)">+</button></div></td>
+            <td style="text-align:right;font-weight:700;">${rp(c.price * c.qty)}</td>
+            <td style="text-align:right;"><button style="border:none;background:none;color:var(--danger);cursor:pointer;font-weight:700;" onclick="chgQty(${c.id},-999)">&times;</button></td>
+          </tr>
+        `).join('');
+      }
+      calcTotals();
+    }
+
+    function showReceipt(tx) {
+      document.getElementById('receiptPaper').innerHTML = `
+        <div style="text-align:center;">
+          <strong>TOKO DDEV MART</strong><br>
+          Jl. Merdeka Raya No. 24, Bandung<br>
+          Telp: 0812-3456-7890
+        </div>
+        <div class="t-line"></div>
+        <div>No : ${tx.inv}</div>
+        <div>Jam: ${tx.time} | ${tx.method}</div>
+        <div class="t-line"></div>
+        ${tx.items.map(i => `
+          <div>${i.name}</div>
+          <div class="t-row"><span>${i.qty} x ${i.price.toLocaleString('id-ID')}</span><span>${(i.qty * i.price).toLocaleString('id-ID')}</span></div>
+        `).join('')}
+        <div class="t-line"></div>
+        <div class="t-row"><span>Subtotal</span><span>${rp(tx.subtotal)}</span></div>
+        ${tx.disc > 0 ? `<div class="t-row"><span>Diskon</span><span>-${rp(tx.disc)}</span></div>` : ''}
+        <div class="t-row"><strong>TOTAL</strong><strong>${rp(tx.total)}</strong></div>
+        <div class="t-row"><span>Bayar</span><span>${rp(tx.cash)}</span></div>
+        <div class="t-row"><span>Kembali</span><span>${rp(tx.change)}</span></div>
+        <div class="t-line"></div>
+        <div style="text-align:center;">Terima kasih telah berbelanja!<br>Powered by Ddev</div>
+      `;
+      document.getElementById('receiptModal').classList.add('open');
+    }
+    window.reopenReceipt = (idx) => showReceipt(transactions[idx]);
+
+    window.checkoutPos = () => {
+      if (!cart.length) return alert('Tambahkan barang ke keranjang terlebih dahulu.');
+      const t = getTotals();
+      if (t.method === 'Tunai' && t.cash < t.total) return alert('Uang bayar masih kurang!');
+
+      // Kurangi stok otomatis
+      cart.forEach(c => {
+        const prod = INVENTORY.find(x => x.id === c.id);
+        if (prod) prod.stock = Math.max(0, prod.stock - c.qty);
+      });
+
+      const tx = {
+        inv: 'TRX-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(transactions.length + 1).padStart(4, '0'),
+        method: t.method,
+        items: cart.map(c => ({ ...c })),
+        subtotal: t.subtotal, disc: t.disc, total: t.total, cash: t.cash, change: t.change,
+        time: new Date().toLocaleTimeString('id-ID')
+      };
+      transactions.unshift(tx);
+      clearCart();
+      renderInventory();
+      renderReport();
+      showReceipt(tx);
+    };
+
+    function renderReport() {
+      const rev = transactions.reduce((s, t) => s + t.total, 0);
+      const profit = transactions.reduce((s, t) => s + t.items.reduce((a, i) => a + (i.price - i.buy) * i.qty, 0) - t.disc, 0);
+      document.getElementById('repRevenue').textContent = rp(rev);
+      document.getElementById('repCount').textContent = transactions.length + ' Struk';
+      document.getElementById('repProfit').textContent = rp(Math.max(0, profit));
+
+      document.getElementById('repBody').innerHTML = transactions.map((t, i) => `
+        <tr>
+          <td><strong>${t.inv}</strong><br><small style="color:var(--muted);">${t.time}</small></td>
+          <td>${t.method}</td>
+          <td>${t.items.map(x => `${x.name} (${x.qty})`).join(', ')}</td>
+          <td><strong>${rp(t.total)}</strong></td>
+          <td>${rp(t.change)}</td>
+          <td><button class="chip-btn" onclick="reopenReceipt(${i})">Lihat Struk</button></td>
+        </tr>
+      `).join('');
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'report') renderReport();
+      };
+    });
+    document.getElementById('searchBox').oninput = renderInventory;
+    document.getElementById('catBox').onchange = renderInventory;
+
+    renderInventory();
+    renderCart();
+    renderReport();
+  </script>
+</body>
+</html>

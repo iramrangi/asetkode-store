@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d9488">
+  <title>Ddev Kalkulator Finansial &amp; Catatan Keuangan</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    (function(){try{var t=localStorage.getItem('ddev_fin_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">Rp</div>
+        <div>
+          <div class="brand-title">Ddev Kalkulator Finansial</div>
+          <div class="brand-sub">Catat Arus Kas, Anggaran &amp; Target Tabungan</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <input type="month" id="monthFilter" class="input" style="width:auto;height:36px" aria-label="Filter bulan">
+        <button class="btn btn-wa btn-sm" id="waShareBtn" title="Bagikan ringkasan ke WhatsApp">Bagikan WhatsApp</button>
+        <button class="btn btn-outline btn-sm" id="exportCsvBtn">Ekspor CSV</button>
+        <button class="btn btn-outline btn-sm" id="resetDemoBtn">Reset Demo</button>
+        <button class="icon-btn" id="themeToggleBtn" aria-label="Ganti Tema"></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- KPI Ringkasan -->
+    <section class="kpi-grid" aria-label="Ringkasan Keuangan">
+      <article class="kpi-card">
+        <div class="kpi-label"><span>Total Pemasukan</span><span>&#8593;</span></div>
+        <div class="kpi-value income" id="kpiIncome">Rp 0</div>
+        <div class="kpi-note">Seluruh dana masuk bulan terpilih</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label"><span>Total Pengeluaran</span><span>&#8595;</span></div>
+        <div class="kpi-value expense" id="kpiExpense">Rp 0</div>
+        <div class="kpi-note">Termasuk tabungan &amp; tagihan</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label"><span>Saldo Bersih</span><span>=</span></div>
+        <div class="kpi-value primary" id="kpiNet">Rp 0</div>
+        <div class="kpi-note" id="kpiNetNote">Arus kas bulan ini</div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label"><span>Rasio Tabungan</span><span>%</span></div>
+        <div class="kpi-value" id="kpiRatio">0%</div>
+        <div class="kpi-note">Idealnya minimal 20% dari pemasukan</div>
+      </article>
+    </section>
+
+    <div class="main-grid">
+      <!-- Kolom Kiri: Form Tambah + Kalkulator Target Tabungan -->
+      <div class="stack">
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Catat Transaksi Baru</h2>
+          </div>
+          <div class="type-switch">
+            <button type="button" class="type-btn active expense" data-tx-type="expense">Pengeluaran</button>
+            <button type="button" class="type-btn income" data-tx-type="income">Pemasukan</button>
+          </div>
+          <form id="txForm">
+            <div class="form-grid">
+              <div class="field full">
+                <label for="txTitle">Keterangan</label>
+                <input type="text" id="txTitle" class="input" placeholder="Contoh: Makan siang / Gaji bulanan" required>
+              </div>
+              <div class="field">
+                <label for="txAmount">Nominal (Rp)</label>
+                <input type="number" id="txAmount" class="input" min="100" step="500" placeholder="50000" required>
+              </div>
+              <div class="field">
+                <label for="txDate">Tanggal</label>
+                <input type="date" id="txDate" class="input" required>
+              </div>
+              <div class="field full">
+                <label for="txCategory">Kategori</label>
+                <select id="txCategory" class="select"></select>
+              </div>
+              <div class="field full" style="margin-top:4px">
+                <button type="submit" class="btn btn-primary" style="width:100%">+ Simpan Transaksi</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Kalkulator Target Tabungan</h2>
+          </div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="goalTarget">Target Dana (Rp)</label>
+              <input type="number" id="goalTarget" class="input" value="30000000" min="0" step="500000">
+            </div>
+            <div class="field">
+              <label for="goalInitial">Saldo Awal (Rp)</label>
+              <input type="number" id="goalInitial" class="input" value="6000000" min="0" step="250000">
+            </div>
+            <div class="field">
+              <label for="goalMonthly">Setoran / Bulan (Rp)</label>
+              <input type="number" id="goalMonthly" class="input" value="1500000" min="0" step="100000">
+            </div>
+            <div class="field full">
+              <label for="goalRate">Estimasi Imbal Hasil (% per tahun)</label>
+              <input type="number" id="goalRate" class="input" value="5" min="0" max="50" step="0.5">
+            </div>
+          </div>
+          <div class="goal-result" id="goalResultBox"></div>
+        </section>
+      </div>
+
+      <!-- Kolom Kanan: Grafik Donut + Budget Bars + Buku Kas -->
+      <div class="stack">
+        <section class="analytics-grid">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Rincian Pengeluaran</h2>
+            </div>
+            <div class="donut-wrap">
+              <div id="expenseDonutBox"></div>
+              <div class="legend-list" id="expenseDonutLegend"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Batas Anggaran Kategori</h2>
+              <button class="btn btn-outline btn-sm" id="openBudgetModalBtn">Atur Batas</button>
+            </div>
+            <div class="budget-list" id="budgetBarsBox"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 class="card-title">Riwayat Buku Kas (Ledger)</h2>
+          </div>
+          <div class="filter-bar">
+            <input type="search" id="searchFilter" class="input" style="flex:1;min-width:170px" placeholder="Cari keterangan atau kategori...">
+            <select id="typeFilter" class="select" style="width:auto;min-width:150px" aria-label="Filter tipe transaksi">
+              <option value="all">Semua Tipe</option>
+              <option value="income">Pemasukan</option>
+              <option value="expense">Pengeluaran</option>
+            </select>
+          </div>
+          <div class="ledger-list" id="ledgerList"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-note">
+    Dikembangkan oleh <strong>Ddev</strong> &bull; <a href="https://asetkode.blogspot.com" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none">https://asetkode.blogspot.com</a>
+  </footer>
+
+  <!-- Modal Pengaturan Anggaran -->
+  <div class="modal-backdrop" id="budgetModal" role="dialog" aria-modal="true" aria-labelledby="budgetModalTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <strong id="budgetModalTitle">Atur Batas Anggaran Bulanan</strong>
+        <button class="icon-btn" data-close-budget aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body" id="budgetInputsBox"></div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-outline" data-close-budget>Batal</button>
+        <button type="button" class="btn btn-primary" id="saveBudgetBtn">Simpan Anggaran</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

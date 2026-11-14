@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk &amp; Daftar — Ddev Admin UI Kit</title>
+  <script>
+    (function(){try{var t=localStorage.getItem('ddev_admin_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+  </script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="auth-page">
+    <section class="auth-hero">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="brand-logo" style="background:rgba(255,255,255,0.2)">D</div>
+        <div>
+          <div style="font-weight:700;font-size:17px">Ddev Admin UI Kit</div>
+          <div style="font-size:12px;opacity:0.8">https://asetkode.blogspot.com</div>
+        </div>
+      </div>
+
+      <div>
+        <h1 style="font-size:32px;line-height:1.25;margin:0 0 14px">Kelola Bisnis, Analitik, dan Faktur dalam Satu Panel Terpadu.</h1>
+        <p style="font-size:15px;opacity:0.9;margin:0">Template dashboard responsif berbahasa Indonesia lengkap dengan grafik SVG interaktif, tabel CRUD, mode gelap otomatis, dan halaman cetak invoice siap pakai.</p>
+      </div>
+
+      <div style="font-size:13px;opacity:0.8">&copy; 2026 Ddev Digital Studio &bull; Offline-First HTML/CSS/JS</div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+          <div>
+            <h2 style="margin:0;font-size:20px">Selamat Datang</h2>
+            <p style="margin:2px 0 0;font-size:13px;color:var(--text-muted)">Masuk atau buat akun administrator demo</p>
+          </div>
+          <button class="icon-btn" data-theme-toggle aria-label="Ganti Tema"></button>
+        </div>
+
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" data-auth-tab="login">Masuk</button>
+          <button type="button" class="auth-tab" data-auth-tab="register">Daftar</button>
+        </div>
+
+        <form id="authForm">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="form-group" id="registerNameGroup" style="display:none">
+              <label class="form-label" for="authName">Nama Lengkap</label>
+              <input type="text" id="authName" class="input" placeholder="Masukkan nama lengkap">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="authEmail">Email Administrator</label>
+              <input type="email" id="authEmail" class="input" value="admin@ddev-app.id" required>
+            </div>
+
+            <div class="form-group">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <label class="form-label" for="authPassword">Kata Sandi</label>
+                <button type="button" class="btn btn-ghost btn-sm" id="togglePassBtn" style="height:auto;padding:2px 6px">Lihat</button>
+              </div>
+              <input type="password" id="authPassword" class="input" value="rahasia123" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="authSubmitBtn" style="width:100%;height:42px">Masuk ke Dashboard</button>
+            <a href="index.html" class="btn btn-outline" style="width:100%">Kembali ke Dashboard</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

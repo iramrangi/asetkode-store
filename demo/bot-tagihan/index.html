@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Demo — Bot Pengingat Tagihan Sheets & Telegram | Ddev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-2: #1e293b;
+      --border: #283548;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --blue: #38bdf8;
+      --tg-bg: #0e1621;
+      --tg-header: #17212b;
+      --tg-bubble: #182533;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .topbar {
+      background: rgba(17,24,39,0.92);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .badge {
+      background: linear-gradient(135deg, #10b981, #0284c7);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .brand h1 { font-size: 16px; }
+    .brand p { font-size: 12px; color: var(--muted); }
+    .brand a { color: var(--green); text-decoration: none; }
+
+    .container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1.25fr 430px;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 1060px) { .container { grid-template-columns: 1fr; } }
+
+    .left-stack { display: flex; flex-direction: column; gap: 16px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .card-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); }
+
+    .cron-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .date-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; }
+    input[type="date"], input[type="text"], input[type="number"], select {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 7px 10px;
+      font-size: 12px;
+      outline: none;
+    }
+    input:focus, select:focus { border-color: var(--green); }
+
+    .btn {
+      border: none;
+      border-radius: 9px;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-cron { background: var(--green); color: #022c22; font-size: 13px; padding: 10px 18px; }
+    .btn-cron:hover { filter: brightness(1.08); }
+    .btn-outline { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 640px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .stat span { font-size: 11px; color: var(--muted); display: block; }
+    .stat strong { font-size: 20px; }
+
+    .sheet-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th {
+      background: #14532d;
+      color: #dcfce7;
+      text-align: left;
+      padding: 9px 10px;
+      white-space: nowrap;
+    }
+    td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .b-h3 { background: rgba(245,158,11,0.18); color: #fbbf24; }
+    .b-h0 { background: rgba(239,68,68,0.22); color: #fca5a5; }
+    .b-late { background: rgba(220,38,38,0.35); color: #fecaca; }
+    .b-ok { background: rgba(16,185,129,0.18); color: #34d399; }
+    .b-wait { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+
+    .add-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1.2fr auto;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    @media (max-width: 780px) { .add-grid { grid-template-columns: 1fr 1fr; } }
+
+    .cron-console {
+      background: #060a13;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      height: 150px;
+      overflow-y: auto;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #93c5fd;
+    }
+
+    /* Telegram Mockup */
+    .tg-panel {
+      background: var(--tg-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 700px;
+      position: sticky;
+      top: 18px;
+    }
+    .tg-head {
+      background: var(--tg-header);
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #202e3c;
+    }
+    .tg-head-left { display: flex; align-items: center; gap: 10px; }
+    .tg-ava {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #0284c7);
+      display: grid; place-items: center; font-weight: 700; font-size: 13px;
+    }
+    .tg-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tg-msg {
+      background: var(--tg-bubble);
+      border: 1px solid #223447;
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      padding: 11px 13px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+    .tg-msg .meta {
+      font-size: 10.5px;
+      color: #60a5fa;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+    .tg-msg .stamp {
+      font-size: 10px;
+      color: #64748b;
+      text-align: right;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="badge">Ddev</div>
+      <div>
+        <h1>Bot Pengingat Tagihan (Google Sheets / CSV + Telegram) — Live Simulator</h1>
+        <p>Edit tanggal jatuh tempo di sheet, lalu jalankan simulasi cron pagi untuk melihat notifikasi Telegram • <a href="https://asetkode.blogspot.com" target="_blank" rel="noopener">asetkode.blogspot.com</a></p>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-outline" id="exportCsvBtn">⬇ Download CSV Sheet</button>
+      <button class="btn btn-outline" id="resetDataBtn">↺ Reset Data Sample</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="left-stack">
+      <div class="cron-bar">
+        <div class="date-group">
+          <label for="simToday"><strong>Simulasi Tanggal Hari Ini:</strong></label>
+          <input type="date" id="simToday" value="2026-11-14" />
+          <span class="mono" style="font-size:11px; color:var(--muted);">Deteksi: H-3, H-0, &amp; Terlambat</span>
+        </div>
+        <button class="btn btn-cron" id="runCronBtn">⏰ Simulasi Cek Cron Pagi</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><span>Total Tagihan</span><strong id="stTotal">0</strong></div>
+        <div class="stat"><span>Mendekati (H-1..H-3)</span><strong id="stH3" style="color:var(--amber);">0</strong></div>
+        <div class="stat"><span>Jatuh Tempo (H-0)</span><strong id="stH0" style="color:var(--red);">0</strong></div>
+        <div class="stat"><span>Terlambat</span><strong id="stLate" style="color:#f87171;">0</strong></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">1. Data Sheet Tagihan Pelanggan (Editable)</span>
+          <span class="mono" style="font-size:11px; color:var(--green);">Sinkron: Google Sheets / template_tagihan.csv</span>
+        </div>
+
+        <div class="sheet-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Invoice</th>
+                <th>Nama Pelanggan</th>
+                <th>Nominal (Rp)</th>
+                <th>Jatuh Tempo</th>
+                <th>Status</th>
+                <th>Kategori Cek</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="sheetBody"></tbody>
+          </table>
+        </div>
+
+        <form class="add-grid" id="addInvoiceForm">
+          <input type="text" id="inNama" placeholder="Nama Pelanggan" required />
+          <input type="number" id="inNominal" placeholder="Nominal (mis. 750000)" required />
+          <input type="date" id="inDue" value="2026-11-17" required />
+          <input type="text" id="inNote" placeholder="Catatan / Paket" />
+          <button type="submit" class="btn btn-cron">+ Tambah</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">2. Log Eksekusi Cron Harian</span>
+          <span class="mono" style="font-size:11px; color:var(--muted);">reminder_bot.py --once</span>
+        </div>
+        <div class="cron-console mono" id="cronConsole">
+          [SISTEM] Siap menjalankan simulasi cek jatuh tempo. Klik "Simulasi Cek Cron Pagi".
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Telegram Alert Mockup -->
+    <aside class="tg-panel">
+      <div class="tg-head">
+        <div class="tg-head-left">
+          <div class="tg-ava">TG</div>
+          <div>
+            <h2 style="font-size:14px;">Ddev_TagihanBot</h2>
+            <span style="font-size:11px; color:#5eb5f7;">Preview Notifikasi Telegram</span>
+          </div>
+        </div>
+        <button class="btn btn-outline" id="clearChatBtn" style="padding:5px 10px; font-size:11px;">Bersihkan</button>
+      </div>
+      <div class="tg-feed" id="tgFeed">
+        <div class="tg-msg">
+          <div class="meta">🤖 Sistem Siap</div>
+          Klik tombol <strong>⏰ Simulasi Cek Cron Pagi</strong> untuk melihat pesan pengingat H-3, Jatuh Tempo (H-0), dan Rekap Admin muncul di sini secara otomatis.
+          <div class="stamp">Ddev • asetkode.blogspot.com</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const DEFAULT_ROWS = [
+      { id: "INV-2026-001", nama: "Toko Berkah Jaya", nominal: 1500000, due: "2026-11-17", status: "Belum Bayar", catatan: "Langganan Paket POS Bulanan" },
+      { id: "INV-2026-002", nama: "CV Karya Mandiri", nominal: 2750000, due: "2026-11-14", status: "Belum Bayar", catatan: "Termin 2 Pembuatan Website" },
+      { id: "INV-2026-003", nama: "Sari Roti Nusantara", nominal: 850000, due: "2026-11-12", status: "Belum Bayar", catatan: "Maintenance Server November" },
+      { id: "INV-2026-004", nama: "UD Sumber Makmur", nominal: 1200000, due: "2026-11-25", status: "Belum Bayar", catatan: "Sewa Cloud Hosting Tahunan" },
+      { id: "INV-2026-005", nama: "Klinik Sehat Sentosa", nominal: 950000, due: "2026-11-14", status: "Lunas", catatan: "Sudah transfer BCA tgl 13 Nov" }
+    ];
+
+    let invoices = JSON.parse(JSON.stringify(DEFAULT_ROWS));
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+    }
+
+    function formatRp(num) {
+      return "Rp " + Number(num || 0).toLocaleString("id-ID");
+    }
+
+    function diffDays(dueStr, todayStr) {
+      const d1 = new Date(dueStr + "T00:00:00");
+      const d2 = new Date(todayStr + "T00:00:00");
+      return Math.round((d1 - d2) / (1000 * 60 * 60 * 24));
+    }
+
+    function classifyRow(row, todayStr) {
+      if (row.status === "Lunas") {
+        return { label: "Lunas", cls: "b-ok", daysLeft: null, trigger: false };
+      }
+      const d = diffDays(row.due, todayStr);
+      if (d > 0 && d <= 3) return { label: `H-${d} (Kirim)`, cls: "b-h3", daysLeft: d, trigger: true };
+      if (d === 0) return { label: "Jatuh Tempo (H-0)", cls: "b-h0", daysLeft: 0, trigger: true };
+      if (d < 0) return { label: `Terlambat +${Math.abs(d)}h`, cls: "b-late", daysLeft: d, trigger: true };
+      return { label: `H-${d} (Belum)`, cls: "b-wait", daysLeft: d, trigger: false };
+    }
+
+    function renderSheet() {
+      const todayStr = document.getElementById("simToday").value || "2026-11-14";
+      const body = document.getElementById("sheetBody");
+
+      let cH3 = 0, cH0 = 0, cLate = 0;
+
+      body.innerHTML = invoices.map((row, idx) => {
+        const info = classifyRow(row, todayStr);
+        if (info.trigger) {
+          if (info.daysLeft > 0) cH3++;
+          else if (info.daysLeft === 0) cH0++;
+          else cLate++;
+        }
+
+        return `
+          <tr>
+            <td class="mono">${esc(row.id)}</td>
+            <td><strong>${esc(row.nama)}</strong><div style="font-size:11px;color:var(--muted);">${esc(row.catatan)}</div></td>
+            <td class="mono">${formatRp(row.nominal)}</td>
+            <td><input type="date" value="${esc(row.due)}" onchange="updateDue(${idx}, this.value)" /></td>
+            <td>
+              <select onchange="updateStatus(${idx}, this.value)">
+                <option value="Belum Bayar" ${row.status === "Belum Bayar" ? "selected" : ""}>Belum Bayar</option>
+                <option value="Lunas" ${row.status === "Lunas" ? "selected" : ""}>Lunas</option>
+              </select>
+            </td>
+            <td><span class="badge-pill ${info.cls}">${info.label}</span></td>
+            <td><button class="btn btn-outline" style="padding:4px 8px;" onclick="deleteRow(${idx})">✕</button></td>
+          </tr>
+        `;
+      }).join("");
+
+      document.getElementById("stTotal").textContent = invoices.length;
+      document.getElementById("stH3").textContent = cH3;
+      document.getElementById("stH0").textContent = cH0;
+      document.getElementById("stLate").textContent = cLate;
+    }
+
+    window.updateDue = (idx, val) => { invoices[idx].due = val; renderSheet(); };
+    window.updateStatus = (idx, val) => { invoices[idx].status = val; renderSheet(); };
+    window.deleteRow = (idx) => { invoices.splice(idx, 1); renderSheet(); };
+
+    function logCron(msg) {
+      const box = document.getElementById("cronConsole");
+      const t = new Date().toLocaleTimeString("id-ID", { hour12: false });
+      box.innerHTML += `<div>[${t}] ${esc(msg)}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function pushTgBubble(meta, htmlBody) {
+      const feed = document.getElementById("tgFeed");
+      const card = document.createElement("div");
+      card.className = "tg-msg";
+      card.innerHTML = `
+        <div class="meta">${meta}</div>
+        <div>${htmlBody}</div>
+        <div class="stamp">${new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} ✓✓</div>
+      `;
+      feed.appendChild(card);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function runCronSimulation() {
+      const todayStr = document.getElementById("simToday").value || "2026-11-14";
+      document.getElementById("tgFeed").innerHTML = "";
+      logCron(`=== Memulai Cek Tagihan Cron Pagi (Tanggal Simulasi: ${todayStr}) ===`);
+
+      const triggered = [];
+      invoices.forEach((row) => {
+        const info = classifyRow(row, todayStr);
+        if (!info.trigger) return;
+        triggered.push({ row, info });
+
+        let title, desc;
+        if (info.daysLeft > 0) {
+          title = `⏰ PENGINGAT TAGIHAN (H-${info.daysLeft})`;
+          desc = `Tagihan Anda akan jatuh tempo dalam <b>${info.daysLeft} hari</b> lagi.`;
+        } else if (info.daysLeft === 0) {
+          title = "🚨 JATUH TEMPO HARI INI (H-0)";
+          desc = "Tagihan Anda jatuh tempo <b>hari ini</b>. Mohon segera selesaikan pembayaran.";
+        } else {
+          const late = Math.abs(info.daysLeft);
+          title = `❗ TAGIHAN TERLAMBAT (+${late} HARI)`;
+          desc = `Tagihan Anda telah melewati jatuh tempo selama <b>${late} hari</b>.`;
+        }
+
+        const msgBody =
+          `<b>${title}</b>\n\n` +
+          `Halo <b>${esc(row.nama)}</b>,\n${desc}\n\n` +
+          `• No. Invoice : <code>${esc(row.id)}</code>\n` +
+          `• Nominal     : <b>${formatRp(row.nominal)}</b>\n` +
+          `• Jatuh Tempo : <b>${esc(row.due)}</b>\n` +
+          `• Keterangan  : ${esc(row.catatan)}\n\n` +
+          `Abaikan pesan ini jika sudah melakukan pembayaran. 🙏`;
+
+        pushTgBubble(`📩 Ke Pelanggan: ${esc(row.nama)}`, msgBody);
+        logCron(`[TERKIRIM] [${info.label}] ${row.id} (${row.nama}) -> ${formatRp(row.nominal)}`);
+      });
+
+      if (triggered.length === 0) {
+        pushTgBubble("🟢 Info Cron", "Tidak ada tagihan yang mendekati atau melewati jatuh tempo pada tanggal ini.");
+        logCron("Tidak ada tagihan yang perlu dikirim hari ini.");
+        return;
+      }
+
+      const adminSummary =
+        `<b>📋 REKAP CEK TAGIHAN HARIAN (${todayStr})</b>\n` +
+        `Total pengingat terkirim: <b>${triggered.length}</b> pelanggan\n\n` +
+        triggered.map(({ row, info }) => `• [${info.label}] <b>${esc(row.nama)}</b> — ${formatRp(row.nominal)}`).join("\n");
+
+      pushTgBubble("👤 Rekap ke Admin (DEFAULT_ADMIN_CHAT_ID)", adminSummary);
+      logCron(`Selesai! ${triggered.length} pengingat pelanggan + 1 rekap admin dikirim.`);
+    }
+
+    document.getElementById("addInvoiceForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nextNum = String(invoices.length + 1).padStart(3, "0");
+      invoices.push({
+        id: `INV-2026-${nextNum}`,
+        nama: document.getElementById("inNama").value.trim(),
+        nominal: Number(document.getElementById("inNominal").value),
+        due: document.getElementById("inDue").value,
+        status: "Belum Bayar",
+        catatan: document.getElementById("inNote").value.trim() || "Tagihan Layanan"
+      });
+      document.getElementById("inNama").value = "";
+      document.getElementById("inNominal").value = "";
+      document.getElementById("inNote").value = "";
+      renderSheet();
+      logCron("Baris tagihan baru ditambahkan ke sheet.");
+    });
+
+    document.getElementById("simToday").addEventListener("change", renderSheet);
+    document.getElementById("runCronBtn").addEventListener("click", runCronSimulation);
+    document.getElementById("clearChatBtn").addEventListener("click", () => {
+      document.getElementById("tgFeed").innerHTML = "";
+    });
+    document.getElementById("resetDataBtn").addEventListener("click", () => {
+      invoices = JSON.parse(JSON.stringify(DEFAULT_ROWS));
+      document.getElementById("simToday").value = "2026-11-14";
+      renderSheet();
+      logCron("Data sheet dikembalikan ke template awal.");
+    });
+    document.getElementById("exportCsvBtn").addEventListener("click", () => {
+      const escCsv = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+      const header = ["id_tagihan", "nama_pelanggan", "nominal", "tanggal_jatuh_tempo", "status", "catatan"].join(",");
+      const rows = invoices.map((r) => [escCsv(r.id), escCsv(r.nama), escCsv(r.nominal), escCsv(r.due), escCsv(r.status), escCsv(r.catatan)].join(","));
+      const blob = new Blob(["\uFEFF" + [header, ...rows].join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "template_tagihan_simulasi.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    renderSheet();
+  </script>
+</body>
+</html>

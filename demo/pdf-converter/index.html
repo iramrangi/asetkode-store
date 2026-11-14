@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Demo — PDF to Excel & Word Converter + OCR | Ddev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-2: #1e293b;
+      --border: #283548;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #f59e0b;
+      --teal: #10b981;
+      --blue: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .topbar {
+      background: rgba(17,24,39,0.92);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .badge {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .brand h1 { font-size: 16px; }
+    .brand p { font-size: 12px; color: var(--muted); }
+    .brand a { color: var(--teal); text-decoration: none; }
+
+    .wrap {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .controls-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .sample-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pill-btn.active { border-color: var(--accent); background: rgba(245,158,11,0.14); color: #fde68a; }
+    .upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-2);
+      border: 1px dashed #475569;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .upload-label:hover { border-color: var(--blue); }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 18px;
+    }
+    @media (max-width: 960px) { .split { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); }
+
+    /* Simulated PDF Paper */
+    .pdf-paper {
+      background: #f8fafc;
+      color: #0f172a;
+      border-radius: 10px;
+      padding: 22px;
+      min-height: 430px;
+      box-shadow: inset 0 0 0 1px #cbd5e1;
+      font-size: 13px;
+      position: relative;
+    }
+    .pdf-paper.ocr-scan {
+      background: #f1f5f9;
+      filter: contrast(1.03);
+    }
+    .ocr-tag {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .pdf-paper h3 { font-size: 16px; margin-bottom: 4px; color: #0f172a; }
+    .pdf-meta { font-size: 12px; color: #475569; margin-bottom: 14px; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; }
+    .pdf-paper table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+    .pdf-paper th, .pdf-paper td { border: 1px solid #94a3b8; padding: 6px 8px; text-align: left; }
+    .pdf-paper th { background: #e2e8f0; }
+
+    /* Output Inspector Tabs */
+    .tabs { display: flex; gap: 8px; }
+    .tab-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab-btn.active { background: var(--teal); color: #022c22; border-color: var(--teal); }
+
+    .excel-grid-wrap {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+      max-height: 360px;
+    }
+    .excel-grid { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .excel-grid th {
+      background: #0f766e;
+      color: #fff;
+      padding: 9px 10px;
+      text-align: left;
+      border-right: 1px solid rgba(255,255,255,0.15);
+    }
+    .excel-grid td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    .word-preview {
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 360px;
+      overflow-y: auto;
+      font-family: Georgia, serif;
+      line-height: 1.65;
+      font-size: 13px;
+    }
+    .word-preview h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: #0f766e; margin-bottom: 8px; }
+    .word-preview p { margin-bottom: 10px; }
+    .word-preview table { width: 100%; border-collapse: collapse; margin-top: 10px; font-family: sans-serif; font-size: 12px; }
+    .word-preview th, .word-preview td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; }
+    .word-preview th { background: #f1f5f9; }
+
+    .action-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+    .btn {
+      border: none;
+      border-radius: 9px;
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-teal { background: var(--teal); color: #022c22; }
+    .btn-blue { background: var(--blue); color: #082f49; }
+    .btn-amber { background: var(--accent); color: #451a03; }
+    .log-strip {
+      background: #060a13;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #93c5fd;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="badge">Ddev</div>
+      <div>
+        <h1>Batch PDF to Excel &amp; Word Converter + OCR — Live Simulator</h1>
+        <p>Uji ekstraksi tabel PDF ke Excel, paragraf ke Word &amp; mode OCR scan • <a href="https://asetkode.blogspot.com" target="_blank" rel="noopener">asetkode.blogspot.com</a></p>
+      </div>
+    </div>
+    <span class="mono" style="font-size:12px; color:var(--muted);">pdfplumber + openpyxl + python-docx</span>
+  </header>
+
+  <main class="wrap">
+    <section class="controls-bar">
+      <div class="sample-pills">
+        <button class="pill-btn active" data-doc="invoice">📄 Invoice Tagihan PT Maju Jaya</button>
+        <button class="pill-btn" data-doc="mutasi">🏦 Rekap Mutasi Rekening</button>
+        <button class="pill-btn" data-doc="scan_ocr">📷 Daftar Harga Supplier (Scan OCR)</button>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <label class="upload-label">
+          <span>📂 Upload File Lokal (.txt/.csv/.pdf)</span>
+          <input type="file" id="localFileInput" accept=".txt,.csv,.pdf" hidden />
+        </label>
+        <button class="btn btn-amber" id="convertBtn">⚡ Ekstrak Ulang Dokumen</button>
+      </div>
+    </section>
+
+    <section class="split">
+      <!-- Left: PDF Source Preview -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">1. Sumber Dokumen PDF Input</span>
+          <span class="mono" id="pdfMetaBadge" style="font-size:11px; color:var(--blue);">Halaman: 1 | Teks Digital</span>
+        </div>
+        <div class="pdf-paper" id="pdfPaper"></div>
+      </div>
+
+      <!-- Right: Extracted Excel vs Word Output -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">2. Hasil Ekstraksi Terstruktur</span>
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="excel">📊 Tabel Excel (.xlsx)</button>
+            <button class="tab-btn" data-tab="word">📝 Dokumen Word (.docx)</button>
+          </div>
+        </div>
+
+        <div id="excelView" class="excel-grid-wrap"></div>
+        <div id="wordView" class="word-preview" style="display:none;"></div>
+
+        <div class="action-row">
+          <div class="log-strip mono" id="processLog" style="flex:1;">
+            [SIAP] Ekstraksi selesai. Siap diunduh ke format Excel-CSV atau Word (.doc).
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-teal" id="dlCsvBtn">⬇ Export CSV (Excel)</button>
+            <button class="btn btn-blue" id="dlDocBtn">⬇ Export Word (.doc)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SAMPLE_DOCS = {
+      invoice: {
+        fileName: "Invoice_INV202611_MajuJaya.pdf",
+        isOcr: false,
+        title: "INVOICE PENAGIHAN #INV-2026-114",
+        meta: "PT Maju Jaya Nusantara • Kepada: CV Karya Mandiri • Tanggal: 14 Nov 2026",
+        paragraphs: [
+          "Berikut rincian tagihan pengadaan perangkat lunak dan jasa instalasi sistem kasir untuk periode November 2026.",
+          "Mohon lakukan pembayaran sebelum tanggal jatuh tempo 21 November 2026 ke rekening BCA 881-002-4491 a.n. PT Maju Jaya Nusantara."
+        ],
+        headers: ["No", "Deskripsi Item", "Qty", "Harga Satuan", "Subtotal"],
+        rows: [
+          ["1", "Lisensi Sistem Kasir & Gudang Pro", "2", "Rp 450.000", "Rp 900.000"],
+          ["2", "Modul Bot Telegram Rekap Harian", "1", "Rp 350.000", "Rp 350.000"],
+          ["3", "Jasa Setup & Training Admin Online", "1", "Rp 250.000", "Rp 250.000"],
+          ["4", "PPN 11%", "-", "-", "Rp 165.000"],
+          ["", "TOTAL TAGIHAN", "", "", "Rp 1.665.000"]
+        ]
+      },
+      mutasi: {
+        fileName: "Mutasi_Rekening_Oktober_2026.pdf",
+        isOcr: false,
+        title: "LAPORAN MUTASI REKENING KORAN",
+        meta: "Bank Mandiri Bisnis • No. Rek: 130-00-991827-4 • Periode: 01–05 Nov 2026",
+        paragraphs: [
+          "Ringkasan transaksi masuk (Kredit) dan keluar (Debit) rekening operasional toko online selama awal bulan November 2026.",
+          "Saldo akhir tercatat sebesar Rp 18.420.000 pada tanggal cetak 05 November 2026."
+        ],
+        headers: ["Tanggal", "Keterangan Transaksi", "Tipe", "Nominal", "Saldo Akhir"],
+        rows: [
+          ["01/11/2026", "Transfer Masuk - Marketplace Settlement", "KR", "Rp 4.250.000", "Rp 15.100.000"],
+          ["02/11/2026", "Pembayaran Supplier Bahan Baku", "DB", "Rp 1.850.000", "Rp 13.250.000"],
+          ["03/11/2026", "Transfer Pelanggan #ORD-782", "KR", "Rp 620.000", "Rp 13.870.000"],
+          ["04/11/2026", "Biaya Iklan Digital Bulanan", "DB", "Rp 950.000", "Rp 12.920.000"],
+          ["05/11/2026", "Transfer Masuk - Grosir Surabaya", "KR", "Rp 5.500.000", "Rp 18.420.000"]
+        ]
+      },
+      scan_ocr: {
+        fileName: "Katalog_Harga_Supplier_Scan.pdf",
+        isOcr: true,
+        title: "DAFTAR HARGA GROSIR (HASIL SCAN PDF)",
+        meta: "UD Sumber Rejeki • Dokumen Gambar Scan 220 DPI • Mode: Tesseract OCR (ind+eng)",
+        paragraphs: [
+          "Dokumen ini merupakan hasil pemindaian kertas fisik tanpa lapisan teks digital. Mesin konverter otomatis mengaktifkan pytesseract OCR fallback.",
+          "Seluruh baris harga di bawah berhasil dikenali dan dikonversi menjadi sel Excel yang siap dihitung ulang."
+        ],
+        headers: ["Kode", "Nama Barang (Hasil OCR)", "Kemasan", "Harga Grosir", "Keterangan"],
+        rows: [
+          ["SR-01", "Kertas Struk Thermal 80x80mm", "Dus (50 Roll)", "Rp 425.000", "Ready Stok"],
+          ["SR-02", "Label Barcode Thermal 100x150", "Roll (500 Pcs)", "Rp 38.500", "Ready Stok"],
+          ["SR-03", "Scanner Barcode 2D Wireless", "Unit", "Rp 410.000", "Garansi 1 Th"],
+          ["SR-04", "Laci Kasir Besi 5 Slot RJ11", "Unit", "Rp 520.000", "Promo Grosir"]
+        ]
+      }
+    };
+
+    let activeDoc = SAMPLE_DOCS.invoice;
+    let currentTab = "excel";
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+    }
+
+    function renderAll() {
+      const pdfPaper = document.getElementById("pdfPaper");
+      const metaBadge = document.getElementById("pdfMetaBadge");
+
+      pdfPaper.className = activeDoc.isOcr ? "pdf-paper ocr-scan" : "pdf-paper";
+      metaBadge.textContent = `${activeDoc.fileName} • ${activeDoc.isOcr ? "OCR Fallback Aktif" : "Teks Digital Native"}`;
+
+      pdfPaper.innerHTML = `
+        ${activeDoc.isOcr ? '<div class="ocr-tag">📷 PDF Hasil Scan — Diproses via Tesseract OCR (ind+eng)</div>' : ""}
+        <h3>${esc(activeDoc.title)}</h3>
+        <div class="pdf-meta">${esc(activeDoc.meta)}</div>
+        ${activeDoc.paragraphs.map((p) => `<p style="margin-bottom:8px;">${esc(p)}</p>`).join("")}
+        <table>
+          <thead><tr>${activeDoc.headers.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead>
+          <tbody>${activeDoc.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+        </table>
+      `;
+
+      // Render Excel View
+      document.getElementById("excelView").innerHTML = `
+        <table class="excel-grid">
+          <thead><tr>${activeDoc.headers.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead>
+          <tbody>${activeDoc.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+        </table>
+      `;
+
+      // Render Word View
+      document.getElementById("wordView").innerHTML = `
+        <h4>Hasil Konversi PDF: ${esc(activeDoc.fileName)}</h4>
+        <p style="font-size:11px; color:#64748b;">Diekstrak menggunakan PDF Converter &amp; OCR — Ddev (https://asetkode.blogspot.com)</p>
+        <p><strong>${esc(activeDoc.title)}</strong><br/>${esc(activeDoc.meta)}</p>
+        ${activeDoc.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}
+        <table>
+          <thead><tr>${activeDoc.headers.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead>
+          <tbody>${activeDoc.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+        </table>
+      `;
+
+      document.getElementById("processLog").textContent =
+        `[OK] ${activeDoc.fileName}: ${activeDoc.rows.length} baris tabel & ${activeDoc.paragraphs.length} paragraf diekstrak${activeDoc.isOcr ? " (via OCR)" : ""}.`;
+    }
+
+    document.querySelectorAll(".pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".pill-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeDoc = SAMPLE_DOCS[btn.dataset.doc];
+        renderAll();
+      });
+    });
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentTab = btn.dataset.tab;
+        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("excelView").style.display = currentTab === "excel" ? "block" : "none";
+        document.getElementById("wordView").style.display = currentTab === "word" ? "block" : "none";
+      });
+    });
+
+    document.getElementById("convertBtn").addEventListener("click", () => {
+      document.getElementById("processLog").textContent = "[PROSES] Membaca ulang halaman PDF & memverifikasi kolom tabel...";
+      setTimeout(renderAll, 280);
+    });
+
+    document.getElementById("localFileInput").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.querySelectorAll(".pill-btn").forEach((b) => b.classList.remove("active"));
+
+      const rawText = await file.text();
+      let lines = rawText
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0 && /^[\x20-\x7E\u00C0-\u024F]+$/.test(l));
+
+      if (file.name.toLowerCase().endsWith(".pdf") && lines.length < 3) {
+        lines = [
+          `File PDF biner terdeteksi: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+          "Catatan: Di browser statis, parsing PDF biner penuh dilakukan oleh skrip Python pdfplumber/OCR lokal.",
+          "Baris metadata terdeteksi: " + (rawText.slice(0, 80).replace(/[^\x20-\x7E]/g, " "))
+        ];
+      }
+
+      const topLines = lines.slice(0, 12);
+      const rows = topLines.map((line, i) => {
+        const parts = line.includes(",") ? line.split(",") : [String(i + 1), line];
+        return [String(i + 1), parts.slice(0, 3).join(" | ").slice(0, 90), "File Lokal"];
+      });
+
+      activeDoc = {
+        fileName: file.name,
+        isOcr: false,
+        title: `PREVIEW FILE LOKAL: ${file.name}`,
+        meta: `Ukuran: ${(file.size / 1024).toFixed(1)} KB • Baris terbaca: ${topLines.length}`,
+        paragraphs: topLines.slice(0, 4),
+        headers: ["No", "Konten Baris Terbaca", "Sumber"],
+        rows: rows.length ? rows : [["1", "(Tidak ada baris teks ASCII terbaca)", "Lokal"]]
+      };
+      renderAll();
+    });
+
+    document.getElementById("dlCsvBtn").addEventListener("click", () => {
+      const escCsv = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+      const lines = [
+        activeDoc.headers.map(escCsv).join(","),
+        ...activeDoc.rows.map((r) => r.map(escCsv).join(","))
+      ];
+      const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = activeDoc.fileName.replace(/\.[^.]+$/, "") + ".csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("dlDocBtn").addEventListener("click", () => {
+      const htmlContent = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+        <head><meta charset='utf-8'><title>${esc(activeDoc.title)}</title></head>
+        <body style="font-family: Calibri, sans-serif;">
+          <h2>${esc(activeDoc.title)}</h2>
+          <p><em>${esc(activeDoc.meta)}</em></p>
+          ${activeDoc.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}
+          <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:100%;">
+            <thead><tr>${activeDoc.headers.map((h) => `<th style="background:#0f766e;color:#fff;">${esc(h)}</th>`).join("")}</tr></thead>
+            <tbody>${activeDoc.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+          </table>
+          <p style="margin-top:20px; font-size:11px; color:#64748b;">Diekspor via PDF Converter Demo — Ddev (https://asetkode.blogspot.com)</p>
+        </body></html>
+      `;
+      const blob = new Blob([htmlContent], { type: "application/msword;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = activeDoc.fileName.replace(/\.[^.]+$/, "") + ".doc";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>

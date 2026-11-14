@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabel Data CRUD — Ddev Admin UI Kit</title>
+  <script>
+    (function(){try{var t=localStorage.getItem('ddev_admin_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+  </script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigasi Utama">
+      <div class="sidebar-brand">
+        <div class="brand-logo">D</div>
+        <div class="brand-text">
+          <span class="brand-name">Ddev Admin</span>
+          <span class="brand-sub">Analytics UI Kit</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Menu Utama</div>
+        <a href="index.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span>Dashboard Analitik</span>
+        </a>
+        <a href="tables.html" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+          <span>Tabel Data CRUD</span>
+        </a>
+        <a href="forms.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <span>Komponen Form</span>
+        </a>
+
+        <div class="nav-section-label">Operasional</div>
+        <a href="invoice.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Faktur / Invoice</span>
+        </a>
+        <a href="auth.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span>Halaman Login / Daftar</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="auth.html" class="sidebar-user">
+          <div class="avatar">AD</div>
+          <div class="sidebar-user-info">
+            <div style="font-weight:600;font-size:13px">Admin Ddev</div>
+            <div style="font-size:11px;color:var(--text-muted)">Super Administrator</div>
+          </div>
+        </a>
+      </div>
+    </aside>
+
+    <div class="main-wrap">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn" id="sidebarToggle" title="Buka/Tutup Sidebar" aria-label="Buka atau tutup sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <span style="font-weight:600">Manajemen Data Transaksi</span>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" data-theme-toggle aria-label="Ganti Tema"></button>
+          <button class="btn btn-outline btn-sm" id="exportCsvBtn">Ekspor CSV</button>
+          <button class="btn btn-primary btn-sm" id="openAddModalBtn">+ Tambah Data</button>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Tabel Data Transaksi &amp; Pelanggan</h1>
+            <p class="page-subtitle">Tambah, cari, filter, urutkan, dan ubah data langsung dengan penyimpanan otomatis di browser (`localStorage`).</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-outline" id="resetDataBtn">Reset Data Demo</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-toolbar">
+            <div class="toolbar-filters">
+              <input type="search" id="tableSearch" class="input" style="max-width:260px" placeholder="Cari ID, nama, atau email...">
+              <select id="statusFilter" class="select" style="max-width:170px" aria-label="Filter status">
+                <option value="all">Semua Status</option>
+                <option value="Lunas">Lunas</option>
+                <option value="Menunggu">Menunggu</option>
+                <option value="Dibatalkan">Dibatalkan</option>
+              </select>
+              <select id="planFilter" class="select" style="max-width:170px" aria-label="Filter paket">
+                <option value="all">Semua Paket</option>
+                <option value="Enterprise">Enterprise</option>
+                <option value="Pro SaaS">Pro SaaS</option>
+                <option value="Starter">Starter</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-sort="id">ID &#8597;</th>
+                  <th data-sort="name">Pelanggan &#8597;</th>
+                  <th data-sort="plan">Paket &#8597;</th>
+                  <th data-sort="amount">Nominal &#8597;</th>
+                  <th data-sort="status">Status &#8597;</th>
+                  <th data-sort="date">Tanggal &#8597;</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="crudTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span id="paginationInfo" style="font-size:13px;color:var(--text-muted)"></span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline btn-sm" id="prevPageBtn">Sebelumnya</button>
+              <button class="btn btn-outline btn-sm" id="nextPageBtn">Berikutnya</button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer-note">
+        Dikembangkan oleh <strong>Ddev</strong> &bull; <a href="https://asetkode.blogspot.com" target="_blank" rel="noopener" style="color:var(--primary)">https://asetkode.blogspot.com</a>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal Tambah / Edit -->
+  <div class="modal-backdrop" id="recordModal" role="dialog" aria-modal="true" aria-labelledby="recordModalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <strong id="recordModalTitle">Tambah Transaksi Baru</strong>
+        <button class="icon-btn" data-close-modal aria-label="Tutup modal">&times;</button>
+      </div>
+      <form id="recordForm">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label" for="fieldName">Nama Lengkap</label>
+              <input type="text" id="fieldName" class="input" placeholder="Contoh: Raka Pratama" required>
+            </div>
+            <div class="form-group full">
+              <label class="form-label" for="fieldEmail">Alamat Email</label>
+              <input type="email" id="fieldEmail" class="input" placeholder="raka@perusahaan.id" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldPlan">Paket Layanan</label>
+              <select id="fieldPlan" class="select">
+                <option value="Starter">Starter</option>
+                <option value="Pro SaaS">Pro SaaS</option>
+                <option value="Enterprise">Enterprise</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldAmount">Nominal (Rp)</label>
+              <input type="number" id="fieldAmount" class="input" min="0" step="1000" value="890000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldStatus">Status Pembayaran</label>
+              <select id="fieldStatus" class="select">
+                <option value="Lunas">Lunas</option>
+                <option value="Menunggu">Menunggu</option>
+                <option value="Dibatalkan">Dibatalkan</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fieldDate">Tanggal</label>
+              <input type="date" id="fieldDate" class="input" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal>Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

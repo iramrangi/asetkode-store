@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Demo — Bot Telegram Auto-Responder | Ddev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-2: #1e293b;
+      --border: #273449;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --tg-bg: #0e1621;
+      --tg-header: #17212b;
+      --tg-bot: #182533;
+      --tg-user: #2b5278;
+      --tg-btn: #243447;
+      --accent: #38bdf8;
+      --green: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .topbar {
+      background: rgba(17,24,39,0.92);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .badge {
+      background: linear-gradient(135deg, #0284c7, #10b981);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .brand h1 { font-size: 16px; }
+    .brand p { font-size: 12px; color: var(--muted); }
+    .brand a { color: var(--accent); text-decoration: none; }
+
+    .layout {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+    /* Telegram Phone Mockup */
+    .tg-shell {
+      background: var(--tg-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 670px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+    .tg-header {
+      background: var(--tg-header);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #202e3c;
+    }
+    .tg-bot-info { display: flex; align-items: center; gap: 10px; }
+    .tg-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      display: grid; place-items: center; font-weight: 700; font-size: 14px;
+    }
+    .tg-bot-info h2 { font-size: 14px; }
+    .tg-bot-info span { font-size: 11px; color: #5eb5f7; }
+
+    .tg-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background-image: radial-gradient(rgba(56,189,248,0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .msg-wrap { display: flex; flex-direction: column; max-width: 88%; }
+    .msg-wrap.user { align-self: flex-end; align-items: flex-end; }
+    .msg-wrap.bot { align-self: flex-start; }
+
+    .bubble {
+      padding: 10px 13px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+    .msg-wrap.bot .bubble { background: var(--tg-bot); border-bottom-left-radius: 4px; }
+    .msg-wrap.user .bubble { background: var(--tg-user); border-bottom-right-radius: 4px; }
+    .msg-time { font-size: 10px; color: #7f91a4; margin-top: 4px; text-align: right; }
+
+    .inline-kb {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+      width: 100%;
+    }
+    .ikb-btn {
+      background: var(--tg-btn);
+      color: #e2e8f0;
+      border: 1px solid #30445c;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+      text-align: center;
+    }
+    .ikb-btn:hover { background: #2f455e; border-color: var(--accent); }
+    .ikb-btn.full { grid-column: 1 / -1; }
+
+    .doc-attach {
+      margin-top: 8px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .doc-attach button {
+      background: var(--accent);
+      color: #082f49;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .tg-input-bar {
+      background: var(--tg-header);
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #202e3c;
+    }
+    .tg-input-bar input {
+      flex: 1;
+      background: #0e1621;
+      border: 1px solid #273747;
+      border-radius: 20px;
+      color: var(--text);
+      padding: 9px 14px;
+      font-size: 13px;
+      outline: none;
+    }
+    .tg-input-bar button {
+      background: var(--accent);
+      color: #082f49;
+      border: none;
+      border-radius: 20px;
+      padding: 0 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .quick-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 12px;
+      background: #131c26;
+      border-top: 1px solid #202e3c;
+    }
+    .chip {
+      background: #1e2d3d;
+      color: #bae6fd;
+      border: 1px solid #2c4157;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .chip:hover { border-color: var(--accent); }
+
+    /* Control Panels */
+    .panels { display: flex; flex-direction: column; gap: 18px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .rule-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 190px; overflow-y: auto; }
+    .rule-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+    }
+    .rule-item code { color: var(--accent); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; font-weight: 600; }
+    input[type="text"], textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 9px 11px;
+      font-size: 13px;
+      outline: none;
+    }
+    textarea { min-height: 78px; resize: vertical; }
+    .btn {
+      border: none;
+      border-radius: 9px;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--green); color: #022c22; }
+    .btn-accent { background: var(--accent); color: #082f49; }
+    .btn-outline { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+    th { background: #1d4ed8; color: #fff; text-align: left; padding: 8px 10px; }
+    td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+    .table-box { max-height: 185px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="badge">Ddev</div>
+      <div>
+        <h1>Bot Telegram Auto-Responder &amp; Webhook Simulator</h1>
+        <p>Uji menu Inline Keyboard, aturan auto-reply kustom, trigger webhook &amp; preview laporan CSV • <a href="https://asetkode.blogspot.com" target="_blank" rel="noopener">asetkode.blogspot.com</a></p>
+      </div>
+    </div>
+    <button class="btn btn-outline" id="resetChatBtn">↺ Reset Chat</button>
+  </header>
+
+  <main class="layout">
+    <!-- Left: Telegram Mockup -->
+    <section class="tg-shell">
+      <div class="tg-header">
+        <div class="tg-bot-info">
+          <div class="tg-avatar">DD</div>
+          <div>
+            <h2>Ddev_AutoBot</h2>
+            <span>bot • aktif 24/7</span>
+          </div>
+        </div>
+        <span class="mono" style="font-size:11px; color:#94a3b8;">v20+ asyncio</span>
+      </div>
+
+      <div class="tg-messages" id="chatMessages"></div>
+
+      <div class="quick-chips">
+        <button class="chip" onclick="sendUserMsg('/start')">/start</button>
+        <button class="chip" onclick="sendUserMsg('harga')">harga</button>
+        <button class="chip" onclick="sendUserMsg('promo')">promo</button>
+        <button class="chip" onclick="sendUserMsg('order')">order</button>
+        <button class="chip" onclick="sendUserMsg('/laporan')">/laporan</button>
+      </div>
+
+      <form class="tg-input-bar" id="chatForm">
+        <input type="text" id="chatInput" placeholder="Ketik pesan ke bot (mis. harga, promo)..." autocomplete="off" />
+        <button type="submit">Kirim</button>
+      </form>
+    </section>
+
+    <!-- Right: Rule Tester, Webhook Simulator, Report Preview -->
+    <section class="panels">
+      <div class="card">
+        <div class="card-title">
+          <span>1. Penguji &amp; Editor Aturan Auto-Reply</span>
+          <span class="mono" id="ruleCountBadge">4 aturan aktif</span>
+        </div>
+
+        <div class="rule-list" id="ruleList"></div>
+
+        <div class="grid-2">
+          <div>
+            <label for="newKeyword">Kata Kunci / Regex Trigger Baru</label>
+            <input type="text" id="newKeyword" placeholder="mis: alamat|lokasi|ongkir" />
+          </div>
+          <div>
+            <label for="newRuleName">Nama Aturan</label>
+            <input type="text" id="newRuleName" placeholder="mis: Info Alamat" />
+          </div>
+        </div>
+        <label for="newReply" style="margin-top:10px;">Pesan Balasan Otomatis</label>
+        <input type="text" id="newReply" placeholder="Contoh: Lokasi gudang kami di Bandung, pengiriman setiap hari kerja." />
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button type="button" class="btn btn-primary" id="addRuleBtn">+ Tambah &amp; Uji Aturan</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>2. Simulator Webhook Server (POST /webhook/report)</span>
+          <span class="mono" id="webhookStatus" style="color:var(--green);">HTTP 200 Ready</span>
+        </div>
+        <label for="webhookPayload">Payload JSON Eksternal (dari Toko / CRM)</label>
+        <textarea id="webhookPayload" class="mono">{
+  "event": "ORDER_BARU",
+  "pesan": "Pesanan #INV-2026-089 dari Budi Santoso senilai Rp 299.000 lunas.",
+  "kirim_laporan": true
+}</textarea>
+        <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <span class="mono" style="font-size:11px; color:var(--muted);">Header: X-Webhook-Secret: rahasia_webhook_anda</span>
+          <button type="button" class="btn btn-accent" id="triggerWebhookBtn">⚡ Kirim Simulasi Webhook</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>3. Preview Log Aktivitas &amp; Export Laporan CSV</span>
+          <button type="button" class="btn btn-primary" id="downloadReportBtn">⬇ Download Laporan (.csv)</button>
+        </div>
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr><th>Waktu</th><th>User</th><th>Aksi</th><th>Detail</th></tr>
+            </thead>
+            <tbody id="activityTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const rules = [
+      {
+        nama: "Daftar Harga",
+        pola: "\\b(harga|paket|biaya|tarif|pricelist)\\b",
+        balasan: "💰 Daftar Paket Layanan Ddev:\n• Paket Starter: Rp 149.000\n• Paket Bisnis: Rp 299.000\n• Paket Enterprise: Rp 599.000"
+      },
+      {
+        nama: "Promo Aktif",
+        pola: "\\b(promo|diskon|voucher)\\b",
+        balasan: "🎉 Promo Spesial Minggu Ini!\nGunakan kode DDEV20 untuk potongan 20% semua paket otomasi."
+      },
+      {
+        nama: "Jam Operasional",
+        pola: "\\b(jam|buka|operasional|jadwal|admin)\\b",
+        balasan: "🕒 Jam Operasional Admin:\nSenin – Sabtu: 08.00 – 20.00 WIB\nBot otomatis melayani 24/7."
+      },
+      {
+        nama: "Cara Order",
+        pola: "\\b(order|beli|pesan|bayar)\\b",
+        balasan: "🛒 Cara Pemesanan:\n1. Pilih paket via /menu\n2. Konfirmasi pembayaran\n3. File & lisensi dikirim dalam 5 menit."
+      }
+    ];
+
+    const activityLogs = [];
+    const chatMessages = document.getElementById("chatMessages");
+    const ruleListEl = document.getElementById("ruleList");
+    const activityBody = document.getElementById("activityTableBody");
+
+    function nowTime() {
+      return new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function addActivity(user, aksi, detail) {
+      const entry = {
+        waktu: new Date().toLocaleString("id-ID", { hour12: false }),
+        user,
+        aksi,
+        detail
+      };
+      activityLogs.unshift(entry);
+      renderActivityTable();
+    }
+
+    function renderActivityTable() {
+      activityBody.innerHTML = activityLogs.map((r) => `
+        <tr>
+          <td class="mono">${r.waktu}</td>
+          <td>${escapeHtml(r.user)}</td>
+          <td><strong>${escapeHtml(r.aksi)}</strong></td>
+          <td>${escapeHtml(r.detail)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+    }
+
+    function renderRules() {
+      document.getElementById("ruleCountBadge").textContent = `${rules.length} aturan aktif`;
+      ruleListEl.innerHTML = rules.map((r, i) => `
+        <div class="rule-item">
+          <div>
+            <strong>${escapeHtml(r.nama)}</strong> — <code>${escapeHtml(r.pola)}</code>
+            <div style="color:var(--muted); margin-top:3px;">${escapeHtml(r.balasan).replace(/\n/g, " ")}</div>
+          </div>
+          <button class="btn btn-outline" style="height:30px;" onclick="sendUserMsg('${escapeHtml(r.pola.replace(/[^a-zA-Z0-9|]/g,'').split('|')[0] || 'harga')}')">Tes</button>
+        </div>
+      `).join("");
+    }
+
+    function appendMessage(sender, text, options = {}) {
+      const wrap = document.createElement("div");
+      wrap.className = `msg-wrap ${sender}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      if (options.attachment) {
+        const doc = document.createElement("div");
+        doc.className = "doc-attach";
+        doc.innerHTML = `<span>📄 <strong>${options.attachment}</strong></span>`;
+        const dlBtn = document.createElement("button");
+        dlBtn.textContent = "Unduh CSV";
+        dlBtn.onclick = downloadCsvReport;
+        doc.appendChild(dlBtn);
+        bubble.appendChild(doc);
+      }
+
+      const timeEl = document.createElement("div");
+      timeEl.className = "msg-time";
+      timeEl.textContent = nowTime();
+      bubble.appendChild(timeEl);
+      wrap.appendChild(bubble);
+
+      if (options.keyboard) {
+        const kb = document.createElement("div");
+        kb.className = "inline-kb";
+        const buttons = [
+          { label: "💰 Daftar Harga", cb: "menu_harga" },
+          { label: "🎉 Promo Aktif", cb: "menu_promo" },
+          { label: "📊 Kirim Laporan", cb: "menu_laporan" },
+          { label: "🕒 Jam Operasional", cb: "menu_jadwal" },
+          { label: "🌐 Kunjungi Portal Ddev", url: "https://asetkode.blogspot.com", full: true }
+        ];
+        buttons.forEach((b) => {
+          const btn = document.createElement("button");
+          btn.className = `ikb-btn ${b.full ? "full" : ""}`;
+          btn.textContent = b.label;
+          btn.onclick = () => {
+            if (b.url) {
+              window.open(b.url, "_blank", "noopener");
+            } else {
+              handleCallback(b.cb, b.label);
+            }
+          };
+          kb.appendChild(btn);
+        });
+        wrap.appendChild(kb);
+      }
+
+      chatMessages.appendChild(wrap);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function handleCallback(cb, label) {
+      addActivity("@pelanggan_demo", "CALLBACK", cb);
+      if (cb === "menu_harga") {
+        appendMessage("bot", rules[0].balasan, { keyboard: true });
+      } else if (cb === "menu_promo") {
+        appendMessage("bot", rules[1].balasan, { keyboard: true });
+      } else if (cb === "menu_jadwal") {
+        appendMessage("bot", rules[2].balasan, { keyboard: true });
+      } else if (cb === "menu_laporan") {
+        appendMessage("bot", `📊 Laporan ringkasan aktivitas (${activityLogs.length} baris) berhasil dibuat:`, {
+          attachment: "laporan_bot_harian.csv"
+        });
+      }
+    }
+
+    function sendUserMsg(rawText) {
+      const text = rawText.trim();
+      if (!text) return;
+
+      appendMessage("user", text);
+      addActivity("@pelanggan_demo", text.startsWith("/") ? "COMMAND" : "PESAN", text);
+
+      setTimeout(() => {
+        if (text === "/start" || text === "/menu") {
+          appendMessage(
+            "bot",
+            "Halo Pelanggan! 👋\nSelamat datang di Asisten Auto-Responder Ddev.\nSilakan klik menu tombol di bawah atau ketik kata kunci (harga, promo, order).",
+            { keyboard: true }
+          );
+          return;
+        }
+        if (text === "/laporan") {
+          appendMessage("bot", `📊 Mengirim laporan aktivitas (${activityLogs.length} baris tercatat):`, {
+            attachment: "laporan_bot_harian.csv"
+          });
+          return;
+        }
+        for (const r of rules) {
+          try {
+            const re = new RegExp(r.pola, "i");
+            if (re.test(text)) {
+              appendMessage("bot", r.balasan, { keyboard: true });
+              return;
+            }
+          } catch {}
+        }
+        appendMessage(
+          "bot",
+          "Terima kasih atas pesan Anda! 🙏\nKata kunci belum cocok. Coba ketik: harga, promo, jadwal, order, atau klik tombol menu:",
+          { keyboard: true }
+        );
+      }, 240);
+    }
+
+    function downloadCsvReport() {
+      const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+      const header = ["waktu", "user", "aksi", "detail"].join(",");
+      const rows = activityLogs.map((r) => [esc(r.waktu), esc(r.user), esc(r.aksi), esc(r.detail)].join(","));
+      const blob = new Blob(["\uFEFF" + [header, ...rows].join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "laporan_aktivitas_bot_ddev.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("chatForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("chatInput");
+      sendUserMsg(input.value);
+      input.value = "";
+    });
+
+    document.getElementById("addRuleBtn").addEventListener("click", () => {
+      const kw = document.getElementById("newKeyword").value.trim();
+      const nm = document.getElementById("newRuleName").value.trim() || "Aturan Kustom";
+      const rp = document.getElementById("newReply").value.trim();
+      if (!kw || !rp) {
+        alert("Isi kata kunci dan pesan balasan terlebih dahulu.");
+        return;
+      }
+      const pattern = kw.includes("\\b") ? kw : `\\b(${kw})\\b`;
+      rules.unshift({ nama: nm, pola: pattern, balasan: rp });
+      renderRules();
+      const testWord = kw.split("|")[0].trim();
+      document.getElementById("newKeyword").value = "";
+      document.getElementById("newRuleName").value = "";
+      document.getElementById("newReply").value = "";
+      sendUserMsg(testWord);
+    });
+
+    document.getElementById("triggerWebhookBtn").addEventListener("click", () => {
+      let data;
+      try {
+        data = JSON.parse(document.getElementById("webhookPayload").value);
+      } catch {
+        document.getElementById("webhookStatus").textContent = "HTTP 400 Invalid JSON";
+        document.getElementById("webhookStatus").style.color = "#ef4444";
+        return;
+      }
+      document.getElementById("webhookStatus").textContent = "HTTP 200 Terkirim!";
+      document.getElementById("webhookStatus").style.color = "#10b981";
+      addActivity("webhook_api", data.event || "WEBHOOK", data.pesan || "-");
+      appendMessage(
+        "bot",
+        `🔔 Webhook Event: ${data.event || "NOTIFIKASI"}\nDetail: ${data.pesan || "-"}`,
+        data.kirim_laporan ? { attachment: "laporan_webhook.csv" } : {}
+      );
+    });
+
+    document.getElementById("downloadReportBtn").addEventListener("click", downloadCsvReport);
+    document.getElementById("resetChatBtn").addEventListener("click", () => {
+      chatMessages.innerHTML = "";
+      initWelcome();
+    });
+
+    function initWelcome() {
+      addActivity("@admin", "INIT", "Bot auto-responder siap dijalankan");
+      appendMessage(
+        "bot",
+        "Halo! 👋 Klik tombol menu di bawah atau ketik pesan apa saja untuk menguji aturan auto-responder secara langsung.",
+        { keyboard: true }
+      );
+    }
+
+    renderRules();
+    initWelcome();
+  </script>
+</body>
+</html>
