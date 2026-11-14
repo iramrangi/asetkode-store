@@ -1,5 +1,5 @@
 /* =========================================================
-   LOGIKA BIO LINK & MINI PORTFOLIO — ASETKODE
+   LOGIKA BIO LINK & MINI PORTFOLIO — DDEV
    Semua data dinamis diambil otomatis dari config.js
    ========================================================= */
 

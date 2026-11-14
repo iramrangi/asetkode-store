@@ -1,4 +1,4 @@
-# 🚀 Panduan Kolaborasi GitHub Pages × Blogger Cloud API (`AsetKode Pro Storefront`)
+# 🚀 Panduan Kolaborasi GitHub Pages × Blogger Cloud API (`Ddev Pro Storefront`)
 
 Arsitektur **Headless Storefront (GitHub Pages + Blogger API)** ini memisahkan **Tampilan Depan (Frontend)** dari **Database Konten (Backend CMS)** sehingga Anda mendapatkan kombinasi terbaik dari keduanya:
 

@@ -1,5 +1,5 @@
 /* =========================================================
-   LOGIKA UNDANGAN PERNIKAHAN DIGITAL ELEGAN — ASETKODE
+   LOGIKA UNDANGAN PERNIKAHAN DIGITAL ELEGAN — DDEV
    Semua data dinamis diambil otomatis dari config.js
    ========================================================= */
 

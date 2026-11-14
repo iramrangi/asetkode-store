@@ -1,4 +1,4 @@
-/* Landing Page UMKM — AsetKode
+/* Landing Page UMKM — Ddev
    Logika halaman. Anda tidak perlu mengedit file ini; semua data ada di config.js */
 (function () {
   'use strict';

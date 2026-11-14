@@ -1,5 +1,5 @@
 /**
- * AsetKode Pro Headless Storefront — Pure Monochrome (Hitam Putih) Edition
+ * Ddev Pro Headless Storefront — Pure Monochrome (Hitam Putih) Edition
  * - Auto-syncs products from https://asetkode.blogspot.com/ via JSONP (zero CORS issues)
  * - Built-in Interactive Live Demo Simulator (Desktop / Tablet / Mobile viewports)
  * - Multi-item Shopping Cart with automatic 20% Bundle Discount & VIP All-Access Pass
@@ -9,7 +9,7 @@
 // ================= 0. CENTRALIZED SITE & BRAND CONFIGURATION =================
 // Ubah konfigurasi di bawah ini saat ganti nama brand, pasang domain baru, atau aktifkan payment gateway.
 const SITE_CONFIG = {
-  brandName: 'AsetKode',
+  brandName: 'Ddev',
   brandBadge: 'PRO STORE',
   orderEmail: 'dekamayooo@gmail.com',
   paymentMode: 'email', // 'email' (order via email saat ini) | 'gateway' (otomatis QRIS/Mayar setelah pasang domain)
@@ -32,7 +32,7 @@ const FALLBACK_PRODUCTS = [
     categories: ['Web App', 'Source Code', 'JavaScript'],
     price: 'Rp 69.000',
     oldPrice: 'Rp 199.000',
-    paymentUrl: 'mailto:dekamayooo@gmail.com?subject=Order%20Aplikasi%20Kasir%20POS%20%26%20Excel%20(Rp%2069.000)&body=Halo%20Admin%20AsetKode%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Aplikasi%20Kasir%20(POS)%20%26%20Inventaris%20Gudang%20Live%20Sync%20Excel%0A-%20Harga%3A%20Rp%2069.000%0A%0AMohon%20info%20nomor%20rekening%20%2F%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.',
+    paymentUrl: 'mailto:dekamayooo@gmail.com?subject=Order%20Aplikasi%20Kasir%20POS%20%26%20Excel%20(Rp%2069.000)&body=Halo%20Admin%20Ddev%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Aplikasi%20Kasir%20(POS)%20%26%20Inventaris%20Gudang%20Live%20Sync%20Excel%0A-%20Harga%3A%20Rp%2069.000%0A%0AMohon%20info%20nomor%20rekening%20%2F%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.',
     demoUrl: 'demo/kasir/',
     postUrl: 'https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-pos.html',
     version: 'v2.4 (Terbaru)',

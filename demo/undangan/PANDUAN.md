@@ -1,6 +1,6 @@
 # Panduan Penggunaan — Template Undangan Pernikahan Digital
 
-Terima kasih telah membeli template undangan pernikahan digital dari **AsetKode**!
+Terima kasih telah membeli template undangan pernikahan digital dari **Ddev**!
 Template ini dibuat khusus agar **mudah disesuaikan tanpa perlu keahlian coding sama sekali**.
 
 ---
@@ -112,5 +112,5 @@ Nama tamu pada layar sampul akan otomatis berubah sesuai link yang Anda kirim!
 ---
 
 ## 📞 Bantuan & Layanan
-Jika ada kendala dalam pengaturan, silakan hubungi kami melalui kontak resmi **AsetKode**.
+Jika ada kendala dalam pengaturan, silakan hubungi kami melalui kontak resmi **Ddev**.
 

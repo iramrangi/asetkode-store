@@ -1,7 +1,7 @@
-LISENSI PENGGUNAAN - Template Bio Link & Mini Portfolio (AsetKode)
+LISENSI PENGGUNAAN - Template Bio Link & Mini Portfolio (Ddev)
 ==================================================================
 
-Terima kasih telah mempercayakan template digital Anda kepada AsetKode.
+Terima kasih telah mempercayakan template digital Anda kepada Ddev.
 
 HAK PENGGUNAAN (BOLEH):
   [v] Menggunakan template untuk profil bio link pribadi Anda selamanya.
@@ -17,5 +17,5 @@ PEMBATASAN LISENSI (TIDAK BOLEH):
 DISCLAIMER:
 Produk ini disediakan "apa adanya" tanpa jaminan tersurat maupun tersirat.
 
-(c) AsetKode - https://asetkode.blogspot.com
+(c) Ddev - https://asetkode.blogspot.com
 

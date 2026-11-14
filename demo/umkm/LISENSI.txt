@@ -1,4 +1,4 @@
-LISENSI PENGGUNAAN - Landing Page UMKM (AsetKode)
+LISENSI PENGGUNAAN - Landing Page UMKM (Ddev)
 ===================================================
 
 Dengan membeli produk ini, Anda BOLEH:
@@ -15,5 +15,5 @@ Anda TIDAK BOLEH:
 Produk ini diberikan "apa adanya". Penjual tidak bertanggung jawab atas
 kerugian yang timbul akibat penggunaan produk.
 
-(c) AsetKode - https://asetkode.blogspot.com
+(c) Ddev - https://asetkode.blogspot.com
 

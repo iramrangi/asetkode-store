@@ -1,6 +1,6 @@
 # Panduan Penggunaan — Template Bio Link & Mini Portfolio
 
-Terima kasih telah memilih template **Bio Link & Mini Portfolio** dari **AsetKode**!
+Terima kasih telah memilih template **Bio Link & Mini Portfolio** dari **Ddev**!
 Template ini adalah solusi mandiri (self-hosted) modern sebagai alternatif Linktree tanpa biaya langganan bulanan ($0 selamanya).
 
 ---
@@ -93,5 +93,5 @@ Simpan file (Ctrl + S), lalu buka `index.html` di browser Anda!
 ---
 
 ## 📞 Bantuan
-Jika membutuhkan bantuan kustomisasi atau pertanyaan lain, hubungi admin **AsetKode**.
+Jika membutuhkan bantuan kustomisasi atau pertanyaan lain, hubungi admin **Ddev**.
 

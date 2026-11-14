@@ -1,6 +1,6 @@
 # Panduan Instalasi — Landing Page UMKM
 
-Terima kasih telah membeli template ini dari **AsetKode**!
+Terima kasih telah membeli template ini dari **Ddev**!
 Template ini bisa dipakai untuk kedai kopi, warung makan, toko kue, laundry, barbershop, butik, dan usaha lainnya.
 
 ---
@@ -96,5 +96,5 @@ Beli domain `.com` / `.id` / `.my.id` (mulai ±Rp 15 rb/tahun untuk `.my.id`), l
 
 ## Bantuan
 
-Ada kendala? Hubungi kami lewat halaman kontak di toko **AsetKode**. Sertakan bukti pembelian.
+Ada kendala? Hubungi kami lewat halaman kontak di toko **Ddev**. Sertakan bukti pembelian.
 

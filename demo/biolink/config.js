@@ -1,5 +1,5 @@
 /* =========================================================
-   PENGATURAN BIO LINK & MINI PORTFOLIO — ASETKODE
+   PENGATURAN BIO LINK & MINI PORTFOLIO — DDEV
    Cukup edit tulisan di dalam tanda kutip '...' sesuai profil Anda.
    ========================================================= */
 const CONFIG = {

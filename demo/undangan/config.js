@@ -1,5 +1,5 @@
 /* =========================================================
-   PENGATURAN UNDANGAN PERNIKAHAN DIGITAL — ASETKODE
+   PENGATURAN UNDANGAN PERNIKAHAN DIGITAL — DDEV
    Cukup edit tulisan di dalam tanda kutip '...' sesuai data Anda.
    ========================================================= */
 const CONFIG = {
