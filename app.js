@@ -12,7 +12,13 @@ const SITE_CONFIG = {
   brandName: 'Ddev',
   brandBadge: 'PRO STORE',
   orderEmail: 'dekamayooo@gmail.com',
-  paymentMode: 'email', // 'email' (order via email saat ini) | 'gateway' (otomatis QRIS/Mayar setelah pasang domain)
+  paymentMode: 'email', // 'email' | 'midtrans' | 'gateway'
+  midtrans: {
+    enabled: false,
+    isProduction: false,
+    clientKey: '',
+    backendUrl: ''
+  },
   bloggerOrigin: 'https://asetkode.blogspot.com',
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
   readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17'],
@@ -1250,6 +1256,75 @@ function buildGmailComposeUrl(mailtoUrl) {
   return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
+let activeStorefrontMidtransOrder = null;
+let storefrontSnapPromise = null;
+
+function ensureStorefrontMidtransSnap() {
+  if (window.snap && typeof window.snap.pay === 'function') return Promise.resolve(window.snap);
+  if (storefrontSnapPromise) return storefrontSnapPromise;
+  const mt = SITE_CONFIG.midtrans || {};
+  storefrontSnapPromise = new Promise((resolve, reject) => {
+    const sc = document.createElement('script');
+    sc.src = mt.isProduction ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js';
+    sc.setAttribute('data-client-key', mt.clientKey || '');
+    sc.onload = () => (window.snap ? resolve(window.snap) : reject(new Error('Midtrans Snap gagal dimuat.')));
+    sc.onerror = () => {
+      storefrontSnapPromise = null;
+      reject(new Error('Gagal memuat script Midtrans Snap.'));
+    };
+    document.head.appendChild(sc);
+  });
+  return storefrontSnapPromise;
+}
+
+window.addEventListener('message', (ev) => {
+  const msg = ev && ev.data;
+  if (!msg || msg.type !== 'DDEV_SF_MIDTRANS_SUBMIT' || !activeStorefrontMidtransOrder) return;
+  const mt = SITE_CONFIG.midtrans || {};
+  const apiBase = String(mt.backendUrl || '').replace(/\/+$/, '');
+  const order = activeStorefrontMidtransOrder;
+
+  Promise.all([
+    ensureStorefrontMidtransSnap(),
+    fetch(`${apiBase}/api/create-transaction`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customerName: msg.name,
+        customerEmail: msg.email,
+        productTitle: order.title,
+        grossAmount: order.grossAmount,
+        items: [{ id: order.id || 'ddev-item', name: order.title, price: order.grossAmount, quantity: 1 }],
+        finishUrl: window.location.href.split('?')[0]
+      })
+    }).then((r) => r.json())
+  ])
+    .then(([snap, tx]) => {
+      if (!tx || !tx.token) throw new Error((tx && tx.error) || 'Gagal membuat transaksi Midtrans.');
+      const modal = document.getElementById('checkoutModal');
+      if (modal) modal.classList.remove('open');
+      snap.pay(tx.token, {
+        onSuccess: () => {
+          alert(`Pembayaran berhasil! Link unduhan .ZIP dikirim ke ${msg.email}`);
+        },
+        onPending: () => {
+          alert('Menunggu penyelesaian pembayaran QRIS / VA Midtrans Anda.');
+        },
+        onError: () => {
+          alert('Pembayaran Midtrans gagal diproses. Silakan coba lagi.');
+        }
+      });
+    })
+    .catch((err) => {
+      const iframe = document.getElementById('checkoutIframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'DDEV_SF_MIDTRANS_ERR', error: err.message }, '*');
+      } else {
+        alert(err.message);
+      }
+    });
+});
+
 function launchCheckoutGateway(order) {
   const modal = document.getElementById('checkoutModal');
   const titleEl = document.getElementById('checkoutModalTitle');
@@ -1259,6 +1334,23 @@ function launchCheckoutGateway(order) {
 
   if (titleEl) titleEl.textContent = `Pemesanan: ${order.title}`;
   if (priceEl) priceEl.textContent = order.price;
+
+  const mt = SITE_CONFIG.midtrans || {};
+  const isMidtransReady = Boolean(mt.enabled && mt.clientKey && mt.backendUrl);
+  const grossAmount = parsePriceNum(order.price);
+
+  if (isMidtransReady && grossAmount >= 1000 && iframe) {
+    activeStorefrontMidtransOrder = { ...order, grossAmount };
+    if (extLink) {
+      extLink.href = `mailto:${SITE_CONFIG.orderEmail}`;
+      extLink.textContent = 'Bantuan Order (Email) ↗';
+    }
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    iframe.removeAttribute('src');
+    iframe.srcdoc = `<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{font-family:system-ui,-apple-system,sans-serif;background:#fafafa;color:#09090b;margin:0;padding:22px;display:flex;justify-content:center;align-items:center;min-height:100vh}.box{background:#fff;border:1px solid #e4e4e7;border-radius:16px;padding:24px;max-width:450px;width:100%}.badge{display:inline-block;background:#09090b;color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;margin-bottom:8px}h2{margin:0 0 6px;font-size:18px}.price{font-size:22px;font-weight:800;margin-bottom:14px}label{display:block;font-size:12px;font-weight:700;color:#52525b;margin:10px 0 5px}input{width:100%;padding:10px 12px;border:1px solid #d4d4d8;border-radius:8px;font-size:14px}button{width:100%;margin-top:16px;padding:12px;border:0;border-radius:9px;background:#09090b;color:#fff;font-weight:800;font-size:14px;cursor:pointer}.err{display:none;margin-top:10px;color:#dc2626;font-size:12px;font-weight:600}</style></head><body><div class="box"><span class="badge">MIDTRANS PAYMENT GATEWAY</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)}</div><form id="f"><label>Nama Lengkap</label><input id="n" type="text" required placeholder="Nama Anda"/><label>Email Penerima File .ZIP</label><input id="e" type="email" required placeholder="nama@email.com"/><button id="b" type="submit">Bayar via Midtrans (QRIS / VA)</button><div id="err" class="err"></div></form></div><scr` + `ipt>var f=document.getElementById("f"),b=document.getElementById("b"),er=document.getElementById("err");f.addEventListener("submit",function(ev){ev.preventDefault();er.style.display="none";b.disabled=true;b.textContent="Menghubungkan Midtrans...";window.parent.postMessage({type:"DDEV_SF_MIDTRANS_SUBMIT",name:document.getElementById("n").value.trim(),email:document.getElementById("e").value.trim()},"*");});window.addEventListener("message",function(ev){if(ev.data&&ev.data.type==="DDEV_SF_MIDTRANS_ERR"){b.disabled=false;b.textContent="Bayar via Midtrans (QRIS / VA)";er.textContent=ev.data.error||"Gagal memproses.";er.style.display="block";}});</scr` + `ipt></body></html>`;
+    if (modal) modal.classList.add('open');
+    return;
+  }
 
   const isPlaceholder = !order.paymentUrl || order.paymentUrl.includes('example.com');
   const forceEmailMode = SITE_CONFIG.paymentMode === 'email';
@@ -1388,7 +1480,7 @@ function buildBuiltInPaymentGatewayHTML(order) {
         <div class="success-box" id="simSuccess">
           <div style="font-size:14px; font-weight:800; color:#09090b; margin-bottom:6px;">✓ Kode Pembayaran Siap</div>
           <p style="font-size:12.5px; color:#52525b; line-height:1.5;">
-            Begitu Anda menghubungkan link produk <strong>Mayar.id / Lynk.id / Tripay</strong> pada atribut <code>data-payment-url</code> di Bot Auto-Post, jendela ini otomatis menampilkan QRIS asli dan mengirimkan file <code>.ZIP</code> ke email pembeli detik itu juga.
+            Begitu Anda mengaktifkan <strong>Midtrans Snap</strong> di <code>SITE_CONFIG.midtrans</code> (atau menempel link Midtrans Payment Link pada atribut <code>data-payment-url</code>), jendela ini otomatis menampilkan QRIS / Virtual Account asli dan mengirimkan file <code>.ZIP</code> ke email pembeli.
           </p>
         </div>
       </div>
