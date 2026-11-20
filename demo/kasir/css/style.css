@@ -1368,6 +1368,16 @@ body {
 .print-only { display: none; }
 
 /* ==================== RESPONSIVE MOBILE & TABLET ==================== */
+@media (max-width: 1180px) {
+    .topbar { padding: 0 12px; gap: 8px; }
+    .topbar-left { gap: 10px; }
+    .store-identity { padding-right: 10px; }
+    .nav-tab { padding: 6px 8px; font-size: 12px; gap: 5px; }
+    .nav-tab kbd,
+    .status-filename,
+    .clock-pill { display: none; }
+}
+
 @media (max-width: 960px) {
     html, body {
         height: auto;
