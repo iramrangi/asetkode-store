@@ -1,5 +1,5 @@
 /* =========================================================
-   LOGIKA BIO LINK & MINI PORTFOLIO — DDEV
+   LOGIKA BIO LINK & MINI PORTFOLIO — DDEV (Upgraded)
    Semua data dinamis diambil otomatis dari config.js
    ========================================================= */
 
@@ -15,6 +15,7 @@
     briefcase: '<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
     chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+    file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
     coffee: '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
     globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
     star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
@@ -28,11 +29,12 @@
     mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>'
   };
 
-  /* ---------- BIND DATA PROFIL ---------- */
+  /* ---------- THEME & COLOR ---------- */
   if (C.warnaAksen) {
     document.documentElement.style.setProperty('--primary', C.warnaAksen);
   }
 
+  /* ---------- BIND DATA PROFIL ---------- */
   $('#headerHandle').textContent = C.handle || '';
   $('#profileName').textContent = C.nama || '';
   $('#profileTitle').textContent = C.profesi || '';
@@ -40,38 +42,53 @@
   $('#footerName').textContent = C.nama || '';
   $('#currentYear').textContent = new Date().getFullYear();
 
-  if (C.nama) {
-    document.title = `${C.nama} — ${C.profesi || 'Bio Link'}`;
+  if (C.nama) document.title = `${C.nama} — ${C.profesi || 'Bio Link'}`;
+  if (C.avatar) $('#profileAvatar').src = C.avatar;
+
+  if (C.lokasi) {
+    $('#locChip').hidden = false;
+    $('#profileLocation').textContent = C.lokasi;
   }
 
-  if (C.avatar) {
-    $('#profileAvatar').src = C.avatar;
-  }
+  const updateLocalClock = () => {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    $('#localTimeText').textContent = `${hh}:${mm} ${C.zonaWaktu || 'WIB'}`;
+  };
+  updateLocalClock();
+  setInterval(updateLocalClock, 30000);
 
-  // Status Badge
   const statusEl = $('#statusBadge');
   if (C.statusTersedia) {
     $('#statusText').textContent = C.teksStatus || 'Tersedia untuk proyek';
   } else {
-    statusEl?.remove();
+    statusEl.hidden = true;
+  }
+
+  /* ---------- RENDER MINI BENTO STATS ---------- */
+  const statsRow = $('#statsRow');
+  if (Array.isArray(C.statistik) && C.statistik.length) {
+    statsRow.hidden = false;
+    statsRow.innerHTML = C.statistik.map((s) => `
+      <div class="stat-tile">
+        <strong>${esc(s.angka)}</strong>
+        <span>${esc(s.label)}</span>
+      </div>`).join('');
   }
 
   /* ---------- RENDER SOCIAL ICONS ---------- */
   const socialBar = $('#socialBar');
   const soc = C.sosial || {};
   const socLinks = [];
-
   const addSoc = (key, iconKey, title) => {
-    if (soc[key]) {
-      const href = key === 'email' ? `mailto:${soc[key]}` : soc[key];
-      socLinks.push(`
-        <a href="${esc(href)}" target="_blank" rel="noopener" class="social-link" title="${esc(title)}" aria-label="${esc(title)}">
-          <svg viewBox="0 0 24 24">${ICONS[iconKey] || ICONS.globe}</svg>
-        </a>
-      `);
-    }
+    if (!soc[key]) return;
+    const href = key === 'email' ? `mailto:${soc[key]}` : soc[key];
+    socLinks.push(`
+      <a href="${esc(href)}" target="_blank" rel="noopener" class="social-link" title="${esc(title)}" aria-label="${esc(title)}">
+        <svg viewBox="0 0 24 24">${ICONS[iconKey] || ICONS.globe}</svg>
+      </a>`);
   };
-
   addSoc('github', 'github', 'GitHub');
   addSoc('linkedin', 'linkedin', 'LinkedIn');
   addSoc('instagram', 'instagram', 'Instagram');
@@ -80,61 +97,7 @@
   addSoc('twitter', 'twitter', 'Twitter / X');
   addSoc('whatsapp', 'whatsapp', 'WhatsApp');
   addSoc('email', 'mail', 'Email');
-
   socialBar.innerHTML = socLinks.join('');
-
-  /* ---------- RENDER MAIN LINKS ---------- */
-  const linksList = $('#linksList');
-  const links = C.links || [];
-  linksList.innerHTML = links.map((link) => {
-    const isAnchor = (link.url || '').startsWith('#');
-    const target = isAnchor ? '' : 'target="_blank" rel="noopener"';
-    return `
-      <a href="${esc(link.url)}" ${target} class="link-card${link.highlight ? ' highlight' : ''}">
-        <div class="link-icon-wrap">
-          <svg viewBox="0 0 24 24">${ICONS[link.ikon] || ICONS.globe}</svg>
-        </div>
-        <div class="link-body">
-          <div class="link-title-row">
-            <span class="link-title">${esc(link.judul)}</span>
-            ${link.badge ? `<span class="link-badge">${esc(link.badge)}</span>` : ''}
-          </div>
-          ${link.deskripsi ? `<p class="link-desc">${esc(link.deskripsi)}</p>` : ''}
-        </div>
-        <div class="link-arrow">
-          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-        </div>
-      </a>
-    `;
-  }).join('');
-
-  /* ---------- RENDER PORTFOLIO PROJECTS ---------- */
-  const portfolioGrid = $('#portfolioGrid');
-  const projects = C.proyek || [];
-  if (projects.length > 0) {
-    portfolioGrid.innerHTML = projects.map((p) => `
-      <article class="project-card">
-        <div class="project-thumb">
-          <img src="${esc(p.gambar)}" alt="${esc(p.judul)}" loading="lazy">
-        </div>
-        <div class="project-content">
-          <div class="project-tags">
-            ${(p.tags || []).map((t) => `<span class="tag-item">${esc(t)}</span>`).join('')}
-          </div>
-          <h3 class="project-title">${esc(p.judul)}</h3>
-          <p class="project-desc">${esc(p.deskripsi)}</p>
-          ${p.demoUrl ? `
-            <a href="${esc(p.demoUrl)}" target="_blank" rel="noopener" class="project-btn">
-              <span>Lihat Demo Proyek</span>
-              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-          ` : ''}
-        </div>
-      </article>
-    `).join('');
-  } else {
-    $('#portfolioSection')?.remove();
-  }
 
   /* ---------- TOAST NOTIFICATION ---------- */
   const toast = $('#toastNotification');
@@ -145,6 +108,209 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
   }
+
+  function copyToClipboard(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showToast(successMsg)).catch(() => showToast(text));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showToast(successMsg);
+    }
+  }
+
+  /* ---------- MODAL HELPER (CASE STUDY, CV, INQUIRY) ---------- */
+  const modal = $('#bioModal');
+  const backdrop = $('#modalBackdrop');
+  const modalTitle = $('#modalTitle');
+  const modalBody = $('#modalBody');
+
+  const closeModal = () => {
+    modal.hidden = true;
+    backdrop.hidden = true;
+  };
+  const openModal = (title, html) => {
+    modalTitle.textContent = title;
+    modalBody.innerHTML = html;
+    modal.hidden = false;
+    backdrop.hidden = false;
+  };
+  $('#closeModalBtn').addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  const openInquiryModal = () => {
+    openModal('Pesan Jasa / Diskusi Proyek', `
+      <form class="inquiry-form" id="inquiryForm">
+        <div>
+          <label for="inqName">Nama Anda</label>
+          <input type="text" id="inqName" placeholder="Misal: Budi Santoso" required>
+        </div>
+        <div>
+          <label for="inqType">Kebutuhan</label>
+          <select id="inqType">
+            <option value="Pembuatan Website / Toko Online">Pembuatan Website / Toko Online</option>
+            <option value="Aplikasi Web / Dashboard Bisnis">Aplikasi Web / Dashboard Bisnis</option>
+            <option value="Redesign UI/UX">Redesign UI/UX</option>
+            <option value="Konsultasi Lainnya">Konsultasi Lainnya</option>
+          </select>
+        </div>
+        <div>
+          <label for="inqNote">Ringkasan Proyek</label>
+          <textarea id="inqNote" rows="3" placeholder="Ceritakan singkat fitur yang diinginkan dan target waktunya..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary-pill" style="width:100%;">
+          <span>Lanjut Kirim ke WhatsApp</span>
+        </button>
+      </form>
+    `);
+
+    $('#inquiryForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = ($('#inqName').value || '').trim();
+      const type = $('#inqType').value;
+      const note = ($('#inqNote').value || '').trim();
+      const phone = ((C.vcard && C.vcard.telepon) || '6281234567890').replace(/[^0-9]/g, '');
+      const text = `Halo ${C.nama || ''},\nNama: ${name}\nKebutuhan: ${type}${note ? `\nDetail: ${note}` : ''}`;
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+      closeModal();
+    });
+  };
+
+  const openResumeModal = () => {
+    const expHtml = (C.pengalaman || []).map((ex) => `
+      <li class="cv-item">
+        <strong>${esc(ex.peran)}</strong>
+        <span>${esc(ex.tempat)} &bull; ${esc(ex.tahun)}</span>
+      </li>`).join('');
+    const skillHtml = (C.keahlian || []).map((k) => `<span class="skill-tag">${esc(k)}</span>`).join('');
+    openModal(`Profil & CV — ${C.nama || ''}`, `
+      <p class="modal-text">${esc(C.bio || '')}</p>
+      ${expHtml ? `<ul class="cv-list">${expHtml}</ul>` : ''}
+      ${skillHtml ? `<div class="skills-pills">${skillHtml}</div>` : ''}
+      <button type="button" class="btn-primary-pill" id="modalToInquiry" style="width:100%;">Diskusi Proyek Sekarang</button>
+    `);
+    const btn = $('#modalToInquiry');
+    if (btn) btn.addEventListener('click', openInquiryModal);
+  };
+
+  $('#openInquiryBtn').addEventListener('click', openInquiryModal);
+
+  /* ---------- RENDER MAIN LINKS ---------- */
+  const linksList = $('#linksList');
+  const links = C.links || [];
+  linksList.innerHTML = links.map((link, idx) => {
+    const arrowSvg = '<div class="link-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>';
+    const inner = `
+      <div class="link-icon-wrap"><svg viewBox="0 0 24 24">${ICONS[link.ikon] || ICONS.globe}</svg></div>
+      <div class="link-body">
+        <div class="link-title-row">
+          <span class="link-title">${esc(link.judul)}</span>
+          ${link.badge ? `<span class="link-badge">${esc(link.badge)}</span>` : ''}
+        </div>
+        ${link.deskripsi ? `<p class="link-desc">${esc(link.deskripsi)}</p>` : ''}
+      </div>
+      ${arrowSvg}`;
+
+    if (link.aksi === 'inquiry' || link.aksi === 'resume') {
+      return `<button type="button" class="link-card${link.highlight ? ' highlight' : ''}" data-link-action="${esc(link.aksi)}">${inner}</button>`;
+    }
+    const isAnchor = (link.url || '').startsWith('#');
+    const target = isAnchor ? '' : 'target="_blank" rel="noopener"';
+    return `<a href="${esc(link.url)}" ${target} data-link-idx="${idx}" class="link-card${link.highlight ? ' highlight' : ''}">${inner}</a>`;
+  }).join('');
+
+  linksList.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-link-action]');
+    if (!btn) return;
+    if (btn.dataset.linkAction === 'inquiry') openInquiryModal();
+    else if (btn.dataset.linkAction === 'resume') openResumeModal();
+  });
+
+  /* ---------- RENDER SKILLS & TESTIMONI ---------- */
+  const skillsBox = $('#skillsBox');
+  const quoteBox = $('#quoteBox');
+  if (Array.isArray(C.keahlian) && C.keahlian.length) {
+    skillsBox.hidden = false;
+    $('#skillsPills').innerHTML = C.keahlian.map((k) => `<span class="skill-tag">${esc(k)}</span>`).join('');
+  }
+  if (C.testimoni && C.testimoni.kutipan) {
+    quoteBox.hidden = false;
+    $('#quoteText').textContent = `“${C.testimoni.kutipan}”`;
+    $('#quoteAuthor').textContent = C.testimoni.nama || '';
+    $('#quoteRole').textContent = C.testimoni.jabatan ? `— ${C.testimoni.jabatan}` : '';
+  }
+  if (skillsBox.hidden && quoteBox.hidden) {
+    $('#skillsSection').hidden = true;
+  }
+
+  /* ---------- RENDER PORTFOLIO PROJECTS ---------- */
+  const portfolioGrid = $('#portfolioGrid');
+  const projects = C.proyek || [];
+  $('#projectCountChip').textContent = `${projects.length} Proyek`;
+
+  if (projects.length > 0) {
+    portfolioGrid.innerHTML = projects.map((p, idx) => `
+      <article class="project-card">
+        <div class="project-thumb">
+          <img src="${esc(p.gambar)}" alt="${esc(p.judul)}" loading="lazy">
+        </div>
+        <div class="project-content">
+          <div class="project-tags">
+            ${(p.tags || []).map((t) => `<span class="tag-item">${esc(t)}</span>`).join('')}
+          </div>
+          <h3 class="project-title">${esc(p.judul)}</h3>
+          <p class="project-desc">${esc(p.deskripsi)}</p>
+          <div class="project-actions">
+            <button type="button" class="project-detail-btn" data-proj-idx="${idx}">Detail Proyek</button>
+            ${p.demoUrl ? `
+              <a href="${esc(p.demoUrl)}" target="_blank" rel="noopener" class="project-btn">
+                <span>Live Demo</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>` : ''}
+          </div>
+        </div>
+      </article>`).join('');
+
+    portfolioGrid.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-proj-idx]');
+      if (!b) return;
+      const p = projects[Number(b.dataset.projIdx)];
+      if (!p) return;
+      openModal(p.judul, `
+        <img src="${esc(p.gambar)}" alt="${esc(p.judul)}" class="modal-img">
+        <div class="project-tags">${(p.tags || []).map((t) => `<span class="tag-item">${esc(t)}</span>`).join('')}</div>
+        <p class="modal-text">${esc(p.ringkasan || p.deskripsi)}</p>
+        ${p.demoUrl ? `<a href="${esc(p.demoUrl)}" target="_blank" rel="noopener" class="btn-primary-pill" style="width:100%;">Buka Live Demo ↗</a>` : ''}
+      `);
+    });
+  } else {
+    $('#portfolioSection').hidden = true;
+  }
+
+  /* ---------- VIEW TABS FILTER ---------- */
+  const viewTabs = $('#viewTabs');
+  viewTabs.addEventListener('click', (e) => {
+    const tab = e.target.closest('.tab-pill');
+    if (!tab) return;
+    const mode = tab.dataset.tab;
+    $$('.tab-pill', viewTabs).forEach((t) => {
+      const active = t === tab;
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-selected', String(active));
+    });
+    $('#linksSection').hidden = mode !== 'all' && mode !== 'links';
+    $('#portfolioSection').hidden = projects.length === 0 || (mode !== 'all' && mode !== 'work');
+    $('#skillsSection').hidden = (skillsBox.hidden && quoteBox.hidden) || (mode !== 'all' && mode !== 'about');
+  });
 
   /* ---------- THEME TOGGLE ---------- */
   const root = document.documentElement;
@@ -162,32 +328,23 @@
     }
   });
 
-  /* ---------- SHARE BUTTON ---------- */
+  /* ---------- SHARE & COPY EMAIL ---------- */
+  $('#copyEmailBtn').addEventListener('click', () => {
+    const email = (C.sosial && C.sosial.email) || (C.vcard && C.vcard.email);
+    if (email) copyToClipboard(email, `Email ${email} disalin!`);
+  });
+
   $('#shareBtn').addEventListener('click', () => {
     if (navigator.share) {
       navigator.share({
         title: document.title,
         text: `Kunjungi profil dan portofolio resmi ${C.nama || ''}:`,
         url: window.location.href
-      }).catch(() => {});
+      }).catch(() => copyToClipboard(window.location.href, 'Tautan profil berhasil disalin!'));
     } else {
       copyToClipboard(window.location.href, 'Tautan profil berhasil disalin!');
     }
   });
-
-  function copyToClipboard(text, successMsg) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(() => showToast(successMsg));
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      ta.remove();
-      showToast(successMsg);
-    }
-  }
 
   /* ---------- V-CARD DOWNLOAD (.vcf) ---------- */
   $('#saveContactBtn').addEventListener('click', () => {
@@ -218,6 +375,4 @@
     document.body.removeChild(link);
     showToast('File kontak (.vcf) berhasil diunduh!');
   });
-
 })();
-
