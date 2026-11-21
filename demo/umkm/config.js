@@ -3,7 +3,7 @@
    Ganti teks di dalam tanda kutip '...' sesuai usaha Anda.
    Simpan file, lalu refresh browser. Selesai!
    ========================================================= */
-const CONFIG = {
+var CONFIG = window.CONFIG = {
   // ---------- IDENTITAS USAHA ----------
   namaUsaha: 'Kopi Senja',
   tagline: 'Kopi lokal, rasa juara',

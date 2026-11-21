@@ -200,15 +200,46 @@ button, input, textarea, select { font-family: inherit; }
 
 /* QUICK VIEW TABS */
 .view-tabs {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem;
   background: var(--surface); border: 1px solid var(--card-border); border-radius: 16px;
   padding: 0.35rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);
 }
 .tab-pill {
-  border: 0; background: transparent; color: var(--text-muted); font-size: 0.82rem; font-weight: 700;
-  padding: 0.52rem 0.4rem; border-radius: 11px; cursor: pointer; transition: all 0.2s;
+  border: 0; background: transparent; color: var(--text-muted); font-size: 0.8rem; font-weight: 700;
+  padding: 0.52rem 0.3rem; border-radius: 11px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
 }
 .tab-pill.active { background: var(--primary); color: #fff; box-shadow: 0 4px 14px -4px var(--primary-glow); }
+
+/* SERVICES RATE CARD */
+.services-section { margin-bottom: 1.85rem; }
+.services-grid { display: grid; gap: 0.85rem; }
+.service-card {
+  background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-md);
+  padding: 1.1rem 1.2rem; backdrop-filter: blur(12px); box-shadow: var(--shadow-main);
+  transition: transform 0.22s, border-color 0.22s;
+}
+.service-card:hover { transform: translateY(-2px); border-color: var(--card-border-hover); }
+.service-card.popular { border-color: var(--primary-border); box-shadow: 0 0 24px -8px var(--primary-glow); }
+.service-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }
+.service-title-row { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+.service-title-row h3 { font-size: 0.98rem; font-weight: 800; color: var(--text-main); }
+.service-popular-pill {
+  font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+  background: var(--primary); color: #fff; padding: 0.14rem 0.48rem; border-radius: 99px;
+}
+.service-desc { font-size: 0.81rem; color: var(--text-muted); line-height: 1.5; }
+.service-price-col { text-align: right; flex-shrink: 0; }
+.service-price { display: block; font-size: 0.98rem; font-weight: 800; color: var(--primary); white-space: nowrap; }
+.service-eta { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
+.service-features { list-style: none; display: grid; gap: 0.35rem; margin-bottom: 0.9rem; }
+.service-features li { display: flex; align-items: center; gap: 0.45rem; font-size: 0.8rem; color: var(--text-muted); }
+.service-features svg { width: 14px; height: 14px; flex-shrink: 0; fill: none; stroke: var(--primary); stroke-width: 2.5; }
+.service-cta-btn {
+  width: 100%; border: 1px solid var(--card-border); background: var(--surface-2); color: var(--text-main);
+  padding: 0.56rem 0.9rem; border-radius: 10px; font-size: 0.81rem; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.service-cta-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
 /* SECTION HEADINGS */
 .section-heading { margin-bottom: 0.85rem; }
@@ -266,6 +297,21 @@ button, input, textarea, select { font-family: inherit; }
 .bento-quote blockquote { font-size: 0.9rem; font-style: italic; color: var(--text-main); margin-bottom: 0.55rem; }
 .bento-quote figcaption { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; }
 .bento-quote figcaption strong { color: var(--primary); }
+.testimonials-grid { display: grid; gap: 0.75rem; }
+
+.faq-list { display: grid; gap: 0.55rem; }
+.faq-item {
+  background: var(--surface-2); border: 1px solid var(--card-border); border-radius: 12px;
+  padding: 0.75rem 0.95rem;
+}
+.faq-item summary {
+  font-size: 0.86rem; font-weight: 700; color: var(--text-main); cursor: pointer;
+  list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; font-size: 1rem; color: var(--primary); font-weight: 800; }
+.faq-item[open] summary::after { content: '−'; }
+.faq-item p { margin-top: 0.55rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; }
 
 /* PORTFOLIO GRID */
 .portfolio-section { margin-bottom: 2.2rem; }
@@ -347,10 +393,14 @@ button, input, textarea, select { font-family: inherit; }
   .container { width: min(640px, 100% - 1.3rem); }
   .profile-inner { padding: 0 1rem 1.35rem; }
   .portfolio-grid { grid-template-columns: 1fr; }
+  .service-top { flex-direction: column; gap: 0.4rem; }
+  .service-price-col { text-align: left; }
+  .view-tabs { overflow-x: auto; grid-template-columns: repeat(5, minmax(72px, 1fr)); scrollbar-width: none; }
+  .view-tabs::-webkit-scrollbar { display: none; }
   .hero-cta-row { flex-direction: column; }
   .btn-primary-pill, .btn-save-contact { width: 100%; }
   .stats-row { gap: 0.4rem; }
   .stat-tile { padding: 0.55rem 0.35rem; }
   .stat-tile strong { font-size: 0.94rem; }
-  .tab-pill { font-size: 0.76rem; padding: 0.46rem 0.25rem; }
+  .tab-pill { font-size: 0.74rem; padding: 0.46rem 0.25rem; }
 }

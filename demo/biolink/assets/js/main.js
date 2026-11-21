@@ -1,11 +1,11 @@
 /* =========================================================
-   LOGIKA BIO LINK & MINI PORTFOLIO — DDEV (Upgraded)
+   LOGIKA BIO LINK & MINI PORTFOLIO — DDEV (Rich Interactive Edition)
    Semua data dinamis diambil otomatis dari config.js
    ========================================================= */
 
 (function () {
   'use strict';
-  const C = window.CONFIG || {};
+  const C = (typeof CONFIG !== 'undefined' ? CONFIG : null) || window.CONFIG || {};
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -35,8 +35,8 @@
   }
 
   /* ---------- BIND DATA PROFIL ---------- */
-  $('#headerHandle').textContent = C.handle || '';
-  $('#profileName').textContent = C.nama || '';
+  $('#headerHandle').textContent = C.handle || '@profil';
+  $('#profileName').textContent = C.nama || 'Nama Profil';
   $('#profileTitle').textContent = C.profesi || '';
   $('#profileBio').textContent = C.bio || '';
   $('#footerName').textContent = C.nama || '';
@@ -48,6 +48,10 @@
   if (C.lokasi) {
     $('#locChip').hidden = false;
     $('#profileLocation').textContent = C.lokasi;
+  }
+  if (C.slotTersedia) {
+    $('#slotChip').hidden = false;
+    $('#slotText').textContent = C.slotTersedia;
   }
 
   const updateLocalClock = () => {
@@ -147,7 +151,16 @@
     if (e.key === 'Escape') closeModal();
   });
 
-  const openInquiryModal = () => {
+  const openInquiryModal = (presetNeed) => {
+    const options = [
+      ...(Array.isArray(C.layanan) ? C.layanan.map((l) => `${l.nama} (${l.harga})`) : []),
+      'Pembuatan Website / Toko Online',
+      'Aplikasi Web / Dashboard Bisnis',
+      'Redesign UI/UX & Optimasi Kecepatan',
+      'Konsultasi Lainnya'
+    ];
+    const uniqueOptions = [...new Set(options)];
+
     openModal('Pesan Jasa / Diskusi Proyek', `
       <form class="inquiry-form" id="inquiryForm">
         <div>
@@ -155,17 +168,14 @@
           <input type="text" id="inqName" placeholder="Misal: Budi Santoso" required>
         </div>
         <div>
-          <label for="inqType">Kebutuhan</label>
+          <label for="inqType">Paket / Kebutuhan</label>
           <select id="inqType">
-            <option value="Pembuatan Website / Toko Online">Pembuatan Website / Toko Online</option>
-            <option value="Aplikasi Web / Dashboard Bisnis">Aplikasi Web / Dashboard Bisnis</option>
-            <option value="Redesign UI/UX">Redesign UI/UX</option>
-            <option value="Konsultasi Lainnya">Konsultasi Lainnya</option>
+            ${uniqueOptions.map((opt) => `<option value="${esc(opt)}"${presetNeed && opt.includes(presetNeed) ? ' selected' : ''}>${esc(opt)}</option>`).join('')}
           </select>
         </div>
         <div>
           <label for="inqNote">Ringkasan Proyek</label>
-          <textarea id="inqNote" rows="3" placeholder="Ceritakan singkat fitur yang diinginkan dan target waktunya..."></textarea>
+          <textarea id="inqNote" rows="3" placeholder="Ceritakan singkat fitur yang diinginkan, referensi desain, dan target waktunya..."></textarea>
         </div>
         <button type="submit" class="btn-primary-pill" style="width:100%;">
           <span>Lanjut Kirim ke WhatsApp</span>
@@ -199,14 +209,15 @@
       <button type="button" class="btn-primary-pill" id="modalToInquiry" style="width:100%;">Diskusi Proyek Sekarang</button>
     `);
     const btn = $('#modalToInquiry');
-    if (btn) btn.addEventListener('click', openInquiryModal);
+    if (btn) btn.addEventListener('click', () => openInquiryModal());
   };
 
-  $('#openInquiryBtn').addEventListener('click', openInquiryModal);
+  $('#openInquiryBtn').addEventListener('click', () => openInquiryModal());
 
   /* ---------- RENDER MAIN LINKS ---------- */
   const linksList = $('#linksList');
   const links = C.links || [];
+  $('#linksCountChip').textContent = `${links.length} Tautan`;
   linksList.innerHTML = links.map((link, idx) => {
     const arrowSvg = '<div class="link-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>';
     const inner = `
@@ -235,21 +246,41 @@
     else if (btn.dataset.linkAction === 'resume') openResumeModal();
   });
 
-  /* ---------- RENDER SKILLS & TESTIMONI ---------- */
-  const skillsBox = $('#skillsBox');
-  const quoteBox = $('#quoteBox');
-  if (Array.isArray(C.keahlian) && C.keahlian.length) {
-    skillsBox.hidden = false;
-    $('#skillsPills').innerHTML = C.keahlian.map((k) => `<span class="skill-tag">${esc(k)}</span>`).join('');
-  }
-  if (C.testimoni && C.testimoni.kutipan) {
-    quoteBox.hidden = false;
-    $('#quoteText').textContent = `“${C.testimoni.kutipan}”`;
-    $('#quoteAuthor').textContent = C.testimoni.nama || '';
-    $('#quoteRole').textContent = C.testimoni.jabatan ? `— ${C.testimoni.jabatan}` : '';
-  }
-  if (skillsBox.hidden && quoteBox.hidden) {
-    $('#skillsSection').hidden = true;
+  /* ---------- RENDER SERVICES / RATE CARD ---------- */
+  const servicesSection = $('#servicesSection');
+  const servicesGrid = $('#servicesGrid');
+  const services = Array.isArray(C.layanan) ? C.layanan : [];
+  if (services.length) {
+    servicesSection.hidden = false;
+    $('#servicesCountChip').textContent = `${services.length} Paket`;
+    servicesGrid.innerHTML = services.map((srv, idx) => `
+      <article class="service-card${srv.populer ? ' popular' : ''}">
+        <div class="service-top">
+          <div>
+            <div class="service-title-row">
+              <h3>${esc(srv.nama)}</h3>
+              ${srv.populer ? '<span class="service-popular-pill">Populer</span>' : ''}
+            </div>
+            <p class="service-desc">${esc(srv.deskripsi || '')}</p>
+          </div>
+          <div class="service-price-col">
+            <strong class="service-price">${esc(srv.harga)}</strong>
+            ${srv.durasi ? `<span class="service-eta">Est. ${esc(srv.durasi)}</span>` : ''}
+          </div>
+        </div>
+        ${Array.isArray(srv.fitur) && srv.fitur.length ? `
+          <ul class="service-features">
+            ${srv.fitur.map((f) => `<li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>${esc(f)}</span></li>`).join('')}
+          </ul>` : ''}
+        <button type="button" class="service-cta-btn" data-srv-idx="${idx}">Pesan Paket Ini &rarr;</button>
+      </article>`).join('');
+
+    servicesGrid.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-srv-idx]');
+      if (!btn) return;
+      const srv = services[Number(btn.dataset.srvIdx)];
+      if (srv) openInquiryModal(srv.nama);
+    });
   }
 
   /* ---------- RENDER PORTFOLIO PROJECTS ---------- */
@@ -296,6 +327,44 @@
     $('#portfolioSection').hidden = true;
   }
 
+  /* ---------- RENDER SKILLS, TESTIMONIALS & FAQ ---------- */
+  const skillsBox = $('#skillsBox');
+  const testimonialsBlock = $('#testimonialsBlock');
+  const faqBox = $('#faqBox');
+
+  if (Array.isArray(C.keahlian) && C.keahlian.length) {
+    skillsBox.hidden = false;
+    $('#skillsPills').innerHTML = C.keahlian.map((k) => `<span class="skill-tag">${esc(k)}</span>`).join('');
+  }
+
+  const testiItems = Array.isArray(C.testimoniList) && C.testimoniList.length
+    ? C.testimoniList
+    : (C.testimoni && C.testimoni.kutipan ? [C.testimoni] : []);
+  if (testiItems.length) {
+    testimonialsBlock.hidden = false;
+    $('#testimonialsGrid').innerHTML = testiItems.map((t) => `
+      <figure class="bento-quote">
+        <blockquote>“${esc(t.kutipan)}”</blockquote>
+        <figcaption>
+          <strong>${esc(t.nama || '')}</strong>
+          ${t.jabatan ? `<span>— ${esc(t.jabatan)}</span>` : ''}
+        </figcaption>
+      </figure>`).join('');
+  }
+
+  const faqItems = Array.isArray(C.faq) ? C.faq : [];
+  if (faqItems.length) {
+    faqBox.hidden = false;
+    $('#faqList').innerHTML = faqItems.map((item, idx) => `
+      <details class="faq-item"${idx === 0 ? ' open' : ''}>
+        <summary>${esc(item.tanya)}</summary>
+        <p>${esc(item.jawab)}</p>
+      </details>`).join('');
+  }
+
+  const hasAbout = !skillsBox.hidden || !testimonialsBlock.hidden || !faqBox.hidden;
+  if (!hasAbout) $('#skillsSection').hidden = true;
+
   /* ---------- VIEW TABS FILTER ---------- */
   const viewTabs = $('#viewTabs');
   viewTabs.addEventListener('click', (e) => {
@@ -308,8 +377,9 @@
       t.setAttribute('aria-selected', String(active));
     });
     $('#linksSection').hidden = mode !== 'all' && mode !== 'links';
+    servicesSection.hidden = services.length === 0 || (mode !== 'all' && mode !== 'services');
     $('#portfolioSection').hidden = projects.length === 0 || (mode !== 'all' && mode !== 'work');
-    $('#skillsSection').hidden = (skillsBox.hidden && quoteBox.hidden) || (mode !== 'all' && mode !== 'about');
+    $('#skillsSection').hidden = !hasAbout || (mode !== 'all' && mode !== 'about');
   });
 
   /* ---------- THEME TOGGLE ---------- */

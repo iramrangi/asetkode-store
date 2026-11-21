@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alex Pratama — Bio Link & Mini Portfolio</title>
-  <meta name="description" content="Official bio link, portofolio, layanan, dan kontak Alex Pratama.">
-  <meta property="og:title" content="Alex Pratama — Bio Link & Mini Portfolio">
-  <meta property="og:description" content="Kunjungi portofolio, tautan penting, dan kontak resmi.">
+  <title>Alex Pratama — Bio Link &amp; Mini Portfolio</title>
+  <meta name="description" content="Official bio link, paket layanan, portofolio, testimoni klien, dan kontak resmi Alex Pratama.">
+  <meta property="og:title" content="Alex Pratama — Bio Link &amp; Mini Portfolio">
+  <meta property="og:description" content="Kunjungi portofolio, paket jasa web, tautan penting, dan kontak resmi.">
   <meta property="og:image" content="assets/img/avatar.jpg">
   <meta name="theme-color" content="#0a0f18">
 
@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="assets/css/style.css?v=20261121">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261121b">
 </head>
 <body>
 
@@ -72,6 +72,10 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
             <span id="localTimeText">--:-- WIB</span>
           </span>
+          <span class="meta-pill" id="slotChip" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="slotText">Slot Tersedia</span>
+          </span>
         </div>
 
         <p class="profile-bio" id="profileBio"></p>
@@ -100,45 +104,69 @@
     <div class="view-tabs" id="viewTabs" role="tablist" aria-label="Filter tampilan profil">
       <button type="button" class="tab-pill active" role="tab" aria-selected="true" data-tab="all">Semua</button>
       <button type="button" class="tab-pill" role="tab" aria-selected="false" data-tab="links">Tautan</button>
+      <button type="button" class="tab-pill" role="tab" aria-selected="false" data-tab="services">Layanan</button>
       <button type="button" class="tab-pill" role="tab" aria-selected="false" data-tab="work">Portofolio</button>
       <button type="button" class="tab-pill" role="tab" aria-selected="false" data-tab="about">Keahlian</button>
     </div>
 
     <!-- MAIN LINKS LIST -->
     <section class="links-section" id="linksSection" aria-label="Daftar Tautan">
-      <div class="section-heading">
-        <h2>Tautan Utama</h2>
+      <div class="section-heading section-heading-row">
+        <div>
+          <h2>Tautan Utama</h2>
+          <p>Akses cepat katalog produk, CV, konsultasi, &amp; saluran resmi</p>
+        </div>
+        <span class="count-chip" id="linksCountChip">0 Link</span>
       </div>
       <div class="links-list" id="linksList"></div>
     </section>
 
-    <!-- SKILLS & QUOTE BENTO ROW -->
-    <section class="skills-section" id="skillsSection" aria-label="Keahlian dan Testimoni">
-      <div class="bento-box" id="skillsBox" hidden>
-        <div class="section-heading">
-          <h2>Stack &amp; Keahlian</h2>
+    <!-- SERVICES / RATE CARD BENTO -->
+    <section class="services-section" id="servicesSection" aria-label="Paket Layanan &amp; Rate Card" hidden>
+      <div class="section-heading section-heading-row">
+        <div>
+          <h2>Paket Layanan &amp; Rate Card</h2>
+          <p>Pilih paket sesuai kebutuhan Anda, lalu klik pesan untuk estimasi</p>
         </div>
-        <div class="skills-pills" id="skillsPills"></div>
+        <span class="count-chip" id="servicesCountChip">3 Paket</span>
       </div>
-      <figure class="bento-quote" id="quoteBox" hidden>
-        <blockquote id="quoteText"></blockquote>
-        <figcaption>
-          <strong id="quoteAuthor"></strong>
-          <span id="quoteRole"></span>
-        </figcaption>
-      </figure>
+      <div class="services-grid" id="servicesGrid"></div>
     </section>
 
     <!-- MINI PORTFOLIO SHOWCASE -->
     <section class="portfolio-section" id="portfolioSection" aria-label="Portofolio Proyek">
       <div class="section-heading section-heading-row">
         <div>
-          <h2>Showcase Proyek</h2>
-          <p>Klik kartu untuk baca ringkasan atau coba Live Demo</p>
+          <h2>Showcase Proyek Pilihan</h2>
+          <p>Klik Detail Proyek untuk ringkasan atau buka Live Demo interaktif</p>
         </div>
         <span class="count-chip" id="projectCountChip">0 Proyek</span>
       </div>
       <div class="portfolio-grid" id="portfolioGrid"></div>
+    </section>
+
+    <!-- SKILLS, TESTIMONI & FAQ -->
+    <section class="skills-section" id="skillsSection" aria-label="Keahlian, Testimoni, dan FAQ">
+      <div class="bento-box" id="skillsBox" hidden>
+        <div class="section-heading">
+          <h2>Stack Teknologi &amp; Keahlian</h2>
+        </div>
+        <div class="skills-pills" id="skillsPills"></div>
+      </div>
+
+      <div class="testimonials-block" id="testimonialsBlock" hidden>
+        <div class="section-heading">
+          <h2>Apa Kata Klien</h2>
+        </div>
+        <div class="testimonials-grid" id="testimonialsGrid"></div>
+      </div>
+
+      <div class="bento-box" id="faqBox" hidden>
+        <div class="section-heading">
+          <h2>Pertanyaan Umum (FAQ)</h2>
+        </div>
+        <div class="faq-list" id="faqList"></div>
+      </div>
     </section>
 
     <!-- FOOTER -->
@@ -164,7 +192,7 @@
   <!-- TOAST NOTIFICATION -->
   <div id="toastNotification" class="toast-notification" role="status" aria-live="polite">Tautan berhasil disalin!</div>
 
-  <script src="config.js?v=20261121"></script>
-  <script src="assets/js/main.js?v=20261121"></script>
+  <script src="config.js?v=20261121b"></script>
+  <script src="assets/js/main.js?v=20261121b"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
    Semua data usaha dikelola dari config.js */
 (function () {
   'use strict';
-  const C = window.CONFIG || {};
+  const C = (typeof CONFIG !== 'undefined' ? CONFIG : null) || window.CONFIG || {};
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
