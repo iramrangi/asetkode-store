@@ -76,11 +76,22 @@ function getProdDisplay(p) {
     isEn,
     title: (isEn && p.titleEn) ? p.titleEn : p.title,
     summary: (isEn && p.summaryEn) ? p.summaryEn : p.summary,
+    features: (isEn && Array.isArray(p.featuresEn) && p.featuresEn.length) ? p.featuresEn : (p.features || []),
+    deliverables: (isEn && Array.isArray(p.deliverablesEn) && p.deliverablesEn.length) ? p.deliverablesEn : [],
     price: isEn ? formatUsd(usdNum) : p.price,
     oldPrice: isEn ? (oldUsdNum > usdNum ? formatUsd(oldUsdNum) : '') : (p.oldPrice || ''),
     priceNum: isEn ? usdNum : idrNum,
     usdNum
   };
+}
+
+function localizeDemoUrl(url) {
+  const raw = String(url || '').trim();
+  if (!raw || raw.startsWith('#') || currentLocale !== 'en') return raw;
+  if (raw.includes('demo/')) {
+    return raw + (raw.includes('?') ? '&' : '?') + 'lang=en';
+  }
+  return raw;
 }
 
 const BLOGGER_ORIGIN = SITE_CONFIG.bloggerOrigin;
@@ -92,6 +103,7 @@ const FALLBACK_PRODUCTS = [
   {
     "id": "prod-1",
     "title": "Source Code Aplikasi Kasir (POS) & Inventaris Gudang Live Sync Excel (.xlsx)",
+    "titleEn": "POS Cashier & Warehouse Inventory Web App (Live Excel .XLSX Sync)",
     "categories": [
       "Aplikasi",
       "Source Code",
@@ -100,6 +112,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 69.000",
     "oldPrice": "Rp 199.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$29",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/kasir/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-pos.html",
@@ -110,6 +125,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/kasir/screenshot.png",
     "summary": "Aplikasi Point of Sale (Kasir Toko) dan Manajemen Inventaris Gudang modern berbasis web yang berjalan langsung di browser tanpa instalasi server rumit (Zero-Config). Dilengkapi fitur sinkronisasi dua arah otomatis dengan Microsoft Excel (.xlsx), pencarian barcode scanner, cetak struk thermal 58mm & 80mm, multi pembayaran (Tunai, QRIS, Kasbon), serta kartu stok gudang.",
+    "summaryEn": "Zero-Config web Point of Sale (POS) and warehouse inventory app with two-way Excel (.xlsx) sync, barcode scanner support, 58mm/80mm thermal receipts, multi-payment modes, and stock ledger.",
     "features": [
       "Zero-Config: Cukup klik 2x Buka_Aplikasi_Kasir.bat, langsung terbuka di browser tanpa install Apache/MySQL.",
       "Live Sync 2-Arah Microsoft Excel (.xlsx): Setiap penjualan & perubahan stok otomatis mengupdate file Excel di komputer.",
@@ -118,15 +134,25 @@ const FALLBACK_PRODUCTS = [
       "Manajemen Stok Gudang, Peringatan Stok Menipis (Low Stock Alert), dan Kartu Mutasi Stok (IN/OUT/Opname).",
       "Multi Metode Pembayaran: Tunai, QRIS, Transfer Bank, dan Pencatatan Kasbon / Piutang Tempo."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$29",
-    "titleEn": "POS Cashier & Warehouse Inventory Web App (Live Excel .XLSX Sync)",
-    "summaryEn": "Zero-Config web Point of Sale (POS) and warehouse inventory app with two-way Excel (.xlsx) sync, barcode scanner support, 58mm/80mm thermal receipts, multi-payment modes, and ",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Zero-Config setup: Double-click Buka_Aplikasi_Kasir.bat to launch immediately without Apache or MySQL.",
+      "2-Way Live Microsoft Excel (.xlsx) Sync: Every sale and inventory update syncs automatically with your workbook.",
+      "Fast POS Cashier with Barcode Scanner support and keyboard shortcuts (F1, F2, F4).",
+      "Automated 58mm & 80mm thermal receipt printing (@media print) & digital invoice view.",
+      "Warehouse Stock Management, low-stock alerts, and Stock Card Ledger (IN / OUT / Opname).",
+      "Multi-payment support: Cash, QRIS/Wallet, Bank Transfer, and customer credit ledger."
+    ],
+    "deliverablesEn": [
+      "100% Unencrypted Full Source Code (HTML5, CSS3, JavaScript).",
+      "One-click desktop launcher script + browser offline support.",
+      "Ready-to-use Excel (.xlsx) database workbook template.",
+      "Full documentation guide & Unlimited Commercial Project License."
+    ]
   },
   {
     "id": "prod-2",
     "title": "Template Landing Page UMKM & Cafe Modern Responsive (Order WhatsApp Langsung)",
+    "titleEn": "Modern SME & Cafe Responsive Landing Page Template (WhatsApp Order)",
     "categories": [
       "JavaScript",
       "Template",
@@ -134,9 +160,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 49.000",
     "oldPrice": "Rp 99.000",
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/umkm/",
-    "postUrl": "https://asetkode.blogspot.com/2026/11/landing-page-saas-digital-agency-modern.html",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/template-landing-page-umkm-cafe-modern.html",
     "version": "v2.0 (Terbaru)",
     "stack": "HTML5 + CSS3 + Vanilla JS (Zero-Config)",
     "license": "Personal & Komersial (Unlimited Project)",
@@ -144,6 +173,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/umkm/screenshot.png",
     "summary": "Template Landing Page siap pakai untuk kedai kopi, resto, dan usaha UMKM lokal. Dilengkapi integrasi order langsung ke WhatsApp dengan rincian menu otomatis, filter katalog menu, integrasi Google Maps, mode gelap/terang, dan panduan kustomisasi tanpa coding.",
+    "summaryEn": "Ready-to-deploy responsive landing page for cafes, restaurants, and local businesses with interactive menu filtering, direct WhatsApp order formatting, dark/light mode, and zero coding customization.",
     "features": [
       "10+ Seksi siap pakai (Hero, Fitur, Harga/Pricing, Testimoni, FAQ, CTA, Footer).",
       "Desain Clean & Modern dengan animasi halus tanpa membebani kecepatan loading.",
@@ -151,24 +181,35 @@ const FALLBACK_PRODUCTS = [
       "Struktur kode HTML5 semantik yang rapi dan mudah diintegrasikan ke framework apa pun.",
       "Sudah dilengkapi optimasi Meta SEO & Schema Markup."
     ],
-    "priceUsd": "$9",
-    "oldPriceUsd": "$19",
-    "titleEn": "Modern SME & Cafe Responsive Landing Page Template (WhatsApp Order)",
-    "summaryEn": "Ready-to-deploy responsive landing page for cafes, restaurants, and local businesses with interactive menu filtering, direct WhatsApp order formatting, dark/light mode, and ze",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "10+ ready sections (Hero, Interactive Menu Filter, Pricing, Testimonials, Maps, FAQ, Footer).",
+      "Clean responsive design with smooth micro-animations and fast loading speed.",
+      "100% Mobile-First responsive across Desktop, Tablet, and Smartphone.",
+      "Direct WhatsApp & online order formatting with dark/light theme support.",
+      "Built-in SEO Meta tags & JSON-LD Schema markup."
+    ],
+    "deliverablesEn": [
+      "Full HTML5, CSS3, and Vanilla JS Source Code.",
+      "SVG icon assets and color/typography customization guide.",
+      "Unlimited commercial license for agency & client websites."
+    ]
   },
   {
     "id": "prod-3",
     "title": "Script Python Otomatisasi Scraper & Export Data ke Excel / Google Sheets",
+    "titleEn": "Python Automated Web Scraper & Excel / Google Sheets Exporter",
     "categories": [
       "Python",
       "Source Code"
     ],
     "price": "Rp 99.000",
     "oldPrice": "Rp 199.000",
+    "priceUsd": "$15",
+    "oldPriceUsd": "$29",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/scraper/",
-    "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-otomatisasi-scraper.html",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-otomatisasi-scraper_01983744995.html",
     "version": "v1.5 (Terbaru)",
     "stack": "Python 3.10+ (BeautifulSoup4 & Pandas)",
     "license": "Personal & Komersial",
@@ -176,21 +217,29 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/scraper/screenshot.png",
     "summary": "Kumpulan script otomatisasi Python siap pakai untuk mengambil, membersihkan, dan mengekspor data web secara terjadwal ke file Excel (.xlsx), CSV, maupun Google Sheets.",
+    "summaryEn": "Modular Python 3.10+ automation script to scrape, clean, and export structured web data on schedule to Excel (.xlsx), CSV, or Google Sheets with auto-retry and User-Agent rotation.",
     "features": [
       "Dilengkapi fitur retry otomatis, rotasi User-Agent, dan penanganan error jaringan.",
       "Ekspor hasil data langsung ke format Excel (.xlsx) rapi atau CSV.",
       "Kode modular dengan komentar penjelasan bahasa Indonesia di setiap fungsi.",
       "Dapat dijalankan otomatis secara terjadwal di Windows maupun Linux."
     ],
-    "priceUsd": "$15",
-    "oldPriceUsd": "$29",
-    "titleEn": "Python Automated Web Scraper & Excel / Google Sheets Exporter",
-    "summaryEn": "Modular Python 3.10+ automation script to scrape, clean, and export structured web data on schedule to Excel (.xlsx), CSV, or Google Sheets with auto-retry and User-Agent rota",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Built-in automatic retries, User-Agent rotation, and network resilience handling.",
+      "Export clean structured datasets directly to Excel (.xlsx), CSV, or Google Sheets.",
+      "Modular, readable Python architecture easy to adapt for any target website.",
+      "Supports scheduled automated cron execution on Windows, macOS, or Linux."
+    ],
+    "deliverablesEn": [
+      "Full Python (.py) Source Code + requirements.txt.",
+      "Step-by-step Python environment setup and configuration guide.",
+      "Sample scraping presets & clean target selectors."
+    ]
   },
   {
     "id": "prod-4",
     "title": "Source Code Aplikasi E-Commerce & Katalog Toko Online Checkout QRIS",
+    "titleEn": "PHP 8 E-Commerce Store & Online Catalog Platform (MySQL PDO)",
     "categories": [
       "PHP",
       "Web App",
@@ -198,9 +247,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 169.000",
     "oldPrice": "Rp 349.000",
+    "priceUsd": "$25",
+    "oldPriceUsd": "$49",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/ecommerce/",
-    "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-e-commerce-katalog.html",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-e-commerce-katalog_0585515657.html",
     "version": "v3.0 (Terbaru)",
     "stack": "PHP 8 Native (PDO MySQL) + Responsive CSS + QRIS Checkout",
     "license": "Personal & Komersial",
@@ -208,6 +260,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/ecommerce/screenshot.png",
     "summary": "Source code platform toko online dan katalog produk lengkap dengan keranjang belanja interaktif, perhitungan ongkos kirim otomatis, manajemen pesanan, dan integrasi pembayaran QRIS & Virtual Account.",
+    "summaryEn": "Full PHP 8 & MySQL PDO e-commerce platform with multi-category product catalog, live cart, product variants, discount vouchers, admin order dashboard, and QRIS/global payment webhook support.",
     "features": [
       "Katalog produk multi-kategori dengan pencarian cepat & filter harga.",
       "Keranjang belanja (Cart) real-time tanpa reload halaman.",
@@ -215,15 +268,23 @@ const FALLBACK_PRODUCTS = [
       "Dashboard Admin lengkap untuk memantau pesanan masuk dan laporan penjualan.",
       "Desain Mobile-First yang sangat nyaman diakses dari smartphone pembeli."
     ],
-    "priceUsd": "$25",
-    "oldPriceUsd": "$49",
-    "titleEn": "PHP 8 E-Commerce Store & Online Catalog Platform (MySQL PDO)",
-    "summaryEn": "Full PHP 8 & MySQL PDO e-commerce platform with multi-category product catalog, live cart, product variants, discount vouchers, admin order dashboard, and QRIS/global payment ",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Multi-category storefront catalog with instant search and price range filters.",
+      "Real-time Shopping Cart without page reloads.",
+      "Product variants, coupon voucher discounts, and automatic stock deduction.",
+      "Complete Admin Panel for order tracking and sales revenue analytics.",
+      "Mobile-First storefront UI optimized for conversion."
+    ],
+    "deliverablesEn": [
+      "Full PHP 8 (PDO Prepared Statements) 100% Open Source Code.",
+      "Pre-seeded MySQL database (database.sql) with categories, variants, and sample products.",
+      "Deployment & setup guide for XAMPP, Laragon, or cPanel hosting."
+    ]
   },
   {
     "id": "prod-5",
     "title": "Admin Dashboard & Analytics UI Kit Modern (Dark/Light Mode)",
+    "titleEn": "Modern Admin Dashboard & Analytics UI Kit (Dark & Light Mode)",
     "categories": [
       "JavaScript",
       "Template",
@@ -231,9 +292,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 89.000",
     "oldPrice": "Rp 179.000",
+    "priceUsd": "$14",
+    "oldPriceUsd": "$29",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/dashboard-ui/",
-    "postUrl": "https://asetkode.blogspot.com/2026/11/admin-dashboard-analytics-ui-kit-modern.html",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/admin-dashboard-analytics-ui-kit-modern_01645151510.html",
     "version": "v2.1 (Terbaru)",
     "stack": "HTML5 + CSS3 + Vanilla JS + SVG Charts (Zero-Dependency)",
     "license": "Personal & Komersial (Unlimited)",
@@ -241,6 +305,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/dashboard-ui/screenshot.png",
     "summary": "Template Admin Dashboard profesional dengan 25+ komponen halaman siap pakai, grafik analitik interaktif, tabel data responsif, dan fitur Dark/Light Mode instan. Cocok untuk backend aplikasi Laravel, Node.js, maupun Python.",
+    "summaryEn": "Multi-page SaaS & admin analytics dashboard template featuring interactive SVG charts, CRUD data tables, form components, printable invoices, auth screens, and Dark/Light themes.",
     "features": [
       "5+ Template halaman siap pakai (Dashboard Analitik, Tabel CRUD, Formulir UI Kit, Faktur Cetak, Auth Login/Daftar).",
       "Grafik SVG interaktif bawaan (Line/Area, Bar, Donut) tanpa CDN eksternal — jalan 100% offline.",
@@ -248,15 +313,23 @@ const FALLBACK_PRODUCTS = [
       "Sidebar navigasi lipat & responsif di layar Desktop, Tablet, maupun Smartphone.",
       "Tabel CRUD interaktif lengkap dengan pencarian, filter, pagination, tambah/edit, & ekspor CSV."
     ],
-    "priceUsd": "$14",
-    "oldPriceUsd": "$29",
-    "titleEn": "Modern Admin Dashboard & Analytics UI Kit (Dark & Light Mode)",
-    "summaryEn": "Multi-page SaaS & admin analytics dashboard template featuring interactive SVG charts, CRUD data tables, form components, printable invoices, auth screens, and Dark/Light them",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "5+ complete admin templates: Analytics Dashboard, CRUD Data Table, Form Kit, Printable Invoice, and Auth pages.",
+      "Interactive built-in SVG Charts (Line/Area, Bar, Donut) with zero external CDN dependencies.",
+      "Persistent Dark Mode & Light Mode saved in localStorage.",
+      "Collapsible responsive sidebar across Desktop, Tablet, and Mobile.",
+      "Full CRUD table with search, filters, sorting, pagination, add/edit modal, and CSV export."
+    ],
+    "deliverablesEn": [
+      "Modular HTML5, CSS3, and Vanilla JS Source Code (no heavy bundler required).",
+      "SVG chart components, validation forms, printable invoices, and modals.",
+      "Customization guide (PANDUAN.md) & Commercial License (LISENSI.txt)."
+    ]
   },
   {
     "id": "prod-6",
     "title": "Bot Auto-Responder & Notifikasi Laporan Otomatis Telegram / Webhook",
+    "titleEn": "Telegram Auto-Responder Bot & Webhook Reporting System (Python)",
     "categories": [
       "Python",
       "Source Code",
@@ -264,9 +337,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 119.000",
     "oldPrice": "Rp 249.000",
+    "priceUsd": "$19",
+    "oldPriceUsd": "$39",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/bot-responder/",
-    "postUrl": "https://asetkode.blogspot.com/2026/11/bot-auto-responder-notifikasi-laporan.html",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/bot-auto-responder-notifikasi-laporan_01829563560.html",
     "version": "v1.8 (Terbaru)",
     "stack": "Python 3.10+ (Asyncio & REST API)",
     "license": "Personal & Komersial",
@@ -274,21 +350,29 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/bot-responder/screenshot.png",
     "summary": "Source code bot otomatisasi Python untuk mengirim notifikasi transaksi, laporan harian database/Excel, pemantauan server, serta balasan menu otomatis secara real-time.",
+    "summaryEn": "Python asyncio Telegram bot with custom regex auto-reply rules, inline keyboards, external webhook report receiver, and CSV activity export.",
     "features": [
       "Arsitektur Asynchronous Python yang ringan dan merespons dalam hitungan milidetik.",
       "Mendukung pengiriman laporan otomatis (teks, tabel gambar, maupun file Excel/PDF).",
       "Menu tombol interaktif (Inline Keyboard) yang mudah dikustomisasi sesuai kebutuhan bisnis.",
       "Dilengkapi sistem pencatatan log aktivitas dan auto-reconnect saat koneksi terputus."
     ],
-    "priceUsd": "$19",
-    "oldPriceUsd": "$39",
-    "titleEn": "Telegram Auto-Responder Bot & Webhook Reporting System (Python)",
-    "summaryEn": "Python asyncio Telegram bot with custom regex auto-reply rules, inline keyboards, external webhook report receiver, and CSV activity export.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Lightweight Asynchronous Python engine with millisecond response speed.",
+      "Supports automated alerts & rich replies (text, inline keyboards, webhook payloads).",
+      "Easy rule matching & custom command triggers without editing core boilerplate.",
+      "Includes activity logging, auto-reconnect handling, and CSV log export."
+    ],
+    "deliverablesEn": [
+      "Modular Python Source Code + environment template (.env.example).",
+      "Step-by-step BotFather token setup & 24/7 VPS/Railway deployment guide.",
+      "Commercial license for internal tools and client automation."
+    ]
   },
   {
     "id": "prod-7",
     "title": "Source Code Aplikasi Kalkulator Pengeluaran & Finansial (Windows .EXE + Android .APK)",
+    "titleEn": "Personal Expense & Financial Budget Tracker Web App (Offline PWA)",
     "categories": [
       "JavaScript",
       "Template",
@@ -296,6 +380,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 45.000",
     "oldPrice": "Rp 99.000",
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/finansial/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kalkulator.html",
@@ -306,6 +393,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/finansial/screenshot.png",
     "summary": "Template website Link-in-Bio modern dan super ringan dengan skor 100 PageSpeed. Bebas biaya langganan bulanan selamanya, bisa di-hosting 100% gratis di GitHub Pages, Vercel, atau Netlify. Lengkap dengan integrasi WhatsApp, medsos, katalog produk, dan mode gelap/terang.",
+    "summaryEn": "Offline-ready financial tracker & budget planner with 4 KPI cards, category spending donut chart, budget limits, savings goal calculator, and CSV export.",
     "features": [
       "Buku kas pemasukan & pengeluaran harian dengan KPI Saldo Bersih dan Rasio Tabungan.",
       "Grafik Donut SVG interaktif & progress bar batas anggaran per kategori.",
@@ -313,21 +401,31 @@ const FALLBACK_PRODUCTS = [
       "Dukungan Dark Mode & Light Mode, ekspor CSV Excel, serta tombol bagikan ringkasan ke WhatsApp.",
       "Dilengkapi manifest PWA, file launcher .bat Desktop, & panduan pembungkusan WebView APK."
     ],
-    "priceUsd": "$7",
-    "oldPriceUsd": "$15",
-    "titleEn": "Personal Expense & Financial Budget Tracker Web App (Offline PWA)",
-    "summaryEn": "Offline-ready financial tracker & budget planner with 4 KPI cards, category spending donut chart, budget limits, savings goal calculator, and CSV export.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Daily income & expense ledger with Net Balance and Savings Ratio KPIs.",
+      "Interactive Donut SVG expense breakdown & category budget progress bars.",
+      "Built-in Savings Goal Calculator & compound yield estimator.",
+      "Dark/Light mode, CSV Excel export, and PWA manifest ready for mobile install."
+    ],
+    "deliverablesEn": [
+      "100% Offline HTML5, CSS3, JS Source Code + manifest.json.",
+      "Desktop quick-launch script & packaging documentation.",
+      "Personal & Commercial License (LISENSI.txt)."
+    ]
   },
   {
     "id": "prod-8",
     "title": "Script Python Auto-Converter PDF to Word / Excel & OCR Text Extractor",
+    "titleEn": "Python Batch PDF to Word / Excel Converter & OCR Extractor (CLI + GUI)",
     "categories": [
       "Python",
       "Source Code"
     ],
     "price": "Rp 39.000",
     "oldPrice": "Rp 89.000",
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/pdf-converter/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-auto-converter-pdf-to.html",
@@ -338,6 +436,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/pdf-converter/screenshot.png",
     "summary": "Script otomatisasi Python siap pakai untuk mengonversi dokumen PDF ke format Word (.docx) atau tabel Excel (.xlsx) tanpa watermark, tanpa batasan jumlah halaman, dan tanpa risiko kebocoran data karena semua proses berjalan 100% lokal di komputer Anda.",
+    "summaryEn": "Python tool to extract tables and text from native and scanned PDFs into formatted Word (.docx) or Excel (.xlsx) files with both CLI and Tkinter GUI modes.",
     "features": [
       "Konversi tabel dari PDF langsung ke file Excel (.xlsx) rapi dengan pemisahan kolom otomatis.",
       "Ekstrak teks dan paragraf PDF ke dokumen Word (.docx) dengan format yang terjaga.",
@@ -345,21 +444,32 @@ const FALLBACK_PRODUCTS = [
       "100% Offline & Privat: data dokumen Anda tidak pernah dikirim ke server pihak ketiga.",
       "Dilengkapi antarmuka GUI sederhana (Tkinter) tinggal klik tombol pilih file."
     ],
-    "priceUsd": "$7",
-    "oldPriceUsd": "$15",
-    "titleEn": "Python Batch PDF to Word / Excel Converter & OCR Extractor (CLI + GUI)",
-    "summaryEn": "Python tool to extract tables and text from native and scanned PDFs into formatted Word (.docx) or Excel (.xlsx) files with both CLI and Tkinter GUI modes.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Extract PDF tables cleanly into Excel (.xlsx) spreadsheets with structured columns.",
+      "Convert PDF text and paragraphs into editable Word (.docx) documents.",
+      "Batch processing for multiple PDF files across an entire folder in seconds.",
+      "100% Offline & Private: sensitive documents never leave your machine.",
+      "Includes simple Tkinter Desktop GUI plus CLI automation mode."
+    ],
+    "deliverablesEn": [
+      "Full Python (.py) Source Code for both CLI and GUI desktop versions.",
+      "requirements.txt & dependency installation guide.",
+      "Windows, macOS, and Linux quick-start manual."
+    ]
   },
   {
     "id": "prod-9",
     "title": "Template Landing Page Undangan Digital Pernikahan & Event Responsive",
+    "titleEn": "Responsive Digital Wedding & Event Invitation Landing Page",
     "categories": [
       "JavaScript",
       "Template"
     ],
     "price": "Rp 45.000",
     "oldPrice": "Rp 99.000",
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/undangan/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-landing-page-undangan-digital.html",
@@ -370,6 +480,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/undangan/screenshot.png",
     "summary": "Template website undangan digital pernikahan atau event modern dengan desain aesthetic dan fitur premium. Sangat cocok bagi Anda yang ingin membuka jasa pembuatan undangan online atau untuk acara pernikahan sendiri.",
+    "summaryEn": "Elegant digital wedding invitation template with custom guest URL parameters, gallery, countdown timer, background audio player, and RSVP form.",
     "features": [
       "Tombol Buka Undangan dengan efek animasi tirai halus (AOS Animation).",
       "Background Music Player dengan tombol kontrol putar/jeda melayang.",
@@ -378,15 +489,23 @@ const FALLBACK_PRODUCTS = [
       "Form RSVP ucapan & konfirmasi kehadiran buku tamu.",
       "Integrasi Google Maps petunjuk arah lokasi acara."
     ],
-    "priceUsd": "$7",
-    "oldPriceUsd": "$15",
-    "titleEn": "Responsive Digital Wedding & Event Invitation Landing Page",
-    "summaryEn": "Elegant digital wedding invitation template with custom guest URL parameters, gallery, countdown timer, background audio player, and RSVP form.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Smooth AOS animated invitation cover reveal button.",
+      "Floating Background Music player with play/pause control.",
+      "Real-time Event Countdown Timer to the wedding day.",
+      "Digital Gift / Bank details copy & interactive RSVP guestbook with wishes.",
+      "Integrated Google Maps venue directions & calendar save button."
+    ],
+    "deliverablesEn": [
+      "Complete HTML5, CSS3, and JavaScript invitation source code.",
+      "Customization guide to edit photos, couple names, dates, and payment info.",
+      "Commercial license to resell custom event websites to clients."
+    ]
   },
   {
     "id": "prod-10",
     "title": "Bot Telegram Pengingat Tagihan & Jadwal Otomatis (Google Sheets API)",
+    "titleEn": "Telegram Billing Reminder & Due-Date Scheduler Bot (Python / CSV)",
     "categories": [
       "Python",
       "Source Code",
@@ -394,6 +513,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 49.000",
     "oldPrice": "Rp 99.000",
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/bot-tagihan/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/bot-telegram-pengingat-tagihan-jadwal.html",
@@ -404,6 +526,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/bot-tagihan/screenshot.png",
     "summary": "Bot otomatisasi yang terhubung langsung dengan Google Sheets. Bot akan membaca tanggal jatuh tempo tagihan, jadwal sewa, atau agenda penting, lalu secara otomatis mengirimkan pesan pengingat ke chat atau grup Telegram tanpa perlu repot cek spreadsheet manual setiap hari.",
+    "summaryEn": "Automated Python billing reminder bot that tracks due dates (H-3, H-0, overdue) from CSV or Google Sheets and pushes formatted alerts to Telegram.",
     "features": [
       "Sinkronisasi real-time dengan Google Sheets pribadi Anda.",
       "Auto-cron check setiap pagi untuk mendeteksi tagihan/agenda yang jatuh tempo hari ini atau H-3.",
@@ -411,15 +534,22 @@ const FALLBACK_PRODUCTS = [
       "Template pesan notifikasi profesional yang rapi dan bisa dikustomisasi sesuka hati.",
       "Bisa berjalan 24/7 di VPS murah atau bahkan gratisan (Google Cloud Run / Railway)."
     ],
-    "priceUsd": "$9",
-    "oldPriceUsd": "$19",
-    "titleEn": "Telegram Billing Reminder & Due-Date Scheduler Bot (Python / CSV)",
-    "summaryEn": "Automated Python billing reminder bot that tracks due dates (H-3, H-0, overdue) from CSV or Google Sheets and pushes formatted alerts to Telegram.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Real-time sync with Google Sheets or CSV billing ledgers.",
+      "Automated daily cron checks for invoices due today or H-3 advance reminders.",
+      "Direct Telegram alerts to individual users or finance team groups.",
+      "Customizable notification templates and 24/7 cloud-ready worker design."
+    ],
+    "deliverablesEn": [
+      "Full Python Bot Source Code ready to run.",
+      "Sample Google Sheets billing template with due-date columns.",
+      "Setup guide for Telegram BotFather & Google Service Account credentials (.env.example)."
+    ]
   },
   {
     "id": "prod-11",
     "title": "Source Code Sistem Absensi Siswa & Karyawan QR Code Berbasis Web PHP",
+    "titleEn": "QR Code Employee & Student Attendance System (PHP 8 + MySQL)",
     "categories": [
       "PHP",
       "Web App",
@@ -427,6 +557,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 59.000",
     "oldPrice": "Rp 129.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/absensi/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-sistem-absensi-siswa.html",
@@ -437,6 +570,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/absensi/screenshot.png",
     "summary": "Aplikasi absensi praktis dan instan tanpa alat fingerprint mahal. Karyawan atau siswa cukup melakukan scan QR Code dinamis menggunakan kamera smartphone masing-masing untuk mencatat kehadiran secara akurat.",
+    "summaryEn": "PHP 8 PDO + MySQL attendance web app with browser camera QR scanning (BarcodeDetector + USB scanner), late threshold calculation, printable QR ID cards, and Excel/CSV export.",
     "features": [
       "Scan QR Code instan langsung lewat kamera browser smartphone tanpa instal aplikasi APK.",
       "Pencatatan waktu hadir, jam masuk, jam pulang, dan status terlambat otomatis.",
@@ -444,24 +578,34 @@ const FALLBACK_PRODUCTS = [
       "Ekspor rekapitulasi kehadiran seluruh karyawan/siswa ke format Excel (.xlsx).",
       "Manajemen data karyawan/siswa, divisi, dan jadwal kerja."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "QR Code Employee & Student Attendance System (PHP 8 + MySQL)",
-    "summaryEn": "PHP 8 PDO + MySQL attendance web app with browser camera QR scanning (BarcodeDetector + USB scanner), late threshold calculation, printable QR ID cards, and Excel/CSV export.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Instant browser camera QR Code scanning without installing native mobile apps.",
+      "Automatic Check-In, Check-Out, and Late arrival status logging.",
+      "Admin Dashboard with daily attendance KPIs and 7-day trend chart.",
+      "Deterministic printable QR ID cards generator + Excel (.xlsx/.csv) attendance export."
+    ],
+    "deliverablesEn": [
+      "Full PHP 8 Native Source Code + ready-to-import MySQL database (.sql).",
+      "Bundled offline HTML5 QR scanner & SVG card generator.",
+      "Step-by-step XAMPP/Laragon setup guide & commercial license."
+    ]
   },
   {
     "id": "prod-12",
     "title": "Starter Kit Payment Gateway Midtrans & Mayar QRIS Siap Pakai (PHP)",
+    "titleEn": "Payment Gateway Starter Kit for Midtrans & Mayar (PHP 8 + Webhook)",
     "categories": [
       "PHP",
       "Source Code"
     ],
     "price": "Rp 65.000",
     "oldPrice": "Rp 139.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/payment-kit/",
-    "postUrl": "https://asetkode.blogspot.com/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/starter-kit-payment-gateway-midtrans.html",
     "version": "v1.2 (Terbaru)",
     "stack": "PHP Native / Laravel (cURL, Webhook Handler, QRIS)",
     "license": "Personal & Komersial",
@@ -469,6 +613,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/payment-kit/screenshot.png",
     "summary": "Modul starter kit siap pakai untuk menerima pembayaran otomatis QRIS, GoPay, OVO, ShopeePay, dan Virtual Account bank (BCA, BNI, BRI, Mandiri) di website Anda. Dilengkapi endpoint webhook otomatis yang mengubah status order jadi LUNAS detik itu juga.",
+    "summaryEn": "Production-ready PHP integration starter kit for invoice creation, MySQL transaction logging, signature verification webhooks, and sandbox testing.",
     "features": [
       "Mendukung 2 gateway populer sekaligus: Midtrans Snap & Mayar Payment Link.",
       "Halaman checkout responsif dengan pop-up QRIS real-time.",
@@ -476,15 +621,22 @@ const FALLBACK_PRODUCTS = [
       "Contoh kode bersih dan modular, mudah ditempel ke web toko online atau sistem Anda yang sudah ada.",
       "Termasuk mode Sandbox (testing) dan mode Production (live)."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "Payment Gateway Starter Kit for Midtrans & Mayar (PHP 8 + Webhook)",
-    "summaryEn": "Production-ready PHP integration starter kit for invoice creation, MySQL transaction logging, signature verification webhooks, and sandbox testing.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Dual gateway starter architecture supporting Snap / Payment Link & instant webhooks.",
+      "Responsive checkout flow with instant status verification listener.",
+      "Clean modular PHP webhook handler to mark orders paid automatically.",
+      "Includes both Sandbox testing simulator and Production setup instructions."
+    ],
+    "deliverablesEn": [
+      "Full PHP checkout, API request helper, and Webhook listener source code.",
+      "Lightweight transaction schema SQL script for order logging.",
+      "Integration guide & Plug-and-Play examples."
+    ]
   },
   {
     "id": "prod-13",
     "title": "Source Code Kasir Toko Sederhana & Cetak Struk Mini POS (Zero-Config XAMPP)",
+    "titleEn": "Mini POS Store Cashier & 58mm Thermal Receipt App (PHP 8 + MySQL)",
     "categories": [
       "PHP",
       "Web App",
@@ -492,9 +644,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 75.000",
     "oldPrice": "Rp 150.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/kasir-php/",
-    "postUrl": "https://asetkode.blogspot.com/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-kasir-toko-sederhana-cetak.html",
     "version": "v1.5 (Terbaru)",
     "stack": "PHP Native + MySQL + Bootstrap (Mudah untuk Pemula)",
     "license": "Personal & Komersial",
@@ -502,6 +657,7 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/kasir-php/screenshot.png",
     "summary": "Aplikasi kasir penjualan dan manajemen stok barang versi ringan tanpa framework rumit. Sangat mudah dipahami bagi pemula yang baru belajar PHP atau UMKM yang membutuhkan sistem kasir simpel tanpa perlu instal Node.js atau Composer.",
+    "summaryEn": "Lightweight PHP & MySQL point-of-sale application for retail shops with barcode product lookup, automatic stock deduction, daily sales reports, and 58mm thermal printing.",
     "features": [
       "Transaksi penjualan kasir cepat dengan hitung kembalian otomatis.",
       "Fitur cetak struk nota belanja langsung ke printer thermal (58mm) atau simpan PDF.",
@@ -509,15 +665,22 @@ const FALLBACK_PRODUCTS = [
       "Laporan omzet penjualan harian dan bulanan sederhana.",
       "Desain antarmuka bersih menggunakan Bootstrap 5, nyaman di layar laptop maupun tablet kasir."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "Mini POS Store Cashier & 58mm Thermal Receipt App (PHP 8 + MySQL)",
-    "summaryEn": "Lightweight PHP & MySQL point-of-sale application for retail shops with barcode product lookup, automatic stock deduction, daily sales reports, and 58mm thermal printing.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Fast cashier checkout screen with instant change calculation and barcode search.",
+      "Print clean 58mm thermal receipts or save transaction PDFs.",
+      "Automatic inventory stock deduction and real-time profit estimation.",
+      "Zero-dependency PHP + Bootstrap 5 UI ready for retail counters and tablets."
+    ],
+    "deliverablesEn": [
+      "Zero-Config PHP Native Source Code (no Composer required).",
+      "Pre-populated .sql database with sample retail SKUs.",
+      "Setup guide & unlimited commercial usage rights."
+    ]
   },
   {
     "id": "prod-14",
     "title": "Template Desain Web Company Profile & Digital Agency Modern (HTML5 + Tailwind)",
+    "titleEn": "Modern Digital Agency & Company Profile HTML5 Template",
     "categories": [
       "Desain Web",
       "Template",
@@ -526,9 +689,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 59.000",
     "oldPrice": "Rp 149.000",
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/agency/",
-    "postUrl": "https://asetkode.blogspot.com/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/template-desain-web-company-profile.html",
     "version": "v2.2 (Terbaru)",
     "stack": "HTML5 + Tailwind CSS + Vanilla JS",
     "license": "Personal & Komersial (Unlimited Project)",
@@ -536,21 +702,29 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/agency/screenshot.png",
     "summary": "Desain web Company Profile & Agensi Digital modern dengan tata letak bersih, dark/light mode, portofolio interaktif, tabel paket layanan, dan form kontak cepat. Cocok untuk bisnis jasa, studio kreatif, dan freelancer.",
+    "summaryEn": "High-converting agency & company profile landing page with service tiers, portfolio showcase, testimonials, FAQ accordion, Dark/Light mode, and easy config.js setup.",
     "features": [
       "8+ Halaman & Seksi Siap Pakai (Hero, Layanan, Portofolio, Tim, Harga, Testimoni, FAQ, Kontak).",
       "Desain Web Responsif 100% di Desktop, Tablet, dan Smartphone.",
       "Animasi Scroll Halus & Skor Performa Tinggi (Tanpa Framework Berat).",
       "Kode HTML5 & CSS Rapi Mudah Diganti Logo, Warna, dan Teks."
     ],
-    "priceUsd": "$9",
-    "oldPriceUsd": "$19",
-    "titleEn": "Modern Digital Agency & Company Profile HTML5 Template",
-    "summaryEn": "High-converting agency & company profile landing page with service tiers, portfolio showcase, testimonials, FAQ accordion, Dark/Light mode, and easy config.js setup.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "8+ high-converting agency sections (Hero, Services, Case Studies, Pricing, FAQ, Contact).",
+      "100% responsive grid across Desktop, Tablet, and Mobile devices.",
+      "Smooth scroll animations and clean semantic HTML5 for top Lighthouse performance.",
+      "Easy config.js brand customization for logos, colors, and contact links."
+    ],
+    "deliverablesEn": [
+      "Full HTML5, CSS3, and JavaScript Source Code.",
+      "SVG assets & quick customization guide.",
+      "Commercial license for unlimited client websites."
+    ]
   },
   {
     "id": "prod-15",
     "title": "Desain Web Portfolio Pribadi & Link-in-Bio Kreator Minimalis (Dark/Light)",
+    "titleEn": "Creator Link-in-Bio & Mini Portfolio Web Template (Dark/Light)",
     "categories": [
       "Desain Web",
       "Template",
@@ -558,9 +732,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 39.000",
     "oldPrice": "Rp 89.000",
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/biolink/",
-    "postUrl": "https://asetkode.blogspot.com/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/desain-web-portfolio-pribadi-link-in.html",
     "version": "v1.4 (Terbaru)",
     "stack": "HTML5 + CSS3 + JavaScript",
     "license": "Personal & Komersial",
@@ -568,21 +745,28 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/biolink/screenshot.png",
     "summary": "Template desain web portfolio pribadi sekaligus halaman Link-in-Bio profesional untuk developer, desainer, content creator, dan pekerja lepas. Tampil elegan dan cepat diakses dari bio Instagram/TikTok.",
+    "summaryEn": "Self-hosted link-in-bio & creator portfolio card with bento stats, project showcase modals, service rate cards, .vcf contact download, and zero monthly fees.",
     "features": [
       "Gabungan Halaman Link-in-Bio & Showcase Portofolio Karya.",
       "Tombol Salin Email & Tautan Sosial Media 1-Klik.",
       "Mode Gelap & Terang Otomatis.",
       "Sangat Ringan (<100 KB) & Ramah SEO."
     ],
-    "priceUsd": "$7",
-    "oldPriceUsd": "$15",
-    "titleEn": "Creator Link-in-Bio & Mini Portfolio Web Template (Dark/Light)",
-    "summaryEn": "Self-hosted link-in-bio & creator portfolio card with bento stats, project showcase modals, service rate cards, .vcf contact download, and zero monthly fees.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Unified Link-in-Bio hub and featured project showcase gallery.",
+      "One-click email copy, vCard contact save (.vcf), and social profile buttons.",
+      "Smooth Dark & Light theme toggle saved automatically.",
+      "Ultra-lightweight (<100 KB) with instant page loads."
+    ],
+    "deliverablesEn": [
+      "Complete HTML5, CSS3, and JavaScript source files + config.js.",
+      "Free static deployment guide & commercial license."
+    ]
   },
   {
     "id": "prod-16",
     "title": "Program Aplikasi Manajemen Antrian & Tiket Layanan Pelanggan Web + Suara Panggil",
+    "titleEn": "Digital Queue & Counter Calling Web System with Voice Synth",
     "categories": [
       "Program",
       "Web App",
@@ -591,9 +775,12 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 89.000",
     "oldPrice": "Rp 199.000",
+    "priceUsd": "$15",
+    "oldPriceUsd": "$29",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/antrian/",
-    "postUrl": "https://asetkode.blogspot.com/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/program-aplikasi-manajemen-antrian_3.html",
     "version": "v1.8 (Terbaru)",
     "stack": "HTML5 + JavaScript + Web Speech API (Zero-Config)",
     "license": "Personal & Komersial",
@@ -601,21 +788,28 @@ const FALLBACK_PRODUCTS = [
     "demoType": "live_frame",
     "thumbnailUrl": "demo/antrian/screenshot.png",
     "summary": "Program antrian digital berbasis web untuk klinik, apotek, bengkel, loket pelayanan, dan toko servis. Dilengkapi layar monitor antrian, tombol panggil suara otomatis bahasa Indonesia, dan cetak nomor antrian.",
+    "summaryEn": "Zero-Config queue management app with Operator console, synced TV waiting-room display, ticket kiosk thermal print, Web Speech voice calling, and CSV logs.",
     "features": [
       "Panggilan Suara Otomatis Bahasa Indonesia (Nomor Antrian & Loket).",
       "Layar Monitor Antrian Fullscreen untuk TV/Monitor Ruang Tunggu.",
       "Dukungan Multi-Loket / Multi-Layanan & Reset Antrian Harian.",
       "Zero-Config: Langsung jalan di browser tanpa install server rumit."
     ],
-    "priceUsd": "$15",
-    "oldPriceUsd": "$29",
-    "titleEn": "Digital Queue & Counter Calling Web System with Voice Synth",
-    "summaryEn": "Zero-Config queue management app with Operator console, synced TV waiting-room display, ticket kiosk thermal print, Web Speech voice calling, and CSV logs.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Automated Web Speech API voice announcer calling ticket & counter numbers.",
+      "Dedicated Fullscreen Queue Monitor Display for waiting room TVs/screens.",
+      "Multi-counter support (Recall, Next, Skip) + instant thermal queue ticket printing.",
+      "Zero-Config real-time broadcast sync right inside your browser."
+    ],
+    "deliverablesEn": [
+      "Complete Digital Queue Web App Source Code (HTML, CSS, JS).",
+      "Quick-launch scripts & setup guide + commercial license."
+    ]
   },
   {
     "id": "prod-17",
     "title": "Paket Desain Web UI Kit E-Commerce & SaaS Components (HTML/CSS/JS Siap Pakai)",
+    "titleEn": "42 Interactive E-Commerce & SaaS Web UI Components Kit",
     "categories": [
       "Desain Web",
       "Template",
@@ -624,31 +818,41 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 69.000",
     "oldPrice": "Rp 159.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/uikit/",
-    "postUrl": "https://asetkode.blogspot.com/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/paket-desain-web-ui-kit-e-commerce-saas_2.html",
     "version": "v2.0 (Terbaru)",
     "stack": "HTML5 + CSS3 + Modular JS",
     "license": "Personal & Komersial (Unlimited Project)",
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/uikit/screenshot.png",
-    "summary": "Koleksi 42 komponen desain web interaktif siap copy-paste untuk Toko Online & SaaS lengkap dengan Dark/Light Mode & salin kode 1-klik.",
+    "summary": "Koleksi 42 komponen desain web interaktif siap copy-paste untuk proyek Toko Online & SaaS (Navigation, Hero CTA, Product Card & Cart, SaaS Pricing Table, Auth/Checkout Forms, Dashboard KPI & Table, hingga FAQ/Modal/Footer) lengkap dengan Token Warna & Dark Mode.",
+    "summaryEn": "42 responsive, copy-paste-ready UI components across 7 categories with CSS design tokens, 4 brand accent presets, Dark/Light mode, and 1-click HTML/CSS code copy.",
     "features": [
       "40+ Komponen UI Siap Pakai Tanpa Dependency Berat.",
       "Sudah Mendukung Dark Mode & Light Mode.",
       "Mudah Digabung ke Laravel, React, Vue, atau HTML Biasa.",
       "Struktur CSS Variabel Bersih untuk Ganti Warna Brand dalam Sekejap."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "42 Interactive E-Commerce & SaaS Web UI Components Kit",
-    "summaryEn": "42 responsive, copy-paste-ready UI components across 7 categories with CSS design tokens, 4 brand accent presets, Dark/Light mode, and 1-click HTML/CSS code copy.",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "42 interactive E-Commerce & SaaS components with zero external CSS frameworks.",
+      "Full Dark Mode & Light Mode support powered by clean tokens.css variables.",
+      "Copy-paste snippets ready for React, Vue, Laravel Blade, or plain HTML.",
+      "Includes pricing sliders, multi-step checkouts, modals, toasts, and KPI widgets."
+    ],
+    "deliverablesEn": [
+      "Full Source Code of all 42 Interactive Components (HTML, CSS, JS).",
+      "CSS design tokens file (tokens.css), documentation & Commercial License."
+    ]
   },
   {
     "id": "prod-18",
     "title": "Program Pembuat Invoice, Penawaran Harga & Kwitansi Bisnis Pro (Cetak PDF & WhatsApp)",
+    "titleEn": "Pro Invoice, Quotation & Business Receipt Generator (A4 PDF Ready)",
     "categories": [
       "Aplikasi",
       "Web App",
@@ -657,6 +861,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 59.000",
     "oldPrice": "Rp 139.000",
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/invoice/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/program-pembuat-invoice-penawaran-harga.html",
@@ -666,21 +873,31 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/invoice/screenshot.png",
-    "summary": "Aplikasi pembuat Invoice tagihan, Penawaran Harga (Quotation), dan Kwitansi resmi siap cetak A4 PDF yang berjalan langsung di browser tanpa server/XAMPP (Zero-Config).",
+    "summary": "Aplikasi pembuat Invoice tagihan, Penawaran Harga (Quotation), dan Kwitansi resmi siap cetak A4 PDF yang berjalan langsung di browser tanpa server/XAMPP (Zero-Config). Dilengkapi konverter nominal Terbilang bahasa Indonesia otomatis, hitung PPN 11% & PPh 23 opsional, stempel SVG LUNAS/BELUM LUNAS, konversi Penawaran ke Invoice 1-klik, dan kirim ringkasan tagihan ke WhatsApp.",
+    "summaryEn": "Offline-first invoicing, quotation, and receipt generator with live A4 preview, automatic tax/discount math, SVG Paid stamps, 1-click quote-to-invoice conversion, and CSV export.",
     "features": [
       "3 Jenis Dokumen Sekaligus: Invoice, Penawaran Harga (Quotation), dan Kwitansi Resmi.",
-      "Live Preview Kertas A4 Real-Time lengkap dengan stempel SVG LUNAS/BELUM LUNAS.",
-      "Terbilang Bahasa Indonesia Otomatis & Hitung PPN 11% / PPh 23."
+      "Editor & Live Preview Kertas A4 Real-Time lengkap dengan stempel SVG (LUNAS / BELUM LUNAS / DRAFT).",
+      "Terbilang Bahasa Indonesia Otomatis (mis. Sembilan Juta Empat Ratus Tiga Puluh Lima Ribu Rupiah).",
+      "Hitung otomatis multi-baris item, Diskon (% atau Rp), PPN 11%, dan PPh 23 (2%).",
+      "Konversi 1-Klik Penawaran -> Invoice dan Invoice -> Kwitansi Lunas, serta ekspor riwayat ke CSV & Cetak PDF bersih."
     ],
-    "priceUsd": "$9",
-    "oldPriceUsd": "$19",
-    "titleEn": "Pro Invoice, Quotation & Business Receipt Generator (A4 PDF Ready)",
-    "summaryEn": "Offline-first invoicing, quotation, and receipt generator with live A4 preview, automatic tax/discount math, SVG Paid stamps, 1-click quote-to-invoice conversion, and CSV expo",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "3-in-1 Document Studio: Official Invoices, Price Quotations, and Paid Receipts.",
+      "Real-time A4 Paper Live Preview with SVG stamps (PAID / PENDING / DRAFT).",
+      "Automatic calculation for line items, discounts (% or fixed), VAT/Tax & withholding tax.",
+      "1-click convert Quotation -> Invoice -> Paid Receipt, CSV export & clean A4 PDF print."
+    ],
+    "deliverablesEn": [
+      "100% Open Source HTML5, CSS3, and Vanilla JS code.",
+      "Desktop quick-launcher script + 4 preloaded business sample documents.",
+      "Documentation (PANDUAN.md) & Commercial License (LISENSI.txt)."
+    ]
   },
   {
     "id": "prod-19",
     "title": "Aplikasi Booking Jadwal, Reservasi Jasa & Manajemen Janji Temu Pelanggan (Klinik / Salon / Bengkel)",
+    "titleEn": "Appointment Booking, Service Reservation & Schedule Manager App",
     "categories": [
       "Aplikasi",
       "Web App",
@@ -689,6 +906,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 79.000",
     "oldPrice": "Rp 169.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/booking/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/aplikasi-booking-jadwal-reservasi-jasa.html",
@@ -698,21 +918,31 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/booking/screenshot.png",
-    "summary": "Sistem reservasi online dan manajemen jadwal janji temu pelanggan siap pakai untuk klinik, barbershop/salon, bengkel, maupun studio konsultasi dengan proteksi anti double-booking.",
-    "features": [
-      "4 Preset Bidang Usaha 1-Klik: Klinik, Barbershop & Salon, Bengkel Servis, Studio Konsultan.",
-      "Slot Jam Dinamis Anti Double-Booking per staf & tanggal.",
-      "Tiket Booking Otomatis + Unduh Kalender (.ics) & Konfirmasi WhatsApp."
-    ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "Appointment Booking, Service Reservation & Schedule Manager App",
+    "summary": "Sistem reservasi online dan manajemen jadwal janji temu pelanggan siap pakai untuk klinik, dokter gigi, barbershop, salon kecantikan, bengkel servis, maupun studio konsultasi. Dilengkapi proteksi anti double-booking per staf/terapis, unduh tiket kalender (.ics), panel admin resepsionis, dan reminder WhatsApp 1-klik.",
     "summaryEn": "Client booking and appointment dashboard with 4 business presets, anti-double-booking per staff slot, .ICS calendar download, and receptionist analytics.",
-    "usdPaymentUrl": "#checkout-usd"
+    "features": [
+      "4 Preset Bidang Usaha 1-Klik: Klinik & Dokter Gigi, Barbershop & Salon, Bengkel & Servis, dan Studio Foto/Konsultan.",
+      "Slot Jam Dinamis (09:00–20:00) dengan Proteksi Anti Double-Booking per staf & tanggal.",
+      "Tiket Booking Otomatis (BKG-xxxx) + Unduh File Kalender (.ics) & Konfirmasi WhatsApp.",
+      "Panel Admin Resepsionis lengkap dengan 4 KPI harian, Timeline/Tabel Jadwal, Ubah Status, & Ekspor CSV.",
+      "Dukungan Kelola Layanan & Staf Kustom serta Mode Gelap / Terang."
+    ],
+    "featuresEn": [
+      "4 one-click industry presets (Clinic, Salon/Barbershop, Workshop, Studio/Consulting).",
+      "Dynamic time slots with built-in anti-double-booking validation per specialist & date.",
+      "Automated booking ticket IDs (BKG-xxxx), .ICS calendar download & WhatsApp confirmation.",
+      "Receptionist Admin Panel with 4 daily KPIs, schedule management, and CSV export."
+    ],
+    "deliverablesEn": [
+      "Complete HTML5, CSS3, and Vanilla JS source code with zero dependencies.",
+      "Quick-launch desktop file & pre-seeded booking dataset.",
+      "Documentation & Commercial License."
+    ]
   },
   {
     "id": "prod-20",
     "title": "Source Code Aplikasi Kasir Laundry Kiloan/Satuan & Pelacakan Status Order + Nota Thermal",
+    "titleEn": "Laundry POS Cashier & 5-Stage Order Tracking + Thermal Receipt",
     "categories": [
       "Aplikasi",
       "Program",
@@ -721,6 +951,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 85.000",
     "oldPrice": "Rp 189.000",
+    "priceUsd": "$15",
+    "oldPriceUsd": "$29",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/laundry/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-laundry.html",
@@ -730,21 +963,31 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/laundry/screenshot.png",
-    "summary": "Aplikasi kasir khusus usaha laundry kiloan dan satuan lengkap dengan board manajemen produksi 5 tahap, pelacakan status cucian real-time, notifikasi WA, dan cetak nota thermal.",
-    "features": [
-      "Kasir Order Kiloan desimal & Satuan dengan 8 paket layanan preset.",
-      "Live Preview & Cetak Nota Thermal 58mm/80mm + Kode Pelacakan LDR-xxxx.",
-      "Board Produksi 5 Tahap & Halaman Cek Status Pelanggan."
-    ],
-    "priceUsd": "$15",
-    "oldPriceUsd": "$29",
-    "titleEn": "Laundry POS Cashier & 5-Stage Order Tracking + Thermal Receipt",
+    "summary": "Aplikasi kasir khusus usaha laundry kiloan dan satuan (bedcover, sepatu, jas, karpet) lengkap dengan board manajemen produksi 5 tahap, pelacakan status cucian pelanggan real-time, notifikasi WhatsApp 'Cucian Siap Diambil', dan cetak struk nota thermal 58mm/80mm tanpa perlu server.",
     "summaryEn": "Dedicated laundry POS supporting weight (kg) & per-item orders, 5-stage production Kanban board, customer order tracker, 58/80mm thermal receipts, and CSV reports.",
-    "usdPaymentUrl": "#checkout-usd"
+    "features": [
+      "Kasir Order Laundry mendukung Kiloan desimal (mis. 2.5 kg) & Satuan dengan 8 paket layanan preset + kustom.",
+      "Pemilih Parfum (Lavender, Ocean Fresh, Sakura), metode Ambil Outlet / Kurir, serta pembayaran Lunas, DP Sebagian, atau Bayar Nanti.",
+      "Live Preview & Cetak Nota Thermal 58mm/80mm lengkap dengan kode pelacakan unik (LDR-xxxx).",
+      "Board Produksi Kanban & Kartu 5 Tahap (Diterima -> Dicuci -> Disetrika -> Siap Diambil -> Selesai) + 1-Klik Notif WA Siap Diambil.",
+      "Halaman Cek Status Pelanggan, KPI Laporan Omzet/Kg/Piutang, & Ekspor CSV."
+    ],
+    "featuresEn": [
+      "Supports decimal weight (kg) and per-piece laundry pricing + custom items.",
+      "Fragrance selector, pickup/delivery mode, and Paid / Partial Deposit / Pay Later states.",
+      "Live 58mm/80mm thermal receipt preview with unique tracking codes (LDR-xxxx).",
+      "5-Stage Kanban production tracker + customer self-lookup portal & CSV export."
+    ],
+    "deliverablesEn": [
+      "100% Open Source HTML5, CSS3, and Vanilla JS Laundry POS code.",
+      "Quick launcher + 6 sample orders preloaded.",
+      "Documentation & Commercial License."
+    ]
   },
   {
     "id": "prod-21",
     "title": "Template Blogger Ddev NewsPro v2.0 — Portal Berita, Majalah & Media Digital Modern",
+    "titleEn": "Ddev NewsPro v2.0 — Editorial News & Magazine Blogger XML Theme",
     "categories": [
       "Template",
       "Blogger",
@@ -753,6 +996,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 69.000",
     "oldPrice": "Rp 149.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-news/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-newspro-v20.html",
@@ -762,21 +1008,30 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/blogger-news/screenshot.png",
-    "summary": "Template Blogger XML Layouts v3 bergaya editorial untuk portal berita online, majalah digital, maupun blog media teknologi lengkap dengan Breaking News Ticker, Hero 3 Kolom, Daftar Isi otomatis, & Dark Mode.",
+    "summary": "Template Blogger XML Layouts v3 bergaya editorial untuk portal berita online, majalah digital, maupun blog media teknologi. Dilengkapi Breaking News Ticker otomatis dari feed JSON, layout Hero Headline Majalah 3 kolom, widget Trending/Popular Posts, estimasi waktu baca, Daftar Isi otomatis, Mode Baca Nyaman & Dark Mode, serta Schema JSON-LD NewsArticle.",
+    "summaryEn": "Valid Blogger Layouts v3 XML theme built for news portals and online magazines featuring a breaking news ticker, 3-column editorial hero, auto TOC, Reader Mode, Dark Mode, and NewsArticle Schema.",
     "features": [
-      "Blogger XML Layouts v3 Asli dengan dukungan Theme Designer (<Group>/<Variable>).",
-      "Breaking News Ticker & Related Posts Otomatis via JSON Feed Blogger.",
-      "Single Post Pro: Estimasi Waktu Baca, Daftar Isi (#toc), Share WA/X, & Schema NewsArticle."
+      "Blogger XML Layouts v3 Asli: mendukung penuh Blogger Theme Designer (<Group>/<Variable>) untuk ubah warna aksen & font tanpa coding.",
+      "Breaking News Ticker & Related Posts Otomatis via JSON Feed Blogger tanpa membebani loading.",
+      "Single Post Editorial Pro: Breadcrumb, Estimasi Waktu Baca, Daftar Isi (#toc) otomatis, Reading Progress Bar, Dropcap, Author Bio, & Tombol Share WA/X/Telegram.",
+      "Mendukung Dark Mode, Mode Baca Nyaman (atur ukuran teks), Sticky Sidebar, dan optimasi SEO NewsArticle + WebSite JSON-LD."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "Ddev NewsPro v2.0 — Editorial News & Magazine Blogger XML Theme",
-    "summaryEn": "Valid Blogger Layouts v3 XML theme built for news portals and online magazines featuring a breaking news ticker, 3-column editorial hero, auto TOC, Reader Mode, Dark Mode, and",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Native Blogger XML Layouts v3 with full Theme Designer variable support.",
+      "Breaking News ticker & automatic JSON-Feed related posts with fast loading.",
+      "Pro article reading experience: Breadcrumbs, auto Table of Contents, Reading Progress Bar, font resizer, and Dark Mode.",
+      "SEO optimized with NewsArticle & WebSite JSON-LD structured data."
+    ],
+    "deliverablesEn": [
+      "Ready-to-restore Blogger XML Theme (template-blogger-news-pro.xml).",
+      "Offline interactive preview bundle (HTML, CSS, JS) + setup documentation.",
+      "Commercial License (LISENSI.txt)."
+    ]
   },
   {
     "id": "prod-22",
     "title": "Template Blogger Ddev TokoKu v3 — Toko Online, Katalog Produk & Checkout WhatsApp / Mayar",
+    "titleEn": "Ddev TokoKu v3 — E-Commerce Catalog & Checkout Blogger XML Theme",
     "categories": [
       "Template",
       "Blogger",
@@ -785,6 +1040,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 79.000",
     "oldPrice": "Rp 179.000",
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-toko/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-tokoku-v3-toko.html",
@@ -794,21 +1052,30 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/blogger-toko/screenshot.png",
-    "summary": "Ubah blog Blogger gratis menjadi website toko online profesional lengkap dengan keranjang belanja persisten, pilihan varian, kalkulasi diskon & ongkir, serta checkout WhatsApp / Mayar.",
+    "summary": "Ubah blog Blogger gratis menjadi website toko online profesional tanpa biaya hosting bulanan. Dilengkapi parser postingan pintar (.toko-meta-data & tag singkat harga/coret/stok/varian), hitung diskon otomatis, keranjang belanja persisten (Slide-over Cart Drawer), pilihan kurir ongkir, checkout terformat ke WhatsApp Admin maupun link bayar Mayar/QRIS.",
+    "summaryEn": "Turn Blogger into an online store with zero hosting cost: structured post price/variant parser, persistent cart drawer, automatic discount math, WhatsApp & global checkout support.",
     "features": [
-      "Parser Postingan Produk Pintar (harga, harga coret, stok, varian, link Mayar).",
-      "Keranjang Belanja Slide-over Drawer + Mobile Sticky Cart Bar.",
-      "Checkout Otomatis ke WhatsApp Admin / Pembayaran Instan Mayar."
+      "Parser Postingan Produk Pintar: tulis harga, harga coret, stok, varian rasa/ukuran, & link Mayar langsung di postingan Blogger.",
+      "Keranjang Belanja Real-Time (localStorage) + Slide-over Cart Drawer + Sticky Bottom Cart di HP.",
+      "Checkout Otomatis ke WhatsApp Admin lengkap dengan daftar belanja, varian, alamat, dan opsi kurir (JNE/J&T/Instant/COD) atau tombol Bayar Instan Mayar.",
+      "Hero Promo Flash Sale, Filter Kategori Label, Sortir Harga/Diskon, Dark/Light Mode, dan Schema JSON-LD Store & Product."
     ],
-    "priceUsd": "$12",
-    "oldPriceUsd": "$25",
-    "titleEn": "Ddev TokoKu v3 — E-Commerce Catalog & Checkout Blogger XML Theme",
-    "summaryEn": "Turn Blogger into an online store with zero hosting cost: structured post price/variant parser, persistent cart drawer, automatic discount math, WhatsApp & global checkout sup",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Smart post metadata parser for prices, variants, stock badges, and checkout links.",
+      "Real-time localStorage Shopping Cart Drawer + mobile sticky checkout bar.",
+      "Direct WhatsApp & online gateway checkout flow with shipping & total calculation.",
+      "Flash Sale hero, category label filtering, price/discount sorting & Dark/Light Mode."
+    ],
+    "deliverablesEn": [
+      "Ready-to-upload Blogger XML Store Theme (template-blogger-toko-whatsapp.xml).",
+      "Interactive 10-product offline storefront preview + setup guide.",
+      "Commercial License (LISENSI.txt)."
+    ]
   },
   {
     "id": "prod-23",
     "title": "Template Blogger Ddev Folio — Portofolio, CV Kreatif & Personal Branding Minimalis",
+    "titleEn": "Ddev Folio — Swiss Minimalist Portfolio & CV Blogger XML Theme",
     "categories": [
       "Template",
       "Blogger",
@@ -817,6 +1084,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 55.000",
     "oldPrice": "Rp 129.000",
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-portfolio/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-folio-portofolio.html",
@@ -826,21 +1096,30 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/blogger-portfolio/screenshot.png",
-    "summary": "Template Blogger Swiss Editorial Minimalis untuk UI/UX Designer, Web Developer, Freelancer, maupun Kreator. Menampilkan studi kasus proyek per Label Blogger, layanan, & preview cetak CV.",
-    "features": [
-      "Desain Swiss Editorial + Filter Karya Dinamis per Label Blogger.",
-      "Layout Studi Kasus Lengkap, Widget Pengalaman Kerja, & Paket Layanan.",
-      "Preview Cetak CV (@media print), Salin Email 1-Klik, & Dark Mode."
-    ],
-    "priceUsd": "$9",
-    "oldPriceUsd": "$19",
-    "titleEn": "Ddev Folio — Swiss Minimalist Portfolio & CV Blogger XML Theme",
+    "summary": "Template Blogger bergaya Swiss Editorial Minimalis yang dirancang khusus untuk UI/UX Designer, Web Developer, Freelancer, Fotografer, maupun Konsultan kreatif. Ubah setiap postingan Blogger menjadi halaman Studi Kasus (Case Study) portofolio lengkap, dengan profil Hero, Pengalaman Kerja, Layanan & Tarif, serta formulir kirim brief WhatsApp tanpa perlu membayar hosting tahunan.",
     "summaryEn": "Editorial Swiss-grid Blogger XML theme for designers, developers, and freelancers with label-based case studies, services & rates, printable CV layout, and Dark Mode.",
-    "usdPaymentUrl": "#checkout-usd"
+    "features": [
+      "Desain Swiss Editorial High-Craft: tipografi bersih (Space Grotesk + Plus Jakarta Sans + JetBrains Mono) dan dukungan Dark/Light Mode.",
+      "Showcase Karya dengan Filter Label Dinamis (UI/UX Design, Web Development, Branding, Mobile App) & Layout Studi Kasus Detail.",
+      "Widget Tata Letak Editable untuk Hero Status ('Open for Freelance'), Pengalaman & Tech Stack, Paket Layanan, Testimoni, & Kontak.",
+      "Tombol Preview Cetak CV (@media print rapi), Salin Email 1-Klik, Modal Kirim Brief WA, dan JSON-LD Schema Person & CreativeWork."
+    ],
+    "featuresEn": [
+      "Swiss minimalist editorial grid featuring Space Grotesk, Plus Jakarta Sans & Dark Mode.",
+      "Filterable portfolio showcase with rich Case Study layout.",
+      "Editable Blogger Layout widgets for availability status, experience, services & testimonials.",
+      "Clean Printable Resume/CV (@media print), 1-click email copy & Person/CreativeWork SEO Schema."
+    ],
+    "deliverablesEn": [
+      "Ready-to-use Blogger XML Portfolio Theme (template-blogger-portfolio-cv.xml).",
+      "Interactive offline demo featuring 6 case studies + printable CV preview.",
+      "Setup Guide & Commercial License."
+    ]
   },
   {
     "id": "prod-24",
     "title": "Template Blogger Ddev DocsPro — Dokumentasi Teknis, Tutorial Kode & Blog Developer Pro",
+    "titleEn": "Ddev DocsPro — 3-Column Tech Docs & Developer Blog Blogger XML Theme",
     "categories": [
       "Template",
       "Blogger",
@@ -849,6 +1128,9 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 65.000",
     "oldPrice": "Rp 145.000",
+    "priceUsd": "$10",
+    "oldPriceUsd": "$22",
+    "usdPaymentUrl": "#checkout-usd",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-docs/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-docspro.html",
@@ -858,19 +1140,28 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/blogger-docs/screenshot.png",
-    "summary": "Template Blogger kelas developer 3 kolom untuk situs dokumentasi API, knowledge base SaaS, maupun blog tutorial coding dengan Quick Search Ctrl+K, Copy Code, & Sticky TOC.",
+    "summary": "Template Blogger kelas developer yang terinspirasi Nextra, Mintlify, dan Tailwind Docs. Mengubah Blogger menjadi situs dokumentasi API, knowledge base SaaS, catatan engineering, atau blog tutorial pemrograman profesional dengan layout 3 kolom (Sidebar Grup Collapsible per Label, Konten Artikel + Tombol Salin Kode otomatis, dan Daftar Isi kanan dengan ScrollSpy).",
+    "summaryEn": "Developer-grade 3-column Blogger XML theme featuring collapsible label sidebar, Ctrl+K JSON feed search, copy-code buttons, callout blocks, ScrollSpy TOC, and TechArticle Schema.",
     "features": [
-      "Layout 3 Kolom: Collapsible Docs Sidebar, Konten Kode + Copy Button, Sticky TOC.",
-      "Quick Search Modal (Ctrl+K) via JSON Feed Blogger dengan Navigasi Keyboard.",
-      "Callout Info/Tip/Warn, Badge HTTP Method, Prev/Next Docs, & Dark Mode."
+      "Layout Dokumentasi 3 Kolom Responsif: Sidebar navigasi otomatis mengelompokkan postingan berdasarkan Label Blogger via JSON Feed.",
+      "Quick Search Modal (Ctrl+K) berbasis feeds JSON Blogger lengkap dengan navigasi keyboard Arrow/Enter/Esc.",
+      "Komponen Penulisan Teknis Siap Pakai: Blok kode dengan tombol Salin Kode otomatis, Callout Info/Tip/Warning, Badge HTTP (GET/POST/PUT/DELETE), & Tabel API.",
+      "Sticky 'Di Halaman Ini' (TOC ScrollSpy) otomatis di kanan + Navigasi Previous/Next Article + Dark/Light Mode + Schema TechArticle JSON-LD."
     ],
-    "priceUsd": "$10",
-    "oldPriceUsd": "$22",
-    "titleEn": "Ddev DocsPro — 3-Column Tech Docs & Developer Blog Blogger XML Theme",
-    "summaryEn": "Developer-grade 3-column Blogger XML theme featuring collapsible label sidebar, Ctrl+K JSON feed search, copy-code buttons, callout blocks, ScrollSpy TOC, and TechArticle Sche",
-    "usdPaymentUrl": "#checkout-usd"
+    "featuresEn": [
+      "Responsive 3-column docs layout auto-grouping Blogger posts by Label via JSON Feed.",
+      "Fast Ctrl+K keyboard Search Modal across all articles and endpoints.",
+      "Developer Markdown components: Copyable Code Blocks, Callouts, HTTP Method Badges & API Tables.",
+      "Sticky right-hand On-This-Page TOC ScrollSpy + Prev/Next navigation + Dark Mode."
+    ],
+    "deliverablesEn": [
+      "Ready-to-use Blogger XML Docs Theme (template-blogger-tech-docs.xml).",
+      "Interactive offline preview with 7 API docs articles & Ctrl+K search.",
+      "Setup Documentation & Commercial License."
+    ]
   }
 ];
+
 let productsState = [...FALLBACK_PRODUCTS];
 let activeCategory = 'all';
 let searchQuery = '';
@@ -956,6 +1247,10 @@ window.__asetkodeBloggerCallback = function (data) {
         ? descEl.textContent.trim().slice(0, 175)
         : 'Source code dan karya digital siap pakai lengkap dengan dokumentasi instalasi dan database.';
 
+      const explicitDescEn = meta ? meta.getAttribute('data-desc-en') || '' : '';
+      const featuresEn = Array.from(doc.querySelectorAll('.ddev-prose-en ul li')).map((li) => li.textContent.trim()).filter(Boolean);
+      const deliverablesEn = Array.from(doc.querySelectorAll('.ddev-prose-en ol li')).map((li) => li.textContent.trim()).filter(Boolean);
+
       return {
         id: 'blogger-prod-' + idx,
         title,
@@ -976,8 +1271,10 @@ window.__asetkodeBloggerCallback = function (data) {
         demoType: inferDemoType(title, categories),
         thumbnailUrl: firstImg ? firstImg.src : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80',
         summary: summaryText,
-        summaryEn: (fbMatch && fbMatch.summaryEn) || '',
-        features
+        summaryEn: explicitDescEn || (fbMatch && fbMatch.summaryEn) || '',
+        features,
+        featuresEn: featuresEn.length ? featuresEn : (fbMatch && fbMatch.featuresEn) || [],
+        deliverablesEn: deliverablesEn.length ? deliverablesEn : (fbMatch && fbMatch.deliverablesEn) || []
       };
     });
 
@@ -986,7 +1283,9 @@ window.__asetkodeBloggerCallback = function (data) {
       renderProductsGrid();
       const statusEl = document.getElementById('catalogStatusText');
       if (statusEl) {
-        statusEl.textContent = `Terhubung Live dengan asetkode.blogspot.com (${syncedProducts.length} produk aktif)`;
+        statusEl.textContent = currentLocale === 'en'
+          ? `Live Synced with asetkode.blogspot.com (${syncedProducts.length} active products)`
+          : `Terhubung Live dengan asetkode.blogspot.com (${syncedProducts.length} produk aktif)`;
       }
     }
   } catch (err) {
@@ -1027,7 +1326,9 @@ function renderProductsGrid() {
     const matchesSearch =
       !q ||
       item.title.toLowerCase().includes(q) ||
+      (item.titleEn && item.titleEn.toLowerCase().includes(q)) ||
       item.summary.toLowerCase().includes(q) ||
+      (item.summaryEn && item.summaryEn.toLowerCase().includes(q)) ||
       item.stack.toLowerCase().includes(q) ||
       item.categories.some((c) => c.toLowerCase().includes(q));
 
@@ -1044,11 +1345,12 @@ function renderProductsGrid() {
   });
 
   if (list.length === 0) {
+    const isEnEmpty = currentLocale === 'en';
     grid.innerHTML = `
       <div style="grid-column: 1 / -1; text-align:center; padding:56px 20px; background:var(--bg-surface); border:1px dashed var(--border-strong); border-radius:16px;">
-        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:6px;">Produk Tidak Ditemukan</h3>
-        <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:16px;">Coba gunakan kata kunci lain atau tampilkan semua kategori.</p>
-        <button type="button" class="btn btn-primary" onclick="resetCatalogFilter()">Tampilkan Semua Karya</button>
+        <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:6px;">${isEnEmpty ? 'No Products Found' : 'Produk Tidak Ditemukan'}</h3>
+        <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:16px;">${isEnEmpty ? 'Try another search keyword or show all categories.' : 'Coba gunakan kata kunci lain atau tampilkan semua kategori.'}</p>
+        <button type="button" class="btn btn-primary" onclick="resetCatalogFilter()">${isEnEmpty ? 'Show All Products' : 'Tampilkan Semua Karya'}</button>
       </div>
     `;
     return;
@@ -1150,15 +1452,16 @@ window.openLiveDemoById = function (productId) {
   const prod = productsState.find((p) => p.id === productId);
   if (!prod) return;
   currentDemoProduct = prod;
+  const disp = getProdDisplay(prod);
 
   const modal = document.getElementById('demoSimModal');
   const titleEl = document.getElementById('demoSimTitle');
   const stageEl = document.getElementById('demoViewportStage');
   const buyBtn = document.getElementById('demoSimBuyBtn');
 
-  if (titleEl) titleEl.textContent = `Interactive Preview: ${prod.title}`;
+  if (titleEl) titleEl.textContent = `Interactive Preview: ${disp.title}`;
   if (buyBtn) {
-    buyBtn.textContent = `Beli Source Code (${prod.price})`;
+    buyBtn.textContent = disp.isEn ? `Buy Source Code (${disp.price})` : `Beli Source Code (${disp.price})`;
     buyBtn.onclick = () => {
       closeModal('demoSimModal');
       openInstantCheckoutById(prod.id);
@@ -1180,18 +1483,20 @@ window.openLiveDemoById = function (productId) {
 
 function buildInteractiveDemoHTML(prod) {
   const type = prod.demoType || inferDemoType(prod.title, prod.categories);
+  const disp = getProdDisplay(prod);
 
   if (type === 'live_frame' || (prod.demoUrl && prod.demoUrl.startsWith('demo/'))) {
+    const targetDemoUrl = localizeDemoUrl(prod.demoUrl);
     return `
       <div style="width:100%; height:620px; position:relative; background:#09090b;">
         <div style="background:#09090b; color:#fff; padding:10px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #27272a;">
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
-            <span style="font-size:0.8rem; font-weight:700;">LIVE PREVIEW: ${prod.title}</span>
+            <span style="font-size:0.8rem; font-weight:700;">LIVE PREVIEW: ${disp.title}</span>
           </div>
-          <a href="${prod.demoUrl}" target="_blank" rel="noopener" style="background:#fff; color:#09090b; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700; text-decoration:none;">Buka Layar Penuh ↗</a>
+          <a href="${targetDemoUrl}" target="_blank" rel="noopener" style="background:#fff; color:#09090b; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700; text-decoration:none;">${disp.isEn ? 'Open Fullscreen ↗' : 'Buka Layar Penuh ↗'}</a>
         </div>
-        <iframe src="${prod.demoUrl}" style="width:100%; height:calc(100% - 41px); border:0; background:#fff;" allow="autoplay; clipboard-write"></iframe>
+        <iframe src="${targetDemoUrl}" style="width:100%; height:calc(100% - 41px); border:0; background:#fff;" allow="autoplay; clipboard-write"></iframe>
       </div>
     `;
   }
@@ -1401,26 +1706,27 @@ function bindPosSimulatorEvents() {
 window.openDetailById = function (productId) {
   const prod = productsState.find((p) => p.id === productId);
   if (!prod) return;
+  const disp = getProdDisplay(prod);
 
   const modal = document.getElementById('detailModal');
   const titleEl = document.getElementById('detailModalTitle');
   const bodyEl = document.getElementById('detailModalBody');
 
-  if (titleEl) titleEl.textContent = prod.title;
+  if (titleEl) titleEl.textContent = disp.title;
   if (bodyEl) {
     const disc = getDiscountPercent(prod.price, prod.oldPrice);
     bodyEl.innerHTML = `
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:22px; align-items:start;">
         <div>
           <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border-color); margin-bottom:16px;">
-            <img src="${prod.thumbnailUrl}" alt="${prod.title}" style="width:100%; height:230px; object-fit:cover; display:block; filter:grayscale(100%);" />
+            <img src="${prod.thumbnailUrl}" alt="${disp.title}" style="width:100%; height:230px; object-fit:cover; display:block;" />
           </div>
           <div style="background:#09090b; border:1px solid #27272a; border-radius:12px; padding:14px; color:#fafafa;">
-            <div style="font-size:0.74rem; font-weight:800; color:#a1a1aa; margin-bottom:8px; font-family:var(--font-mono);">ISI PAKET UNDUHAN (.ZIP):</div>
+            <div style="font-size:0.74rem; font-weight:800; color:#a1a1aa; margin-bottom:8px; font-family:var(--font-mono);">${disp.isEn ? 'WHAT\x27S INCLUDED (.ZIP BUNDLE):' : 'ISI PAKET UNDUHAN (.ZIP):'}</div>
             <ul class="zip-tree">
               <li class="zip-row"><span>/full-source-code/ (${prod.stack})</span><span class="zip-badge">Unlocked</span></li>
               <li class="zip-row"><span>/database/schema_sample.sql</span><span class="zip-badge">Ready</span></li>
-              <li class="zip-row"><span>PANDUAN_INSTALASI.pdf</span><span class="zip-badge">Bahasa ID</span></li>
+              <li class="zip-row"><span>${disp.isEn ? 'SETUP_GUIDE_EN_ID.md' : 'PANDUAN_INSTALASI.pdf'}</span><span class="zip-badge">${disp.isEn ? 'English + ID' : 'Bahasa ID'}</span></li>
             </ul>
           </div>
         </div>
@@ -1432,26 +1738,26 @@ window.openDetailById = function (productId) {
           </div>
 
           <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.65;">
-            ${prod.summary}
+            ${disp.summary}
           </p>
 
           <div style="margin-bottom:18px;">
-            <div style="font-size:0.82rem; font-weight:800; margin-bottom:8px;">Fitur Unggulan yang Anda Dapatkan:</div>
+            <div style="font-size:0.82rem; font-weight:800; margin-bottom:8px;">${disp.isEn ? 'Key Features Included:' : 'Fitur Unggulan yang Anda Dapatkan:'}</div>
             <ul style="list-style:none; display:grid; gap:7px; font-size:0.84rem; color:var(--text-secondary);">
-              ${prod.features.map((f) => `<li>✓ ${f}</li>`).join('')}
+              ${disp.features.map((f) => `<li>✓ ${f}</li>`).join('')}
             </ul>
           </div>
 
           <div style="background:var(--bg-elevated); border:1px solid var(--border-color); border-radius:12px; padding:16px;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
               <div>
-                <div style="font-size:0.74rem; color:var(--text-muted);">Harga Lisensi &amp; Source Code:</div>
+                <div style="font-size:0.74rem; color:var(--text-muted);">${disp.isEn ? 'Full Source Code &amp; Commercial License:' : 'Harga Lisensi &amp; Source Code:'}</div>
                 <div style="display:flex; align-items:baseline; gap:8px;">
-                  <span class="price-current" style="font-size:1.5rem;">${prod.price}</span>
-                  ${prod.oldPrice ? `<span class="price-old">${prod.oldPrice}</span>` : ''}
+                  <span class="price-current" style="font-size:1.5rem;">${disp.price}</span>
+                  ${disp.oldPrice ? `<span class="price-old">${disp.oldPrice}</span>` : ''}
                 </div>
               </div>
-              ${disc > 0 ? `<span class="discount-pill" style="position:static;">HEMAT ${disc}%</span>` : ''}
+              ${disc > 0 ? `<span class="discount-pill" style="position:static;">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
@@ -1459,7 +1765,7 @@ window.openDetailById = function (productId) {
                 Live Demo
               </button>
               <button type="button" class="btn btn-primary" onclick="closeModal('detailModal'); openInstantCheckoutById('${prod.id}')">
-                Beli &amp; Download
+                ${disp.isEn ? 'Buy &amp; Download' : 'Beli &amp; Download'}
               </button>
             </div>
           </div>
@@ -1722,7 +2028,7 @@ function buildGlobalUsdCheckoutHTML(order) {
   const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}body{margin:0;padding:24px;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06);}.badge{display:inline-block;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px;}h2{margin:0 0 6px;font-size:19px;}.price{font-size:24px;font-weight:800;color:#059669;margin-bottom:12px;}.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}.pill{font-size:12px;font-weight:700;padding:4px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#334155;}.btn{display:block;text-align:center;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;}.btn-primary{background:linear-gradient(135deg,#4f46e5,#2563eb);color:#fff;}.btn-sec{background:#fff;color:#0f172a;border:1px solid #cbd5e1;}.note{font-size:12px;color:#64748b;line-height:1.5;background:#f1f5f9;padding:12px;border-radius:10px;}</style></head>
-  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span><span class="pill">Polar.sh</span></div><a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request Instant USD Checkout Link (Gmail) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a><div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
+  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div><a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a><div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
 }
 
 function buildEmailOrderHTML(order) {
@@ -1843,30 +2149,37 @@ function buildBuiltInPaymentGatewayHTML(order) {
 // ================= 7. HERO ROI CALCULATOR & STUDIO TABS =================
 const ROI_DATA = {
   pos: {
-    customCost: 'Rp 4.500.000',
-    customTime: 'Waktu: 28 Hari Kerja',
-    asetPrice: 'Rp 69.000',
-    savingsText: 'Anda Hemat Rp 4.431.000 (98%) & 28 Hari Coding!'
+    customCost: 'Rp 4.500.000', customTime: 'Waktu: 28 Hari Kerja', asetPrice: 'Rp 69.000', savingsText: 'Anda Hemat Rp 4.431.000 (98%) & 28 Hari Coding!',
+    customCostEn: '$390', customTimeEn: 'Time: 28 Working Days', asetPriceEn: '$12', savingsTextEn: 'Save $378 (97%) & 28 Coding Days!'
   },
   ecom: {
-    customCost: 'Rp 5.800.000',
-    customTime: 'Waktu: 35 Hari Kerja',
-    asetPrice: 'Rp 169.000',
-    savingsText: 'Anda Hemat Rp 5.631.000 (97%) & 35 Hari Coding!'
+    customCost: 'Rp 5.800.000', customTime: 'Waktu: 35 Hari Kerja', asetPrice: 'Rp 169.000', savingsText: 'Anda Hemat Rp 5.631.000 (97%) & 35 Hari Coding!',
+    customCostEn: '$490', customTimeEn: 'Time: 35 Working Days', asetPriceEn: '$25', savingsTextEn: 'Save $465 (95%) & 35 Coding Days!'
   },
   saas: {
-    customCost: 'Rp 2.200.000',
-    customTime: 'Waktu: 14 Hari Kerja',
-    asetPrice: 'Rp 79.000',
-    savingsText: 'Anda Hemat Rp 2.121.000 (96%) & 14 Hari Coding!'
+    customCost: 'Rp 2.200.000', customTime: 'Waktu: 14 Hari Kerja', asetPrice: 'Rp 79.000', savingsText: 'Anda Hemat Rp 2.121.000 (96%) & 14 Hari Coding!',
+    customCostEn: '$240', customTimeEn: 'Time: 14 Working Days', asetPriceEn: '$14', savingsTextEn: 'Save $226 (94%) & 14 Coding Days!'
   },
   bot: {
-    customCost: 'Rp 3.000.000',
-    customTime: 'Waktu: 18 Hari Kerja',
-    asetPrice: 'Rp 99.000',
-    savingsText: 'Anda Hemat Rp 2.901.000 (96%) & 18 Hari Coding!'
+    customCost: 'Rp 3.000.000', customTime: 'Waktu: 18 Hari Kerja', asetPrice: 'Rp 99.000', savingsText: 'Anda Hemat Rp 2.901.000 (96%) & 18 Hari Coding!',
+    customCostEn: '$290', customTimeEn: 'Time: 18 Working Days', asetPriceEn: '$15', savingsTextEn: 'Save $275 (95%) & 18 Coding Days!'
   }
 };
+
+function updateRoiCalculatorUI() {
+  const roiSelect = document.getElementById('roiProjectSelect');
+  if (!roiSelect) return;
+  const info = ROI_DATA[roiSelect.value] || ROI_DATA.pos;
+  const isEn = currentLocale === 'en';
+  const cCost = document.getElementById('roiCustomCost');
+  const cTime = document.getElementById('roiCustomTime');
+  const aPrice = document.getElementById('roiAsetPrice');
+  const sTxt = document.getElementById('roiSavingsText');
+  if (cCost) cCost.textContent = isEn ? info.customCostEn : info.customCost;
+  if (cTime) cTime.textContent = isEn ? info.customTimeEn : info.customTime;
+  if (aPrice) aPrice.textContent = isEn ? info.asetPriceEn : info.asetPrice;
+  if (sTxt) sTxt.textContent = isEn ? info.savingsTextEn : info.savingsText;
+}
 
 function initHeroStudioAndROI() {
   document.querySelectorAll('.studio-tab').forEach((tab) => {
@@ -1881,15 +2194,7 @@ function initHeroStudioAndROI() {
   });
 
   const roiSelect = document.getElementById('roiProjectSelect');
-  if (roiSelect) {
-    roiSelect.addEventListener('change', () => {
-      const info = ROI_DATA[roiSelect.value] || ROI_DATA.pos;
-      document.getElementById('roiCustomCost').textContent = info.customCost;
-      document.getElementById('roiCustomTime').textContent = info.customTime;
-      document.getElementById('roiAsetPrice').textContent = info.asetPrice;
-      document.getElementById('roiSavingsText').textContent = info.savingsText;
-    });
-  }
+  if (roiSelect) roiSelect.addEventListener('change', updateRoiCalculatorUI);
 }
 
 // ================= 8. MODAL, THEME & TOOLBAR EVENTS =================
@@ -1974,7 +2279,41 @@ window.openLegalModal = function (type) {
   const bodyEl = document.getElementById('detailModalBody');
   if (!modal || !titleEl || !bodyEl) return;
 
-  const docs = {
+  const isEn = currentLocale === 'en';
+  const docs = isEn ? {
+    about: {
+      title: `About ${SITE_CONFIG.brandName}`,
+      html: `
+        <h3 style="margin-bottom:10px;">Production-Ready Web Apps &amp; Source Code Templates</h3>
+        <p style="margin-bottom:12px;color:var(--text-secondary);"><strong>${SITE_CONFIG.brandName}</strong> builds ready-to-launch web applications, POS &amp; business software, Python automation scripts, and modern UI templates for businesses, freelancers, and developers.</p>
+        <p style="margin-bottom:12px;color:var(--text-secondary);">Every product in our catalog is pre-tested and paired with an <strong>Interactive Live Demo</strong> right in your browser before purchase.</p>
+        <p style="color:var(--text-secondary);">Official contact &amp; customer support: <strong>${SITE_CONFIG.orderEmail}</strong></p>
+      `
+    },
+    terms: {
+      title: 'Terms, Conditions & Product License',
+      html: `
+        <h3 style="margin-bottom:10px;">Personal &amp; Commercial License Terms</h3>
+        <ul style="padding-left:18px;display:flex;flex-direction:column;gap:8px;color:var(--text-secondary);">
+          <li>You receive <strong>100% Open Unencrypted Source Code</strong> with documentation and setup guides.</li>
+          <li>Free to modify and deploy for personal apps, internal business operations, and unlimited commercial client websites.</li>
+          <li><strong>Not permitted:</strong> Reselling, redistributing, or publishing the raw source template as a competing starter kit or template marketplace product.</li>
+          <li>One-time purchase with zero recurring subscription fees.</li>
+        </ul>
+      `
+    },
+    refund: {
+      title: 'Refund Policy & File Guarantee',
+      html: `
+        <h3 style="margin-bottom:10px;">Digital Goods Policy</h3>
+        <ul style="padding-left:18px;display:flex;flex-direction:column;gap:8px;color:var(--text-secondary);">
+          <li>Because products are instant downloadable digital source code bundles (<code>.ZIP</code>), delivered orders are generally final (non-refundable).</li>
+          <li>Please test the <strong>Interactive Live Demo</strong> prior to checkout to make sure the app meets your project requirements.</li>
+          <li><strong>File &amp; Support Guarantee:</strong> If your <code>.ZIP</code> archive is corrupted or you experience initial setup issues, we will re-send your bundle and assist directly via <strong>${SITE_CONFIG.orderEmail}</strong>.</li>
+        </ul>
+      `
+    }
+  } : {
     about: {
       title: `Tentang ${SITE_CONFIG.brandName}`,
       html: `
@@ -2015,6 +2354,12 @@ window.openLegalModal = function (type) {
   modal.classList.add('open');
 };
 
+function setLocalizedInner(el, isEn, enHtml) {
+  if (!el) return;
+  if (!el.dataset.idHtml) el.dataset.idHtml = el.innerHTML;
+  el.innerHTML = isEn ? enHtml : el.dataset.idHtml;
+}
+
 function applyStorefrontLocaleUI() {
   const isEn = currentLocale === 'en';
   document.documentElement.lang = isEn ? 'en' : 'id';
@@ -2022,6 +2367,12 @@ function applyStorefrontLocaleUI() {
   const lblEl = document.getElementById('langCurrencyLabel');
   if (flagEl) flagEl.textContent = isEn ? '🇺🇸' : '🇮🇩';
   if (lblEl) lblEl.textContent = isEn ? 'USD' : 'IDR';
+
+  setLocalizedInner(
+    document.querySelector('.promo-ribbon-inner'),
+    isEn,
+    '<span class="promo-pill">GLOBAL LAUNCH</span><span>Save up to <strong>50%</strong> + Extra 20% Auto-Bundle Discount in Cart • Card / Polar.sh / Email Order: <strong data-order-email>dekamayooo@gmail.com</strong></span>'
+  );
 
   const searchInput = document.getElementById('searchInput');
   if (searchInput) searchInput.placeholder = isEn ? 'Search POS apps, Blogger XML themes, PHP, Python...' : 'Cari aplikasi kasir, laravel, python, landing page...';
@@ -2034,34 +2385,147 @@ function applyStorefrontLocaleUI() {
   const cartSpan = document.querySelector('#openCartBtn span:not(.cart-count-pill)');
   if (cartSpan) cartSpan.textContent = isEn ? 'Cart' : 'Keranjang';
 
-  const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle) {
-    if (!heroTitle.dataset.idHtml) heroTitle.dataset.idHtml = heroTitle.innerHTML;
-    heroTitle.innerHTML = isEn
-      ? 'Launch Projects &amp; Businesses 10x Faster with <span class="gradient-text">Production Code</span>'
-      : heroTitle.dataset.idHtml;
-  }
-  const heroDesc = document.querySelector('.hero-desc');
-  if (heroDesc) {
-    if (!heroDesc.dataset.idHtml) heroDesc.dataset.idHtml = heroDesc.innerHTML;
-    heroDesc.innerHTML = isEn
-      ? 'Explore ready-to-launch web apps, Python automation scripts, Blogger XML themes &amp; modern UI kits. Test the <strong>Interactive Live Demo</strong> right in your browser before purchasing, and get the complete open-source <code>.ZIP</code> package.'
-      : heroDesc.dataset.idHtml;
-  }
+  const heroStatusText = document.getElementById('heroStatusText');
+  if (heroStatusText) heroStatusText.textContent = isEn ? 'Try Live Demo in Browser • Global USD Checkout Ready' : 'Coba Aplikasi di Browser • Order Cepat via Email';
+
+  setLocalizedInner(
+    document.querySelector('.hero-title'),
+    isEn,
+    'Launch Projects &amp; Businesses 10x Faster with <span class="gradient-text">Production Code</span>'
+  );
+  setLocalizedInner(
+    document.querySelector('.hero-desc'),
+    isEn,
+    'Explore ready-to-launch web apps, Python automation scripts, Blogger XML themes &amp; modern UI kits. Test the <strong>Interactive Live Demo</strong> right in your browser before purchasing, and receive the complete open-source <code>.ZIP</code> bundle.'
+  );
   const heroCtas = document.querySelectorAll('.hero-cta-row a');
   if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Explore Catalog & Live Demo →' : 'Eksplor Katalog & Live Demo →';
   if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'All-In-One Pack ($49 USD • Save 80%)' : 'All-In-One Pack (Hemat 65%)';
 
-  const bundlePriceEl = document.querySelector('#bundleDeal .bundle-price, [data-bundle-price]');
-  if (bundlePriceEl) bundlePriceEl.textContent = isEn ? SITE_CONFIG.bundlePriceUsd : SITE_CONFIG.bundlePrice;
+  const metricLabels = document.querySelectorAll('.hero-metrics .metric-label');
+  const metricVals = document.querySelectorAll('.hero-metrics .metric-val');
+  if (metricVals[2]) metricVals[2].textContent = isEn ? 'Commercial' : 'Komersial';
+  if (metricLabels[0]) metricLabels[0].textContent = isEn ? 'Full Unencrypted Source Code' : 'Full Source Code Tanpa Enkripsi';
+  if (metricLabels[1]) metricLabels[1].textContent = isEn ? 'Instant .ZIP Delivery to Inbox' : 'Dikirim Rapi ke Email Pembeli';
+  if (metricLabels[2]) metricLabels[2].textContent = isEn ? 'Unlimited Business & Client Projects' : 'Bebas Dipakai Usaha & Klien';
+
+  const studioTabs = document.querySelectorAll('.studio-tab');
+  if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'Savings Calculator' : 'Kalkulator Hemat';
+  if (studioTabs[1]) studioTabs[1].textContent = isEn ? 'Inside .ZIP Pack' : 'Isi File .ZIP';
+  if (studioTabs[2]) studioTabs[2].textContent = isEn ? 'Global Architecture' : 'GitHub × Blogger';
+
+  setLocalizedInner(document.querySelector('label[for="roiProjectSelect"]'), isEn, 'Choose the software project you want to launch:');
+  const roiOpts = document.querySelectorAll('#roiProjectSelect option');
+  if (roiOpts[0]) roiOpts[0].textContent = isEn ? 'POS Cashier & Warehouse Inventory Web App' : 'Aplikasi Kasir & Inventori Toko (POS)';
+  if (roiOpts[1]) roiOpts[1].textContent = isEn ? 'Online Store & E-Commerce Catalog System' : 'Website Toko Online & Katalog Checkout QRIS';
+  if (roiOpts[2]) roiOpts[2].textContent = isEn ? 'SaaS / Agency Landing Page Template' : 'Landing Page SaaS / Company Profile';
+  if (roiOpts[3]) roiOpts[3].textContent = isEn ? 'Python Scraper & Automated Reporter Bot' : 'Bot Otomatisasi Scraper & Laporan Python';
+  updateRoiCalculatorUI();
+
+  const bundleBox = document.getElementById('bundleDeal');
+  if (bundleBox) {
+    setLocalizedInner(bundleBox.querySelector('h2'), isEn, 'Get All 24 Production Apps &amp; Templates Together (Save 80%)');
+    setLocalizedInner(bundleBox.querySelector('p'), isEn, 'Unlock every flagship <code>.ZIP</code> bundle &amp; Live Demo (POS Inventory, Invoice Pro, Booking System, Laundry POS, QR Attendance, Blogger XML Themes &amp; UI Kits).');
+    const oldBundleEl = bundleBox.querySelector('.bundle-action > div > div:first-child');
+    if (oldBundleEl) oldBundleEl.textContent = isEn ? 'Individual Total: $249' : 'Total Satuan: Rp 419.000';
+    const newBundleEl = bundleBox.querySelector('.bundle-price-num');
+    if (newBundleEl) newBundleEl.textContent = isEn ? '$49 USD' : 'Rp 249.000';
+    const addBundleBtnEl = document.getElementById('addBundleBtn');
+    if (addBundleBtnEl) addBundleBtnEl.textContent = isEn ? 'Grab All-Access Bundle →' : 'Ambil Paket Bundling →';
+  }
 
   const filterAll = document.querySelector('#filterBar .filter-chip[data-cat="all"]');
   if (filterAll) filterAll.textContent = isEn ? 'All Products' : 'Semua Karya';
   const filterTemplate = document.querySelector('#filterBar .filter-chip[data-cat="Template"]');
   if (filterTemplate) filterTemplate.textContent = isEn ? 'Templates / UI' : 'Template / UI';
+  const filterDesign = document.querySelector('#filterBar .filter-chip[data-cat="Desain Web"]');
+  if (filterDesign) filterDesign.textContent = isEn ? 'Web Design' : 'Desain Web';
 
+  setLocalizedInner(document.querySelector('label[for="sortSelect"]'), isEn, 'Sort:');
+  const sortOpts = document.querySelectorAll('#sortSelect option');
+  if (sortOpts[0]) sortOpts[0].textContent = isEn ? 'Newest' : 'Terbaru';
+  if (sortOpts[1]) sortOpts[1].textContent = isEn ? 'Price: Low to High' : 'Harga Terendah';
+  if (sortOpts[2]) sortOpts[2].textContent = isEn ? 'Price: High to Low' : 'Harga Tertinggi';
+  if (sortOpts[3]) sortOpts[3].textContent = isEn ? 'Biggest Discount' : 'Diskon Terbesar';
+
+  setLocalizedInner(
+    document.getElementById('keunggulan'),
+    isEn,
+    '<div class="section-header"><span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">WHY DDEV STUDIO?</span><h2>Engineered for Fast Developer &amp; Business Launch</h2></div>' +
+    '<div class="bento-grid">' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.78rem; font-weight:800; margin-bottom:10px; color:var(--text-muted);">01 / LIVE SIMULATOR</div><h3 style="font-size:1rem; font-weight:800; margin-bottom:6px;">Interactive Live Demo in Browser</h3><p style="font-size:0.85rem; color:var(--text-secondary);">Test real POS workflows, booking slots, themes, and responsive mobile views directly in your browser before purchasing.</p></div>' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.78rem; font-weight:800; margin-bottom:10px; color:var(--text-muted);">02 / SMART CART</div><h3 style="font-size:1rem; font-weight:800; margin-bottom:6px;">Multi-Item Cart &amp; 20% Bundle Off</h3><p style="font-size:0.85rem; color:var(--text-secondary);">Add 2 or more source code items to your cart to automatically unlock an instant 20% bundle discount.</p></div>' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.78rem; font-weight:800; margin-bottom:10px; color:var(--text-muted);">03 / UNLOCKED CODE</div><h3 style="font-size:1rem; font-weight:800; margin-bottom:6px;">100% Clean Unencrypted Code</h3><p style="font-size:0.85rem; color:var(--text-secondary);">Every release ships clean and organized with sample datasets, setup docs, and commercial client usage rights.</p></div>' +
+    '</div>'
+  );
+
+  setLocalizedInner(
+    document.getElementById('cara-order'),
+    isEn,
+    '<div class="section-header"><span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">HOW TO ORDER</span><h2>Get Your Source Code in 3 Simple Steps</h2><p>One-time payment with zero monthly subscriptions — ready to run locally or deploy to the cloud.</p></div>' +
+    '<div class="steps-grid">' +
+    '<div class="step-card"><span class="step-num">01</span><h3>Test Live Demo &amp; Pick Tools</h3><p>Click <strong>Live Demo</strong> on any item to test features interactively. Add 2+ products to unlock an automatic 20% cart discount.</p></div>' +
+    '<div class="step-card"><span class="step-num">02</span><h3>Pay Securely in USD</h3><p>Click <strong>Buy Now</strong> to pay globally via Polar.sh (Visa, Mastercard, Apple Pay, PayPal) or request an instant USD invoice via <strong data-order-email>dekamayooo@gmail.com</strong>.</p></div>' +
+    '<div class="step-card"><span class="step-num">03</span><h3>Receive .ZIP &amp; Deploy</h3><p>Your complete open-source <code>.ZIP</code> bundle + English setup guide are delivered straight to your inbox. Unzip and go live in minutes.</p></div>' +
+    '</div>'
+  );
+
+  setLocalizedInner(
+    document.getElementById('standar-paket'),
+    isEn,
+    '<div class="section-header"><span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">.ZIP BUNDLE STANDARD</span><h2>Included With Every Purchase</h2></div>' +
+    '<div class="testimonial-grid">' +
+    '<div class="testimonial-card"><div><div class="brand-badge" style="font-size:0.7rem;">01 • FULL SOURCE CODE</div><p class="testimonial-quote" style="margin-top:10px;">Clean modular code with zero obfuscators or domain locks. Customize branding, colors, and business logic freely.</p></div><div class="testimonial-author"><div class="testimonial-name">100% Unlocked</div><div class="testimonial-role">HTML5, CSS3, JS, PHP 8 &amp; Python 3</div></div></div>' +
+    '<div class="testimonial-card"><div><div class="brand-badge" style="font-size:0.7rem;">02 • DOCS &amp; SAMPLE DATA</div><p class="testimonial-quote" style="margin-top:10px;">Every <code>.ZIP</code> archive includes setup instructions, ready-to-import SQL/Excel templates, and quick launchers.</p></div><div class="testimonial-author"><div class="testimonial-name">Launch Fast</div><div class="testimonial-role">Direct Setup Support via Email</div></div></div>' +
+    '<div class="testimonial-card"><div><div class="brand-badge" style="font-size:0.7rem;">03 • COMMERCIAL LICENSE</div><p class="testimonial-quote" style="margin-top:10px;">One-time fee with no subscriptions. Use freely across your own SaaS/storefronts or unlimited client deliveries.</p></div><div class="testimonial-author"><div class="testimonial-name">Lifetime Access</div><div class="testimonial-role">Includes Official <code>LISENSI.txt</code></div></div></div>' +
+    '</div>'
+  );
+
+  setLocalizedInner(
+    document.querySelector('#faq .section-header'),
+    isEn,
+    '<span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">FAQ</span><h2>Frequently Asked Questions</h2>'
+  );
+  const faqQs = document.querySelectorAll('#faqList .faq-q span:first-child');
+  const faqAs = document.querySelectorAll('#faqList .faq-a');
+  if (faqQs[0]) setLocalizedInner(faqQs[0], isEn, 'Is the source code 100% open and editable?');
+  if (faqAs[0]) setLocalizedInner(faqAs[0], isEn, 'Yes. Every bundle ships as unencrypted open source code without obfuscators or license keys, ready to customize for personal or client projects.');
+  if (faqQs[1]) setLocalizedInner(faqQs[1], isEn, 'Can non-developers run these web apps easily?');
+  if (faqAs[1]) setLocalizedInner(faqAs[1], isEn, 'Absolutely. Flagship tools like POS Cashier, Invoice Pro, Laundry POS, and Booking Manager are Zero-Config browser apps that run offline or host free on Cloudflare Pages.');
+  if (faqQs[2]) setLocalizedInner(faqQs[2], isEn, 'How do I pay in USD and receive my .ZIP files?');
+  if (faqAs[2]) setLocalizedInner(faqAs[2], isEn, 'Click <strong>Buy Now</strong> or checkout from your Cart. Pay securely via global checkout (Polar.sh / Card / PayPal) or email <strong data-order-email>dekamayooo@gmail.com</strong> — your <code>.ZIP</code> bundle is sent directly to your email.');
+  if (faqQs[3]) setLocalizedInner(faqQs[3], isEn, 'Are there any monthly or annual fees?');
+  if (faqAs[3]) setLocalizedInner(faqAs[3], isEn, 'Never. You pay <strong>once</strong> for lifetime source code access and commercial usage rights.');
+
+  setLocalizedInner(
+    document.querySelector('.site-footer .footer-grid > div:nth-child(1) p'),
+    isEn,
+    'Production-ready web apps, automation scripts, Blogger XML themes, and UI kits crafted to ship business &amp; developer projects faster.'
+  );
+  setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(2) h4'), isEn, 'Quick Links');
+  const fLinks1 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(2) a');
+  if (fLinks1[0]) fLinks1[0].textContent = isEn ? 'Product Catalog' : 'Katalog Produk';
+  if (fLinks1[1]) fLinks1[1].textContent = isEn ? 'VIP All-Access Bundle' : 'Paket Bundling VIP';
+  if (fLinks1[2]) fLinks1[2].textContent = isEn ? 'How to Order' : 'Cara Pemesanan';
+  setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(3) h4'), isEn, 'Contact & Legal');
+  const fLinks2 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(3) a');
+  if (fLinks2[1]) fLinks2[1].textContent = isEn ? 'About Us' : 'Tentang Kami';
+  if (fLinks2[2]) fLinks2[2].textContent = isEn ? 'Terms & Commercial License' : 'Syarat, Ketentuan & Lisensi';
+  if (fLinks2[3]) fLinks2[3].textContent = isEn ? 'Refund Policy & Support' : 'Kebijakan Refund & Bantuan';
+
+  const cartDrawerTitle = document.querySelector('#cartBackdrop .modal-top-title');
+  if (cartDrawerTitle) cartDrawerTitle.textContent = isEn ? 'Your Shopping Cart' : 'Keranjang Belanja Anda';
   const checkoutCartBtn = document.getElementById('checkoutCartBtn');
   if (checkoutCartBtn) checkoutCartBtn.textContent = isEn ? '⚡ Global Checkout (USD / Card / PayPal)' : '⚡ Checkout Sekarang (Mayar / QRIS)';
+
+  const statusEl = document.getElementById('catalogStatusText');
+  if (statusEl && statusEl.textContent) {
+    if (isEn && statusEl.textContent.indexOf('asetkode.blogspot.com') !== -1) {
+      statusEl.textContent = `Live Synced with asetkode.blogspot.com (${productsState.length} active products)`;
+    } else if (!isEn && statusEl.textContent.indexOf('Live Synced') !== -1) {
+      statusEl.textContent = `Terhubung Live dengan asetkode.blogspot.com (${productsState.length} produk aktif)`;
+    }
+  }
 
   renderProductsGrid();
   updateCartUI();

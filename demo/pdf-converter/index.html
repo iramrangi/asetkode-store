@@ -483,7 +483,8 @@
             <tbody>${activeDoc.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
           </table>
           <p style="margin-top:20px; font-size:11px; color:#64748b;">Diekspor via PDF Converter Demo — Ddev (https://asetkode.blogspot.com)</p>
-        </body></html>
+          <script src="../demo-i18n.js"></script>
+</body></html>
       `;
       const blob = new Blob([htmlContent], { type: "application/msword;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
