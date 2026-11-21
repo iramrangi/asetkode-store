@@ -175,7 +175,7 @@ p { color: var(--muted); }
   padding: .85rem 1.15rem; border-radius: 16px; box-shadow: var(--shadow); display: grid; gap: .12rem;
   animation: float 4s ease-in-out infinite;
 }
-.floating-card small { color: var(--muted); font-size: .8rem; }
+.floating-card small { color: var(--text); opacity: .86; font-size: .82rem; font-weight: 500; }
 .stars { color: #f59e0b; letter-spacing: 2px; font-size: .92rem; line-height: 1; }
 @keyframes float { 50% { transform: translateY(-7px); } }
 

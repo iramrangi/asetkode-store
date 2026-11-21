@@ -1,4 +1,20 @@
-LISENSI KOMERSIAL & PERSONAL
-==============================
-1. Anda bebas menggunakan, memodifikasi, dan men-deploy source code ini untuk website bisnis sendiri maupun proyek klien tanpa batas (Unlimited Project).
-2. Dilarang menjual ulang atau membagikan ulang file mentah template ini sebagai produk template digital saingan.
+LISENSI KOMERSIAL & PERSONAL — Ddev
+===================================
+Produk     : Template Company Profile & Digital Agency Pro (Ddev)
+Pengembang : Ddev (https://asetkode.blogspot.com)
+
+HAK PENGGUNAAN (BOLEH):
+  [v] Menggunakan template untuk website perusahaan, agensi, atau portofolio pribadi Anda selamanya.
+  [v] Memakai dan memodifikasi template ini untuk mengerjakan proyek website klien komersial
+      (Unlimited Client Projects).
+  [v] Mengubah kode HTML, CSS, JavaScript, warna tema, teks, dan gambar secara bebas sesuai kebutuhan.
+
+PEMBATASAN LISENSI (TIDAK BOLEH):
+  [x] Menjual ulang, membagikan secara gratis, atau mengunggah ulang paket source code mentah ini
+      sebagai produk template/aset digital saingan di marketplace mana pun.
+  [x] Mengklaim sebagai pembuat asli template ini untuk didistribusikan kembali.
+
+DISCLAIMER:
+Produk ini disediakan "apa adanya" tanpa jaminan tersurat maupun tersirat.
+
+(c) Ddev - https://asetkode.blogspot.com

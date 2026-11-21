@@ -3,82 +3,361 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistem Absensi QR Code Siswa &amp; Karyawan</title>
+  <meta name="theme-color" content="#2563eb" />
+  <title>AbsensiQR Pro — Sistem Absensi Siswa &amp; Karyawan QR Code Real-Time</title>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('ddev_absensi_theme_v1');
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="qr-badge">QR</span>
-      <div>
-        <strong>AbsensiQR Pro</strong>
-        <small>Sistem Kehadiran Siswa &amp; Karyawan Real-Time</small>
-      </div>
-    </div>
-    <nav class="tabs">
-      <button type="button" class="tab active" data-tab="scan">Scan Absensi</button>
-      <button type="button" class="tab" data-tab="members">Kartu QR Anggota</button>
-      <button type="button" class="tab" data-tab="report">Rekap &amp; Export</button>
-    </nav>
-    <div class="clock" id="liveClock">--:--:--</div>
-  </header>
-
-  <main class="wrap">
-    <!-- TAB 1: SCAN ABSENSI -->
-    <section id="tab-scan" class="panel active">
-      <div class="grid-2">
-        <div class="card">
-          <h2>Simulasi Scan / Input ID QR</h2>
-          <p class="muted">Pilih anggota untuk simulasi scan kartu QR atau ketik ID (contoh: <code>EMP-001</code>), lalu klik Catat Kehadiran.</p>
-          <div class="scan-box">
-            <input type="text" id="scanInput" placeholder="Masukkan / Scan Kode ID (misal: EMP-001)" />
-            <button type="button" class="btn-primary" id="scanSubmitBtn">Catat Absensi</button>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <path d="M14 14h3v3h-3z"></path>
+              <path d="M17 17h4v4h-4z"></path>
+              <path d="M14 21h2"></path>
+              <path d="M21 14v2"></path>
+            </svg>
           </div>
-          <div class="quick-list" id="quickScanBtns"></div>
-          <div id="scanFeedback" class="feedback" style="display:none;"></div>
+          <div>
+            <div class="brand-title">AbsensiQR Pro</div>
+            <div class="brand-sub">Ddev Tech / SMK Nusantara • Absensi QR Real-Time</div>
+          </div>
         </div>
-        <div class="card">
+
+        <div class="header-actions">
+          <span class="schedule-pill" title="Jadwal Kerja / Sekolah">
+            Masuk 08:00 (+15m) • Pulang 17:00
+          </span>
+          <div class="clock-pill" id="liveClock">--:--:--</div>
+          <button type="button" class="btn btn-outline btn-sm" id="resetDemoBtn" title="Kembalikan data demo awal">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span class="hide-xs">Reset Demo</span>
+          </button>
+          <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Ganti Mode Terang atau Gelap" title="Ganti Tema"></button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="tabs-bar" aria-label="Navigasi Utama">
+        <div class="tabs-inner">
+          <button type="button" class="tab-btn active" data-tab="scan">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"></path>
+              <line x1="7" y1="12" x2="17" y2="12"></line>
+            </svg>
+            <span>Scan Absensi</span>
+          </button>
+
+          <button type="button" class="tab-btn" data-tab="members">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <circle cx="9" cy="10" r="2"></circle>
+              <path d="M15 9h3M15 13h3M6 16c1-1.5 5-1.5 6 0"></path>
+            </svg>
+            <span>Kartu QR Anggota</span>
+            <span class="tab-badge" id="membersCountBadge">0</span>
+          </button>
+
+          <button type="button" class="tab-btn" data-tab="report">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>Rekap &amp; Laporan</span>
+            <span class="tab-badge" id="logsCountBadge">0</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- 4 KPI Cards -->
+      <section class="kpi-grid no-print" aria-label="Statistik Kehadiran Hari Ini">
+        <article class="kpi-card">
+          <div>
+            <div class="kpi-label">Total Anggota</div>
+            <div class="kpi-value" id="kpiTotalMembers">0</div>
+            <div class="kpi-sub">Karyawan &amp; Siswa aktif</div>
+          </div>
+          <div class="kpi-icon blue" aria-hidden="true">
+            <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div>
+            <div class="kpi-label">Hadir Hari Ini</div>
+            <div class="kpi-value" id="kpiPresentToday">0</div>
+            <div class="kpi-sub" id="kpiPresentPct">0% tingkat kehadiran</div>
+          </div>
+          <div class="kpi-icon teal" aria-hidden="true">
+            <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div>
+            <div class="kpi-label">Tepat Waktu</div>
+            <div class="kpi-value" id="kpiOnTime">0</div>
+            <div class="kpi-sub">Masuk &le; 08:15 WIB</div>
+          </div>
+          <div class="kpi-icon green" aria-hidden="true">
+            <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div>
+            <div class="kpi-label">Terlambat</div>
+            <div class="kpi-value" id="kpiLate">0</div>
+            <div class="kpi-sub">Melewati batas toleransi</div>
+          </div>
+          <div class="kpi-icon amber" aria-hidden="true">
+            <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+        </article>
+      </section>
+
+      <!-- ==================== TAB 1: SCAN ABSENSI ==================== -->
+      <section id="tab-scan" class="view-panel active">
+        <div class="grid-main">
+          <!-- Kiri: Scanner QR -->
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h1 class="card-title">Scanner QR Code Real-Time</h1>
+                <p class="card-sub">Pilih mode masuk/pulang, lalu scan via kamera, ketik kode ID, atau klik simulasi.</p>
+              </div>
+              <span class="badge badge-info" id="detectorBadge">Siap Scan</span>
+            </div>
+
+            <div class="seg-group" id="modeToggle">
+              <button type="button" class="seg-btn active" data-mode="in">Absen Masuk</button>
+              <button type="button" class="seg-btn mode-out" data-mode="out">Absen Pulang</button>
+            </div>
+
+            <div class="camera-box" id="cameraBox">
+              <video id="cameraVideo" playsinline muted></video>
+              <div class="camera-placeholder">
+                <div class="reticle">
+                  <div class="scan-laser"></div>
+                  <span class="reticle-label">QR FRAME</span>
+                </div>
+                <div class="cam-title">Bingkai Kamera Scanner QR</div>
+                <div class="cam-sub">Aktifkan kamera browser (<code>BarcodeDetector</code>) atau uji cepat dengan chip anggota di bawah.</div>
+              </div>
+            </div>
+
+            <div class="camera-toolbar">
+              <div class="toolbar-left">
+                <button type="button" class="btn btn-primary btn-sm" id="toggleCameraBtn">Aktifkan Kamera</button>
+                <label class="btn btn-outline btn-sm sound-label">
+                  <input type="checkbox" id="soundToggle" checked />
+                  <span>Suara Beep</span>
+                </label>
+              </div>
+              <span class="cam-status-text" id="cameraStatusText">Input USB &amp; Manual siap</span>
+            </div>
+
+            <form id="scanForm" class="scan-input-row">
+              <input type="text" id="scanInput" class="input" placeholder="Scan / ketik kode ID (contoh: EMP-001)" autocomplete="off" />
+              <button type="submit" class="btn btn-primary" id="scanSubmitBtn">Catat Absensi</button>
+            </form>
+
+            <div>
+              <div class="quick-label">Simulasi Scan Cepat (Klik untuk Absen):</div>
+              <div class="quick-grid" id="quickScanBtns"></div>
+            </div>
+
+            <div id="scanFeedback" class="alert-banner" role="status" aria-live="polite"></div>
+          </article>
+
+          <!-- Kanan: Kehadiran Hari Ini -->
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title">Kehadiran Hari Ini</h2>
+                <p class="card-sub">Log waktu masuk, waktu pulang, dan status ketepatan waktu.</p>
+              </div>
+              <span class="badge badge-ok" id="todayCountPill">0 Hadir</span>
+            </div>
+
+            <div class="search-row">
+              <input type="search" id="todaySearchInput" class="input" placeholder="Cari nama, kode EMP, atau divisi/kelas..." />
+            </div>
+
+            <div class="att-list" id="todayAttList"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: KARTU QR ANGGOTA ==================== -->
+      <section id="tab-members" class="view-panel">
+        <article class="card no-print" style="margin-bottom:18px;">
           <div class="card-head">
-            <h2>Kehadiran Hari Ini</h2>
-            <span class="pill" id="todayCountPill">0 Hadir</span>
+            <div>
+              <h2 class="card-title">Tambah Karyawan / Siswa Baru</h2>
+              <p class="card-sub">Kartu QR Code SVG deterministik dibuat otomatis dan siap dicetak.</p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" id="printCardsBtn">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              Cetak Kartu QR
+            </button>
           </div>
-          <div class="att-list" id="todayAttList"></div>
-        </div>
-      </div>
-    </section>
 
-    <!-- TAB 2: KARTU QR ANGGOTA -->
-    <section id="tab-members" class="panel">
-      <div class="card" style="margin-bottom:18px;">
-        <h2>Tambah Siswa / Karyawan Baru</h2>
-        <form id="addMemberForm" class="inline-form">
-          <input type="text" id="mName" placeholder="Nama Lengkap" required />
-          <input type="text" id="mRole" placeholder="Divisi / Kelas (misal: XII IPA 1 / Kasir)" required />
-          <button type="submit" class="btn-primary">+ Buat Kartu QR</button>
-        </form>
-      </div>
-      <div class="qr-grid" id="qrCardsGrid"></div>
-    </section>
+          <form id="addMemberForm" class="form-grid">
+            <div class="field">
+              <label for="mName">Nama Lengkap *</label>
+              <input type="text" id="mName" class="input" placeholder="Contoh: Ahmad Fauzi" required />
+            </div>
+            <div class="field">
+              <label for="mDept">Divisi / Kelas *</label>
+              <input type="text" id="mDept" class="input" placeholder="Contoh: XII IPA 2 / Marketing" required />
+            </div>
+            <div class="field">
+              <label for="mPos">Jabatan / Peran</label>
+              <input type="text" id="mPos" class="input" placeholder="Contoh: Staff / Siswa" />
+            </div>
+            <div class="field">
+              <label for="mCode">Kode QR (Opsional)</label>
+              <input type="text" id="mCode" class="input" placeholder="Otomatis EMP-009" />
+            </div>
+            <div class="form-submit-row">
+              <button type="submit" class="btn btn-primary">+ Tambah &amp; Buat Kartu QR</button>
+            </div>
+          </form>
+        </article>
 
-    <!-- TAB 3: REKAP & EXPORT -->
-    <section id="tab-report" class="panel">
-      <div class="card">
-        <div class="card-head">
-          <h2>Rekapitulasi Kehadiran</h2>
-          <button type="button" class="btn-primary" id="exportCsvBtn">Export CSV / Excel</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>ID</th><th>Nama</th><th>Divisi/Kelas</th><th>Jam Masuk</th><th>Status</th></tr>
-            </thead>
-            <tbody id="reportTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
+        <article class="card">
+          <div class="card-head no-print">
+            <div>
+              <h2 class="card-title">Daftar Kartu QR Anggota</h2>
+              <p class="card-sub">Klik "Scan Cepat" pada kartu untuk menguji absensi atau cetak seluruh kartu.</p>
+            </div>
+            <div class="filter-inline">
+              <input type="search" id="memberSearchInput" class="input input-sm" placeholder="Cari anggota..." />
+              <select id="memberDeptFilter" class="select select-sm">
+                <option value="">Semua Divisi/Kelas</option>
+              </select>
+            </div>
+          </div>
 
+          <div class="qr-grid" id="qrCardsGrid"></div>
+        </article>
+      </section>
+
+      <!-- ==================== TAB 3: REKAP & LAPORAN ==================== -->
+      <section id="tab-report" class="view-panel">
+        <article class="card" style="margin-bottom:18px;">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">Statistik Kehadiran 7 Hari Terakhir</h2>
+              <p class="card-sub">Visualisasi jumlah kehadiran harian dari riwayat absensi.</p>
+            </div>
+            <span class="badge badge-info">Grafik Mingguan</span>
+          </div>
+          <div class="chart-bars" id="weeklyChartBars"></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">Rekapitulasi &amp; Export Excel</h2>
+              <p class="card-sub">Filter laporan berdasarkan tanggal, divisi/kelas, atau status, lalu unduh ke Excel.</p>
+            </div>
+            <div class="export-actions">
+              <button type="button" class="btn btn-success btn-sm" id="exportCsvBtn">Export CSV (Excel)</button>
+              <button type="button" class="btn btn-primary btn-sm" id="exportXlsBtn">Export XLS (Excel)</button>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="field">
+              <label for="filterStartDate">Dari Tanggal</label>
+              <input type="date" id="filterStartDate" class="input" />
+            </div>
+            <div class="field">
+              <label for="filterEndDate">Sampai Tanggal</label>
+              <input type="date" id="filterEndDate" class="input" />
+            </div>
+            <div class="field">
+              <label for="filterDept">Divisi / Kelas</label>
+              <select id="filterDept" class="select">
+                <option value="">Semua Divisi/Kelas</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filterStatus">Status Kehadiran</label>
+              <select id="filterStatus" class="select">
+                <option value="">Semua Status</option>
+                <option value="Tepat Waktu">Tepat Waktu</option>
+                <option value="Terlambat">Terlambat</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Kode QR</th>
+                  <th>Nama Lengkap</th>
+                  <th>Divisi / Kelas</th>
+                  <th>Jam Masuk</th>
+                  <th>Jam Pulang</th>
+                  <th>Metode</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="alert"></div>
   <script src="app.js"></script>
 </body>
 </html>

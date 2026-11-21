@@ -71,7 +71,7 @@ button, input, textarea, select { font-family: inherit; }
 /* TOP BAR */
 .top-bar {
   display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-  padding: 1.25rem 0 0.85rem; position: relative; z-index: 10;
+  padding: 0.85rem 0 0.6rem; position: relative; z-index: 10;
 }
 .brand-chip {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -108,19 +108,19 @@ button, input, textarea, select { font-family: inherit; }
 .profile-card {
   background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-xl);
   backdrop-filter: blur(16px); box-shadow: var(--shadow-main);
-  overflow: hidden; margin-bottom: 1.35rem; position: relative;
+  overflow: hidden; margin-bottom: 0.9rem; position: relative;
 }
 .profile-cover {
-  height: 92px;
+  height: 64px;
   background:
     radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--primary) 38%, transparent), transparent 58%),
     radial-gradient(circle at 82% 30%, color-mix(in srgb, var(--primary) 22%, #38bdf8), transparent 62%),
     var(--surface-2);
   border-bottom: 1px solid var(--card-border);
 }
-.profile-inner { padding: 0 1.4rem 1.65rem; text-align: center; }
+.profile-inner { padding: 0 1.35rem 1.2rem; text-align: center; }
 
-.avatar-wrapper { position: relative; width: 104px; height: 104px; margin: -52px auto 0.9rem; }
+.avatar-wrapper { position: relative; width: 88px; height: 88px; margin: -44px auto 0.65rem; }
 .avatar-img {
   width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
   border: 4px solid var(--bg-base); box-shadow: 0 0 0 2px var(--primary), 0 8px 24px var(--primary-glow);
@@ -136,7 +136,7 @@ button, input, textarea, select { font-family: inherit; }
   display: inline-flex; align-items: center; gap: 0.45rem;
   font-size: 0.77rem; font-weight: 700; color: var(--primary);
   background: var(--primary-soft); border: 1px solid var(--primary-border);
-  padding: 0.28rem 0.82rem; border-radius: 99px; margin-bottom: 0.75rem;
+  padding: 0.25rem 0.78rem; border-radius: 99px; margin-bottom: 0.5rem;
 }
 .status-indicator { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
 
@@ -153,22 +153,22 @@ button, input, textarea, select { font-family: inherit; }
 }
 .meta-pill svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
 
-.profile-bio { font-size: 0.9rem; color: var(--text-muted); max-width: 470px; margin: 0 auto 1.15rem; line-height: 1.6; }
+.profile-bio { font-size: 0.9rem; color: var(--text-muted); max-width: 470px; margin: 0 auto 0.85rem; line-height: 1.55; }
 
 /* MINI BENTO STATS */
 .stats-row {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.85rem;
 }
 .stat-tile {
   background: var(--surface-2); border: 1px solid var(--card-border);
-  border-radius: 14px; padding: 0.65rem 0.5rem;
+  border-radius: 14px; padding: 0.55rem 0.5rem;
 }
 .stat-tile strong { display: block; font-size: 1.02rem; font-weight: 800; color: var(--text-main); line-height: 1.25; }
 .stat-tile span { font-size: 0.72rem; color: var(--text-muted); }
 
 /* SOCIAL ICONS */
-.social-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.55rem; margin-bottom: 1.25rem; }
+.social-bar { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.55rem; margin-bottom: 0.9rem; }
 .social-link {
   width: 40px; height: 40px; border-radius: 12px;
   background: var(--surface-2); border: 1px solid var(--card-border); color: var(--text-main);
@@ -202,7 +202,7 @@ button, input, textarea, select { font-family: inherit; }
 .view-tabs {
   display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem;
   background: var(--surface); border: 1px solid var(--card-border); border-radius: 16px;
-  padding: 0.35rem; margin-bottom: 1.5rem; backdrop-filter: blur(12px);
+  padding: 0.35rem; margin-bottom: 1rem; backdrop-filter: blur(12px);
 }
 .tab-pill {
   border: 0; background: transparent; color: var(--text-muted); font-size: 0.8rem; font-weight: 700;

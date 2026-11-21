@@ -38,7 +38,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 69.000",
     "oldPrice": "Rp 199.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Source%20Code%20Aplikasi%20Kasir%20%28POS%29%20%26%20Inventaris%20Gudang%20Live%20Sync%20Excel%20%28.xlsx%29%20%28Rp%2069.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Aplikasi%20Kasir%20%28POS%29%20%26%20Inventaris%20Gudang%20Live%20Sync%20Excel%20%28.xlsx%29%0A-%20Harga%3A%20Rp%2069.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/kasir/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-pos.html",
     "version": "v2.4 (Terbaru)",
@@ -67,7 +67,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 49.000",
     "oldPrice": "Rp 99.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Template%20Landing%20Page%20UMKM%20%26%20Cafe%20Modern%20Responsive%20%28Order%20WhatsApp%20Langsung%29%20%28Rp%2049.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Template%20Landing%20Page%20UMKM%20%26%20Cafe%20Modern%20Responsive%20%28Order%20WhatsApp%20Langsung%29%0A-%20Harga%3A%20Rp%2049.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/umkm/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/landing-page-saas-digital-agency-modern.html",
     "version": "v2.0 (Terbaru)",
@@ -94,7 +94,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 99.000",
     "oldPrice": "Rp 199.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Script%20Python%20Otomatisasi%20Scraper%20%26%20Export%20Data%20ke%20Excel%20/%20Google%20Sheets%20%28Rp%2099.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Script%20Python%20Otomatisasi%20Scraper%20%26%20Export%20Data%20ke%20Excel%20/%20Google%20Sheets%0A-%20Harga%3A%20Rp%2099.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/scraper/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-otomatisasi-scraper.html",
     "version": "v1.5 (Terbaru)",
@@ -121,7 +121,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 169.000",
     "oldPrice": "Rp 349.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Source%20Code%20Aplikasi%20E-Commerce%20%26%20Katalog%20Toko%20Online%20Checkout%20QRIS%20%28Rp%20169.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Aplikasi%20E-Commerce%20%26%20Katalog%20Toko%20Online%20Checkout%20QRIS%0A-%20Harga%3A%20Rp%20169.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/ecommerce/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-e-commerce-katalog.html",
     "version": "v3.0 (Terbaru)",
@@ -149,7 +149,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 89.000",
     "oldPrice": "Rp 179.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Admin%20Dashboard%20%26%20Analytics%20UI%20Kit%20Modern%20%28Dark/Light%20Mode%29%20%28Rp%2089.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Admin%20Dashboard%20%26%20Analytics%20UI%20Kit%20Modern%20%28Dark/Light%20Mode%29%0A-%20Harga%3A%20Rp%2089.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/dashboard-ui/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/admin-dashboard-analytics-ui-kit-modern.html",
     "version": "v2.1 (Terbaru)",
@@ -177,7 +177,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 119.000",
     "oldPrice": "Rp 249.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Bot%20Auto-Responder%20%26%20Notifikasi%20Laporan%20Otomatis%20Telegram%20/%20Webhook%20%28Rp%20119.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Bot%20Auto-Responder%20%26%20Notifikasi%20Laporan%20Otomatis%20Telegram%20/%20Webhook%0A-%20Harga%3A%20Rp%20119.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/bot-responder/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/bot-auto-responder-notifikasi-laporan.html",
     "version": "v1.8 (Terbaru)",
@@ -204,7 +204,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 45.000",
     "oldPrice": "Rp 99.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Source%20Code%20Aplikasi%20Kalkulator%20Pengeluaran%20%26%20Finansial%20%28Windows%20.EXE%20%2B%20Android%20.APK%29%20%28Rp%2045.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Aplikasi%20Kalkulator%20Pengeluaran%20%26%20Finansial%20%28Windows%20.EXE%20%2B%20Android%20.APK%29%0A-%20Harga%3A%20Rp%2045.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/finansial/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kalkulator.html",
     "version": "v2.0 (Terbaru)",
@@ -231,7 +231,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 39.000",
     "oldPrice": "Rp 89.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Script%20Python%20Auto-Converter%20PDF%20to%20Word%20/%20Excel%20%26%20OCR%20Text%20Extractor%20%28Rp%2039.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Script%20Python%20Auto-Converter%20PDF%20to%20Word%20/%20Excel%20%26%20OCR%20Text%20Extractor%0A-%20Harga%3A%20Rp%2039.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/pdf-converter/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-auto-converter-pdf-to.html",
     "version": "v1.3 (Terbaru)",
@@ -258,7 +258,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 45.000",
     "oldPrice": "Rp 99.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Template%20Landing%20Page%20Undangan%20Digital%20Pernikahan%20%26%20Event%20Responsive%20%28Rp%2045.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Template%20Landing%20Page%20Undangan%20Digital%20Pernikahan%20%26%20Event%20Responsive%0A-%20Harga%3A%20Rp%2045.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/undangan/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-landing-page-undangan-digital.html",
     "version": "v2.0 (Terbaru)",
@@ -287,7 +287,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 49.000",
     "oldPrice": "Rp 99.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Bot%20Telegram%20Pengingat%20Tagihan%20%26%20Jadwal%20Otomatis%20%28Google%20Sheets%20API%29%20%28Rp%2049.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Bot%20Telegram%20Pengingat%20Tagihan%20%26%20Jadwal%20Otomatis%20%28Google%20Sheets%20API%29%0A-%20Harga%3A%20Rp%2049.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/bot-tagihan/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/bot-telegram-pengingat-tagihan-jadwal.html",
     "version": "v1.4 (Terbaru)",
@@ -315,7 +315,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 59.000",
     "oldPrice": "Rp 129.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Source%20Code%20Sistem%20Absensi%20Siswa%20%26%20Karyawan%20QR%20Code%20Berbasis%20Web%20PHP%20%28Rp%2059.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Sistem%20Absensi%20Siswa%20%26%20Karyawan%20QR%20Code%20Berbasis%20Web%20PHP%0A-%20Harga%3A%20Rp%2059.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/absensi/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-sistem-absensi-siswa.html",
     "version": "v2.1 (Terbaru)",
@@ -342,7 +342,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 65.000",
     "oldPrice": "Rp 139.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Starter%20Kit%20Payment%20Gateway%20Midtrans%20%26%20Mayar%20QRIS%20Siap%20Pakai%20%28PHP%29%20%28Rp%2065.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Starter%20Kit%20Payment%20Gateway%20Midtrans%20%26%20Mayar%20QRIS%20Siap%20Pakai%20%28PHP%29%0A-%20Harga%3A%20Rp%2065.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/payment-kit/",
     "postUrl": "https://asetkode.blogspot.com/",
     "version": "v1.2 (Terbaru)",
@@ -370,7 +370,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 75.000",
     "oldPrice": "Rp 150.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Source%20Code%20Kasir%20Toko%20Sederhana%20%26%20Cetak%20Struk%20Mini%20POS%20%28Zero-Config%20XAMPP%29%20%28Rp%2075.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Source%20Code%20Kasir%20Toko%20Sederhana%20%26%20Cetak%20Struk%20Mini%20POS%20%28Zero-Config%20XAMPP%29%0A-%20Harga%3A%20Rp%2075.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/kasir-php/",
     "postUrl": "https://asetkode.blogspot.com/",
     "version": "v1.5 (Terbaru)",
@@ -399,7 +399,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 59.000",
     "oldPrice": "Rp 149.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Template%20Desain%20Web%20Company%20Profile%20%26%20Digital%20Agency%20Modern%20%28HTML5%20%2B%20Tailwind%29%20%28Rp%2059.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Template%20Desain%20Web%20Company%20Profile%20%26%20Digital%20Agency%20Modern%20%28HTML5%20%2B%20Tailwind%29%0A-%20Harga%3A%20Rp%2059.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/agency/",
     "postUrl": "https://asetkode.blogspot.com/",
     "version": "v2.2 (Terbaru)",
@@ -426,7 +426,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 39.000",
     "oldPrice": "Rp 89.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Desain%20Web%20Portfolio%20Pribadi%20%26%20Link-in-Bio%20Kreator%20Minimalis%20%28Dark/Light%29%20%28Rp%2039.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Desain%20Web%20Portfolio%20Pribadi%20%26%20Link-in-Bio%20Kreator%20Minimalis%20%28Dark/Light%29%0A-%20Harga%3A%20Rp%2039.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/biolink/",
     "postUrl": "https://asetkode.blogspot.com/",
     "version": "v1.4 (Terbaru)",
@@ -454,7 +454,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 89.000",
     "oldPrice": "Rp 199.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Program%20Aplikasi%20Manajemen%20Antrian%20%26%20Tiket%20Layanan%20Pelanggan%20Web%20%2B%20Suara%20Panggil%20%28Rp%2089.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Program%20Aplikasi%20Manajemen%20Antrian%20%26%20Tiket%20Layanan%20Pelanggan%20Web%20%2B%20Suara%20Panggil%0A-%20Harga%3A%20Rp%2089.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/antrian/",
     "postUrl": "https://asetkode.blogspot.com/",
     "version": "v1.8 (Terbaru)",
@@ -482,7 +482,7 @@ const FALLBACK_PRODUCTS = [
     ],
     "price": "Rp 69.000",
     "oldPrice": "Rp 159.000",
-    "paymentUrl": "mailto:dekamayooo@gmail.com?subject=Order%20Paket%20Desain%20Web%20UI%20Kit%20E-Commerce%20%26%20SaaS%20Components%20%28HTML/CSS/JS%20Siap%20Pakai%29%20%28Rp%2069.000%29&body=Halo%20Admin%20Ddev%20Studio%2C%0A%0ASaya%20ingin%20membeli%3A%0A-%20Produk%3A%20Paket%20Desain%20Web%20UI%20Kit%20E-Commerce%20%26%20SaaS%20Components%20%28HTML/CSS/JS%20Siap%20Pakai%29%0A-%20Harga%3A%20Rp%2069.000%0A%0AMohon%20info%20nomor%20rekening%20/%20QRIS%20untuk%20pembayaran.%20Terima%20kasih.",
+    "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/uikit/",
     "postUrl": "https://asetkode.blogspot.com/",
     "version": "v2.0 (Terbaru)",
@@ -491,7 +491,7 @@ const FALLBACK_PRODUCTS = [
     "openMode": "modal",
     "demoType": "live_frame",
     "thumbnailUrl": "demo/uikit/screenshot.png",
-    "summary": "Koleksi 40+ komponen desain web siap copy-paste untuk proyek Toko Online & SaaS: Navbar, Mega Menu, Pricing Table, Checkout Modal, Filter Produk, FAQ Accordion, hingga Footer.",
+    "summary": "Koleksi 42 komponen desain web interaktif siap copy-paste untuk Toko Online & SaaS lengkap dengan Dark/Light Mode & salin kode 1-klik.",
     "features": [
       "40+ Komponen UI Siap Pakai Tanpa Dependency Berat.",
       "Sudah Mendukung Dark Mode & Light Mode.",
@@ -1295,15 +1295,11 @@ function addAllBundleToCart() {
   cartState = [
     {
       id: 'vip-bundle-all',
-      title: 'VIP All-Access Developer Pass (Seluruh 6+ Source Code & Template Lengkap)',
+      title: 'VIP All-Access Developer Pass (Seluruh 24 Source Code & Template Lengkap)',
       price: SITE_CONFIG.bundlePrice,
       priceNum: SITE_CONFIG.bundlePriceNum,
-      stack: 'All-In-One Pack (Hemat 65%)',
-      paymentUrl: buildOrderMailtoUrl(
-        'VIP All-Access Developer Pass (Seluruh Katalog)',
-        SITE_CONFIG.bundlePrice,
-        'Paket Bundling Lengkap'
-      )
+      stack: 'All-In-One Pack (Hemat 80%)',
+      paymentUrl: SITE_CONFIG.mayarBundleUrl || '#checkout-mayar'
     }
   ];
   saveCartToStorage();
@@ -1415,11 +1411,11 @@ function launchCheckoutGateway(order) {
   if (titleEl) titleEl.textContent = `Pemesanan: ${order.title}`;
   if (priceEl) priceEl.textContent = order.price;
 
-  const isPlaceholder = !order.paymentUrl || order.paymentUrl.includes('example.com');
+  const isPlaceholder = !order.paymentUrl || order.paymentUrl.startsWith('#') || order.paymentUrl.includes('example.com');
   const isHttpPayLink = Boolean(order.paymentUrl && order.paymentUrl.startsWith('http') && !isPlaceholder);
   const forceEmailMode = SITE_CONFIG.paymentMode === 'email' && !isHttpPayLink;
   const effectiveUrl =
-    forceEmailMode || isPlaceholder
+    forceEmailMode
       ? (order.paymentUrl && order.paymentUrl.startsWith('mailto:')
           ? order.paymentUrl
           : buildOrderMailtoUrl(order.title, order.price, order.stack))
@@ -1427,8 +1423,8 @@ function launchCheckoutGateway(order) {
 
   const isMailto = effectiveUrl.startsWith('mailto:');
   if (extLink) {
-    extLink.href = isMailto ? buildGmailComposeUrl(effectiveUrl) : effectiveUrl;
-    extLink.textContent = isMailto ? 'Buka di Gmail Web ↗' : 'Buka Halaman Pembayaran Penuh ↗';
+    extLink.href = isMailto ? buildGmailComposeUrl(effectiveUrl) : (isHttpPayLink ? effectiveUrl : 'https://asetkode.blogspot.com/');
+    extLink.textContent = isMailto ? 'Buka di Gmail Web ↗' : (isHttpPayLink ? 'Buka Halaman Pembayaran Penuh ↗' : 'Buka Checkout Mayar di Blogger ↗');
   }
 
   if (iframe) {

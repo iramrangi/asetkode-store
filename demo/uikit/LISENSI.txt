@@ -1,4 +1,17 @@
-LISENSI KOMERSIAL & PERSONAL
-==============================
-1. Bebas digunakan di proyek pribadi maupun proyek klien tanpa batas (Unlimited Project).
-2. Dilarang menjual ulang paket UI Kit mentah ini sebagai produk UI Kit saingan.
+LISENSI PENGGUNAAN KOMERSIAL & PERSONAL
+UI Kit E-Commerce & SaaS Pro v3.0 (42 Komponen Siap Copy-Paste)
+=================================================================
+
+Dengan memiliki paket ini, Anda mendapatkan hak lisensi berikut:
+
+1. HAK PENGGUNAAN (DIPERBOLEHKAN)
+   - Bebas digunakan pada proyek pribadi maupun proyek komersial klien tanpa batas jumlah proyek (Unlimited Projects).
+   - Bebas memodifikasi warna, tipografi, tata letak, struktur HTML/CSS/JS, dan mengintegrasikannya ke HTML statis, Laravel Blade, CodeIgniter, WordPress, React, Next.js, Vue, atau Tailwind/Bootstrap.
+   - Bebas menggunakan komponen sebagai bagian dari website, toko online, dashboard SaaS, atau aplikasi web yang dibangun untuk klien/perusahaan.
+
+2. BATASAN (TIDAK DIPERBOLEHKAN)
+   - Dilarang menjual ulang, mendistribusikan ulang secara gratis, atau mengemas ulang paket UI Kit mentah ini sebagai produk UI Kit / template library saingan.
+   - Dilarang membagikan file ZIP paket ini ke forum publik, repositori publik gratis, atau situs berbagi file.
+
+3. DUKUNGAN & PEMBARUAN
+   - Seluruh komponen dibuat menggunakan HTML5, CSS3 Design Tokens, dan Vanilla JavaScript tanpa dependensi eksternal sehingga aman digunakan jangka panjang.

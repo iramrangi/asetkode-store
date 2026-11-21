@@ -1,4 +1,20 @@
-LISENSI KOMERSIAL & PERSONAL
-==============================
-1. Anda bebas menggunakan dan memodifikasi source code ini untuk klinik, apotek, bengkel, toko, maupun proyek klien.
-2. Dilarang menjual ulang file mentah source code sebagai produk template/script saingan.
+LISENSI KOMERSIAL & PERSONAL — Ddev
+===================================
+Produk     : Program Antrian Digital & Suara Panggil Otomatis Pro (Ddev)
+Pengembang : Ddev (https://asetkode.blogspot.com)
+
+HAK PENGGUNAAN (BOLEH):
+  [v] Menggunakan aplikasi secara permanen untuk operasional klinik, apotek, bengkel, toko,
+      kantor layanan, maupun instansi Anda sendiri tanpa batas waktu & tanpa biaya bulanan.
+  [v] Memodifikasi tampilan, nama instansi, daftar layanan, maupun menginstal/men-deploy aplikasi
+      untuk proyek klien Anda.
+
+PEMBATASAN LISENSI (TIDAK BOLEH):
+  [x] Menjual ulang, membagikan secara gratis, atau mengunggah ulang file source code mentah ini
+      sebagai produk script/aplikasi saingan di marketplace mana pun.
+  [x] Mengklaim source code asli ini sebagai karya buatan sendiri untuk dijual kembali.
+
+DISCLAIMER:
+Produk ini disediakan "apa adanya" tanpa jaminan tersurat maupun tersirat.
+
+(c) Ddev - https://asetkode.blogspot.com

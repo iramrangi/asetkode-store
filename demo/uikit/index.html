@@ -1,185 +1,112 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="light">
+<html lang="id" data-theme="light" data-accent="indigo">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UI Kit E-Commerce &amp; SaaS Components — Siap Pakai</title>
+  <title>UI Kit E-Commerce &amp; SaaS Pro — 42 Komponen Siap Copy-Paste</title>
   <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="kit-bar">
-    <div class="container kit-bar-inner">
-      <div class="kit-brand">UI Kit Pro <span class="badge">v2.0</span></div>
-      <div class="kit-filter" id="kitFilter">
-        <button type="button" class="chip active" data-group="all">Semua Komponen</button>
-        <button type="button" class="chip" data-group="ecommerce">E-Commerce</button>
-        <button type="button" class="chip" data-group="saas">SaaS</button>
-        <button type="button" class="chip" data-group="feedback">Modal &amp; FAQ</button>
+    <div class="kit-container kit-bar-inner">
+      <div class="kit-brand-wrap">
+        <div class="kit-logo-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="2" width="9" height="9" rx="2.5" fill="currentColor" />
+            <rect x="13" y="2" width="9" height="9" rx="4.5" fill="currentColor" opacity="0.6" />
+            <rect x="2" y="13" width="9" height="9" rx="4.5" fill="currentColor" opacity="0.6" />
+            <rect x="13" y="13" width="9" height="9" rx="2.5" fill="currentColor" />
+          </svg>
+        </div>
+        <div>
+          <div class="kit-brand">
+            UI Kit Pro
+            <span class="kit-ver-badge">v3.0</span>
+            <span class="kit-count-pill" id="headerCountPill">42 Komponen</span>
+          </div>
+          <div class="kit-subbrand">E-Commerce &amp; SaaS Design System</div>
+        </div>
       </div>
-      <button type="button" class="btn btn-outline btn-sm" id="toggleTheme">Mode Gelap / Terang</button>
+
+      <div class="kit-studio-controls">
+        <div class="kit-search-wrap">
+          <svg class="kit-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search" id="kitSearch" class="kit-search-input" placeholder="Cari komponen (mis. navbar, pricing, qris)..." aria-label="Cari komponen" />
+        </div>
+
+        <div class="kit-accent-picker" id="accentPicker" role="group" aria-label="Pilih warna aksen brand">
+          <span class="kit-control-label">Aksen:</span>
+          <button type="button" class="accent-dot active" data-accent="indigo" title="Indigo" aria-label="Aksen Indigo"></button>
+          <button type="button" class="accent-dot" data-accent="emerald" title="Emerald" aria-label="Aksen Emerald"></button>
+          <button type="button" class="accent-dot" data-accent="crimson" title="Crimson" aria-label="Aksen Crimson"></button>
+          <button type="button" class="accent-dot" data-accent="amber" title="Amber" aria-label="Aksen Amber"></button>
+        </div>
+
+        <button type="button" class="kit-theme-btn" id="toggleTheme" aria-label="Ganti Mode Gelap atau Terang">
+          <span class="theme-icon-sun" aria-hidden="true">☀️</span>
+          <span class="theme-icon-moon" aria-hidden="true">🌙</span>
+          <span id="themeBtnLabel">Mode Gelap</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="container kit-main">
-    <div class="kit-intro">
-      <h1>Komponen Desain Web E-Commerce &amp; SaaS Siap Copy-Paste</h1>
-      <p>Ubah warna brand cukup dari <code>tokens.css</code>. Klik <strong>Salin Kode</strong> pada blok komponen mana saja untuk langsung menempelnya ke proyek HTML, Laravel, React, atau Vue Anda.</p>
+  <main class="kit-container kit-main">
+    <section class="kit-hero">
+      <div class="kit-hero-content">
+        <div class="kit-hero-eyebrow">
+          <span class="kit-pulse-dot"></span>
+          <span>100% Pure HTML + CSS Tokens + Vanilla JS</span>
+        </div>
+        <h1>42 Komponen Web E-Commerce &amp; SaaS Siap Copy-Paste</h1>
+        <p>Semua komponen interaktif, responsif, dan terhubung langsung ke <code>tokens.css</code>. Uji Dark Mode &amp; warna aksen di atas, klik preview secara langsung, lalu salin kode HTML/CSS ke proyek HTML, Laravel, React, atau Vue Anda.</p>
+      </div>
+      <div class="kit-hero-stats">
+        <div class="kit-stat-mini">
+          <strong id="totalCompStat">42</strong>
+          <span>Komponen Nyata</span>
+        </div>
+        <div class="kit-stat-mini">
+          <strong>7</strong>
+          <span>Kategori Lengkap</span>
+        </div>
+        <div class="kit-stat-mini">
+          <strong>4×2</strong>
+          <span>Aksen &amp; Tema</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="kit-toolbar">
+      <div class="kit-filter" id="kitFilter" role="tablist" aria-label="Filter kategori komponen">
+        <button type="button" class="chip active" data-group="all">Semua <span class="chip-n">42</span></button>
+        <button type="button" class="chip" data-group="navigation">Navigation &amp; Header <span class="chip-n">6</span></button>
+        <button type="button" class="chip" data-group="hero">Hero &amp; CTA <span class="chip-n">6</span></button>
+        <button type="button" class="chip" data-group="ecommerce">E-Commerce &amp; Cart <span class="chip-n">6</span></button>
+        <button type="button" class="chip" data-group="saas">SaaS &amp; Social Proof <span class="chip-n">6</span></button>
+        <button type="button" class="chip" data-group="forms">Forms, Auth &amp; Checkout <span class="chip-n">6</span></button>
+        <button type="button" class="chip" data-group="dashboard">Dashboard &amp; Data <span class="chip-n">6</span></button>
+        <button type="button" class="chip" data-group="overlays">Overlays &amp; Footer <span class="chip-n">6</span></button>
+      </div>
+      <div class="kit-status-meta" id="kitStatusMeta">Menampilkan <strong>42</strong> dari <strong>42</strong> komponen</div>
     </div>
 
-    <!-- KOMPONEN 1: NAVBAR + CART BADGE -->
-    <section class="comp-block" data-group="ecommerce">
-      <div class="comp-head">
-        <div><strong>01. Sticky Navbar + Search + Cart Badge</strong><span>E-Commerce Header</span></div>
-        <button type="button" class="btn btn-primary btn-sm copy-btn" data-target="comp1">Salin Kode HTML</button>
-      </div>
-      <div class="comp-preview" id="comp1">
-        <nav class="ui-navbar">
-          <div class="ui-logo">BrandStore</div>
-          <input type="search" class="ui-search" placeholder="Cari produk..." />
-          <div class="ui-nav-actions">
-            <a href="#comp1">Katalog</a>
-            <button type="button" class="btn btn-primary btn-sm">Keranjang <span class="ui-pill">2</span></button>
-          </div>
-        </nav>
-      </div>
-    </section>
+    <div id="componentsGrid" class="components-grid"></div>
 
-    <!-- KOMPONEN 2: PRODUCT CARD -->
-    <section class="comp-block" data-group="ecommerce">
-      <div class="comp-head">
-        <div><strong>02. E-Commerce Product Card + Badge Diskon</strong><span>Catalog Grid Item</span></div>
-        <button type="button" class="btn btn-primary btn-sm copy-btn" data-target="comp2">Salin Kode HTML</button>
-      </div>
-      <div class="comp-preview" id="comp2">
-        <div class="ui-grid-3">
-          <article class="ui-card">
-            <span class="ui-badge-disc">HEMAT 40%</span>
-            <div class="ui-card-img">Preview Produk</div>
-            <h3>Source Code Kasir POS</h3>
-            <p class="ui-muted">Aplikasi kasir web siap pakai dengan export Excel.</p>
-            <div class="ui-price-row">
-              <strong>Rp 69.000</strong>
-              <del>Rp 115.000</del>
-            </div>
-            <button type="button" class="btn btn-primary" style="width:100%;" onclick="showKitToast('Ditambahkan ke keranjang!')">+ Tambah ke Keranjang</button>
-          </article>
-          <article class="ui-card">
-            <span class="ui-badge-disc">TERLARIS</span>
-            <div class="ui-card-img">Preview Produk</div>
-            <h3>Landing Page UMKM Pro</h3>
-            <p class="ui-muted">Desain web responsif terhubung WhatsApp otomatis.</p>
-            <div class="ui-price-row">
-              <strong>Rp 49.000</strong>
-              <del>Rp 99.000</del>
-            </div>
-            <button type="button" class="btn btn-outline" style="width:100%;" onclick="showKitToast('Ditambahkan ke keranjang!')">+ Tambah ke Keranjang</button>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- KOMPONEN 3: SAAS PRICING TABLE WITH TOGGLE -->
-    <section class="comp-block" data-group="saas">
-      <div class="comp-head">
-        <div><strong>03. SaaS Pricing Table (Toggle Bulanan / Tahunan)</strong><span>Conversion Section</span></div>
-        <button type="button" class="btn btn-primary btn-sm copy-btn" data-target="comp3">Salin Kode HTML</button>
-      </div>
-      <div class="comp-preview" id="comp3">
-        <div class="pricing-toggle-wrap">
-          <span>Bulanan</span>
-          <button type="button" class="switch-btn" id="billingSwitch" aria-pressed="false"></button>
-          <span>Tahunan <strong style="color:var(--accent-blue);">(Hemat 20%)</strong></span>
-        </div>
-        <div class="ui-grid-3">
-          <div class="ui-card">
-            <h3>Starter</h3>
-            <div class="ui-big-price" data-month="Rp 49rb" data-year="Rp 39rb">Rp 49rb</div>
-            <ul class="ui-list">
-              <li>✓ 1 Proyek Aktif</li>
-              <li>✓ Analytics Dasar</li>
-              <li>✓ Support Email</li>
-            </ul>
-            <button type="button" class="btn btn-outline" style="width:100%;">Pilih Starter</button>
-          </div>
-          <div class="ui-card ui-card-pop">
-            <span class="ui-badge-disc">POPULER</span>
-            <h3>Business Pro</h3>
-            <div class="ui-big-price" data-month="Rp 149rb" data-year="Rp 119rb">Rp 149rb</div>
-            <ul class="ui-list">
-              <li>✓ Unlimited Proyek</li>
-              <li>✓ Custom Domain &amp; SSL</li>
-              <li>✓ Prioritas Support</li>
-            </ul>
-            <button type="button" class="btn btn-primary" style="width:100%;">Pilih Business Pro</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- KOMPONEN 4: FAQ ACCORDION & TOAST -->
-    <section class="comp-block" data-group="feedback">
-      <div class="comp-head">
-        <div><strong>04. Interactive FAQ Accordion &amp; Toast Alert</strong><span>Trust &amp; Feedback</span></div>
-        <button type="button" class="btn btn-primary btn-sm copy-btn" data-target="comp4">Salin Kode HTML</button>
-      </div>
-      <div class="comp-preview" id="comp4">
-        <div class="ui-faq">
-          <details open>
-            <summary>Apakah komponen ini mendukung Dark Mode?</summary>
-            <p>Ya, seluruh komponen menggunakan CSS Variables di tokens.css sehingga otomatis berubah saat data-theme="dark".</p>
-          </details>
-          <details>
-            <summary>Apakah bisa dipakai di Laravel, React, atau HTML statis?</summary>
-            <p>Bisa. Struktur HTML dan CSS murni tanpa dependency framework eksternal.</p>
-          </details>
-        </div>
-      </div>
-    </section>
+    <div id="emptySearch" class="kit-empty-search" hidden>
+      <div class="kit-empty-icon">🔍</div>
+      <h3>Komponen tidak ditemukan</h3>
+      <p>Tidak ada komponen yang cocok dengan kata kunci pencarian Anda. Coba kata lain atau reset filter.</p>
+      <button type="button" class="ui-btn ui-btn-primary" id="resetFilterBtn">Reset Filter &amp; Pencarian</button>
+    </div>
   </main>
 
-  <div id="kitToast" class="kit-toast"></div>
+  <div id="kitToast" class="kit-toast" role="status" aria-live="polite"></div>
 
-  <script>
-    function showKitToast(msg) {
-      const t = document.getElementById('kitToast');
-      t.textContent = msg;
-      t.classList.add('show');
-      clearTimeout(window._kt);
-      window._kt = setTimeout(() => t.classList.remove('show'), 2000);
-    }
-
-    document.getElementById('toggleTheme').addEventListener('click', () => {
-      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-    });
-
-    document.getElementById('billingSwitch').addEventListener('click', function () {
-      const yearly = this.getAttribute('aria-pressed') !== 'true';
-      this.setAttribute('aria-pressed', String(yearly));
-      document.querySelectorAll('.ui-big-price').forEach((el) => {
-        el.textContent = el.getAttribute(yearly ? 'data-year' : 'data-month');
-      });
-    });
-
-    document.querySelectorAll('#kitFilter .chip').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#kitFilter .chip').forEach((c) => c.classList.remove('active'));
-        btn.classList.add('active');
-        const g = btn.getAttribute('data-group');
-        document.querySelectorAll('.comp-block').forEach((blk) => {
-          blk.style.display = g === 'all' || blk.getAttribute('data-group') === g ? 'block' : 'none';
-        });
-      });
-    });
-
-    document.querySelectorAll('.copy-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const target = document.getElementById(btn.getAttribute('data-target'));
-        if (!target) return;
-        navigator.clipboard.writeText(target.innerHTML.trim());
-        showKitToast('Kode HTML komponen disalin!');
-      });
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
