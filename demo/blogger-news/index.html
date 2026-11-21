@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light" data-read-mode="normal">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ddev NewsPro v2.0 — Preview Tema Blogger Portal Berita &amp; Majalah Modern</title>
+  <meta name="description" content="Preview interaktif tema Blogger Ddev NewsPro v2.0: portal berita, majalah digital, dan media online modern berkecepatan tinggi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div id="readingProgressWrap" class="reading-progress-wrap" aria-hidden="true">
+    <div id="readingProgressBar" class="reading-progress-bar"></div>
+  </div>
+
+  <!-- Top Demo Info Bar -->
+  <div class="preview-ribbon">
+    <div class="container preview-ribbon-inner">
+      <div class="preview-ribbon-badge">
+        <span class="preview-dot"></span>
+        <span>Preview Tema Blogger: Ddev NewsPro v2.0</span>
+      </div>
+      <div class="preview-ribbon-hints">
+        <span>Shortcut: <span class="kbd-hint">/</span> Cari Berita</span>
+        <span>&bull;</span>
+        <span>Filter Kategori</span>
+        <span>&bull;</span>
+        <span>Mode Gelap &amp; Baca Nyaman</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Utility Bar -->
+  <div class="utility-bar">
+    <div class="container utility-bar-inner">
+      <div class="utility-date" id="currentDateText">Sabtu, 21 November 2026</div>
+      <div class="ticker-wrap" aria-label="Breaking News">
+        <span class="ticker-label">Breaking</span>
+        <div class="ticker-viewport">
+          <div class="ticker-track" id="tickerTrack"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Header & Navigation -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-main">
+        <button type="button" class="brand-btn" id="brandHomeBtn" aria-label="Kembali ke Beranda">
+          <span class="brand-mark">D</span>
+          <span class="brand-text">
+            <span class="brand-title">Ddev <span>NewsPro</span></span>
+            <span class="brand-tagline">Media Digital &amp; Jurnal Teknologi</span>
+          </span>
+        </button>
+
+        <div class="header-actions">
+          <div class="search-box">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </span>
+            <input type="search" id="searchInput" class="search-input" placeholder="Cari berita atau topik (/)..." aria-label="Cari berita" />
+            <button type="button" id="searchClearBtn" class="search-clear" aria-label="Bersihkan pencarian">&times;</button>
+          </div>
+
+          <button type="button" id="readModeToggle" class="icon-btn" title="Ubah ukuran font &amp; mode baca nyaman">
+            <span>Aa</span>
+            <span id="readModeLabel">Baca Nyaman</span>
+          </button>
+
+          <button type="button" id="themeToggle" class="icon-btn" title="Ganti mode terang atau gelap">
+            <span id="themeIcon" aria-hidden="true">&#9790;</span>
+            <span id="themeLabel">Mode Gelap</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="header-nav-bar" aria-label="Kategori Berita">
+        <div class="nav-list" id="categoryNav"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-wrap">
+    <div class="container">
+      <!-- HOME VIEW -->
+      <section id="homeView" class="home-view">
+        <!-- Featured Editorial Hero -->
+        <section id="heroSection" class="hero-section" aria-label="Berita Utama">
+          <div class="hero-grid" id="heroGrid"></div>
+        </section>
+
+        <!-- Main 2-Column Editorial Feed + Sticky Sidebar -->
+        <div class="content-layout">
+          <div>
+            <div class="section-heading">
+              <div class="section-heading-left">
+                <span class="section-accent-bar"></span>
+                <h2 class="section-title" id="gridSectionTitle">Berita Terbaru</h2>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="section-meta" id="gridResultMeta">8 artikel</span>
+                <button type="button" id="resetFilterBtn" class="reset-filter-btn" style="display:none;">Tampilkan Semua</button>
+              </div>
+            </div>
+
+            <div class="news-grid" id="newsGrid"></div>
+          </div>
+
+          <aside class="sidebar-col" aria-label="Sidebar Redaksi">
+            <div class="widget-card">
+              <h3 class="widget-title">Terpopuler Pekan Ini</h3>
+              <div class="popular-list" id="popularPostsList"></div>
+            </div>
+
+            <div class="widget-card">
+              <h3 class="widget-title">Kanal &amp; Topik Pilihan</h3>
+              <div class="label-cloud" id="labelCloudList"></div>
+            </div>
+
+            <div class="widget-card newsletter-widget">
+              <h3 class="widget-title">Ringkasan Redaksi</h3>
+              <p class="newsletter-desc">Dapatkan intisari berita teknologi, AI, dan ekonomi digital Indonesia langsung setiap pagi.</p>
+              <form id="newsletterForm" class="newsletter-form">
+                <input type="email" id="newsletterEmail" class="newsletter-input" placeholder="nama@emailanda.com" required />
+                <button type="submit" class="newsletter-btn">Langganan Buletin Gratis</button>
+                <div id="newsletterFeedback" class="newsletter-feedback" role="status"></div>
+              </form>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- SINGLE ARTICLE VIEW -->
+      <section id="articleView" class="article-view" aria-label="Detail Artikel">
+        <div class="article-top-bar">
+          <button type="button" id="backHomeBtn" class="back-home-btn">
+            <span>&larr;</span>
+            <span>Kembali ke Beranda</span>
+          </button>
+
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <button type="button" id="breadcrumbHomeBtn">Beranda</button>
+            <span>/</span>
+            <button type="button" id="breadcrumbCategoryBtn">Kategori</button>
+            <span>/</span>
+            <span id="breadcrumbTitle">Judul Artikel</span>
+          </nav>
+        </div>
+
+        <div class="content-layout">
+          <article class="article-shell">
+            <header class="article-header">
+              <span class="badge-cat" id="articleCategoryBadge">Teknologi</span>
+              <h1 class="article-title" id="articleTitle">Judul Artikel</h1>
+              <p class="article-subtitle" id="articleSubtitle"></p>
+
+              <div class="article-byline">
+                <div class="byline-author">
+                  <div class="author-avatar" id="articleAuthorAvatar">DN</div>
+                  <div>
+                    <div class="byline-name" id="articleAuthorName">Nama Penulis</div>
+                    <div class="byline-sub" id="articleAuthorRole">Redaksi Teknologi</div>
+                  </div>
+                </div>
+                <div class="meta-row" style="margin-top:0;">
+                  <span id="articleMetaDate">21 Nov 2026</span>
+                  <span class="meta-dot"></span>
+                  <span id="articleReadTime">5 menit baca</span>
+                  <span class="meta-dot"></span>
+                  <span id="articleViews">4.2rb dibaca</span>
+                </div>
+              </div>
+            </header>
+
+            <figure class="article-hero-figure" id="articleHeroFigure">
+              <div class="article-hero-media" id="articleHeroMedia"></div>
+              <figcaption class="article-hero-caption" id="articleHeroCaption"></figcaption>
+            </figure>
+
+            <div class="toc-box" id="tocBox">
+              <div class="toc-header">
+                <span>Daftar Isi Artikel</span>
+                <span style="font-size:0.74rem;color:var(--muted);font-weight:600;">Klik untuk lompat bagian</span>
+              </div>
+              <ol class="toc-list" id="articleToc"></ol>
+            </div>
+
+            <div class="article-body" id="articleBody"></div>
+
+            <div class="share-bar">
+              <span class="share-label">Bagikan artikel ini:</span>
+              <div class="share-actions">
+                <button type="button" id="shareWaBtn" class="share-btn wa">WhatsApp</button>
+                <button type="button" id="shareXBtn" class="share-btn x">X / Twitter</button>
+                <button type="button" id="shareTgBtn" class="share-btn tg">Telegram</button>
+                <button type="button" id="copyLinkBtn" class="share-btn">Salin Link</button>
+              </div>
+            </div>
+
+            <div class="author-bio-box">
+              <div class="author-bio-avatar" id="bioAvatar">DN</div>
+              <div>
+                <div class="author-bio-name" id="bioName">Nama Penulis</div>
+                <div class="author-bio-role" id="bioRole">Jurnalis Senior</div>
+                <p class="author-bio-text" id="bioText"></p>
+              </div>
+            </div>
+
+            <section class="related-section" aria-label="Artikel Terkait">
+              <div class="section-heading">
+                <div class="section-heading-left">
+                  <span class="section-accent-bar"></span>
+                  <h2 class="section-title">Berita Terkait</h2>
+                </div>
+              </div>
+              <div class="related-grid" id="relatedPostsGrid"></div>
+            </section>
+          </article>
+
+          <aside class="sidebar-col" aria-label="Sidebar Artikel">
+            <div class="widget-card">
+              <h3 class="widget-title">Jangan Lewatkan</h3>
+              <p style="margin:0 0 12px;font-size:0.86rem;color:var(--ink-secondary);line-height:1.55;">
+                Template <strong>Ddev NewsPro v2.0</strong> dilengkapi widget Populer, Label Cloud, Daftar Isi otomatis, dan Schema <code>NewsArticle</code> siap AdSense &amp; Google News.
+              </p>
+              <button type="button" id="sidebarBackBtn" class="newsletter-btn" style="width:100%;">Jelajahi Semua Berita</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 3-Column Editorial Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4 class="footer-heading">Ddev NewsPro Media</h4>
+          <p class="footer-text">
+            Portal berita independen yang menyajikan liputan mendalam seputar teknologi, UMKM, ekonomi digital, kecerdasan buatan, dan industri gadget di Indonesia.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Kanal Berita</h4>
+          <ul class="footer-links" id="footerCatLinks"></ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Sorotan Redaksi</h4>
+          <ul class="footer-links" id="footerTrendingLinks"></ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; <span id="footerYear">2026</span> Ddev NewsPro &mdash; Ddev Studio Editorial Theme.</span>
+        <span>Dioptimalkan untuk Core Web Vitals, SEO &amp; Google News.</span>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toastMessage" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kopi &amp; Craft Nusantara Store — Ddev TokoKu Live Preview</title>
+  <meta name="description" content="Demo interaktif Template Blogger Toko Online Ddev TokoKu: katalog produk modern, varian, keranjang belanja, ongkos kirim, dan checkout WhatsApp &amp; Mayar." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span class="topbar-pill">PROMO TOKO</span>
+      <span>Gratis Ongkir s/d Rp 20.000 minimal belanja Rp 350.000 &bull; Bisa COD &amp; Bayar Instan QRIS/Mayar</span>
+    </div>
+  </div>
+
+  <!-- Sticky Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-main">
+        <a href="#katalog" class="brand-logo" aria-label="Beranda Kopi &amp; Craft Nusantara">
+          <div class="brand-mark">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <strong>Kopi &amp; Craft Nusantara</strong>
+            <span>Powered by Ddev TokoKu v3</span>
+          </div>
+        </a>
+
+        <div class="search-box">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Cari tas kulit, kopi gayo, TWS, serum..." autocomplete="off" />
+          <button type="button" id="searchClear" class="search-clear" aria-label="Hapus pencarian">&times;</button>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" id="themeToggle" class="icon-btn" aria-label="Ganti tema gelap atau terang" title="Dark / Light Mode">
+            <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <button type="button" id="cartBtn" class="cart-btn" aria-label="Buka keranjang belanja">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-label">Keranjang</span>
+            <span id="cartBadge" class="cart-badge">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="header-nav" aria-label="Menu Kategori">
+      <div class="container">
+        <div class="header-nav-list" id="headerNavList">
+          <button type="button" class="nav-link active" data-cat="Semua">Semua Produk</button>
+          <button type="button" class="nav-link" data-cat="Fashion &amp; Tas">Fashion &amp; Tas</button>
+          <button type="button" class="nav-link" data-cat="Elektronik">Elektronik</button>
+          <button type="button" class="nav-link" data-cat="Kopi &amp; Kuliner">Kopi &amp; Kuliner</button>
+          <button type="button" class="nav-link" data-cat="Skincare &amp; Herbal">Skincare &amp; Herbal</button>
+          <a href="#keunggulan" class="nav-link">Cara Order &amp; Ongkir</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Hero Promo Banner -->
+    <section class="hero-section">
+      <div class="hero-card">
+        <div style="position:relative; z-index:1;">
+          <div class="hero-badges">
+            <span class="hero-badge-flash">&#9889; FLASH SALE HARI INI</span>
+            <span class="hero-countdown">Berakhir dalam <strong id="flashCountdown">05:42:18</strong></span>
+          </div>
+          <h1 class="hero-title">Produk Lokal Kurasi Terbaik, Checkout Langsung ke WhatsApp</h1>
+          <p class="hero-desc">
+            Belanja praktis tanpa ribet daftar akun. Pilih varian, hitung ongkos kirim otomatis, lalu kirim rincian pesanan ke WhatsApp Admin atau bayar instan lewat Mayar &amp; QRIS.
+          </p>
+          <div class="hero-actions">
+            <a href="#katalog" class="btn-hero-primary">Jelajahi 10 Produk Pilihan &rarr;</a>
+            <button type="button" id="heroOpenCartBtn" class="btn-hero-secondary">Lihat Keranjang Saya</button>
+          </div>
+        </div>
+
+        <div class="hero-highlights">
+          <div class="hero-stat-card">
+            <strong>Diskon s/d 38%</strong>
+            <span>Harga spesial paket promo &amp; bundle mingguan</span>
+          </div>
+          <div class="hero-stat-card">
+            <strong>Checkout 1 Klik</strong>
+            <span>Format order otomatis ke WhatsApp Admin</span>
+          </div>
+          <div class="hero-stat-card">
+            <strong>Mayar &amp; QRIS</strong>
+            <span>Opsi pembayaran instan terintegrasi per produk</span>
+          </div>
+          <div class="hero-stat-card">
+            <strong>JNE / J&amp;T / COD</strong>
+            <span>Estimasi ongkir langsung di keranjang</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catalog Filter & Sort Toolbar -->
+    <section id="katalog">
+      <div class="catalog-toolbar">
+        <div class="category-pills" id="categoryPills">
+          <button type="button" class="cat-pill active" data-cat="Semua">Semua (10)</button>
+          <button type="button" class="cat-pill" data-cat="Fashion &amp; Tas">Fashion &amp; Tas</button>
+          <button type="button" class="cat-pill" data-cat="Elektronik">Elektronik</button>
+          <button type="button" class="cat-pill" data-cat="Kopi &amp; Kuliner">Kopi &amp; Kuliner</button>
+          <button type="button" class="cat-pill" data-cat="Skincare &amp; Herbal">Skincare &amp; Herbal</button>
+        </div>
+
+        <div class="toolbar-right">
+          <span id="resultCount" class="result-count">Menampilkan 10 produk</span>
+          <select id="sortSelect" class="sort-select" aria-label="Urutkan produk">
+            <option value="terbaru">Urutkan: Terbaru</option>
+            <option value="termurah">Harga: Termurah</option>
+            <option value="termahal">Harga: Termahal</option>
+            <option value="diskon">Diskon Terbesar</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <!-- Trust / Shipping Strip -->
+    <section id="keunggulan" class="trust-strip">
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div>
+          <strong>Respon Cepat WhatsApp</strong>
+          <span>Order otomatis rapi beserta varian &amp; ongkir</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        </div>
+        <div>
+          <strong>Link Pembayaran Mayar</strong>
+          <span>Dukung QRIS, VA Bank, &amp; E-Wallet instan</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        </div>
+        <div>
+          <strong>Pengiriman Se-Indonesia</strong>
+          <span>JNE, J&amp;T, Instant Kurir &amp; COD tersedia</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <div>
+          <strong>Garansi Produk Original</strong>
+          <span>Retur mudah 7 hari jika barang rusak</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 3-Column Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Kopi &amp; Craft Nusantara Store</h4>
+          <p>
+            Showcase toko online modern berbasis Blogger XML v3 (<strong>Ddev TokoKu</strong>). Dirancang ringan, SEO-friendly dengan Schema Store &amp; Product, serta konversi tinggi via WhatsApp dan Mayar.
+          </p>
+          <p style="font-size:12px; color:var(--text-soft);">
+            Jl. Merdeka Kreatif No. 48, Bandung &bull; Jam Operasional: Senin&ndash;Sabtu 08.00&ndash;20.00 WIB
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Kategori &amp; Navigasi</h4>
+          <ul class="footer-links">
+            <li><button type="button" data-footer-cat="Fashion &amp; Tas">Fashion &amp; Tas</button></li>
+            <li><button type="button" data-footer-cat="Elektronik">Elektronik &amp; Gadget</button></li>
+            <li><button type="button" data-footer-cat="Kopi &amp; Kuliner">Kopi &amp; Kuliner Nusantara</button></li>
+            <li><button type="button" data-footer-cat="Skincare &amp; Herbal">Skincare &amp; Herbal Alami</button></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Pembayaran &amp; Ekspedisi</h4>
+          <p>Tersedia pembayaran otomatis melalui Mayar Payment Link &amp; konfirmasi admin via WhatsApp.</p>
+          <div class="payment-chips">
+            <span class="pay-chip">QRIS</span>
+            <span class="pay-chip">Mayar Pay</span>
+            <span class="pay-chip">BCA / Mandiri VA</span>
+            <span class="pay-chip">JNE</span>
+            <span class="pay-chip">J&amp;T</span>
+            <span class="pay-chip">COD</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Kopi &amp; Craft Nusantara &bull; Template Blogger <strong>Ddev TokoKu</strong></span>
+        <span>Demo Offline &amp; Storefront Preview</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Sticky Cart Bar -->
+  <div class="mobile-sticky-bar" id="mobileStickyBar">
+    <div class="mobile-bar-info">
+      <strong id="mobileBarTotal">Rp 0</strong>
+      <span id="mobileBarCount">0 item di keranjang</span>
+    </div>
+    <button type="button" id="mobileCartBtn" class="btn-mobile-cart">Checkout Keranjang</button>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div class="modal-backdrop" id="productModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button type="button" id="closeModalBtn" class="modal-close" aria-label="Tutup detail produk">&times;</button>
+      <div class="detail-layout">
+        <div>
+          <div class="detail-gallery-main" id="detailMainArt"></div>
+          <div class="detail-thumbs" id="detailThumbs"></div>
+        </div>
+
+        <div class="detail-info">
+          <div class="product-meta-row">
+            <span class="product-cat" id="detailCategory">Kategori</span>
+            <span class="product-stock" id="detailStock">Stok tersedia</span>
+          </div>
+          <h2 id="detailTitle">Nama Produk</h2>
+          <div class="product-rating" id="detailRating"></div>
+
+          <div class="detail-price-box">
+            <span class="detail-price-now" id="detailPrice">Rp 0</span>
+            <span class="detail-price-old" id="detailOldPrice"></span>
+            <span class="detail-discount-pill" id="detailDiscount"></span>
+          </div>
+
+          <div class="variant-section">
+            <span class="variant-label">Pilih Varian: <strong id="selectedVariantLabel">-</strong></span>
+            <div class="variant-chips" id="detailVariants"></div>
+          </div>
+
+          <div class="qty-row">
+            <span class="variant-label" style="margin:0;">Jumlah:</span>
+            <div class="qty-stepper">
+              <button type="button" id="detailQtyMinus" aria-label="Kurangi jumlah">&minus;</button>
+              <span id="detailQtyValue">1</span>
+              <button type="button" id="detailQtyPlus" aria-label="Tambah jumlah">+</button>
+            </div>
+          </div>
+
+          <div class="detail-cta-group">
+            <button type="button" id="detailAddCartBtn" class="btn-primary-lg">+ Keranjang</button>
+            <button type="button" id="detailDirectWaBtn" class="btn-wa-lg">Checkout WhatsApp</button>
+          </div>
+          <button type="button" id="detailMayarBtn" class="btn-mayar-lg">
+            &#9889; Bayar Instan via Mayar / QRIS
+          </button>
+
+          <div class="detail-tabs">
+            <div class="tab-nav">
+              <button type="button" class="tab-btn active" data-tab="desc">Deskripsi</button>
+              <button type="button" class="tab-btn" data-tab="spec">Spesifikasi</button>
+              <button type="button" class="tab-btn" data-tab="review">Ulasan Pembeli</button>
+            </div>
+            <div class="tab-content" id="detailTabContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sliding Cart Drawer -->
+  <div class="drawer-backdrop" id="cartDrawer" aria-hidden="true">
+    <aside class="cart-drawer" aria-label="Keranjang Belanja">
+      <div class="drawer-head">
+        <h3>Keranjang Belanja (<span id="drawerCount">0</span>)</h3>
+        <button type="button" id="closeDrawerBtn" class="drawer-close" aria-label="Tutup keranjang">&times;</button>
+      </div>
+
+      <div class="drawer-body">
+        <div id="cartItemsList"></div>
+
+        <div id="checkoutFormSection" class="checkout-form-box">
+          <h4>Data Pengiriman &amp; Kurir</h4>
+          <div class="form-field">
+            <label for="shippingSelect">Pilih Kurir / Layanan</label>
+            <select id="shippingSelect">
+              <option value="JNE Reguler|15000">JNE Reguler (2-3 hari) &mdash; Rp 15.000</option>
+              <option value="J&amp;T Express|18000">J&amp;T Express (1-2 hari) &mdash; Rp 18.000</option>
+              <option value="Instant Kurir|25000">GoSend / Grab Instant &mdash; Rp 25.000</option>
+              <option value="COD Bayar di Tempat|20000">COD (Bayar di Tempat) &mdash; Rp 20.000</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="buyerName">Nama Lengkap</label>
+            <input type="text" id="buyerName" placeholder="Contoh: Budi Santoso" />
+          </div>
+          <div class="form-field">
+            <label for="buyerPhone">No. WhatsApp Pembeli</label>
+            <input type="tel" id="buyerPhone" placeholder="Contoh: 081234567890" />
+          </div>
+          <div class="form-field">
+            <label for="buyerAddress">Alamat Lengkap Pengiriman</label>
+            <textarea id="buyerAddress" rows="2" placeholder="Jalan, No. Rumah, Kecamatan, Kota, Kode Pos"></textarea>
+          </div>
+
+          <div class="wa-preview-box">
+            <div class="wa-preview-head">
+              <span>Preview Format Pesan WhatsApp</span>
+              <button type="button" id="copyWaBtn" class="btn-copy-msg">Salin Pesan</button>
+            </div>
+            <div id="waPreviewText" class="wa-preview-text"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-foot">
+        <div class="summary-row">
+          <span>Subtotal Produk</span>
+          <strong id="cartSubtotal">Rp 0</strong>
+        </div>
+        <div class="summary-row">
+          <span>Ongkos Kirim</span>
+          <strong id="cartShipping">Rp 0</strong>
+        </div>
+        <div class="summary-row total">
+          <span>Total Bayar</span>
+          <span id="cartTotal" style="color:var(--brand);">Rp 0</span>
+        </div>
+        <div class="drawer-cta-grid">
+          <button type="button" id="checkoutWaBtn" class="btn-wa-lg" style="font-size:12.5px;">Kirim ke WhatsApp</button>
+          <button type="button" id="checkoutMayarBtn" class="btn-primary-lg" style="font-size:12.5px;">Bayar Mayar</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

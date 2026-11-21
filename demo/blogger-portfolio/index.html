@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raka Pratama — Senior Product Designer &amp; Frontend Engineer | Ddev Folio</title>
+  <meta name="description" content="Portofolio resmi Raka Pratama — Senior Product Designer &amp; Frontend Engineer berbasis di Jakarta. Spesialis desain produk SaaS, UI/UX, design system, dan pengembangan web modern." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('ddev_folio_demo_theme');
+        if (saved === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Sticky Minimal Navbar -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="#top" class="brand-link" aria-label="Raka Pratama Beranda">
+        <span class="brand-mark">RP</span>
+        <span class="brand-name">Raka Pratama</span>
+        <span class="brand-tag">FOLIO '26</span>
+      </a>
+
+      <nav class="nav-menu-wrap" id="navMenuWrap" aria-label="Navigasi Utama">
+        <ul class="nav-menu-list">
+          <li><a href="#karya">Karya</a></li>
+          <li><a href="#pengalaman">Pengalaman</a></li>
+          <li><a href="#layanan">Layanan</a></li>
+          <li><a href="#testimoni">Testimoni</a></li>
+          <li><a href="#kontak">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost btn-sm hide-sm" id="printCvNavBtn" title="Cetak atau Simpan CV sebagai PDF">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Cetak CV</span>
+        </button>
+        <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Ganti Mode Gelap atau Terang" title="Mode Gelap / Terang">
+          <span id="themeIcon" aria-hidden="true">☾</span>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="openContactNavBtn">Kirim Brief</button>
+        <button type="button" class="icon-btn mobile-menu-toggle" id="mobileMenuBtn" aria-label="Buka Menu Navigasi" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-main">
+            <div class="status-badge">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>Open for Freelance / Remote · Q2–Q3 2026</span>
+            </div>
+            <h1 class="hero-title">
+              Merancang Produk Digital yang <span class="text-accent">Jernih</span>, Terukur, &amp; Cepat.
+            </h1>
+            <p class="hero-lead">
+              Saya <strong>Raka Pratama</strong> — Senior Product Designer &amp; Frontend Engineer dengan pengalaman 7+ tahun membantu startup SaaS, fintech, dan brand digital mengubah masalah kompleks menjadi antarmuka yang intuitif dan siap produksi.
+            </p>
+            <div class="hero-cta-row">
+              <button type="button" class="btn btn-primary" id="openContactHeroBtn">
+                <span>Diskusi Proyek via WA</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+              <a href="#karya" class="btn btn-outline">Lihat Portofolio (6)</a>
+              <button type="button" class="btn btn-ghost" id="copyEmailHeroBtn" data-email="raka@pratamastudio.id">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>raka@pratamastudio.id</span>
+              </button>
+            </div>
+          </div>
+
+          <aside class="hero-profile-card" aria-label="Ringkasan Profil Raka Pratama">
+            <div class="profile-card-top">
+              <div class="avatar-monogram" aria-hidden="true">RP</div>
+              <div>
+                <div class="profile-role-eyebrow">RINGKASAN KANDIDAT</div>
+                <div class="profile-location">Jakarta, ID · Remote (UTC+7)</div>
+              </div>
+            </div>
+            <p class="profile-summary">
+              Fokus pada <strong>Product UI/UX</strong>, <strong>Design Systems</strong>, dan <strong>Frontend Architecture</strong> (React, TypeScript, CSS Grid, &amp; Core Web Vitals).
+            </p>
+            <div class="hero-stats-grid">
+              <div class="stat-cell">
+                <div class="stat-value">7+ Thn</div>
+                <div class="stat-label">Pengalaman Produk</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-value">42+</div>
+                <div class="stat-label">Produk Dirilis</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-value">99/100</div>
+                <div class="stat-label">Skor Lighthouse</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-value">4.9/5</div>
+                <div class="stat-label">Kepuasan Klien</div>
+              </div>
+            </div>
+            <div class="profile-card-footer">
+              <span class="mono">Ddev Folio v1.0</span>
+              <button type="button" class="text-link-btn" id="printCvHeroBtn">Preview Cetak CV →</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 01: Showcase Portofolio -->
+    <section class="section-block" id="karya">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">01 / Karya Pilihan</div>
+            <h2 class="section-title">Studi Kasus &amp; Portofolio</h2>
+            <p class="section-desc">Setiap proyek mencakup riset masalah, keputusan desain, arsitektur antarmuka, dan metrik dampak bisnis. Klik kartu untuk membuka studi kasus lengkap.</p>
+          </div>
+          <div class="portfolio-count mono" id="portfolioCount">Menampilkan 6 dari 6 proyek</div>
+        </div>
+
+        <div class="filter-bar" id="portfolioFilterBar" role="tablist" aria-label="Filter kategori portofolio">
+          <button type="button" class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">Semua (6)</button>
+          <button type="button" class="filter-btn" data-filter="UI/UX Design" role="tab" aria-selected="false">UI/UX Design</button>
+          <button type="button" class="filter-btn" data-filter="Web Development" role="tab" aria-selected="false">Web Development</button>
+          <button type="button" class="filter-btn" data-filter="Mobile App" role="tab" aria-selected="false">Mobile App</button>
+          <button type="button" class="filter-btn" data-filter="Branding" role="tab" aria-selected="false">Branding</button>
+        </div>
+
+        <div class="portfolio-grid" id="portfolioGrid" aria-live="polite">
+          <!-- Diisi dinamis oleh app.js dengan 6 studi kasus lengkap + SVG mockup -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Pengalaman, Pendidikan & Tech Stack -->
+    <section class="section-block" id="pengalaman">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">02 / Rekam Jejak &amp; CV</div>
+            <h2 class="section-title">Pengalaman &amp; Tech Stack</h2>
+            <p class="section-desc">Perjalanan karier lintas produk fintech, analytics SaaS, dan agensi digital dengan standar engineering yang rapi.</p>
+          </div>
+          <button type="button" class="btn btn-outline" id="printCvExpBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            <span>Cetak / Simpan PDF CV</span>
+          </button>
+        </div>
+
+        <div class="editorial-two-col">
+          <div>
+            <h3 class="subhead-mono">PENGALAMAN KERJA</h3>
+            <div class="timeline-list">
+              <article class="timeline-item">
+                <div class="timeline-period">2023 – Sekarang</div>
+                <div>
+                  <h4 class="timeline-role">Principal Product Designer · Karsa Labs</h4>
+                  <p class="timeline-desc">Memimpin tim desain beranggotakan 5 desainer untuk platform analytics B2B (180rb+ MAU). Membangun multi-brand design system yang memangkas waktu development frontend hingga 40%.</p>
+                </div>
+              </article>
+              <article class="timeline-item">
+                <div class="timeline-period">2020 – 2023</div>
+                <div>
+                  <h4 class="timeline-role">Senior Frontend Engineer · Finansia Tech</h4>
+                  <p class="timeline-desc">Merancang dan mengimplementasikan dashboard portofolio investasi serta alur KYC digital menggunakan React &amp; TypeScript dengan skor Lighthouse rata-rata 98+.</p>
+                </div>
+              </article>
+              <article class="timeline-item">
+                <div class="timeline-period">2018 – 2020</div>
+                <div>
+                  <h4 class="timeline-role">UI/UX Specialist · Studio Aksara</h4>
+                  <p class="timeline-desc">Menangani 15+ proyek desain produk, website korporat, dan prototipe interaktif untuk klien sektor logistik, agrotech, dan retail premium.</p>
+                </div>
+              </article>
+              <article class="timeline-item">
+                <div class="timeline-period">2017 – 2018</div>
+                <div>
+                  <h4 class="timeline-role">Frontend Developer · Kreasi Digital</h4>
+                  <p class="timeline-desc">Mengonversi desain Figma menjadi halaman web semantik, responsif, dan ramah SEO untuk UMKM serta perusahaan rintisan.</p>
+                </div>
+              </article>
+            </div>
+
+            <div class="education-box">
+              <div class="subhead-mono">PENDIDIKAN &amp; SERTIFIKASI</div>
+              <div class="edu-row">
+                <div>
+                  <strong>S1 Teknik Informatika — Institut Teknologi Bandung</strong>
+                  <div class="muted-sm">Fokus Rekayasa Perangkat Lunak &amp; Interaksi Manusia-Komputer</div>
+                </div>
+                <span class="mono muted-sm">2013 – 2017</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="subhead-mono">KEAHLIAN &amp; TECH STACK</h3>
+            <div class="stack-group">
+              <div class="stack-label">Design &amp; Prototyping</div>
+              <div class="stack-chips">
+                <span class="stack-chip">Figma &amp; Variables</span>
+                <span class="stack-chip">Design System</span>
+                <span class="stack-chip">User Research</span>
+                <span class="stack-chip">Information Architecture</span>
+                <span class="stack-chip">Usability Testing</span>
+                <span class="stack-chip">Micro-interactions</span>
+              </div>
+            </div>
+            <div class="stack-group">
+              <div class="stack-label">Frontend &amp; Web Architecture</div>
+              <div class="stack-chips">
+                <span class="stack-chip">HTML5 / Semantic Web</span>
+                <span class="stack-chip">CSS3 / Swiss Grid</span>
+                <span class="stack-chip">TypeScript / ES6+</span>
+                <span class="stack-chip">React / Next.js</span>
+                <span class="stack-chip">Tailwind CSS</span>
+                <span class="stack-chip">Blogger XML v3</span>
+              </div>
+            </div>
+            <div class="stack-group">
+              <div class="stack-label">Performance &amp; Collaboration</div>
+              <div class="stack-chips">
+                <span class="stack-chip">Core Web Vitals</span>
+                <span class="stack-chip">WCAG Accessibility</span>
+                <span class="stack-chip">SEO &amp; Schema JSON-LD</span>
+                <span class="stack-chip">Git / Linear / Notion</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: Paket Layanan & Estimasi Tarif -->
+    <section class="section-block" id="layanan">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">03 / Layanan &amp; Tarif</div>
+            <h2 class="section-title">Paket Kolaborasi &amp; Estimasi</h2>
+            <p class="section-desc">Pilih paket yang sesuai dengan kebutuhan produk Anda. Setiap paket mendukung kustomisasi scope sebelum proyek dimulai.</p>
+          </div>
+        </div>
+
+        <div class="services-grid">
+          <article class="service-card">
+            <div class="service-kicker mono">PAKET 01 · DESIGN</div>
+            <h3 class="service-name">UI/UX Design &amp; Prototype</h3>
+            <div class="service-price">Rp 6.500.000</div>
+            <div class="service-eta mono">Estimasi 2–3 Minggu</div>
+            <ul class="service-list">
+              <li>Audit UX &amp; penyusunan User Flow</li>
+              <li>12–16 Layar High-Fidelity di Figma</li>
+              <li>Clickable Interactive Prototype</li>
+              <li>Design Token &amp; Developer Handoff</li>
+            </ul>
+            <button type="button" class="btn btn-outline btn-full select-package-btn" data-package="UI/UX Design & Prototype (Mulai Rp 6.500.000)">
+              Pilih Paket → Kirim Brief WhatsApp
+            </button>
+          </article>
+
+          <article class="service-card is-featured">
+            <div class="service-badge-row">
+              <span class="service-kicker mono text-accent">PAKET 02 · END-TO-END</span>
+              <span class="popular-pill">Paling Populer</span>
+            </div>
+            <h3 class="service-name">Web App &amp; Design System</h3>
+            <div class="service-price">Rp 12.000.000</div>
+            <div class="service-eta mono">Estimasi 3–5 Minggu</div>
+            <ul class="service-list">
+              <li>Desain UI/UX Lengkap + Component Library</li>
+              <li>Implementasi Frontend Responsif (Clean Code)</li>
+              <li>Optimasi Core Web Vitals &amp; SEO Schema</li>
+              <li>Garansi Revisi 2 Minggu Pasca Rilis</li>
+            </ul>
+            <button type="button" class="btn btn-primary btn-full select-package-btn" data-package="Web App & Design System (Mulai Rp 12.000.000)">
+              Pilih Paket → Kirim Brief WhatsApp
+            </button>
+          </article>
+
+          <article class="service-card">
+            <div class="service-kicker mono">PAKET 03 · LAUNCH</div>
+            <h3 class="service-name">Brand Identity &amp; Landing Page</h3>
+            <div class="service-eta mono">Estimasi 1–2 Minggu</div>
+            <div class="service-price">Rp 4.500.000</div>
+            <ul class="service-list">
+              <li>Logo Mark, Palet Warna &amp; Tipografi</li>
+              <li>Landing Page Editorial Konversi Tinggi</li>
+              <li>Integrasi WhatsApp &amp; Form Lead</li>
+              <li>Setup Custom Domain &amp; Analytics</li>
+            </ul>
+            <button type="button" class="btn btn-outline btn-full select-package-btn" data-package="Brand Identity & Landing Page (Mulai Rp 4.500.000)">
+              Pilih Paket → Kirim Brief WhatsApp
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 04: Testimoni Klien -->
+    <section class="section-block" id="testimoni">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">04 / Testimoni</div>
+            <h2 class="section-title">Apa Kata Klien &amp; Partner</h2>
+          </div>
+        </div>
+
+        <div class="testimonial-grid">
+          <article class="testimonial-card">
+            <p class="testimonial-quote">"Pendekatan Raka sangat sistematis. Redesign dashboard analytics kami memangkas waktu onboarding klien enterprise dari 4 hari menjadi kurang dari 2 jam."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">DW</div>
+              <div>
+                <div class="author-name">Dimas Wijaya</div>
+                <div class="author-role mono">VP of Product · Nalar Analytics</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card">
+            <p class="testimonial-quote">"Jarang menemukan product designer yang juga menguasai arsitektur frontend sedalam Raka. Kode yang diserahkan bersih, aksesibel, dan sangat cepat."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">NK</div>
+              <div>
+                <div class="author-name">Nadya Kusuma</div>
+                <div class="author-role mono">CTO · RuangArsip.id</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card">
+            <p class="testimonial-quote">"Identitas visual dan web storefront baru dari Raka langsung meningkatkan kepercayaan pembeli dan konversi checkout mobile sebesar 41%."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">BS</div>
+              <div>
+                <div class="author-name">Bima Santoso</div>
+                <div class="author-role mono">Founder · Svara Audio</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Section 05: Footer Kontak -->
+  <footer class="site-footer" id="kontak">
+    <div class="container">
+      <div class="footer-cta-box">
+        <div>
+          <div class="section-eyebrow">05 / Mulai Kolaborasi</div>
+          <h2 class="section-title footer-cta-title">Punya ide produk atau butuh partner desain &amp; frontend?</h2>
+          <p class="section-desc">Kirim brief singkat atau salin alamat email untuk konsultasi awal gratis selama 30 menit.</p>
+        </div>
+        <div class="footer-cta-actions">
+          <button type="button" class="btn btn-outline" id="copyEmailFooterBtn" data-email="raka@pratamastudio.id">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Salin Email</span>
+          </button>
+          <button type="button" class="btn btn-primary" id="openContactFooterBtn">Kirim Brief Proyek ↗</button>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Raka Pratama · Dibangun dengan <strong>Ddev Folio</strong> (Template Blogger Minimalis)</span>
+        <div class="footer-links">
+          <a href="#karya">Portofolio</a>
+          <a href="#layanan">Layanan</a>
+          <a href="#pengalaman">CV &amp; Pengalaman</a>
+          <a href="https://wa.me/6281234567890" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Case Study Drawer / Modal -->
+  <div class="modal-backdrop" id="caseStudyModal" role="dialog" aria-modal="true" aria-labelledby="caseModalTitle" hidden>
+    <div class="drawer-panel">
+      <div class="drawer-topbar">
+        <div class="drawer-meta-pill mono" id="caseModalCategory">STUDI KASUS</div>
+        <div class="drawer-topbar-actions">
+          <button type="button" class="icon-btn" id="prevCaseBtn" title="Proyek Sebelumnya" aria-label="Proyek Sebelumnya">←</button>
+          <button type="button" class="icon-btn" id="nextCaseBtn" title="Proyek Berikutnya" aria-label="Proyek Berikutnya">→</button>
+          <button type="button" class="icon-btn" id="closeCaseModalBtn" title="Tutup Studi Kasus" aria-label="Tutup Studi Kasus">✕</button>
+        </div>
+      </div>
+      <div class="drawer-body" id="caseModalBody">
+        <h2 class="drawer-title" id="caseModalTitle">Judul Proyek</h2>
+        <p class="drawer-subtitle" id="caseModalSubtitle"></p>
+
+        <div class="case-meta-grid" id="caseMetaGrid"></div>
+
+        <div class="drawer-visual" id="caseModalVisual"></div>
+
+        <div class="case-metrics-grid" id="caseMetricsGrid"></div>
+
+        <div class="case-sections">
+          <div class="case-section-item">
+            <h3>Latar Belakang &amp; Tantangan</h3>
+            <p id="caseModalProblem"></p>
+          </div>
+          <div class="case-section-item">
+            <h3>Pendekatan &amp; Solusi</h3>
+            <p id="caseModalSolution"></p>
+          </div>
+          <div class="case-two-col">
+            <div class="case-section-item">
+              <h3>Deliverables Utama</h3>
+              <ul class="clean-list" id="caseModalDeliverables"></ul>
+            </div>
+            <div class="case-section-item">
+              <h3>Tech Stack &amp; Tools</h3>
+              <div class="stack-chips" id="caseModalStack"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-cta-footer">
+          <div>
+            <strong>Tertarik membangun produk serupa?</strong>
+            <div class="muted-sm">Diskusikan kebutuhan proyek Anda langsung lewat form brief atau WhatsApp.</div>
+          </div>
+          <button type="button" class="btn btn-primary" id="discussSimilarBtn">Diskusikan Proyek Serupa ↗</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact / Brief Modal -->
+  <div class="modal-backdrop" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" hidden>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="section-eyebrow">Brief Proyek Baru</div>
+          <h2 class="modal-title" id="contactModalTitle">Kirim Brief via WhatsApp</h2>
+        </div>
+        <button type="button" class="icon-btn" id="closeContactModalBtn" aria-label="Tutup Formulir Kontak">✕</button>
+      </div>
+      <form id="briefForm" class="brief-form">
+        <div class="form-group">
+          <label for="briefName">Nama Lengkap / Perusahaan</label>
+          <input type="text" id="briefName" name="name" placeholder="Contoh: Andi Saputra — PT Maju Bersama" required />
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="briefEmail">Email Aktif</label>
+            <input type="email" id="briefEmail" name="email" placeholder="andi@perusahaan.id" required />
+          </div>
+          <div class="form-group">
+            <label for="briefPackage">Paket / Kebutuhan</label>
+            <select id="briefPackage" name="package">
+              <option value="UI/UX Design & Prototype (Mulai Rp 6.500.000)">UI/UX Design &amp; Prototype</option>
+              <option value="Web App & Design System (Mulai Rp 12.000.000)">Web App &amp; Design System</option>
+              <option value="Brand Identity & Landing Page (Mulai Rp 4.500.000)">Brand Identity &amp; Landing Page</option>
+              <option value="Konsultasi & Audit Produk Kustom">Konsultasi &amp; Audit Kustom</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="briefMessage">Ringkasan Proyek &amp; Target Waktu</label>
+          <textarea id="briefMessage" name="message" rows="4" placeholder="Ceritakan singkat produk yang ingin dibuat, target rilis, atau link referensi..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="copyBriefBtn">Salin Teks Brief</button>
+          <button type="submit" class="btn btn-primary">Kirim ke WhatsApp ↗</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-banner" id="toastBanner" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

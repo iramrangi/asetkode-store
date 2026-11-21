@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KitePay &amp; CloudStack Docs v2.4 — Preview Ddev DocsPro</title>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('ddev_docspro_demo_theme');
+        document.documentElement.setAttribute('data-theme', saved || 'dark');
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top Sticky Navbar -->
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <div class="header-left">
+        <button id="mobileMenuBtn" class="mobile-menu-btn" type="button" aria-label="Buka Sidebar Dokumentasi">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+
+        <a href="#pengenalan-arsitektur" class="brand-wrap" id="brandHomeLink">
+          <span class="brand-logo-icon">&lt;/&gt;</span>
+          <span class="brand-text">
+            <span class="brand-title">KitePay Docs</span>
+            <span class="version-pill">v2.4</span>
+          </span>
+        </a>
+
+        <nav class="header-nav" aria-label="Navigasi Versi &amp; Dokumentasi">
+          <ul id="topNavLinks">
+            <li><a href="#overview" data-nav="overview">Beranda</a></li>
+            <li><a href="#pengenalan-arsitektur" data-nav="article" data-article-id="pengenalan-arsitektur" class="active">Dokumentasi</a></li>
+            <li><a href="#membuat-transaksi-qris" data-nav="article" data-article-id="membuat-transaksi-qris">Referensi API</a></li>
+            <li><a href="#deploy-docker-nginx" data-nav="article" data-article-id="deploy-docker-nginx">Deployment</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="header-actions">
+        <button id="searchTriggerBtn" class="search-trigger" type="button" aria-label="Cari Dokumentasi">
+          <span class="search-trigger-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="search-label">Cari dokumentasi...</span>
+          </span>
+          <span class="kbd-shortcut">Ctrl K</span>
+        </button>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Ganti Tema Gelap atau Terang" title="Ganti Tema Gelap / Terang">
+          <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+  <!-- 3-Column Documentation Layout -->
+  <div id="docsShell" class="docs-shell">
+    <!-- Left Column: Collapsible Sidebar -->
+    <aside id="docsSidebar" class="docs-sidebar" aria-label="Daftar Dokumentasi">
+      <div class="sidebar-top-meta">
+        <div class="sidebar-env-card">
+          <span class="status-dot"></span>
+          <span>API Status: <strong>99.98% Operational</strong></span>
+        </div>
+      </div>
+
+      <div id="sidebarNavContainer" class="sidebar-nav-container"></div>
+
+      <div class="sidebar-footer-badge">
+        <span>Template Preview</span>
+        <strong>Ddev DocsPro XML v3</strong>
+      </div>
+    </aside>
+
+    <!-- Center Column: Active Documentation Article or Overview Grid -->
+    <main class="docs-main">
+      <nav id="docBreadcrumb" class="docs-breadcrumb" aria-label="Breadcrumb"></nav>
+
+      <article id="docArticleView" class="single-doc-article">
+        <header id="docArticleHeader" class="article-header"></header>
+        <div id="docArticleBody" class="post-body"></div>
+        <nav id="docPagerContainer" class="doc-pager" aria-label="Navigasi Artikel"></nav>
+      </article>
+
+      <section id="docOverviewView" class="overview-view" style="display:none;"></section>
+    </main>
+
+    <!-- Right Column: Sticky Table of Contents with ScrollSpy -->
+    <aside id="docsTocAside" class="docs-toc" aria-label="Di Halaman Ini">
+      <div class="toc-sticky-box">
+        <h4 class="toc-title">Di Halaman Ini</h4>
+        <ul id="docTocList" class="toc-list"></ul>
+        <div class="toc-helper-card">
+          <div class="toc-helper-title">Shortcut Cepat</div>
+          <p>Tekan <kbd>Ctrl</kbd> + <kbd>K</kbd> kapan saja untuk mencari endpoint, payload, atau panduan.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Quick Search Modal (Ctrl+K) -->
+  <div id="searchModal" class="search-modal-backdrop" aria-hidden="true">
+    <div class="search-modal" role="dialog" aria-modal="true" aria-labelledby="quickSearchInput">
+      <div class="search-input-wrap">
+        <svg class="search-modal-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="quickSearchInput" class="search-input" type="text" autocomplete="off" placeholder="Cari judul, endpoint API, cURL, webhook, atau Docker..." />
+        <button id="closeSearchBtn" class="kbd-shortcut kbd-close" type="button">ESC</button>
+      </div>
+      <div id="quickSearchResults" class="search-results"></div>
+      <div class="search-modal-footer">
+        <span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Navigasi</span>
+        <span><kbd>Enter</kbd> Buka Artikel</span>
+        <span><kbd>Esc</kbd> Tutup</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="docs-footer">
+    <div class="docs-footer-inner">
+      <span>&copy; 2026 KitePay &amp; CloudStack Docs v2.4 &mdash; Live Demo <strong>Ddev DocsPro</strong></span>
+      <span>Blogger XML v3 &bull; Dark/Light Mode &bull; Auto TOC ScrollSpy</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

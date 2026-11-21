@@ -16,7 +16,7 @@ const SITE_CONFIG = {
   mayarBundleUrl: '',   // isi Payment Link Mayar untuk Paket Bundling All-In-One
   bloggerOrigin: 'https://asetkode.blogspot.com',
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
-  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20'],
+  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24'],
   bundlePrice: 'Rp 249.000',
   bundlePriceNum: 249000
 };
@@ -497,6 +497,160 @@ const FALLBACK_PRODUCTS = [
       "Sudah Mendukung Dark Mode & Light Mode.",
       "Mudah Digabung ke Laravel, React, Vue, atau HTML Biasa.",
       "Struktur CSS Variabel Bersih untuk Ganti Warna Brand dalam Sekejap."
+    ]
+  },
+  {
+    "id": "prod-18",
+    "title": "Program Pembuat Invoice, Penawaran Harga & Kwitansi Bisnis Pro (Cetak PDF & WhatsApp)",
+    "categories": ["Aplikasi", "Web App", "Source Code", "JavaScript"],
+    "price": "Rp 59.000",
+    "oldPrice": "Rp 139.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/invoice/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/program-pembuat-invoice-penawaran-harga.html",
+    "version": "v1.0 (Terbaru)",
+    "stack": "HTML5 + CSS3 + Vanilla JS (Zero-Config & Print A4 PDF Ready)",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/invoice/screenshot.png",
+    "summary": "Aplikasi pembuat Invoice tagihan, Penawaran Harga (Quotation), dan Kwitansi resmi siap cetak A4 PDF yang berjalan langsung di browser tanpa server/XAMPP (Zero-Config).",
+    "features": [
+      "3 Jenis Dokumen Sekaligus: Invoice, Penawaran Harga (Quotation), dan Kwitansi Resmi.",
+      "Live Preview Kertas A4 Real-Time lengkap dengan stempel SVG LUNAS/BELUM LUNAS.",
+      "Terbilang Bahasa Indonesia Otomatis & Hitung PPN 11% / PPh 23."
+    ]
+  },
+  {
+    "id": "prod-19",
+    "title": "Aplikasi Booking Jadwal, Reservasi Jasa & Manajemen Janji Temu Pelanggan (Klinik / Salon / Bengkel)",
+    "categories": ["Aplikasi", "Web App", "Source Code", "JavaScript"],
+    "price": "Rp 79.000",
+    "oldPrice": "Rp 169.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/booking/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/aplikasi-booking-jadwal-reservasi-jasa.html",
+    "version": "v1.0 (Terbaru)",
+    "stack": "HTML5 + CSS3 + Vanilla JS (Anti Double-Booking & .ICS Calendar)",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/booking/screenshot.png",
+    "summary": "Sistem reservasi online dan manajemen jadwal janji temu pelanggan siap pakai untuk klinik, barbershop/salon, bengkel, maupun studio konsultasi dengan proteksi anti double-booking.",
+    "features": [
+      "4 Preset Bidang Usaha 1-Klik: Klinik, Barbershop & Salon, Bengkel Servis, Studio Konsultan.",
+      "Slot Jam Dinamis Anti Double-Booking per staf & tanggal.",
+      "Tiket Booking Otomatis + Unduh Kalender (.ics) & Konfirmasi WhatsApp."
+    ]
+  },
+  {
+    "id": "prod-20",
+    "title": "Source Code Aplikasi Kasir Laundry Kiloan/Satuan & Pelacakan Status Order + Nota Thermal",
+    "categories": ["Aplikasi", "Program", "Web App", "Source Code"],
+    "price": "Rp 85.000",
+    "oldPrice": "Rp 189.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/laundry/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-laundry.html",
+    "version": "v1.0 (Terbaru)",
+    "stack": "HTML5 + CSS3 + Vanilla JS (Nota Thermal 58/80mm & Order Tracking)",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/laundry/screenshot.png",
+    "summary": "Aplikasi kasir khusus usaha laundry kiloan dan satuan lengkap dengan board manajemen produksi 5 tahap, pelacakan status cucian real-time, notifikasi WA, dan cetak nota thermal.",
+    "features": [
+      "Kasir Order Kiloan desimal & Satuan dengan 8 paket layanan preset.",
+      "Live Preview & Cetak Nota Thermal 58mm/80mm + Kode Pelacakan LDR-xxxx.",
+      "Board Produksi 5 Tahap & Halaman Cek Status Pelanggan."
+    ]
+  },
+  {
+    "id": "prod-21",
+    "title": "Template Blogger Ddev NewsPro v2.0 — Portal Berita, Majalah & Media Digital Modern",
+    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "price": "Rp 69.000",
+    "oldPrice": "Rp 149.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/blogger-news/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-newspro-v20.html",
+    "version": "v2.0 (Blogger XML v3)",
+    "stack": "Blogger XML v3 + Responsive CSS + JSON Feed & SEO Schema",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/blogger-news/screenshot.png",
+    "summary": "Template Blogger XML Layouts v3 bergaya editorial untuk portal berita online, majalah digital, maupun blog media teknologi lengkap dengan Breaking News Ticker, Hero 3 Kolom, Daftar Isi otomatis, & Dark Mode.",
+    "features": [
+      "Blogger XML Layouts v3 Asli dengan dukungan Theme Designer (<Group>/<Variable>).",
+      "Breaking News Ticker & Related Posts Otomatis via JSON Feed Blogger.",
+      "Single Post Pro: Estimasi Waktu Baca, Daftar Isi (#toc), Share WA/X, & Schema NewsArticle."
+    ]
+  },
+  {
+    "id": "prod-22",
+    "title": "Template Blogger Ddev TokoKu v3 — Toko Online, Katalog Produk & Checkout WhatsApp / Mayar",
+    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "price": "Rp 79.000",
+    "oldPrice": "Rp 179.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/blogger-toko/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-tokoku-v3-toko.html",
+    "version": "v3.0 (Blogger XML v3)",
+    "stack": "Blogger XML v3 + Cart Engine + Checkout WhatsApp & Mayar",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/blogger-toko/screenshot.png",
+    "summary": "Ubah blog Blogger gratis menjadi website toko online profesional lengkap dengan keranjang belanja persisten, pilihan varian, kalkulasi diskon & ongkir, serta checkout WhatsApp / Mayar.",
+    "features": [
+      "Parser Postingan Produk Pintar (harga, harga coret, stok, varian, link Mayar).",
+      "Keranjang Belanja Slide-over Drawer + Mobile Sticky Cart Bar.",
+      "Checkout Otomatis ke WhatsApp Admin / Pembayaran Instan Mayar."
+    ]
+  },
+  {
+    "id": "prod-23",
+    "title": "Template Blogger Ddev Folio — Portofolio, CV Kreatif & Personal Branding Minimalis",
+    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "price": "Rp 55.000",
+    "oldPrice": "Rp 129.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/blogger-portfolio/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-folio-portofolio.html",
+    "version": "v1.0 (Blogger XML v3)",
+    "stack": "Blogger XML v3 + Swiss Minimalist Grid + Dark Mode",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/blogger-portfolio/screenshot.png",
+    "summary": "Template Blogger Swiss Editorial Minimalis untuk UI/UX Designer, Web Developer, Freelancer, maupun Kreator. Menampilkan studi kasus proyek per Label Blogger, layanan, & preview cetak CV.",
+    "features": [
+      "Desain Swiss Editorial + Filter Karya Dinamis per Label Blogger.",
+      "Layout Studi Kasus Lengkap, Widget Pengalaman Kerja, & Paket Layanan.",
+      "Preview Cetak CV (@media print), Salin Email 1-Klik, & Dark Mode."
+    ]
+  },
+  {
+    "id": "prod-24",
+    "title": "Template Blogger Ddev DocsPro — Dokumentasi Teknis, Tutorial Kode & Blog Developer Pro",
+    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "price": "Rp 65.000",
+    "oldPrice": "Rp 145.000",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/blogger-docs/",
+    "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-docspro.html",
+    "version": "v1.0 (Blogger XML v3)",
+    "stack": "Blogger XML v3 + 3-Col Docs Layout + Ctrl+K Search",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/blogger-docs/screenshot.png",
+    "summary": "Template Blogger kelas developer 3 kolom untuk situs dokumentasi API, knowledge base SaaS, maupun blog tutorial coding dengan Quick Search Ctrl+K, Copy Code, & Sticky TOC.",
+    "features": [
+      "Layout 3 Kolom: Collapsible Docs Sidebar, Konten Kode + Copy Button, Sticky TOC.",
+      "Quick Search Modal (Ctrl+K) via JSON Feed Blogger dengan Navigasi Keyboard.",
+      "Callout Info/Tip/Warn, Badge HTTP Method, Prev/Next Docs, & Dark Mode."
     ]
   }
 ];
