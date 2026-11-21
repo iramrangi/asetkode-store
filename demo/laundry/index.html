@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0284c7">
+  <title>Ddev Laundry POS — Kasir Kiloan/Satuan, Tracking Order &amp; Nota Thermal</title>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('ddev_laundry_theme_v1');
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="2" width="18" height="20" rx="3"></rect>
+              <circle cx="12" cy="13" r="5"></circle>
+              <path d="M9.5 13a2.5 2.5 0 0 0 5 0"></path>
+              <circle cx="7" cy="5.5" r="0.8" fill="currentColor"></circle>
+              <circle cx="10.5" cy="5.5" r="0.8" fill="currentColor"></circle>
+              <path d="M14.5 5.5h2.5"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-title">Ddev Laundry POS</div>
+            <div class="brand-sub" id="outletHeaderSub">Kasir Kiloan &amp; Satuan • Tracking Order • Nota Thermal</div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="outlet-pill" id="openSettingsBtn" title="Pengaturan Outlet &amp; Data">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span id="outletHeaderName">Ddev Fresh Laundry</span>
+          </button>
+
+          <button type="button" class="btn btn-outline btn-sm" id="headerResetDemoBtn" title="Kembalikan 6 data order demo">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span class="hide-xs">Reset Demo</span>
+          </button>
+
+          <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Ganti Mode Terang atau Gelap" title="Ganti Tema"></button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="tabs-bar" aria-label="Navigasi Utama">
+        <div class="tabs-inner">
+          <button type="button" class="tab-btn active" data-tab="kasir">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="M6 8h.01M10 8h.01M14 8h4M6 12h12M6 16h7"></path>
+            </svg>
+            <span>Kasir Order Baru</span>
+          </button>
+
+          <button type="button" class="tab-btn" data-tab="board">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="5" height="18" rx="1"></rect>
+              <rect x="10" y="3" width="5" height="12" rx="1"></rect>
+              <rect x="17" y="3" width="4" height="15" rx="1"></rect>
+            </svg>
+            <span>Board Produksi</span>
+            <span class="tab-badge" id="activeOrdersBadge">0</span>
+          </button>
+
+          <button type="button" class="tab-btn" data-tab="tracking">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Cek Status Pelanggan</span>
+          </button>
+
+          <button type="button" class="tab-btn" data-tab="laporan">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>Laporan &amp; Export</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- ==================== VIEW 1: KASIR ORDER BARU ==================== -->
+      <section id="view-kasir" class="view-panel active" aria-labelledby="tab-kasir">
+        <div class="kasir-layout">
+          <!-- Left Column: Form & Multi-Item Builder -->
+          <div class="stack">
+            <!-- Customer & Pickup Card -->
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h1 class="card-title">1. Data Pelanggan &amp; Pengambilan</h1>
+                  <p class="card-sub">Isi detail pelanggan untuk struk nota dan notifikasi WhatsApp otomatis.</p>
+                </div>
+                <span class="code-chip" id="previewOrderCode">LDR-0000</span>
+              </div>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="custName">Nama Pelanggan <span class="req">*</span></label>
+                  <input type="text" id="custName" class="input" placeholder="Contoh: Ibu Siti Aminah" autocomplete="off">
+                </div>
+                <div class="field">
+                  <label for="custPhone">Nomor WhatsApp <span class="req">*</span></label>
+                  <input type="tel" id="custPhone" class="input" placeholder="Contoh: 081234567890" autocomplete="off">
+                </div>
+
+                <div class="field full">
+                  <label>Metode Penyerahan / Pengambilan</label>
+                  <div class="seg-group" id="deliveryToggleGroup">
+                    <button type="button" class="seg-btn active" data-delivery="outlet">
+                      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                      Ambil di Outlet
+                    </button>
+                    <button type="button" class="seg-btn" data-delivery="antar-jemput">
+                      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                      Antar-Jemput Kurir
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field full hidden" id="deliveryAddressGroup">
+                  <label for="custAddress">Alamat Antar-Jemput <span class="req">*</span></label>
+                  <input type="text" id="custAddress" class="input" placeholder="Jl. Melati No. 14, patokan dekat gerbang komplek">
+                </div>
+
+                <div class="field full">
+                  <label for="orderNote">Catatan Khusus Cucian (Opsional)</label>
+                  <input type="text" id="orderNote" class="input" placeholder="Contoh: Pisahkan pakaian putih, jangan pakai pemutih">
+                </div>
+              </div>
+            </article>
+
+            <!-- Multi-Item Builder Card -->
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h2 class="card-title">2. Pilih Layanan Kiloan &amp; Satuan</h2>
+                  <p class="card-sub">Klik paket preset untuk menambahkan ke keranjang, lalu ubah berat desimal (misal 2.5 kg) atau jumlah pcs.</p>
+                </div>
+              </div>
+
+              <div class="preset-grid" id="presetGrid"></div>
+
+              <!-- Custom Item Adder -->
+              <details class="custom-box">
+                <summary class="custom-summary">+ Tambah Layanan Kustom (Kiloan / Satuan Lainnya)</summary>
+                <div class="custom-form-grid">
+                  <div class="field">
+                    <label for="customName">Nama Layanan</label>
+                    <input type="text" id="customName" class="input" placeholder="Contoh: Cuci Boneka Besar">
+                  </div>
+                  <div class="field">
+                    <label for="customMode">Tipe &amp; Satuan</label>
+                    <select id="customMode" class="select">
+                      <option value="kiloan|kg">Kiloan (kg)</option>
+                      <option value="satuan|pcs">Satuan (pcs)</option>
+                      <option value="satuan|psg">Satuan (psg)</option>
+                      <option value="satuan|m2">Satuan (m²)</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="customQty">Berat / Qty</label>
+                    <input type="number" id="customQty" class="input" value="1" min="0.1" step="0.1">
+                  </div>
+                  <div class="field">
+                    <label for="customPrice">Harga / Satuan (Rp)</label>
+                    <input type="number" id="customPrice" class="input" value="15000" min="500" step="500">
+                  </div>
+                  <div class="field">
+                    <label for="customHours">Estimasi (Jam)</label>
+                    <input type="number" id="customHours" class="input" value="48" min="1" step="1">
+                  </div>
+                  <div class="field custom-btn-wrap">
+                    <button type="button" class="btn btn-primary" id="addCustomItemBtn">+ Masukkan</button>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Cart List -->
+              <div class="cart-section">
+                <div class="cart-head-row">
+                  <span class="cart-label">Daftar Item Order (<span id="cartItemCount">0</span> item)</span>
+                  <button type="button" class="btn-link danger" id="clearCartBtn">Kosongkan Item</button>
+                </div>
+                <div id="cartList" class="cart-list"></div>
+              </div>
+            </article>
+
+            <!-- Fragrance, Discount & Payment Card -->
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h2 class="card-title">3. Parfum, Diskon &amp; Pembayaran</h2>
+                  <p class="card-sub">Estimasi waktu selesai dihitung otomatis dari layanan terlama di keranjang.</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="field full">
+                  <label>Pilihan Parfum Laundry</label>
+                  <div class="chip-group" id="fragranceGroup">
+                    <button type="button" class="choice-chip active" data-fragrance="Lavender">Lavender</button>
+                    <button type="button" class="choice-chip" data-fragrance="Ocean Fresh">Ocean Fresh</button>
+                    <button type="button" class="choice-chip" data-fragrance="Sakura">Sakura</button>
+                    <button type="button" class="choice-chip" data-fragrance="No Parfum">No Parfum</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="orderDiscount">Diskon / Promo (Rp)</label>
+                  <input type="number" id="orderDiscount" class="input" value="0" min="0" step="500">
+                </div>
+
+                <div class="field">
+                  <label>Estimasi Selesai Otomatis</label>
+                  <div class="estimate-pill" id="estimateDisplay">-</div>
+                </div>
+
+                <div class="field full">
+                  <label>Status Pembayaran</label>
+                  <div class="seg-group three" id="paymentStatusGroup">
+                    <button type="button" class="seg-btn active" data-pay="Lunas">Lunas</button>
+                    <button type="button" class="seg-btn" data-pay="DP Sebagian">DP Sebagian</button>
+                    <button type="button" class="seg-btn" data-pay="Bayar Saat Ambil">Bayar Saat Ambil</button>
+                  </div>
+                </div>
+
+                <div class="field full hidden" id="dpInputGroup">
+                  <div class="dp-row">
+                    <div class="field">
+                      <label for="orderDpAmount">Nominal DP Dibayar (Rp)</label>
+                      <input type="number" id="orderDpAmount" class="input" value="20000" min="0" step="1000">
+                    </div>
+                    <div class="field">
+                      <label>Sisa Tagihan Saat Ambil</label>
+                      <div class="dp-remaining-box" id="dpRemainingDisplay">Rp 0</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-primary btn-lg" id="saveOrderBtn">
+                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Simpan Order &amp; Preview Nota
+                </button>
+                <button type="button" class="btn btn-outline" id="resetOrderFormBtn">Reset Form</button>
+              </div>
+            </article>
+          </div>
+
+          <!-- Right Column: Live Summary & Thermal Preview -->
+          <aside class="kasir-preview-col">
+            <div class="card sticky-panel">
+              <div class="card-head">
+                <div>
+                  <h2 class="card-title">Ringkasan &amp; Preview Nota Thermal</h2>
+                  <p class="card-sub">Tampilan langsung sesuai kertas thermal kasir.</p>
+                </div>
+                <div class="paper-switch" id="livePaperSwitch" aria-label="Ukuran Kertas Thermal">
+                  <button type="button" class="paper-btn active" data-width="58">58mm</button>
+                  <button type="button" class="paper-btn" data-width="80">80mm</button>
+                </div>
+              </div>
+
+              <div class="summary-stats">
+                <div class="sum-row"><span>Subtotal Layanan</span><strong id="sumSubtotal">Rp 0</strong></div>
+                <div class="sum-row"><span>Diskon</span><strong id="sumDiscount">- Rp 0</strong></div>
+                <div class="sum-row total"><span>Total Tagihan</span><strong id="sumTotal">Rp 0</strong></div>
+                <div class="sum-row"><span>Dibayar Sekarang</span><strong id="sumPaid" class="text-success">Rp 0</strong></div>
+                <div class="sum-row"><span>Sisa Tagihan</span><strong id="sumRemaining" class="text-warn">Rp 0</strong></div>
+              </div>
+
+              <div class="thermal-stage">
+                <div class="thermal-paper w-58" id="liveThermalPreview"></div>
+              </div>
+
+              <div class="preview-footer-actions">
+                <button type="button" class="btn btn-outline btn-sm" id="printDraftBtn" title="Simpan &amp; cetak struk ini">
+                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Simpan &amp; Cetak Nota
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 2: BOARD PRODUKSI ==================== -->
+      <section id="view-board" class="view-panel" aria-labelledby="tab-board">
+        <div class="card toolbar-card">
+          <div class="toolbar-top">
+            <div class="search-box">
+              <svg class="icon-sm search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="boardSearchInput" class="input search-input" placeholder="Cari kode LDR-xxxx, nama pelanggan, atau nomor WA...">
+            </div>
+
+            <div class="toolbar-controls">
+              <select id="boardPayFilter" class="select select-sm" aria-label="Filter Pembayaran">
+                <option value="ALL">Semua Pembayaran</option>
+                <option value="UNPAID">Belum Lunas / DP</option>
+                <option value="PAID">Sudah Lunas</option>
+              </select>
+
+              <div class="seg-group compact" id="boardLayoutToggle">
+                <button type="button" class="seg-btn active" data-layout="kanban" title="Tampilan Kolom Kanban">Kanban</button>
+                <button type="button" class="seg-btn" data-layout="cards" title="Tampilan Daftar Kartu">Kartu</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-filter-bar" id="stageFilterBar"></div>
+        </div>
+
+        <div id="boardContainer"></div>
+      </section>
+
+      <!-- ==================== VIEW 3: CEK STATUS PELANGGAN ==================== -->
+      <section id="view-tracking" class="view-panel" aria-labelledby="tab-tracking">
+        <div class="tracking-hero card">
+          <div class="tracking-hero-inner">
+            <div class="tracking-badge">Portal Pelacakan Cucian Real-Time</div>
+            <h1 class="tracking-title">Cek Status Cucian Anda</h1>
+            <p class="tracking-desc">Masukkan <strong>Kode Order</strong> (contoh: <code>LDR-2401</code>) atau <strong>Nomor HP / WhatsApp</strong> yang terdaftar pada nota.</p>
+
+            <form id="trackingForm" class="tracking-search-form">
+              <input type="text" id="trackingInput" class="input input-lg" placeholder="Ketik Kode Order (LDR-xxxx) atau No. HP..." autocomplete="off">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                Cek Status
+              </button>
+            </form>
+
+            <div class="sample-chips-wrap">
+              <span class="sample-label">Uji cepat 1-klik:</span>
+              <div id="trackingSampleChips" class="sample-chips"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="trackingResult"></div>
+      </section>
+
+      <!-- ==================== VIEW 4: LAPORAN & EXPORT ==================== -->
+      <section id="view-laporan" class="view-panel" aria-labelledby="tab-laporan">
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-head">
+              <span>Total Omzet Lunas</span>
+              <span class="kpi-dot success"></span>
+            </div>
+            <div class="kpi-value success" id="kpiPaidRevenue">Rp 0</div>
+            <div class="kpi-note" id="kpiPaidNote">Dana masuk dari order lunas &amp; DP</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-head">
+              <span>Piutang Belum Lunas</span>
+              <span class="kpi-dot warn"></span>
+            </div>
+            <div class="kpi-value warn" id="kpiUnpaidReceivable">Rp 0</div>
+            <div class="kpi-note" id="kpiUnpaidNote">Sisa tagihan saat pengambilan</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-head">
+              <span>Total Kg Dicuci</span>
+              <span class="kpi-dot primary"></span>
+            </div>
+            <div class="kpi-value primary" id="kpiTotalKg">0 kg</div>
+            <div class="kpi-note" id="kpiKgNote">Termasuk item kiloan &amp; satuan</div>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-head">
+              <span>Order Aktif</span>
+              <span class="kpi-dot info"></span>
+            </div>
+            <div class="kpi-value" id="kpiActiveOrders">0</div>
+            <div class="kpi-note" id="kpiActiveNote">Sedang diproses di outlet</div>
+          </article>
+        </div>
+
+        <div class="card report-actions-card">
+          <div class="report-actions-left">
+            <h2 class="card-title">Kontrol Laporan, Ekspor &amp; Tema</h2>
+            <p class="card-sub">Unduh seluruh riwayat transaksi ke Excel (CSV UTF-8) atau ubah tampilan tema aplikasi.</p>
+          </div>
+          <div class="report-actions-right">
+            <button type="button" class="btn btn-primary" id="exportCsvBtn">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export CSV (Excel)
+            </button>
+            <button type="button" class="btn btn-outline" id="laporanThemeBtn">Ganti Mode Terang/Gelap</button>
+            <button type="button" class="btn btn-outline" id="laporanResetDemoBtn">Reset Data Demo</button>
+          </div>
+        </div>
+
+        <div class="report-grid">
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title">Rincian Omzet Harian</h2>
+                <p class="card-sub">Grafik nilai tagihan vs pembayaran masuk per tanggal order masuk.</p>
+              </div>
+            </div>
+            <div id="dailyRevenueChart" class="daily-chart"></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Order</th>
+                    <th>Kg</th>
+                    <th>Tagihan</th>
+                    <th>Terbayar</th>
+                    <th>Piutang</th>
+                  </tr>
+                </thead>
+                <tbody id="dailyRevenueTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title">Distribusi Tahap &amp; Layanan</h2>
+                <p class="card-sub">Ringkasan beban produksi dan kontribusi Kiloan vs Satuan.</p>
+              </div>
+            </div>
+            <div id="stageBreakdownBox" class="breakdown-list"></div>
+            <hr class="divider">
+            <h3 class="sub-section-title">Kontribusi Layanan</h3>
+            <div id="serviceBreakdownBox" class="breakdown-list"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ==================== MODAL NOTA THERMAL ==================== -->
+  <div class="modal-backdrop hidden" id="receiptModal" role="dialog" aria-modal="true" aria-labelledby="receiptModalTitle">
+    <div class="modal-box modal-receipt">
+      <div class="modal-head">
+        <div>
+          <h3 class="modal-title" id="receiptModalTitle">Nota Thermal Laundry</h3>
+          <div class="modal-sub" id="receiptModalCode">LDR-0000</div>
+        </div>
+        <div class="modal-head-right">
+          <div class="paper-switch" id="modalPaperSwitch">
+            <button type="button" class="paper-btn active" data-width="58">58mm</button>
+            <button type="button" class="paper-btn" data-width="80">80mm</button>
+          </div>
+          <button type="button" class="icon-btn" id="closeReceiptModalBtn" aria-label="Tutup">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body thermal-modal-body">
+        <div class="thermal-paper w-58" id="modalThermalPaper"></div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn btn-wa" id="modalSendWaBtn">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          Kirim Nota ke WA
+        </button>
+        <button type="button" class="btn btn-outline" id="modalCopyWaBtn">Salin Teks Nota</button>
+        <button type="button" class="btn btn-primary" id="modalPrintBtn">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Cetak Nota
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL PENGATURAN OUTLET ==================== -->
+  <div class="modal-backdrop hidden" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h3 class="modal-title" id="settingsModalTitle">Pengaturan Profil Outlet</h3>
+          <div class="modal-sub">Tampil otomatis di header aplikasi, nota thermal, dan pesan WhatsApp.</div>
+        </div>
+        <button type="button" class="icon-btn" id="closeSettingsModalBtn" aria-label="Tutup">&times;</button>
+      </div>
+      <form id="settingsForm" class="modal-body">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="setOutletName">Nama Laundry / Outlet</label>
+            <input type="text" id="setOutletName" class="input" required>
+          </div>
+          <div class="field full">
+            <label for="setOutletAddress">Alamat Outlet</label>
+            <input type="text" id="setOutletAddress" class="input" required>
+          </div>
+          <div class="field full">
+            <label for="setOutletPhone">Nomor WhatsApp / Telepon Outlet</label>
+            <input type="text" id="setOutletPhone" class="input" required>
+          </div>
+          <div class="field full">
+            <label for="setOutletFooter">Pesan Kaki Nota Thermal</label>
+            <input type="text" id="setOutletFooter" class="input" required>
+          </div>
+        </div>
+        <div class="modal-foot-inline">
+          <button type="button" class="btn btn-outline" id="settingsResetDemoBtn">Reset 6 Data Demo</button>
+          <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dedicated Print Target (Only visible in @media print) -->
+  <div id="printContainer" aria-hidden="true"></div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

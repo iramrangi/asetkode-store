@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d9488">
+  <title>Ddev Invoice, Penawaran &amp; Kwitansi Bisnis Pro</title>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('ddev_inv_theme');
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="8" y1="13" x2="16" y2="13"/>
+            <line x1="8" y1="17" x2="13" y2="17"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">Ddev Invoice &amp; Kwitansi Pro</div>
+          <div class="brand-sub">Invoice, Penawaran Harga &amp; Kwitansi Bisnis (PDF &amp; WhatsApp)</div>
+        </div>
+      </div>
+
+      <nav class="view-tabs" aria-label="Navigasi Utama">
+        <button type="button" class="tab-btn active" data-view="editor">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span>Editor &amp; Preview</span>
+        </button>
+        <button type="button" class="tab-btn" data-view="history">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
+          <span>Riwayat Dokumen</span>
+          <span class="tab-badge" id="historyCountBadge">0</span>
+        </button>
+        <button type="button" class="tab-btn" data-view="profile">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg>
+          <span>Profil Usaha</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-outline btn-sm" id="exportCsvBtn" title="Unduh semua dokumen sebagai CSV">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Ekspor CSV</span>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="newDocBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Dokumen Baru</span>
+        </button>
+        <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Ganti Tema" title="Ganti Tema Terang / Gelap"></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- VIEW 1: EDITOR & LIVE A4 PREVIEW -->
+    <section id="view-editor" class="view-section active">
+      <div class="workspace-grid">
+        <!-- LEFT PANEL: DOCUMENT EDITOR -->
+        <aside class="editor-panel">
+          <div class="card editor-card">
+            <div class="card-head">
+              <div>
+                <h1 class="card-title" id="editorModeTitle">Edit Dokumen</h1>
+                <p class="card-subtitle" id="editorModeHint">Perubahan langsung tampil di pratinjau kertas A4</p>
+              </div>
+              <span class="unsaved-pill" id="saveStateBadge">Tersimpan</span>
+            </div>
+
+            <!-- Jenis Dokumen -->
+            <div class="form-section">
+              <label class="section-label">Jenis Dokumen</label>
+              <div class="doc-type-switch" role="group" aria-label="Pilih Jenis Dokumen">
+                <button type="button" class="doc-type-btn active" data-doc-type="INVOICE">INVOICE</button>
+                <button type="button" class="doc-type-btn" data-doc-type="PENAWARAN">PENAWARAN</button>
+                <button type="button" class="doc-type-btn" data-doc-type="KWITANSI">KWITANSI</button>
+              </div>
+            </div>
+
+            <!-- Metadata Dokumen -->
+            <div class="form-section">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="docNumber">Nomor Dokumen</label>
+                  <div class="input-group">
+                    <input type="text" id="docNumber" class="input mono" placeholder="INV/2026/11/001">
+                    <button type="button" class="btn btn-outline btn-xs" id="regenNumberBtn" title="Buat nomor otomatis berikutnya">Auto</button>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="docStatus">Status Dokumen</label>
+                  <select id="docStatus" class="input">
+                    <option value="Draft">Draft</option>
+                    <option value="Terkirim">Terkirim</option>
+                    <option value="Lunas">Lunas</option>
+                    <option value="Jatuh Tempo">Jatuh Tempo</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="docDate">Tanggal Terbit</label>
+                  <input type="date" id="docDate" class="input">
+                </div>
+                <div class="field">
+                  <label for="docDueDate" id="docDueLabel">Jatuh Tempo</label>
+                  <input type="date" id="docDueDate" class="input">
+                </div>
+              </div>
+            </div>
+
+            <!-- Data Klien -->
+            <div class="form-section">
+              <div class="section-head-row">
+                <span class="section-label">Data Klien / Penerima</span>
+              </div>
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="clientName">Nama Perusahaan / Klien</label>
+                  <input type="text" id="clientName" class="input" placeholder="Contoh: PT Nusantara Digital Kreatif">
+                </div>
+                <div class="field">
+                  <label for="clientPic">Nama Kontak / PIC</label>
+                  <input type="text" id="clientPic" class="input" placeholder="Contoh: Bapak Budi Santoso">
+                </div>
+                <div class="field">
+                  <label for="clientWa">WhatsApp Klien</label>
+                  <input type="tel" id="clientWa" class="input" placeholder="0812xxxxxxxx">
+                </div>
+                <div class="field full">
+                  <label for="clientEmail">Email Klien</label>
+                  <input type="email" id="clientEmail" class="input" placeholder="finance@klien.co.id">
+                </div>
+                <div class="field full">
+                  <label for="clientAddress">Alamat Klien</label>
+                  <textarea id="clientAddress" class="input textarea" rows="2" placeholder="Alamat lengkap perusahaan atau penerima"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item Pekerjaan / Barang -->
+            <div class="form-section">
+              <div class="section-head-row">
+                <span class="section-label">Rincian Item / Jasa</span>
+                <button type="button" class="btn btn-outline btn-xs" id="addItemBtn">+ Tambah Baris</button>
+              </div>
+              <div id="itemsEditorList" class="items-editor-list"></div>
+              <datalist id="unitSuggestions">
+                <option value="Paket"></option>
+                <option value="Unit"></option>
+                <option value="Pcs"></option>
+                <option value="Jam"></option>
+                <option value="Hari"></option>
+                <option value="Bulan"></option>
+                <option value="Sesi"></option>
+                <option value="Lisensi"></option>
+              </datalist>
+            </div>
+
+            <!-- Diskon & Pajak -->
+            <div class="form-section">
+              <span class="section-label">Diskon &amp; Perpajakan</span>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="discountValue">Diskon</label>
+                  <div class="input-group">
+                    <input type="number" id="discountValue" class="input" min="0" step="any" value="0">
+                    <select id="discountType" class="input select-compact" aria-label="Tipe diskon">
+                      <option value="percent">%</option>
+                      <option value="amount">Rp</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field tax-toggles-wrap">
+                  <label>Opsi Pajak</label>
+                  <div class="toggle-stack">
+                    <label class="check-pill">
+                      <input type="checkbox" id="ppnToggle">
+                      <span>PPN 11%</span>
+                    </label>
+                    <label class="check-pill">
+                      <input type="checkbox" id="pph23Toggle">
+                      <span>Potong PPh 23 (2%)</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Catatan & Pembayaran -->
+            <div class="form-section">
+              <span class="section-label">Catatan &amp; Pembayaran</span>
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="docNotes">Catatan / Syarat &amp; Ketentuan</label>
+                  <textarea id="docNotes" class="input textarea" rows="2" placeholder="Contoh: Pembayaran paling lambat 14 hari setelah invoice diterima."></textarea>
+                </div>
+                <div class="field full">
+                  <label class="check-row">
+                    <input type="checkbox" id="showPaymentInfo">
+                    <span>Tampilkan info Rekening Bank &amp; QRIS dari Profil Usaha pada dokumen</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Editor Primary Save Footer -->
+            <div class="editor-footer-actions">
+              <button type="button" class="btn btn-primary" id="saveDocBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span>Simpan Dokumen</span>
+              </button>
+              <button type="button" class="btn btn-outline" id="duplicateDocBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Duplikat</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- RIGHT PANEL: ACTION STRIP + LIVE A4 PAPER -->
+        <div class="preview-panel">
+          <div class="preview-toolbar">
+            <div class="preview-toolbar-left">
+              <span class="preview-pill">Pratinjau Kertas A4</span>
+              <span class="preview-summary-mini" id="previewTotalMini">Total: Rp 0</span>
+            </div>
+            <div class="preview-toolbar-actions">
+              <button type="button" class="btn btn-accent btn-sm hidden" id="convertToInvoiceBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                <span>Konversi ke Invoice</span>
+              </button>
+              <button type="button" class="btn btn-success btn-sm hidden" id="markPaidKwitansiBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Tandai Lunas &rarr; Kwitansi</span>
+              </button>
+              <button type="button" class="btn btn-wa btn-sm" id="sendWaBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                <span>Kirim WhatsApp</span>
+              </button>
+              <button type="button" class="btn btn-dark btn-sm" id="printPdfBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>Cetak / Simpan PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="paper-stage">
+            <article class="doc-paper" id="docPaper" aria-label="Pratinjau Dokumen A4"></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: RIWAYAT DOKUMEN -->
+    <section id="view-history" class="view-section">
+      <div class="container-wide">
+        <div class="kpi-grid" aria-label="Ringkasan Tagihan">
+          <article class="kpi-card">
+            <div class="kpi-label"><span>Total Tagihan Lunas</span><span class="kpi-dot success"></span></div>
+            <div class="kpi-value success" id="kpiPaidTotal">Rp 0</div>
+            <div class="kpi-note" id="kpiPaidCount">0 dokumen lunas</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label"><span>Menunggu Pembayaran</span><span class="kpi-dot warning"></span></div>
+            <div class="kpi-value warning" id="kpiPendingTotal">Rp 0</div>
+            <div class="kpi-note" id="kpiPendingCount">0 dokumen terkirim</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label"><span>Jatuh Tempo</span><span class="kpi-dot danger"></span></div>
+            <div class="kpi-value danger" id="kpiOverdueTotal">Rp 0</div>
+            <div class="kpi-note" id="kpiOverdueCount">0 dokumen lewat jatuh tempo</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label"><span>Jumlah Dokumen</span><span class="kpi-dot primary"></span></div>
+            <div class="kpi-value primary" id="kpiDocCount">0</div>
+            <div class="kpi-note" id="kpiDocBreakdown">0 Invoice &middot; 0 Penawaran &middot; 0 Kwitansi</div>
+          </article>
+        </div>
+
+        <div class="card">
+          <div class="history-toolbar">
+            <div>
+              <h2 class="card-title">Arsip &amp; Riwayat Dokumen</h2>
+              <p class="card-subtitle">Kelola seluruh Invoice, Penawaran Harga, dan Kwitansi tersimpan di browser Anda</p>
+            </div>
+            <div class="history-filters">
+              <input type="search" id="historySearch" class="input" placeholder="Cari nomor, klien, atau item...">
+              <select id="historyTypeFilter" class="input">
+                <option value="ALL">Semua Jenis</option>
+                <option value="INVOICE">Invoice</option>
+                <option value="PENAWARAN">Penawaran</option>
+                <option value="KWITANSI">Kwitansi</option>
+              </select>
+              <select id="historyStatusFilter" class="input">
+                <option value="ALL">Semua Status</option>
+                <option value="Draft">Draft</option>
+                <option value="Terkirim">Terkirim</option>
+                <option value="Lunas">Lunas</option>
+                <option value="Jatuh Tempo">Jatuh Tempo</option>
+              </select>
+              <button type="button" class="btn btn-outline btn-sm" id="resetDemoBtn">Reset Demo</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nomor Dokumen</th>
+                  <th>Jenis</th>
+                  <th>Klien / Penerima</th>
+                  <th>Tanggal</th>
+                  <th class="text-right">Total Nilai</th>
+                  <th>Status</th>
+                  <th class="text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="historyTableBody"></tbody>
+            </table>
+          </div>
+          <div id="historyEmptyState" class="empty-state hidden">
+            Tidak ada dokumen yang sesuai dengan filter pencarian.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: PROFIL USAHA -->
+    <section id="view-profile" class="view-section">
+      <div class="container-narrow">
+        <form id="profileForm" class="card">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">Profil Usaha &amp; Pengaturan Rekening</h2>
+              <p class="card-subtitle">Identitas penerbit ini otomatis tampil di kop surat, info transfer, dan tanda tangan setiap dokumen</p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" id="resetProfileBtn">Reset Default</button>
+          </div>
+
+          <div class="form-grid profile-grid">
+            <div class="field">
+              <label for="profName">Nama Perusahaan / Usaha</label>
+              <input type="text" id="profName" class="input" required>
+            </div>
+            <div class="field">
+              <label for="profTagline">Tagline / Bidang Usaha</label>
+              <input type="text" id="profTagline" class="input">
+            </div>
+            <div class="field full">
+              <label for="profAddress">Alamat Kantor / Usaha</label>
+              <textarea id="profAddress" class="input textarea" rows="2"></textarea>
+            </div>
+            <div class="field">
+              <label for="profPhone">Nomor Telepon / WhatsApp</label>
+              <input type="text" id="profPhone" class="input">
+            </div>
+            <div class="field">
+              <label for="profEmail">Email Bisnis</label>
+              <input type="email" id="profEmail" class="input">
+            </div>
+            <div class="field">
+              <label for="profNpwp">NPWP Perusahaan (Opsional)</label>
+              <input type="text" id="profNpwp" class="input" placeholder="00.000.000.0-000.000">
+            </div>
+            <div class="field">
+              <label>Warna Aksen Dokumen A4</label>
+              <div class="color-swatches" id="accentSwatches">
+                <button type="button" class="swatch-btn" data-color="#0d9488" style="--swatch:#0d9488" title="Teal Profesional"></button>
+                <button type="button" class="swatch-btn" data-color="#1e40af" style="--swatch:#1e40af" title="Royal Navy"></button>
+                <button type="button" class="swatch-btn" data-color="#0f172a" style="--swatch:#0f172a" title="Executive Slate"></button>
+                <button type="button" class="swatch-btn" data-color="#047857" style="--swatch:#047857" title="Emerald Bisnis"></button>
+                <button type="button" class="swatch-btn" data-color="#be123c" style="--swatch:#be123c" title="Crimson Korporat"></button>
+              </div>
+              <input type="hidden" id="profAccentColor" value="#0d9488">
+            </div>
+
+            <div class="field full section-divider">
+              <h3>Rekening Bank &amp; Pembayaran</h3>
+            </div>
+            <div class="field">
+              <label for="profBankName">Nama Bank</label>
+              <input type="text" id="profBankName" class="input">
+            </div>
+            <div class="field">
+              <label for="profBankAccount">Nomor Rekening</label>
+              <input type="text" id="profBankAccount" class="input mono">
+            </div>
+            <div class="field">
+              <label for="profBankHolder">Atas Nama Rekening</label>
+              <input type="text" id="profBankHolder" class="input">
+            </div>
+            <div class="field">
+              <label for="profQrisId">Nama Merchant QRIS (Opsional)</label>
+              <input type="text" id="profQrisId" class="input" placeholder="Contoh: Ddev Studio Digital">
+            </div>
+            <div class="field full">
+              <label for="profPaymentNote">Instruksi Pembayaran Default</label>
+              <textarea id="profPaymentNote" class="input textarea" rows="2"></textarea>
+            </div>
+
+            <div class="field full section-divider">
+              <h3>Tanda Tangan Dokumen</h3>
+            </div>
+            <div class="field">
+              <label for="profSignName">Nama Penandatangan</label>
+              <input type="text" id="profSignName" class="input">
+            </div>
+            <div class="field">
+              <label for="profSignTitle">Jabatan Penandatangan</label>
+              <input type="text" id="profSignTitle" class="input">
+            </div>
+          </div>
+
+          <div class="profile-footer">
+            <button type="submit" class="btn btn-primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Simpan Profil Usaha</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

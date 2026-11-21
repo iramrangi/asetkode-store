@@ -16,7 +16,7 @@ const SITE_CONFIG = {
   mayarBundleUrl: '',   // isi Payment Link Mayar untuk Paket Bundling All-In-One
   bloggerOrigin: 'https://asetkode.blogspot.com',
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
-  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17'],
+  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20'],
   bundlePrice: 'Rp 249.000',
   bundlePriceNum: 249000
 };

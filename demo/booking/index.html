@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Sistem Booking Jadwal &amp; Reservasi Pelanggan — Zero-Config</title>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('ddev_booking_theme_v1');
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header no-print">
+    <div class="header-main">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="3"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="M9 16l2 2 4-4"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-row">
+            <h1 class="brand-title" id="headerBizName">Klinik Gigi &amp; Estetika Sehat</h1>
+            <span class="industry-pill" id="headerPresetBadge">Klinik &amp; Dokter Gigi</span>
+          </div>
+          <p class="brand-sub" id="headerBizTagline">Reservasi Dokter, Perawatan Gigi &amp; Konsultasi</p>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" role="tablist" aria-label="Menu Aplikasi Booking">
+        <button type="button" class="tab-btn active" role="tab" aria-selected="true" data-tab="booking">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <line x1="12" y1="14" x2="12" y2="18"></line>
+            <line x1="10" y1="16" x2="14" y2="16"></line>
+          </svg>
+          <span>Form Booking Pelanggan</span>
+        </button>
+        <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+            <rect x="9" y="3" width="6" height="4" rx="1"></rect>
+            <path d="M9 12h6"></path>
+            <path d="M9 16h4"></path>
+          </svg>
+          <span>Panel Admin &amp; Jadwal</span>
+          <span class="tab-badge" id="navPendingBadge" hidden>0</span>
+        </button>
+        <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+          <span>Kelola Layanan &amp; Staff</span>
+        </button>
+      </nav>
+
+      <div class="header-utils">
+        <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Ganti Tema Gelap/Terang" title="Ganti Tema Gelap/Terang"></button>
+      </div>
+    </div>
+
+    <div class="preset-strip">
+      <div class="preset-strip-inner">
+        <span class="preset-strip-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+          Preset Bidang Usaha (1-Klik):
+        </span>
+        <div class="preset-pills" id="headerPresetPills"></div>
+        <button type="button" class="btn-link-subtle" id="headerResetDemoBtn" title="Pulihkan data contoh preset aktif">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          Reset Demo
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Print-only header for daily schedule -->
+  <div class="print-only print-schedule-header" id="printScheduleHeader">
+    <div>
+      <h2 id="printBizName">Klinik Gigi &amp; Estetika Sehat</h2>
+      <p id="printBizSub">Laporan Jadwal Reservasi Pelanggan</p>
+    </div>
+    <div class="print-meta">
+      <div id="printFilterMeta">Filter: Semua Jadwal</div>
+      <div id="printTimestamp">Dicetak: -</div>
+    </div>
+  </div>
+
+  <main class="app-main">
+    <!-- ==================== TAB 1: FORM BOOKING PELANGGAN ==================== -->
+    <section id="tab-booking" class="tab-panel active no-print" role="tabpanel">
+      <div class="booking-layout">
+        <div class="booking-steps">
+          <!-- Step 1: Service -->
+          <article class="card">
+            <div class="card-header">
+              <div class="step-heading">
+                <span class="step-num">1</span>
+                <div>
+                  <h2 class="card-title">Pilih Layanan</h2>
+                  <p class="card-desc">Klik salah satu layanan untuk melihat durasi dan estimasi biaya</p>
+                </div>
+              </div>
+              <span class="count-chip" id="serviceCountChip">0 Layanan</span>
+            </div>
+            <div class="service-grid" id="serviceGrid"></div>
+          </article>
+
+          <!-- Step 2: Staff & Date -->
+          <article class="card">
+            <div class="card-header">
+              <div class="step-heading">
+                <span class="step-num">2</span>
+                <div>
+                  <h2 class="card-title">Pilih Staff / Spesialis &amp; Tanggal</h2>
+                  <p class="card-desc">Setiap staff memiliki jadwal terpisah yang dicek otomatis</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-label-sm">Pilih Staff / Spesialis</div>
+            <div class="staff-grid" id="staffGrid"></div>
+
+            <div class="date-selector-box">
+              <div class="field-label-sm">Tanggal Kunjungan</div>
+              <div class="date-controls">
+                <div class="quick-dates" id="quickBookingDates">
+                  <button type="button" class="pill-btn active" data-offset="0">Hari Ini</button>
+                  <button type="button" class="pill-btn" data-offset="1">Besok</button>
+                  <button type="button" class="pill-btn" data-offset="2">Lusa</button>
+                </div>
+                <input type="date" id="bookingDate" class="input date-input" aria-label="Pilih tanggal booking">
+              </div>
+            </div>
+          </article>
+
+          <!-- Step 3: Dynamic Time Slots -->
+          <article class="card">
+            <div class="card-header">
+              <div class="step-heading">
+                <span class="step-num">3</span>
+                <div>
+                  <h2 class="card-title">Pilih Jam Kedatangan</h2>
+                  <p class="card-desc" id="slotContextLabel">Slot otomatis terkunci jika sudah terisi pada tanggal &amp; staff terpilih</p>
+                </div>
+              </div>
+              <span class="availability-pill" id="slotAvailBadge">12 Tersedia</span>
+            </div>
+
+            <div class="slot-legend">
+              <span class="legend-item"><span class="legend-dot free"></span> Tersedia</span>
+              <span class="legend-item"><span class="legend-dot selected"></span> Dipilih</span>
+              <span class="legend-item"><span class="legend-dot occupied"></span> Terisi (Anti Double-Booking)</span>
+              <span class="legend-item"><span class="legend-dot conflict"></span> Bentrok Durasi</span>
+            </div>
+
+            <div class="time-slot-grid" id="timeSlotGrid"></div>
+            <div class="slot-helper-note" id="slotHelperNote"></div>
+          </article>
+
+          <!-- Step 4: Customer Info -->
+          <article class="card">
+            <div class="card-header">
+              <div class="step-heading">
+                <span class="step-num">4</span>
+                <div>
+                  <h2 class="card-title">Data Pelanggan &amp; Konfirmasi</h2>
+                  <p class="card-desc">Lengkapi data agar tiket &amp; pengingat WhatsApp dapat dikirim</p>
+                </div>
+              </div>
+            </div>
+
+            <form id="bookingForm" novalidate>
+              <div class="form-grid-2">
+                <div class="field">
+                  <label for="custName">Nama Lengkap <span class="req">*</span></label>
+                  <input type="text" id="custName" class="input" placeholder="Contoh: Andi Wijaya" required maxlength="80">
+                </div>
+                <div class="field">
+                  <label for="custPhone">Nomor WhatsApp <span class="req">*</span></label>
+                  <input type="tel" id="custPhone" class="input" placeholder="Contoh: 081234567890" required maxlength="25">
+                </div>
+                <div class="field full">
+                  <label for="custNotes">Catatan / Keluhan / Detail (Opsional)</label>
+                  <textarea id="custNotes" class="input textarea" rows="2" placeholder="Contoh: Keluhan gigi sensitif / No. Plat B 1234 XYZ / Request khusus..." maxlength="240"></textarea>
+                </div>
+              </div>
+
+              <div class="form-error" id="bookingFormError" hidden></div>
+
+              <div class="form-submit-row">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBookingBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <span>Buat Reservasi &amp; Terbitkan Tiket</span>
+                </button>
+              </div>
+            </form>
+          </article>
+        </div>
+
+        <!-- Sticky Summary Sidebar -->
+        <aside class="booking-sidebar">
+          <div class="card summary-card">
+            <div class="summary-top">
+              <span class="summary-eyebrow">RINGKASAN RESERVASI</span>
+              <h3 class="summary-biz" id="summaryBizName">Klinik Gigi &amp; Estetika Sehat</h3>
+            </div>
+
+            <div class="summary-list" id="bookingSummaryList"></div>
+
+            <div class="summary-total-box">
+              <span>Estimasi Biaya</span>
+              <strong id="summaryPriceTotal">Rp 0</strong>
+            </div>
+
+            <div class="summary-guard-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 12l2 2 4-4"></path>
+              </svg>
+              <span>Proteksi Anti Double-Booking aktif: jam yang sudah dipesan otomatis terkunci untuk staff terkait.</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: PANEL ADMIN & JADWAL ==================== -->
+    <section id="tab-admin" class="tab-panel" role="tabpanel">
+      <div class="kpi-grid no-print">
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Total Hari Ini</span>
+            <span class="kpi-icon indigo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </span>
+          </div>
+          <div class="kpi-value" id="kpiTodayTotal">0</div>
+          <div class="kpi-sub" id="kpiTodaySub">Jadwal aktif hari ini</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Menunggu Konfirmasi</span>
+            <span class="kpi-icon amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </span>
+          </div>
+          <div class="kpi-value" id="kpiPendingTotal">0</div>
+          <div class="kpi-sub" id="kpiPendingSub">Perlu konfirmasi admin</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Terkonfirmasi</span>
+            <span class="kpi-icon emerald">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </span>
+          </div>
+          <div class="kpi-value" id="kpiConfirmedTotal">0</div>
+          <div class="kpi-sub" id="kpiConfirmedSub">Siap dilayani sesuai jadwal</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Estimasi Omzet</span>
+            <span class="kpi-icon teal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </span>
+          </div>
+          <div class="kpi-value money" id="kpiRevenueTotal">Rp 0</div>
+          <div class="kpi-sub" id="kpiRevenueSub">Total jadwal aktif terpilih</div>
+        </article>
+      </div>
+
+      <article class="card toolbar-card no-print">
+        <div class="toolbar-row">
+          <div class="toolbar-group">
+            <div class="quick-dates" id="adminDatePills">
+              <button type="button" class="pill-btn active" data-date-mode="all">Semua Tanggal</button>
+              <button type="button" class="pill-btn" data-date-mode="today">Hari Ini</button>
+              <button type="button" class="pill-btn" data-date-mode="tomorrow">Besok</button>
+            </div>
+            <input type="date" id="adminDateFilter" class="input input-sm" aria-label="Filter tanggal spesifik">
+            <select id="adminStatusFilter" class="input input-sm" aria-label="Filter status booking">
+              <option value="ALL">Semua Status</option>
+              <option value="Menunggu">Menunggu</option>
+              <option value="Dikonfirmasi">Dikonfirmasi</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Batal">Batal</option>
+            </select>
+          </div>
+
+          <div class="toolbar-group">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="search" id="adminSearchInput" class="input input-sm search-input" placeholder="Cari kode BKG, nama, WA, staff...">
+            </div>
+
+            <div class="view-switch" role="group" aria-label="Mode tampilan jadwal">
+              <button type="button" class="view-btn active" data-view="table" title="Tampilan Tabel">Tabel</button>
+              <button type="button" class="view-btn" data-view="timeline" title="Tampilan Timeline">Timeline</button>
+            </div>
+
+            <button type="button" class="btn btn-outline btn-sm" id="printScheduleBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span>Cetak Jadwal</span>
+            </button>
+
+            <button type="button" class="btn btn-outline btn-sm" id="exportCsvBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Export CSV</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card schedule-card">
+        <div class="card-header schedule-head no-print">
+          <div>
+            <h2 class="card-title">Daftar Jadwal &amp; Janji Temu</h2>
+            <p class="card-desc" id="scheduleCountLabel">Menampilkan 0 reservasi</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" id="jumpToBookingBtn">+ Buat Booking Baru</button>
+        </div>
+
+        <div id="scheduleContainer"></div>
+      </article>
+    </section>
+
+    <!-- ==================== TAB 3: KELOLA LAYANAN & STAFF ==================== -->
+    <section id="tab-settings" class="tab-panel no-print" role="tabpanel">
+      <div class="settings-grid">
+        <!-- Preset Switcher -->
+        <article class="card full-span">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Pilih Preset Bidang Usaha (1-Klik Adaptasi)</h2>
+              <p class="card-desc">Ganti seluruh layanan, nama staff, profil usaha, dan contoh jadwal sesuai jenis bisnis Anda</p>
+            </div>
+          </div>
+          <div class="preset-cards-grid" id="presetCardsGrid"></div>
+        </article>
+
+        <!-- Business Profile & Preferences -->
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Profil Usaha &amp; Pengaturan</h2>
+              <p class="card-desc">Tampil di header aplikasi, tiket pelanggan, pesan WhatsApp, dan cetakan jadwal</p>
+            </div>
+          </div>
+          <form id="bizProfileForm" class="stack-form">
+            <div class="field">
+              <label for="bizNameInput">Nama Usaha / Klinik / Bengkel</label>
+              <input type="text" id="bizNameInput" class="input" required maxlength="90">
+            </div>
+            <div class="field">
+              <label for="bizTaglineInput">Tagline / Subjudul</label>
+              <input type="text" id="bizTaglineInput" class="input" maxlength="120">
+            </div>
+            <div class="field">
+              <label for="bizWaInput">Nomor WhatsApp Admin (Format 628...)</label>
+              <input type="tel" id="bizWaInput" class="input" placeholder="6281234567890" required maxlength="25">
+            </div>
+            <div class="settings-btn-row">
+              <button type="submit" class="btn btn-primary">Simpan Profil Usaha</button>
+            </div>
+          </form>
+
+          <div class="divider"></div>
+
+          <div class="pref-row">
+            <div>
+              <strong>Mode Tampilan</strong>
+              <p class="card-desc">Ubah tampilan antara Mode Terang dan Mode Gelap</p>
+            </div>
+            <button type="button" class="btn btn-outline" id="settingsThemeToggle">Ganti Tema</button>
+          </div>
+
+          <div class="pref-row" style="margin-top:12px;">
+            <div>
+              <strong>Reset Data Demo</strong>
+              <p class="card-desc">Kembalikan jadwal, layanan, dan staff preset ini ke kondisi awal</p>
+            </div>
+            <button type="button" class="btn btn-danger-soft" id="settingsResetBtn">Reset Preset Ini</button>
+          </div>
+        </article>
+
+        <!-- Staff CRUD -->
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Kelola Staff / Spesialis</h2>
+              <p class="card-desc">Tambah dokter, stylist, mekanik, atau konsultan baru</p>
+            </div>
+          </div>
+
+          <form id="addStaffForm" class="inline-crud-form">
+            <div class="field">
+              <label for="stfNameInput">Nama Staff / Spesialis</label>
+              <input type="text" id="stfNameInput" class="input" placeholder="Contoh: drg. Reza Pratama" required maxlength="60">
+            </div>
+            <div class="field">
+              <label for="stfRoleInput">Jabatan / Keahlian</label>
+              <input type="text" id="stfRoleInput" class="input" placeholder="Contoh: Spesialis Konservasi" required maxlength="60">
+            </div>
+            <button type="submit" class="btn btn-primary">+ Tambah Staff</button>
+          </form>
+
+          <div class="crud-list" id="manageStaffList"></div>
+        </article>
+
+        <!-- Services CRUD -->
+        <article class="card full-span">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Kelola Daftar Layanan</h2>
+              <p class="card-desc">Atur nama layanan, durasi pengerjaan (menit), dan tarif harga</p>
+            </div>
+          </div>
+
+          <form id="addServiceForm" class="service-crud-form">
+            <div class="field">
+              <label for="svcNameInput">Nama Layanan</label>
+              <input type="text" id="svcNameInput" class="input" placeholder="Contoh: Scaling + Fluoride" required maxlength="70">
+            </div>
+            <div class="field">
+              <label for="svcDurationInput">Durasi (Menit)</label>
+              <input type="number" id="svcDurationInput" class="input" min="15" max="360" step="15" value="45" required>
+            </div>
+            <div class="field">
+              <label for="svcPriceInput">Harga (Rp)</label>
+              <input type="number" id="svcPriceInput" class="input" min="0" step="5000" placeholder="150000" required>
+            </div>
+            <div class="field">
+              <label for="svcDescInput">Keterangan Singkat</label>
+              <input type="text" id="svcDescInput" class="input" placeholder="Opsional..." maxlength="100">
+            </div>
+            <div class="field field-btn">
+              <button type="submit" class="btn btn-primary">+ Tambah Layanan</button>
+            </div>
+          </form>
+
+          <div class="crud-list two-col" id="manageServicesList"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== TICKET CONFIRMATION MODAL ==================== -->
+  <div class="modal-backdrop" id="ticketModal" role="dialog" aria-modal="true" aria-labelledby="ticketModalTitle" hidden>
+    <div class="modal-dialog">
+      <div class="modal-head no-print">
+        <div class="modal-title-wrap">
+          <span class="modal-success-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </span>
+          <div>
+            <h2 id="ticketModalTitle">Tiket Reservasi Pelanggan</h2>
+            <p class="modal-sub" id="ticketModalSub">Jadwal Anda telah tercatat dan terkunci dari double-booking</p>
+          </div>
+        </div>
+        <button type="button" class="icon-btn" id="closeTicketModalBtn" aria-label="Tutup modal tiket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="ticket-paper" id="ticketBody"></div>
+
+      <div class="modal-actions no-print">
+        <button type="button" class="btn btn-outline" id="downloadIcsBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M12 14v4"></path><path d="M10 16l2 2 2-2"></path></svg>
+          <span>Download .ics Kalender</span>
+        </button>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa" id="sendTicketWaBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          <span>Kirim Konfirmasi ke WhatsApp</span>
+        </a>
+        <button type="button" class="btn btn-outline" id="printTicketBtn">Cetak Tiket</button>
+        <button type="button" class="btn btn-primary" id="doneTicketBtn">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container no-print" aria-live="polite"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
