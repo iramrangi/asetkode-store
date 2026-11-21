@@ -21,7 +21,8 @@ const SITE_CONFIG = {
   bundlePriceNum: 249000,
   bundlePriceUsd: '$49',
   bundlePriceUsdNum: 49,
-  usdStoreUrl: '' // Opsional: Link toko Polar.sh / Payhip / Gumroad global Anda
+  usdStoreUrl: 'https://polar.sh/ddev-studio',
+  polarBundleUrl: 'https://buy.polar.sh/polar_cl_dxsnzbBhCtf4KGKygvpm8agB1rd8yLFe0PY6F2Vx1E6'
 };
 
 const STORAGE_LOCALE_KEY = 'ddev_locale_v1';
@@ -114,7 +115,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 199.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$29",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_2gqekO0vfdY3DlEeuYcxYmZxo1a52IVLGuZKU29x925",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/kasir/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-pos.html",
@@ -162,7 +163,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 99.000",
     "priceUsd": "$9",
     "oldPriceUsd": "$19",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_FhJaDpUubFgRr7vCHTzEhCTpLRKrevdsplXUX1O2awR",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/umkm/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-landing-page-umkm-cafe-modern.html",
@@ -206,7 +207,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 199.000",
     "priceUsd": "$15",
     "oldPriceUsd": "$29",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_ujKMtXy5lLH0yavS8JKSE7BskRO6GGb18IQGd3Pxnjf",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/scraper/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-otomatisasi-scraper_01983744995.html",
@@ -249,7 +250,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 349.000",
     "priceUsd": "$25",
     "oldPriceUsd": "$49",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_lufYFGaik2pMgJza2yeUFvLU0pxQrtP5P6nsy1pe95A",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/ecommerce/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-e-commerce-katalog_0585515657.html",
@@ -294,7 +295,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 179.000",
     "priceUsd": "$14",
     "oldPriceUsd": "$29",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_7wOmgIXoXBcqzK4OH0ljaPUFObFFfSKGe96u50sBoRr",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/dashboard-ui/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/admin-dashboard-analytics-ui-kit-modern_01645151510.html",
@@ -339,7 +340,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 249.000",
     "priceUsd": "$19",
     "oldPriceUsd": "$39",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_YyNN2n3ceJNptzFy1SUkIKBAOxbb04BaUICEO3iIted",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/bot-responder/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/bot-auto-responder-notifikasi-laporan_01829563560.html",
@@ -382,7 +383,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 99.000",
     "priceUsd": "$7",
     "oldPriceUsd": "$15",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_kKEkZ01SZ5LKJG6sHGHi9ExSQj6I95G2u5OKv0wnLDS",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/finansial/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kalkulator.html",
@@ -425,7 +426,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 89.000",
     "priceUsd": "$7",
     "oldPriceUsd": "$15",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_ar1xkNq0iMl025ZKO1E1KmFxArmimr8CsbfMU1MPj2C",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/pdf-converter/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/script-python-auto-converter-pdf-to.html",
@@ -469,7 +470,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 99.000",
     "priceUsd": "$7",
     "oldPriceUsd": "$15",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_IqjHhZCSNsnCTEedwm7zAPS2SmhAy7M76ypVn1UYK7T",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/undangan/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-landing-page-undangan-digital.html",
@@ -515,7 +516,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 99.000",
     "priceUsd": "$9",
     "oldPriceUsd": "$19",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_7mc0ZY2T5D2KYPtLSRXIt20RELCMzy4K96ieU1RbEu0",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/bot-tagihan/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/bot-telegram-pengingat-tagihan-jadwal.html",
@@ -559,7 +560,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 129.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_yPImlJVfC7FVlXymcznKng6hvqlRh1dzgekeU0xBGpf",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/absensi/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-sistem-absensi-siswa.html",
@@ -602,7 +603,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 139.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_LcoZCZq4QDRXMLiTadO1hESsRKQMrVfExP0XQ0QPB24",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/payment-kit/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/starter-kit-payment-gateway-midtrans.html",
@@ -646,7 +647,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 150.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_YdQciZ7F6l7zBwpB2jDxK5QkqvcXlysmuWnLf0H3aS2",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/kasir-php/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-kasir-toko-sederhana-cetak.html",
@@ -691,7 +692,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 149.000",
     "priceUsd": "$9",
     "oldPriceUsd": "$19",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_tA48uVg3o8VgRgMlo5YIYId6XczToBhpjwfZv0uhqRB",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/agency/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-desain-web-company-profile.html",
@@ -734,7 +735,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 89.000",
     "priceUsd": "$7",
     "oldPriceUsd": "$15",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_whDfPJ5r7YHYdpWPxkb4ml3dHsxCCV8Mu4jo93s6NFy",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/biolink/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/desain-web-portfolio-pribadi-link-in.html",
@@ -777,7 +778,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 199.000",
     "priceUsd": "$15",
     "oldPriceUsd": "$29",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_1rNakvqCFhuzeVjpqRHGVEg8MnqIJEt5uUNjp3wNP8J",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/antrian/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/program-aplikasi-manajemen-antrian_3.html",
@@ -820,7 +821,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 159.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_VRqwJZZAG3ZbNaW0rRTVaTJkf6Ek3BTgU4p4M0ixPgQ",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/uikit/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/paket-desain-web-ui-kit-e-commerce-saas_2.html",
@@ -863,7 +864,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 139.000",
     "priceUsd": "$9",
     "oldPriceUsd": "$19",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_ZLlM0fHxXtygcFf7sKv8X3fnYFrRo6BcGwCnG3T9CZg",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/invoice/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/program-pembuat-invoice-penawaran-harga.html",
@@ -908,7 +909,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 169.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_wKSKcXH0LRfWIacG82TsDM8wyXLGQ9kdxg0D50qKDAr",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/booking/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/aplikasi-booking-jadwal-reservasi-jasa.html",
@@ -953,7 +954,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 189.000",
     "priceUsd": "$15",
     "oldPriceUsd": "$29",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_BdeXg3PE7hCWsPXe5dqW1xn0kF124WcMAFHP32U4CoS",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/laundry/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/source-code-aplikasi-kasir-laundry.html",
@@ -998,7 +999,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 149.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_44PHmlZPTtfThSutgMq4EtCHItKpWcGhcJLD81x5H89",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-news/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-newspro-v20.html",
@@ -1042,7 +1043,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 179.000",
     "priceUsd": "$12",
     "oldPriceUsd": "$25",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_w4QUnOE6lNeEh4jBjETTeczHI49cVvYhOxHYT3BYtw0",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-toko/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-tokoku-v3-toko.html",
@@ -1086,7 +1087,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 129.000",
     "priceUsd": "$9",
     "oldPriceUsd": "$19",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_15xI9cJ7vIVWY90rUlIhjQ4V9yqCRI0DCdDjp3I7vrN",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-portfolio/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-folio-portofolio.html",
@@ -1130,7 +1131,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 145.000",
     "priceUsd": "$10",
     "oldPriceUsd": "$22",
-    "usdPaymentUrl": "#checkout-usd",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_kkGrj135F5UQzt23gUsu1QJxqTqZNTpyEgA7X0iu1GH",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/blogger-docs/",
     "postUrl": "https://asetkode.blogspot.com/2026/11/template-blogger-ddev-docspro.html",
@@ -1839,7 +1840,7 @@ function addAllBundleToCart() {
       priceUsdNum: SITE_CONFIG.bundlePriceUsdNum || 49,
       stack: 'All-In-One Pack (Hemat 80%)',
       paymentUrl: SITE_CONFIG.mayarBundleUrl || '#checkout-mayar',
-      usdPaymentUrl: SITE_CONFIG.usdStoreUrl || '#checkout-usd'
+      usdPaymentUrl: SITE_CONFIG.polarBundleUrl || SITE_CONFIG.usdStoreUrl
     }
   ];
   saveCartToStorage();
@@ -1977,18 +1978,22 @@ function launchCheckoutGateway(order) {
   const isPlaceholder = !order.paymentUrl || order.paymentUrl.startsWith('#') || order.paymentUrl.includes('example.com');
   const isHttpPayLink = Boolean(order.paymentUrl && order.paymentUrl.startsWith('http') && !isPlaceholder);
 
-  if (isUsdMode && !isHttpPayLink) {
+  if (isUsdMode) {
     const subj = `International Order (${order.price} USD): ${order.title}`;
-    const body = `Hello ${SITE_CONFIG.brandName},\n\nI would like to purchase:\n- Product: ${order.title}\n- Total: ${order.price} USD\n\nPlease send a Visa/Mastercard/PayPal payment link so I can receive the .ZIP download. Thank you.`;
+    const body = `Hello ${SITE_CONFIG.brandName},\n\nI would like to purchase:\n- Product: ${order.title}\n- Total: ${order.price} USD\n\nPlease assist with checkout / .ZIP delivery. Thank you.`;
     const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
     const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+    const directPayHref = isHttpPayLink ? order.paymentUrl : (SITE_CONFIG.polarBundleUrl || gmailHref);
+    if (isHttpPayLink) {
+      try { window.open(order.paymentUrl, '_blank', 'noopener'); } catch (e) {}
+    }
     if (extLink) {
-      extLink.href = gmailHref;
-      extLink.textContent = 'Request USD Payment Link via Gmail ↗';
+      extLink.href = directPayHref;
+      extLink.textContent = isHttpPayLink ? 'Open Polar.sh Checkout ↗' : 'Request USD Payment Link via Gmail ↗';
     }
     if (iframe) {
       iframe.removeAttribute('src');
-      iframe.srcdoc = buildGlobalUsdCheckoutHTML({ ...order, gmailHref, mailHref });
+      iframe.srcdoc = buildGlobalUsdCheckoutHTML({ ...order, gmailHref, mailHref, directPayUrl: isHttpPayLink ? order.paymentUrl : '' });
     }
     if (modal) modal.classList.add('open');
     return;
@@ -2028,7 +2033,9 @@ function buildGlobalUsdCheckoutHTML(order) {
   const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}body{margin:0;padding:24px;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06);}.badge{display:inline-block;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px;}h2{margin:0 0 6px;font-size:19px;}.price{font-size:24px;font-weight:800;color:#059669;margin-bottom:12px;}.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}.pill{font-size:12px;font-weight:700;padding:4px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#334155;}.btn{display:block;text-align:center;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;}.btn-primary{background:linear-gradient(135deg,#4f46e5,#2563eb);color:#fff;}.btn-sec{background:#fff;color:#0f172a;border:1px solid #cbd5e1;}.note{font-size:12px;color:#64748b;line-height:1.5;background:#f1f5f9;padding:12px;border-radius:10px;}</style></head>
-  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div><a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a><div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
+  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div>${order.directPayUrl
+  ? `<a class="btn btn-primary" href="${esc(order.directPayUrl)}" target="_blank" rel="noopener">Proceed to Polar.sh Secure Checkout ↗</a><a class="btn btn-sec" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Need Invoice / Custom Help? Email Us</a>`
+  : `<a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a>`}<div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
 }
 
 function buildEmailOrderHTML(order) {
