@@ -18,8 +18,70 @@ const SITE_CONFIG = {
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
   readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24'],
   bundlePrice: 'Rp 249.000',
-  bundlePriceNum: 249000
+  bundlePriceNum: 249000,
+  bundlePriceUsd: '$49',
+  bundlePriceUsdNum: 49,
+  usdStoreUrl: '' // Opsional: Link toko Polar.sh / Payhip / Gumroad global Anda
 };
+
+const STORAGE_LOCALE_KEY = 'ddev_locale_v1';
+function detectInitialLocale() {
+  try {
+    const qp = new URLSearchParams(window.location.search).get('lang');
+    if (qp === 'en' || qp === 'id') {
+      localStorage.setItem(STORAGE_LOCALE_KEY, qp);
+      return qp;
+    }
+    const saved = localStorage.getItem(STORAGE_LOCALE_KEY);
+    if (saved === 'en' || saved === 'id') return saved;
+    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+    const isIndoTz = /^(Asia\/(Jakarta|Pontianak|Makassar|Ujung_Pandang|Jayapura|Bali))$/i.test(tz);
+    const navLang = (navigator.language || 'id').toLowerCase();
+    if (!isIndoTz && !navLang.startsWith('id') && !navLang.startsWith('ms')) return 'en';
+  } catch (e) {}
+  return 'id';
+}
+let currentLocale = detectInitialLocale();
+
+function parseUsdPriceNum(str) {
+  const m = String(str || '').replace(/,/g, '').match(/(\d+(?:\.\d+)?)/);
+  return m ? parseFloat(m[1]) : 0;
+}
+
+function formatUsd(num) {
+  const v = Number(num) || 0;
+  return Math.abs(v - Math.round(v)) < 0.005 ? ('$' + Math.round(v)) : ('$' + v.toFixed(2));
+}
+
+function idrToCleanUsdNum(idrNum) {
+  const n = Number(idrNum) || 0;
+  if (!n) return 0;
+  if (n <= 45000) return 7;
+  if (n <= 60000) return 9;
+  if (n <= 80000) return 12;
+  if (n <= 92000) return 14;
+  if (n <= 105000) return 15;
+  if (n <= 130000) return 19;
+  if (n <= 180000) return 25;
+  if (n <= 260000) return 49;
+  return Math.max(5, Math.round(n / 16000));
+}
+
+function getProdDisplay(p) {
+  const isEn = currentLocale === 'en';
+  const idrNum = parsePriceNum(p.price);
+  const usdNum = parseUsdPriceNum(p.priceUsd) || idrToCleanUsdNum(idrNum);
+  const oldUsdNum = parseUsdPriceNum(p.oldPriceUsd) || (usdNum ? Math.round(usdNum * 2) + 1 : 0);
+  return {
+    isEn,
+    title: (isEn && p.titleEn) ? p.titleEn : p.title,
+    summary: (isEn && p.summaryEn) ? p.summaryEn : p.summary,
+    price: isEn ? formatUsd(usdNum) : p.price,
+    oldPrice: isEn ? (oldUsdNum > usdNum ? formatUsd(oldUsdNum) : '') : (p.oldPrice || ''),
+    priceNum: isEn ? usdNum : idrNum,
+    usdNum
+  };
+}
 
 const BLOGGER_ORIGIN = SITE_CONFIG.bloggerOrigin;
 const STORAGE_CART_KEY = 'asetkode_pro_cart_v1';
@@ -55,7 +117,12 @@ const FALLBACK_PRODUCTS = [
       "Cetak Struk Thermal (58mm & 80mm) Otomatis (@media print) & Invoice Digital.",
       "Manajemen Stok Gudang, Peringatan Stok Menipis (Low Stock Alert), dan Kartu Mutasi Stok (IN/OUT/Opname).",
       "Multi Metode Pembayaran: Tunai, QRIS, Transfer Bank, dan Pencatatan Kasbon / Piutang Tempo."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$29",
+    "titleEn": "POS Cashier & Warehouse Inventory Web App (Live Excel .XLSX Sync)",
+    "summaryEn": "Zero-Config web Point of Sale (POS) and warehouse inventory app with two-way Excel (.xlsx) sync, barcode scanner support, 58mm/80mm thermal receipts, multi-payment modes, and ",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-2",
@@ -83,7 +150,12 @@ const FALLBACK_PRODUCTS = [
       "100% Responsive di layar Desktop, Tablet, dan Smartphone.",
       "Struktur kode HTML5 semantik yang rapi dan mudah diintegrasikan ke framework apa pun.",
       "Sudah dilengkapi optimasi Meta SEO & Schema Markup."
-    ]
+    ],
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "titleEn": "Modern SME & Cafe Responsive Landing Page Template (WhatsApp Order)",
+    "summaryEn": "Ready-to-deploy responsive landing page for cafes, restaurants, and local businesses with interactive menu filtering, direct WhatsApp order formatting, dark/light mode, and ze",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-3",
@@ -109,7 +181,12 @@ const FALLBACK_PRODUCTS = [
       "Ekspor hasil data langsung ke format Excel (.xlsx) rapi atau CSV.",
       "Kode modular dengan komentar penjelasan bahasa Indonesia di setiap fungsi.",
       "Dapat dijalankan otomatis secara terjadwal di Windows maupun Linux."
-    ]
+    ],
+    "priceUsd": "$15",
+    "oldPriceUsd": "$29",
+    "titleEn": "Python Automated Web Scraper & Excel / Google Sheets Exporter",
+    "summaryEn": "Modular Python 3.10+ automation script to scrape, clean, and export structured web data on schedule to Excel (.xlsx), CSV, or Google Sheets with auto-retry and User-Agent rota",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-4",
@@ -137,7 +214,12 @@ const FALLBACK_PRODUCTS = [
       "Manajemen produk, varian ukuran/warna, diskon voucher, dan stok otomatis.",
       "Dashboard Admin lengkap untuk memantau pesanan masuk dan laporan penjualan.",
       "Desain Mobile-First yang sangat nyaman diakses dari smartphone pembeli."
-    ]
+    ],
+    "priceUsd": "$25",
+    "oldPriceUsd": "$49",
+    "titleEn": "PHP 8 E-Commerce Store & Online Catalog Platform (MySQL PDO)",
+    "summaryEn": "Full PHP 8 & MySQL PDO e-commerce platform with multi-category product catalog, live cart, product variants, discount vouchers, admin order dashboard, and QRIS/global payment ",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-5",
@@ -165,7 +247,12 @@ const FALLBACK_PRODUCTS = [
       "Dark Mode & Light Mode otomatis tersimpan di localStorage.",
       "Sidebar navigasi lipat & responsif di layar Desktop, Tablet, maupun Smartphone.",
       "Tabel CRUD interaktif lengkap dengan pencarian, filter, pagination, tambah/edit, & ekspor CSV."
-    ]
+    ],
+    "priceUsd": "$14",
+    "oldPriceUsd": "$29",
+    "titleEn": "Modern Admin Dashboard & Analytics UI Kit (Dark & Light Mode)",
+    "summaryEn": "Multi-page SaaS & admin analytics dashboard template featuring interactive SVG charts, CRUD data tables, form components, printable invoices, auth screens, and Dark/Light them",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-6",
@@ -192,7 +279,12 @@ const FALLBACK_PRODUCTS = [
       "Mendukung pengiriman laporan otomatis (teks, tabel gambar, maupun file Excel/PDF).",
       "Menu tombol interaktif (Inline Keyboard) yang mudah dikustomisasi sesuai kebutuhan bisnis.",
       "Dilengkapi sistem pencatatan log aktivitas dan auto-reconnect saat koneksi terputus."
-    ]
+    ],
+    "priceUsd": "$19",
+    "oldPriceUsd": "$39",
+    "titleEn": "Telegram Auto-Responder Bot & Webhook Reporting System (Python)",
+    "summaryEn": "Python asyncio Telegram bot with custom regex auto-reply rules, inline keyboards, external webhook report receiver, and CSV activity export.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-7",
@@ -220,7 +312,12 @@ const FALLBACK_PRODUCTS = [
       "Kalkulator target tabungan & simulasi imbal hasil bulanan otomatis.",
       "Dukungan Dark Mode & Light Mode, ekspor CSV Excel, serta tombol bagikan ringkasan ke WhatsApp.",
       "Dilengkapi manifest PWA, file launcher .bat Desktop, & panduan pembungkusan WebView APK."
-    ]
+    ],
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "titleEn": "Personal Expense & Financial Budget Tracker Web App (Offline PWA)",
+    "summaryEn": "Offline-ready financial tracker & budget planner with 4 KPI cards, category spending donut chart, budget limits, savings goal calculator, and CSV export.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-8",
@@ -247,7 +344,12 @@ const FALLBACK_PRODUCTS = [
       "Fitur Batch Processing: convert puluhan file PDF sekaligus dalam satu folder.",
       "100% Offline & Privat: data dokumen Anda tidak pernah dikirim ke server pihak ketiga.",
       "Dilengkapi antarmuka GUI sederhana (Tkinter) tinggal klik tombol pilih file."
-    ]
+    ],
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "titleEn": "Python Batch PDF to Word / Excel Converter & OCR Extractor (CLI + GUI)",
+    "summaryEn": "Python tool to extract tables and text from native and scanned PDFs into formatted Word (.docx) or Excel (.xlsx) files with both CLI and Tkinter GUI modes.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-9",
@@ -275,7 +377,12 @@ const FALLBACK_PRODUCTS = [
       "Fitur Amplop Digital: Nomor rekening & scan QRIS dengan tombol 1-klik salin nomor.",
       "Form RSVP ucapan & konfirmasi kehadiran buku tamu.",
       "Integrasi Google Maps petunjuk arah lokasi acara."
-    ]
+    ],
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "titleEn": "Responsive Digital Wedding & Event Invitation Landing Page",
+    "summaryEn": "Elegant digital wedding invitation template with custom guest URL parameters, gallery, countdown timer, background audio player, and RSVP form.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-10",
@@ -303,7 +410,12 @@ const FALLBACK_PRODUCTS = [
       "Kirim notifikasi otomatis langsung ke akun Telegram pribadi atau grup tim.",
       "Template pesan notifikasi profesional yang rapi dan bisa dikustomisasi sesuka hati.",
       "Bisa berjalan 24/7 di VPS murah atau bahkan gratisan (Google Cloud Run / Railway)."
-    ]
+    ],
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "titleEn": "Telegram Billing Reminder & Due-Date Scheduler Bot (Python / CSV)",
+    "summaryEn": "Automated Python billing reminder bot that tracks due dates (H-3, H-0, overdue) from CSV or Google Sheets and pushes formatted alerts to Telegram.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-11",
@@ -331,7 +443,12 @@ const FALLBACK_PRODUCTS = [
       "Dashboard admin untuk melihat kehadiran harian dan grafik statistik bulanan.",
       "Ekspor rekapitulasi kehadiran seluruh karyawan/siswa ke format Excel (.xlsx).",
       "Manajemen data karyawan/siswa, divisi, dan jadwal kerja."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "QR Code Employee & Student Attendance System (PHP 8 + MySQL)",
+    "summaryEn": "PHP 8 PDO + MySQL attendance web app with browser camera QR scanning (BarcodeDetector + USB scanner), late threshold calculation, printable QR ID cards, and Excel/CSV export.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-12",
@@ -358,7 +475,12 @@ const FALLBACK_PRODUCTS = [
       "Webhook notification handler untuk verifikasi pembayaran otomatis dari server payment.",
       "Contoh kode bersih dan modular, mudah ditempel ke web toko online atau sistem Anda yang sudah ada.",
       "Termasuk mode Sandbox (testing) dan mode Production (live)."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "Payment Gateway Starter Kit for Midtrans & Mayar (PHP 8 + Webhook)",
+    "summaryEn": "Production-ready PHP integration starter kit for invoice creation, MySQL transaction logging, signature verification webhooks, and sandbox testing.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-13",
@@ -386,7 +508,12 @@ const FALLBACK_PRODUCTS = [
       "Manajemen data barang, harga beli, harga jual, dan stok otomatis berkurang saat terjual.",
       "Laporan omzet penjualan harian dan bulanan sederhana.",
       "Desain antarmuka bersih menggunakan Bootstrap 5, nyaman di layar laptop maupun tablet kasir."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "Mini POS Store Cashier & 58mm Thermal Receipt App (PHP 8 + MySQL)",
+    "summaryEn": "Lightweight PHP & MySQL point-of-sale application for retail shops with barcode product lookup, automatic stock deduction, daily sales reports, and 58mm thermal printing.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-14",
@@ -414,7 +541,12 @@ const FALLBACK_PRODUCTS = [
       "Desain Web Responsif 100% di Desktop, Tablet, dan Smartphone.",
       "Animasi Scroll Halus & Skor Performa Tinggi (Tanpa Framework Berat).",
       "Kode HTML5 & CSS Rapi Mudah Diganti Logo, Warna, dan Teks."
-    ]
+    ],
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "titleEn": "Modern Digital Agency & Company Profile HTML5 Template",
+    "summaryEn": "High-converting agency & company profile landing page with service tiers, portfolio showcase, testimonials, FAQ accordion, Dark/Light mode, and easy config.js setup.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-15",
@@ -441,7 +573,12 @@ const FALLBACK_PRODUCTS = [
       "Tombol Salin Email & Tautan Sosial Media 1-Klik.",
       "Mode Gelap & Terang Otomatis.",
       "Sangat Ringan (<100 KB) & Ramah SEO."
-    ]
+    ],
+    "priceUsd": "$7",
+    "oldPriceUsd": "$15",
+    "titleEn": "Creator Link-in-Bio & Mini Portfolio Web Template (Dark/Light)",
+    "summaryEn": "Self-hosted link-in-bio & creator portfolio card with bento stats, project showcase modals, service rate cards, .vcf contact download, and zero monthly fees.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-16",
@@ -469,7 +606,12 @@ const FALLBACK_PRODUCTS = [
       "Layar Monitor Antrian Fullscreen untuk TV/Monitor Ruang Tunggu.",
       "Dukungan Multi-Loket / Multi-Layanan & Reset Antrian Harian.",
       "Zero-Config: Langsung jalan di browser tanpa install server rumit."
-    ]
+    ],
+    "priceUsd": "$15",
+    "oldPriceUsd": "$29",
+    "titleEn": "Digital Queue & Counter Calling Web System with Voice Synth",
+    "summaryEn": "Zero-Config queue management app with Operator console, synced TV waiting-room display, ticket kiosk thermal print, Web Speech voice calling, and CSV logs.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-17",
@@ -497,12 +639,22 @@ const FALLBACK_PRODUCTS = [
       "Sudah Mendukung Dark Mode & Light Mode.",
       "Mudah Digabung ke Laravel, React, Vue, atau HTML Biasa.",
       "Struktur CSS Variabel Bersih untuk Ganti Warna Brand dalam Sekejap."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "42 Interactive E-Commerce & SaaS Web UI Components Kit",
+    "summaryEn": "42 responsive, copy-paste-ready UI components across 7 categories with CSS design tokens, 4 brand accent presets, Dark/Light mode, and 1-click HTML/CSS code copy.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-18",
     "title": "Program Pembuat Invoice, Penawaran Harga & Kwitansi Bisnis Pro (Cetak PDF & WhatsApp)",
-    "categories": ["Aplikasi", "Web App", "Source Code", "JavaScript"],
+    "categories": [
+      "Aplikasi",
+      "Web App",
+      "Source Code",
+      "JavaScript"
+    ],
     "price": "Rp 59.000",
     "oldPrice": "Rp 139.000",
     "paymentUrl": "#checkout-mayar",
@@ -519,12 +671,22 @@ const FALLBACK_PRODUCTS = [
       "3 Jenis Dokumen Sekaligus: Invoice, Penawaran Harga (Quotation), dan Kwitansi Resmi.",
       "Live Preview Kertas A4 Real-Time lengkap dengan stempel SVG LUNAS/BELUM LUNAS.",
       "Terbilang Bahasa Indonesia Otomatis & Hitung PPN 11% / PPh 23."
-    ]
+    ],
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "titleEn": "Pro Invoice, Quotation & Business Receipt Generator (A4 PDF Ready)",
+    "summaryEn": "Offline-first invoicing, quotation, and receipt generator with live A4 preview, automatic tax/discount math, SVG Paid stamps, 1-click quote-to-invoice conversion, and CSV expo",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-19",
     "title": "Aplikasi Booking Jadwal, Reservasi Jasa & Manajemen Janji Temu Pelanggan (Klinik / Salon / Bengkel)",
-    "categories": ["Aplikasi", "Web App", "Source Code", "JavaScript"],
+    "categories": [
+      "Aplikasi",
+      "Web App",
+      "Source Code",
+      "JavaScript"
+    ],
     "price": "Rp 79.000",
     "oldPrice": "Rp 169.000",
     "paymentUrl": "#checkout-mayar",
@@ -541,12 +703,22 @@ const FALLBACK_PRODUCTS = [
       "4 Preset Bidang Usaha 1-Klik: Klinik, Barbershop & Salon, Bengkel Servis, Studio Konsultan.",
       "Slot Jam Dinamis Anti Double-Booking per staf & tanggal.",
       "Tiket Booking Otomatis + Unduh Kalender (.ics) & Konfirmasi WhatsApp."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "Appointment Booking, Service Reservation & Schedule Manager App",
+    "summaryEn": "Client booking and appointment dashboard with 4 business presets, anti-double-booking per staff slot, .ICS calendar download, and receptionist analytics.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-20",
     "title": "Source Code Aplikasi Kasir Laundry Kiloan/Satuan & Pelacakan Status Order + Nota Thermal",
-    "categories": ["Aplikasi", "Program", "Web App", "Source Code"],
+    "categories": [
+      "Aplikasi",
+      "Program",
+      "Web App",
+      "Source Code"
+    ],
     "price": "Rp 85.000",
     "oldPrice": "Rp 189.000",
     "paymentUrl": "#checkout-mayar",
@@ -563,12 +735,22 @@ const FALLBACK_PRODUCTS = [
       "Kasir Order Kiloan desimal & Satuan dengan 8 paket layanan preset.",
       "Live Preview & Cetak Nota Thermal 58mm/80mm + Kode Pelacakan LDR-xxxx.",
       "Board Produksi 5 Tahap & Halaman Cek Status Pelanggan."
-    ]
+    ],
+    "priceUsd": "$15",
+    "oldPriceUsd": "$29",
+    "titleEn": "Laundry POS Cashier & 5-Stage Order Tracking + Thermal Receipt",
+    "summaryEn": "Dedicated laundry POS supporting weight (kg) & per-item orders, 5-stage production Kanban board, customer order tracker, 58/80mm thermal receipts, and CSV reports.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-21",
     "title": "Template Blogger Ddev NewsPro v2.0 — Portal Berita, Majalah & Media Digital Modern",
-    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "categories": [
+      "Template",
+      "Blogger",
+      "Desain Web",
+      "Source Code"
+    ],
     "price": "Rp 69.000",
     "oldPrice": "Rp 149.000",
     "paymentUrl": "#checkout-mayar",
@@ -585,12 +767,22 @@ const FALLBACK_PRODUCTS = [
       "Blogger XML Layouts v3 Asli dengan dukungan Theme Designer (<Group>/<Variable>).",
       "Breaking News Ticker & Related Posts Otomatis via JSON Feed Blogger.",
       "Single Post Pro: Estimasi Waktu Baca, Daftar Isi (#toc), Share WA/X, & Schema NewsArticle."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "Ddev NewsPro v2.0 — Editorial News & Magazine Blogger XML Theme",
+    "summaryEn": "Valid Blogger Layouts v3 XML theme built for news portals and online magazines featuring a breaking news ticker, 3-column editorial hero, auto TOC, Reader Mode, Dark Mode, and",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-22",
     "title": "Template Blogger Ddev TokoKu v3 — Toko Online, Katalog Produk & Checkout WhatsApp / Mayar",
-    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "categories": [
+      "Template",
+      "Blogger",
+      "Desain Web",
+      "Source Code"
+    ],
     "price": "Rp 79.000",
     "oldPrice": "Rp 179.000",
     "paymentUrl": "#checkout-mayar",
@@ -607,12 +799,22 @@ const FALLBACK_PRODUCTS = [
       "Parser Postingan Produk Pintar (harga, harga coret, stok, varian, link Mayar).",
       "Keranjang Belanja Slide-over Drawer + Mobile Sticky Cart Bar.",
       "Checkout Otomatis ke WhatsApp Admin / Pembayaran Instan Mayar."
-    ]
+    ],
+    "priceUsd": "$12",
+    "oldPriceUsd": "$25",
+    "titleEn": "Ddev TokoKu v3 — E-Commerce Catalog & Checkout Blogger XML Theme",
+    "summaryEn": "Turn Blogger into an online store with zero hosting cost: structured post price/variant parser, persistent cart drawer, automatic discount math, WhatsApp & global checkout sup",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-23",
     "title": "Template Blogger Ddev Folio — Portofolio, CV Kreatif & Personal Branding Minimalis",
-    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "categories": [
+      "Template",
+      "Blogger",
+      "Desain Web",
+      "Source Code"
+    ],
     "price": "Rp 55.000",
     "oldPrice": "Rp 129.000",
     "paymentUrl": "#checkout-mayar",
@@ -629,12 +831,22 @@ const FALLBACK_PRODUCTS = [
       "Desain Swiss Editorial + Filter Karya Dinamis per Label Blogger.",
       "Layout Studi Kasus Lengkap, Widget Pengalaman Kerja, & Paket Layanan.",
       "Preview Cetak CV (@media print), Salin Email 1-Klik, & Dark Mode."
-    ]
+    ],
+    "priceUsd": "$9",
+    "oldPriceUsd": "$19",
+    "titleEn": "Ddev Folio — Swiss Minimalist Portfolio & CV Blogger XML Theme",
+    "summaryEn": "Editorial Swiss-grid Blogger XML theme for designers, developers, and freelancers with label-based case studies, services & rates, printable CV layout, and Dark Mode.",
+    "usdPaymentUrl": "#checkout-usd"
   },
   {
     "id": "prod-24",
     "title": "Template Blogger Ddev DocsPro — Dokumentasi Teknis, Tutorial Kode & Blog Developer Pro",
-    "categories": ["Template", "Blogger", "Desain Web", "Source Code"],
+    "categories": [
+      "Template",
+      "Blogger",
+      "Desain Web",
+      "Source Code"
+    ],
     "price": "Rp 65.000",
     "oldPrice": "Rp 145.000",
     "paymentUrl": "#checkout-mayar",
@@ -651,7 +863,12 @@ const FALLBACK_PRODUCTS = [
       "Layout 3 Kolom: Collapsible Docs Sidebar, Konten Kode + Copy Button, Sticky TOC.",
       "Quick Search Modal (Ctrl+K) via JSON Feed Blogger dengan Navigasi Keyboard.",
       "Callout Info/Tip/Warn, Badge HTTP Method, Prev/Next Docs, & Dark Mode."
-    ]
+    ],
+    "priceUsd": "$10",
+    "oldPriceUsd": "$22",
+    "titleEn": "Ddev DocsPro — 3-Column Tech Docs & Developer Blog Blogger XML Theme",
+    "summaryEn": "Developer-grade 3-column Blogger XML theme featuring collapsible label sidebar, Ctrl+K JSON feed search, copy-code buttons, callout blocks, ScrollSpy TOC, and TechArticle Sche",
+    "usdPaymentUrl": "#checkout-usd"
   }
 ];
 let productsState = [...FALLBACK_PRODUCTS];
@@ -713,6 +930,11 @@ window.__asetkodeBloggerCallback = function (data) {
 
       const price = (metaEl && metaEl.getAttribute('data-price')) || 'Rp 99.000';
       const oldPrice = (metaEl && metaEl.getAttribute('data-old-price')) || '';
+      const priceUsd = (metaEl && metaEl.getAttribute('data-price-usd')) || '';
+      const oldPriceUsd = (metaEl && metaEl.getAttribute('data-old-price-usd')) || '';
+      const usdPaymentUrl = (metaEl && metaEl.getAttribute('data-usd-url')) || '#checkout-usd';
+      const explicitTitleEn = (metaEl && metaEl.getAttribute('data-title-en')) || '';
+      const fbMatch = FALLBACK_PRODUCTS.find((f) => f.title.toLowerCase() === title.toLowerCase() || (f.demoUrl && metaEl && (metaEl.getAttribute('data-demo-url') || '').includes(f.demoUrl)));
       const paymentUrl = (metaEl && metaEl.getAttribute('data-payment-url')) || postUrl;
       const demoUrl = (metaEl && metaEl.getAttribute('data-demo-url')) || postUrl;
       const version = (metaEl && metaEl.getAttribute('data-version')) || 'v1.0';
@@ -737,9 +959,13 @@ window.__asetkodeBloggerCallback = function (data) {
       return {
         id: 'blogger-prod-' + idx,
         title,
+        titleEn: explicitTitleEn || (fbMatch && fbMatch.titleEn) || '',
         categories: categories.length ? categories : ['Source Code'],
         price,
         oldPrice,
+        priceUsd: priceUsd || (fbMatch && fbMatch.priceUsd) || '',
+        oldPriceUsd: oldPriceUsd || (fbMatch && fbMatch.oldPriceUsd) || '',
+        usdPaymentUrl,
         paymentUrl,
         demoUrl,
         postUrl,
@@ -750,6 +976,7 @@ window.__asetkodeBloggerCallback = function (data) {
         demoType: inferDemoType(title, categories),
         thumbnailUrl: firstImg ? firstImg.src : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80',
         summary: summaryText,
+        summaryEn: (fbMatch && fbMatch.summaryEn) || '',
         features
       };
     });
@@ -829,6 +1056,7 @@ function renderProductsGrid() {
 
   grid.innerHTML = list
     .map((p) => {
+      const disp = getProdDisplay(p);
       const disc = getDiscountPercent(p.price, p.oldPrice);
       const inCart = cartState.some((c) => c.id === p.id);
       const hasRealDemo = Boolean(p.demoUrl && !p.demoUrl.startsWith('http'));
@@ -850,8 +1078,8 @@ function renderProductsGrid() {
           </div>
 
           <div class="card-thumb">
-            <img src="${p.thumbnailUrl}" alt="${p.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
-            ${disc > 0 ? `<span class="discount-pill">HEMAT ${disc}%</span>` : ''}
+            <img src="${p.thumbnailUrl}" alt="${disp.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
+            ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             ${hasRealDemo ? `<span class="live-app-pill">● Live App</span>` : ''}
             <div class="thumb-tags">
               ${p.categories
@@ -864,38 +1092,38 @@ function renderProductsGrid() {
                 Live Demo
               </button>
               <button type="button" class="overlay-btn" onclick="openDetailById('${p.id}')">
-                Detail &amp; Isi .ZIP
+                ${disp.isEn ? 'Details &amp; .ZIP' : 'Detail &amp; Isi .ZIP'}
               </button>
             </div>
           </div>
 
           <div class="card-body">
-            <h3 class="card-title" onclick="openDetailById('${p.id}')">${p.title}</h3>
-            <p class="card-desc">${p.summary}</p>
+            <h3 class="card-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
+            <p class="card-desc">${disp.summary}</p>
 
             <div class="stack-row">
               ${stackChips.map((st) => `<span class="stack-chip">${st}</span>`).join('')}
-              <span class="stack-chip">Auto-Download</span>
+              <span class="stack-chip">${disp.isEn ? 'Instant ZIP' : 'Auto-Download'}</span>
             </div>
 
             <div class="card-footer">
               <div class="price-row">
                 <div class="price-group">
-                  <span class="price-current">${p.price}</span>
-                  ${p.oldPrice ? `<span class="price-old">${p.oldPrice}</span>` : ''}
+                  <span class="price-current">${disp.price}</span>
+                  ${disp.oldPrice ? `<span class="price-old">${disp.oldPrice}</span>` : ''}
                 </div>
                 <span class="verified-pill">✓ Instant ZIP</span>
               </div>
 
               <div class="card-actions">
-                <button type="button" class="btn-card" onclick="openLiveDemoById('${p.id}')" title="Coba Simulasi Live Demo">
+                <button type="button" class="btn-card" onclick="openLiveDemoById('${p.id}')" title="${disp.isEn ? 'Launch Interactive Demo' : 'Coba Simulasi Live Demo'}">
                   Demo
                 </button>
-                <button type="button" class="btn-card" onclick="toggleCartItemById('${p.id}')" title="Masukkan ke Keranjang">
-                  ${inCart ? '✓ Keranjang' : '+ Keranjang'}
+                <button type="button" class="btn-card" onclick="toggleCartItemById('${p.id}')" title="${disp.isEn ? 'Add to Cart' : 'Masukkan ke Keranjang'}">
+                  ${inCart ? (disp.isEn ? '✓ In Cart' : '✓ Keranjang') : (disp.isEn ? '+ Cart' : '+ Keranjang')}
                 </button>
                 <button type="button" class="btn-card buy" onclick="openInstantCheckoutById('${p.id}')">
-                  Beli Instan
+                  ${disp.isEn ? 'Buy Now' : 'Beli Instan'}
                 </button>
               </div>
             </div>
@@ -1274,12 +1502,15 @@ window.toggleCartItemById = function (productId) {
     cartState.push({
       id: prod.id,
       title: prod.title,
+      titleEn: prod.titleEn || prod.title,
       price: prod.price,
       priceNum: parsePriceNum(prod.price),
+      priceUsdNum: parseUsdPriceNum(prod.priceUsd) || idrToCleanUsdNum(parsePriceNum(prod.price)),
       stack: prod.stack,
-      paymentUrl: prod.paymentUrl
+      paymentUrl: prod.paymentUrl,
+      usdPaymentUrl: prod.usdPaymentUrl || '#checkout-usd'
     });
-    showToast('Ditambahkan ke keranjang!');
+    showToast(currentLocale === 'en' ? 'Added to cart!' : 'Ditambahkan ke keranjang!');
     openCartDrawer();
   }
   saveCartToStorage();
@@ -1296,14 +1527,17 @@ function addAllBundleToCart() {
     {
       id: 'vip-bundle-all',
       title: 'VIP All-Access Developer Pass (Seluruh 24 Source Code & Template Lengkap)',
+      titleEn: 'VIP All-Access Developer Bundle (All 24 Apps, Templates & Source Codes)',
       price: SITE_CONFIG.bundlePrice,
       priceNum: SITE_CONFIG.bundlePriceNum,
+      priceUsdNum: SITE_CONFIG.bundlePriceUsdNum || 49,
       stack: 'All-In-One Pack (Hemat 80%)',
-      paymentUrl: SITE_CONFIG.mayarBundleUrl || '#checkout-mayar'
+      paymentUrl: SITE_CONFIG.mayarBundleUrl || '#checkout-mayar',
+      usdPaymentUrl: SITE_CONFIG.usdStoreUrl || '#checkout-usd'
     }
   ];
   saveCartToStorage();
-  showToast('Paket VIP All-Access masuk ke keranjang!');
+  showToast(currentLocale === 'en' ? 'VIP All-Access Bundle added!' : 'Paket VIP All-Access masuk ke keranjang!');
   openCartDrawer();
 }
 
@@ -1317,47 +1551,67 @@ function updateCartUI() {
   if (!listEl) return;
 
   if (cartState.length === 0) {
-    listEl.innerHTML = `
+    listEl.innerHTML = currentLocale === 'en'
+      ? `
+      <div style="text-align:center; padding:48px 16px; color:var(--text-secondary);">
+        <div style="font-weight:800; font-size:0.95rem; margin-bottom:4px; color:var(--text-primary);">Your Cart is Empty</div>
+        <p style="font-size:0.8rem;">Add at least 2 products to unlock an automatic <strong>20% Bundle Discount</strong>.</p>
+      </div>
+    `
+      : `
       <div style="text-align:center; padding:48px 16px; color:var(--text-secondary);">
         <div style="font-weight:800; font-size:0.95rem; margin-bottom:4px; color:var(--text-primary);">Keranjang Anda Masih Kosong</div>
         <p style="font-size:0.8rem;">Pilih minimal 2 source code untuk mendapatkan <strong>Diskon Bundling 20% Otomatis</strong>.</p>
       </div>
     `;
     if (hintEl) hintEl.textContent = '';
-    if (totalEl) totalEl.textContent = 'Rp 0';
+    if (totalEl) totalEl.textContent = currentLocale === 'en' ? '$0' : 'Rp 0';
     return;
   }
 
+  const isEn = currentLocale === 'en';
   listEl.innerHTML = cartState
     .map(
-      (item) => `
+      (item) => {
+        const unitUsd = item.priceUsdNum || idrToCleanUsdNum(item.priceNum);
+        const dispTitle = (isEn && item.titleEn) ? item.titleEn : item.title;
+        const dispPrice = isEn ? formatUsd(unitUsd) : item.price;
+        return `
       <div class="cart-item">
         <div>
-          <div class="cart-item-title">${item.title}</div>
+          <div class="cart-item-title">${dispTitle}</div>
           <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:4px;">${item.stack}</div>
-          <div class="cart-item-price">${item.price}</div>
+          <div class="cart-item-price">${dispPrice}</div>
         </div>
-        <button type="button" class="close-x" onclick="removeCartItemById('${item.id}')" title="Hapus">×</button>
+        <button type="button" class="close-x" onclick="removeCartItemById('${item.id}')" title="${isEn ? 'Remove' : 'Hapus'}">×</button>
       </div>
-    `
+    `;
+      }
     )
     .join('');
 
-  const rawTotal = cartState.reduce((acc, item) => acc + (item.priceNum || 0), 0);
+  const rawTotal = cartState.reduce((acc, item) => acc + (isEn ? (item.priceUsdNum || idrToCleanUsdNum(item.priceNum)) : (item.priceNum || 0)), 0);
   const hasBundleDiscount = cartState.length >= 2 && !cartState.some((i) => i.id === 'vip-bundle-all');
-  const finalTotal = hasBundleDiscount ? Math.round(rawTotal * 0.8) : rawTotal;
+  const finalTotal = hasBundleDiscount ? (isEn ? Math.round(rawTotal * 0.8 * 100) / 100 : Math.round(rawTotal * 0.8)) : rawTotal;
+  const fmtTotal = isEn ? formatUsd : formatRupiah;
 
   if (hintEl) {
     if (hasBundleDiscount) {
-      hintEl.textContent = `✓ Diskon Bundling 20% Aktif (Hemat ${formatRupiah(rawTotal - finalTotal)})`;
+      hintEl.textContent = isEn
+        ? `✓ 20% Bundle Discount Active (Save ${fmtTotal(rawTotal - finalTotal)})`
+        : `✓ Diskon Bundling 20% Aktif (Hemat ${fmtTotal(rawTotal - finalTotal)})`;
     } else if (cartState.some((i) => i.id === 'vip-bundle-all')) {
-      hintEl.textContent = '✓ Paket VIP All-Access Aktif (Hemat Rp 455.000 dari harga satuan)';
+      hintEl.textContent = isEn
+        ? '✓ VIP All-Access Bundle Active (Save $200+ off individual prices)'
+        : '✓ Paket VIP All-Access Aktif (Hemat Rp 455.000 dari harga satuan)';
     } else {
-      hintEl.textContent = 'Tips: Tambah 1 produk lagi untuk ekstra diskon bundling 20% otomatis.';
+      hintEl.textContent = isEn
+        ? 'Tip: Add 1 more product to unlock an automatic 20% bundle discount.'
+        : 'Tips: Tambah 1 produk lagi untuk ekstra diskon bundling 20% otomatis.';
     }
   }
 
-  if (totalEl) totalEl.textContent = formatRupiah(finalTotal);
+  if (totalEl) totalEl.textContent = fmtTotal(finalTotal);
 }
 
 function openCartDrawer() {
@@ -1369,11 +1623,13 @@ function openCartDrawer() {
 window.openInstantCheckoutById = function (productId) {
   const prod = productsState.find((p) => p.id === productId);
   if (!prod) return;
+  const disp = getProdDisplay(prod);
   launchCheckoutGateway({
-    title: prod.title,
-    price: prod.price,
-    paymentUrl: prod.paymentUrl,
-    stack: prod.stack
+    title: disp.title,
+    price: disp.price,
+    paymentUrl: disp.isEn ? (prod.usdPaymentUrl || SITE_CONFIG.usdStoreUrl || '#checkout-usd') : prod.paymentUrl,
+    stack: prod.stack,
+    isUsd: disp.isEn
   });
 };
 
@@ -1408,11 +1664,30 @@ function launchCheckoutGateway(order) {
   const iframe = document.getElementById('checkoutIframe');
   const extLink = document.getElementById('checkoutExternalLink');
 
-  if (titleEl) titleEl.textContent = `Pemesanan: ${order.title}`;
-  if (priceEl) priceEl.textContent = order.price;
+  const isUsdMode = Boolean(order.isUsd || currentLocale === 'en');
+  if (titleEl) titleEl.textContent = (isUsdMode ? 'Order: ' : 'Pemesanan: ') + order.title;
+  if (priceEl) priceEl.textContent = isUsdMode && !String(order.price).includes('USD') ? `${order.price} USD` : order.price;
 
   const isPlaceholder = !order.paymentUrl || order.paymentUrl.startsWith('#') || order.paymentUrl.includes('example.com');
   const isHttpPayLink = Boolean(order.paymentUrl && order.paymentUrl.startsWith('http') && !isPlaceholder);
+
+  if (isUsdMode && !isHttpPayLink) {
+    const subj = `International Order (${order.price} USD): ${order.title}`;
+    const body = `Hello ${SITE_CONFIG.brandName},\n\nI would like to purchase:\n- Product: ${order.title}\n- Total: ${order.price} USD\n\nPlease send a Visa/Mastercard/PayPal payment link so I can receive the .ZIP download. Thank you.`;
+    const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+    const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+    if (extLink) {
+      extLink.href = gmailHref;
+      extLink.textContent = 'Request USD Payment Link via Gmail ↗';
+    }
+    if (iframe) {
+      iframe.removeAttribute('src');
+      iframe.srcdoc = buildGlobalUsdCheckoutHTML({ ...order, gmailHref, mailHref });
+    }
+    if (modal) modal.classList.add('open');
+    return;
+  }
+
   const forceEmailMode = SITE_CONFIG.paymentMode === 'email' && !isHttpPayLink;
   const effectiveUrl =
     forceEmailMode
@@ -1441,6 +1716,13 @@ function launchCheckoutGateway(order) {
   }
 
   if (modal) modal.classList.add('open');
+}
+
+function buildGlobalUsdCheckoutHTML(order) {
+  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}body{margin:0;padding:24px;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06);}.badge{display:inline-block;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px;}h2{margin:0 0 6px;font-size:19px;}.price{font-size:24px;font-weight:800;color:#059669;margin-bottom:12px;}.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}.pill{font-size:12px;font-weight:700;padding:4px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#334155;}.btn{display:block;text-align:center;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;}.btn-primary{background:linear-gradient(135deg,#4f46e5,#2563eb);color:#fff;}.btn-sec{background:#fff;color:#0f172a;border:1px solid #cbd5e1;}.note{font-size:12px;color:#64748b;line-height:1.5;background:#f1f5f9;padding:12px;border-radius:10px;}</style></head>
+  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span><span class="pill">Polar.sh</span></div><a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request Instant USD Checkout Link (Gmail) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a><div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
 }
 
 function buildEmailOrderHTML(order) {
@@ -1733,14 +2015,75 @@ window.openLegalModal = function (type) {
   modal.classList.add('open');
 };
 
+function applyStorefrontLocaleUI() {
+  const isEn = currentLocale === 'en';
+  document.documentElement.lang = isEn ? 'en' : 'id';
+  const flagEl = document.getElementById('langCurrencyFlag');
+  const lblEl = document.getElementById('langCurrencyLabel');
+  if (flagEl) flagEl.textContent = isEn ? '🇺🇸' : '🇮🇩';
+  if (lblEl) lblEl.textContent = isEn ? 'USD' : 'IDR';
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.placeholder = isEn ? 'Search POS apps, Blogger XML themes, PHP, Python...' : 'Cari aplikasi kasir, laravel, python, landing page...';
+
+  const navLinks = document.querySelectorAll('.nav-menu a');
+  if (navLinks[0]) navLinks[0].textContent = isEn ? 'Catalog' : 'Katalog';
+  if (navLinks[1]) navLinks[1].textContent = isEn ? 'Bundle' : 'Bundling';
+  if (navLinks[2]) navLinks[2].textContent = isEn ? 'How to Buy' : 'Cara Order';
+
+  const cartSpan = document.querySelector('#openCartBtn span:not(.cart-count-pill)');
+  if (cartSpan) cartSpan.textContent = isEn ? 'Cart' : 'Keranjang';
+
+  const heroTitle = document.querySelector('.hero-title');
+  if (heroTitle) {
+    if (!heroTitle.dataset.idHtml) heroTitle.dataset.idHtml = heroTitle.innerHTML;
+    heroTitle.innerHTML = isEn
+      ? 'Launch Projects &amp; Businesses 10x Faster with <span class="gradient-text">Production Code</span>'
+      : heroTitle.dataset.idHtml;
+  }
+  const heroDesc = document.querySelector('.hero-desc');
+  if (heroDesc) {
+    if (!heroDesc.dataset.idHtml) heroDesc.dataset.idHtml = heroDesc.innerHTML;
+    heroDesc.innerHTML = isEn
+      ? 'Explore ready-to-launch web apps, Python automation scripts, Blogger XML themes &amp; modern UI kits. Test the <strong>Interactive Live Demo</strong> right in your browser before purchasing, and get the complete open-source <code>.ZIP</code> package.'
+      : heroDesc.dataset.idHtml;
+  }
+  const heroCtas = document.querySelectorAll('.hero-cta-row a');
+  if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Explore Catalog & Live Demo →' : 'Eksplor Katalog & Live Demo →';
+  if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'All-In-One Pack ($49 USD • Save 80%)' : 'All-In-One Pack (Hemat 65%)';
+
+  const bundlePriceEl = document.querySelector('#bundleDeal .bundle-price, [data-bundle-price]');
+  if (bundlePriceEl) bundlePriceEl.textContent = isEn ? SITE_CONFIG.bundlePriceUsd : SITE_CONFIG.bundlePrice;
+
+  const filterAll = document.querySelector('#filterBar .filter-chip[data-cat="all"]');
+  if (filterAll) filterAll.textContent = isEn ? 'All Products' : 'Semua Karya';
+  const filterTemplate = document.querySelector('#filterBar .filter-chip[data-cat="Template"]');
+  if (filterTemplate) filterTemplate.textContent = isEn ? 'Templates / UI' : 'Template / UI';
+
+  const checkoutCartBtn = document.getElementById('checkoutCartBtn');
+  if (checkoutCartBtn) checkoutCartBtn.textContent = isEn ? '⚡ Global Checkout (USD / Card / PayPal)' : '⚡ Checkout Sekarang (Mayar / QRIS)';
+
+  renderProductsGrid();
+  updateCartUI();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   applySiteBranding();
   initThemeToggle();
   initHeroStudioAndROI();
   initFaqAccordion();
   loadCartFromStorage();
-  renderProductsGrid();
+  applyStorefrontLocaleUI();
   syncFromBloggerCloud();
+
+  const langBtn = document.getElementById('langCurrencyBtn');
+  if (langBtn) {
+    langBtn.addEventListener('click', () => {
+      currentLocale = currentLocale === 'id' ? 'en' : 'id';
+      try { localStorage.setItem(STORAGE_LOCALE_KEY, currentLocale); } catch (e) {}
+      applyStorefrontLocaleUI();
+    });
+  }
 
   document.querySelectorAll('#filterBar .filter-chip').forEach((chip) => {
     chip.addEventListener('click', () => {
@@ -1793,19 +2136,27 @@ document.addEventListener('DOMContentLoaded', () => {
   if (checkoutCartBtn) {
     checkoutCartBtn.addEventListener('click', () => {
       if (!cartState.length) return;
+      const isEn = currentLocale === 'en';
       const totalStr = document.getElementById('cartTotalPrice').textContent;
-      const titles = cartState.map((c) => `${c.title} (${c.price})`).join(', ');
+      const titles = cartState.map((c) => {
+        const t = isEn ? (c.titleEn || c.title) : c.title;
+        const p = isEn ? formatUsd(c.priceUsdNum || idrToCleanUsdNum(c.priceNum)) : c.price;
+        return `${t} (${p})`;
+      }).join(', ');
+      const singleTitle = isEn ? (cartState[0].titleEn || cartState[0].title) : cartState[0].title;
       const orderTitle =
-        cartState.length === 1 ? cartState[0].title : `Paket Bundling (${cartState.length} Produk)`;
+        cartState.length === 1
+          ? singleTitle
+          : (isEn ? `Bundle (${cartState.length} Products)` : `Paket Bundling (${cartState.length} Produk)`);
       closeModal('cartBackdrop');
       launchCheckoutGateway({
         title: orderTitle,
         price: totalStr,
-        paymentUrl:
-          cartState.length === 1
-            ? cartState[0].paymentUrl
-            : buildOrderMailtoUrl(orderTitle, totalStr, titles),
-        stack: titles
+        paymentUrl: isEn
+          ? (cartState.length === 1 ? (cartState[0].usdPaymentUrl || SITE_CONFIG.usdStoreUrl || '#checkout-usd') : (SITE_CONFIG.usdStoreUrl || '#checkout-usd'))
+          : (cartState.length === 1 ? cartState[0].paymentUrl : '#checkout-mayar'),
+        stack: titles,
+        isUsd: isEn
       });
     });
   }
