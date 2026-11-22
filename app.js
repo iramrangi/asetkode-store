@@ -1233,10 +1233,12 @@ const FALLBACK_PRODUCTS = [
   }
 ];
 
+const CATALOG_PAGE_SIZE = 20;
 let productsState = [...FALLBACK_PRODUCTS];
 let activeCategory = 'all';
 let searchQuery = '';
 let sortMode = 'newest';
+let currentCatalogPage = 1;
 let cartState = [];
 let currentDemoProduct = null;
 
@@ -1431,10 +1433,17 @@ function renderProductsGrid() {
         <button type="button" class="btn btn-primary" onclick="resetCatalogFilter()">${isEnEmpty ? 'Show All Products' : 'Tampilkan Semua Karya'}</button>
       </div>
     `;
+    renderCatalogPagination(0, 1, 0, 0);
     return;
   }
 
-  grid.innerHTML = list
+  const totalItems = list.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / CATALOG_PAGE_SIZE));
+  currentCatalogPage = Math.min(Math.max(1, currentCatalogPage), totalPages);
+  const startIdx = (currentCatalogPage - 1) * CATALOG_PAGE_SIZE;
+  const pagedList = list.slice(startIdx, startIdx + CATALOG_PAGE_SIZE);
+
+  grid.innerHTML = pagedList
     .map((p) => {
       const disp = getProdDisplay(p);
       const disc = getDiscountPercent(p.price, p.oldPrice);
@@ -1504,11 +1513,56 @@ function renderProductsGrid() {
       `;
     })
     .join('');
+  renderCatalogPagination(totalItems, totalPages, startIdx, pagedList.length);
 }
+
+function renderCatalogPagination(totalItems, totalPages, startIdx, pageCount) {
+  let pagEl = document.getElementById('catalogPagination');
+  if (!pagEl) {
+    const grid = document.getElementById('productGrid');
+    if (!grid || !grid.parentNode) return;
+    pagEl = document.createElement('div');
+    pagEl.id = 'catalogPagination';
+    pagEl.className = 'catalog-pagination';
+    grid.parentNode.insertBefore(pagEl, grid.nextSibling);
+  }
+  if (!totalItems || totalPages <= 1) {
+    pagEl.style.display = 'none';
+    pagEl.innerHTML = '';
+    return;
+  }
+  pagEl.style.display = 'flex';
+  const isEn = currentLocale === 'en';
+  const fromNum = startIdx + 1;
+  const toNum = startIdx + pageCount;
+  const infoText = isEn
+    ? `Showing ${fromNum}–${toNum} of ${totalItems} products (Page ${currentCatalogPage} of ${totalPages})`
+    : `Menampilkan ${fromNum}–${toNum} dari ${totalItems} produk (Halaman ${currentCatalogPage} dari ${totalPages})`;
+  const pageButtons = Array.from({ length: totalPages }, (_, idx) => {
+    const pNum = idx + 1;
+    return `<button type="button" class="page-btn ${pNum === currentCatalogPage ? 'active' : ''}" onclick="goToCatalogPage(${pNum})">${pNum}</button>`;
+  }).join('');
+  pagEl.innerHTML = `
+    <div class="catalog-page-info">${infoText}</div>
+    <div class="catalog-page-controls">
+      <button type="button" class="page-btn" ${currentCatalogPage <= 1 ? 'disabled' : ''} onclick="goToCatalogPage(${currentCatalogPage - 1})">${isEn ? '← Previous' : '← Sebelumnya'}</button>
+      ${pageButtons}
+      <button type="button" class="page-btn next-cta" ${currentCatalogPage >= totalPages ? 'disabled' : ''} onclick="goToCatalogPage(${currentCatalogPage + 1})">${isEn ? 'View Next Page →' : 'Lihat Halaman Selanjutnya →'}</button>
+    </div>
+  `;
+}
+
+window.goToCatalogPage = function (pageNum) {
+  currentCatalogPage = Math.max(1, Number(pageNum) || 1);
+  renderProductsGrid();
+  const kat = document.getElementById('katalog');
+  if (kat) kat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 window.resetCatalogFilter = function () {
   activeCategory = 'all';
   searchQuery = '';
+  currentCatalogPage = 1;
   const searchInput = document.getElementById('searchInput');
   if (searchInput) searchInput.value = '';
   document.querySelectorAll('#filterBar .filter-chip').forEach((btn) => {
@@ -3323,6 +3377,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('#filterBar .filter-chip').forEach((c) => c.classList.remove('active'));
       chip.classList.add('active');
       activeCategory = chip.getAttribute('data-cat') || 'all';
+      currentCatalogPage = 1;
       renderProductsGrid();
     });
   });
@@ -3331,6 +3386,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       searchQuery = e.target.value || '';
+      currentCatalogPage = 1;
       renderProductsGrid();
     });
   }
@@ -3339,6 +3395,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (sortSelect) {
     sortSelect.addEventListener('change', (e) => {
       sortMode = e.target.value || 'newest';
+      currentCatalogPage = 1;
       renderProductsGrid();
     });
   }
