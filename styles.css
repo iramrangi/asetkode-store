@@ -151,7 +151,7 @@ button, input, select {
   align-items: center;
   justify-content: space-between;
   height: 70px;
-  gap: 16px;
+  gap: 14px;
 }
 
 .brand {
@@ -159,13 +159,16 @@ button, input, select {
   align-items: center;
   gap: 10px;
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   letter-spacing: -0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand-mark {
   width: 36px;
   height: 36px;
+  flex-shrink: 0;
   border-radius: 9px;
   background: var(--accent);
   color: var(--accent-fg);
@@ -178,6 +181,8 @@ button, input, select {
 }
 
 .brand-badge {
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 0.65rem;
   font-family: var(--font-mono);
   font-weight: 700;
@@ -191,19 +196,21 @@ button, input, select {
 }
 
 .nav-search-wrap {
-  flex: 0 1 280px;
-  max-width: 280px;
+  flex: 1 1 220px;
+  min-width: 170px;
+  max-width: 300px;
   position: relative;
 }
 
 .nav-search-input {
   width: 100%;
-  padding: 9px 16px 9px 38px;
+  padding: 9px 14px 9px 36px;
   border-radius: 999px;
   border: 1px solid var(--border-color);
   background: var(--bg-elevated);
   color: var(--text-primary);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
   outline: none;
   transition: all 0.2s ease;
 }
@@ -227,11 +234,16 @@ button, input, select {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 20px;
-  font-size: 0.86rem;
+  flex-shrink: 0;
+  gap: 16px;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
   margin-left: auto;
+}
+
+.nav-menu a {
+  white-space: nowrap;
 }
 
 .nav-menu a:hover {
@@ -241,6 +253,8 @@ button, input, select {
 .nav-actions {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
   gap: 8px;
 }
 
@@ -253,6 +267,8 @@ button, input, select {
   color: var(--text-primary);
   font-size: 0.82rem;
   font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -1243,12 +1259,28 @@ html[data-theme="dark"] .price-current {
   color: var(--text-secondary);
 }
 
+@media (max-width: 1180px) {
+  .brand-badge {
+    display: none;
+  }
+  .nav-menu {
+    gap: 12px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 1040px) {
+  .nav-menu {
+    display: none;
+  }
+  .nav-search-wrap {
+    max-width: 460px;
+  }
+}
+
 @media (max-width: 960px) {
   .hero-grid {
     grid-template-columns: 1fr;
-  }
-  .nav-menu {
-    display: none;
   }
 }
 

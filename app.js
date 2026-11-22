@@ -2574,7 +2574,7 @@ function applyStorefrontLocaleUI() {
   );
 
   const searchInput = document.getElementById('searchInput');
-  if (searchInput) searchInput.placeholder = isEn ? 'Search POS apps, Blogger XML themes, PHP, Python...' : 'Cari aplikasi kasir, laravel, python, landing page...';
+  if (searchInput) searchInput.placeholder = isEn ? 'Search POS, travel, PHP, Python...' : 'Cari kasir, travel, python...';
 
   const navLinks = document.querySelectorAll('.nav-menu a');
   if (navLinks[0]) navLinks[0].textContent = isEn ? 'Catalog' : 'Katalog';
