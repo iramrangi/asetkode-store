@@ -1704,15 +1704,10 @@ window.goToCatalogPage = function (pageNum) {
 };
 
 const FEATURED_CAROUSEL_IDS = ['prod-25', 'prod-1', 'prod-4', 'prod-19', 'prod-18', 'prod-20', 'prod-16', 'prod-24', 'prod-6', 'prod-3'];
-function renderFeaturedCarousel() {
-  const track = document.getElementById('featuredCarouselTrack');
-  if (!track) return;
-  const isEn = currentLocale === 'en';
-  const pill = document.getElementById('carouselPill');
-  const heading = document.getElementById('carouselHeading');
-  if (pill) pill.textContent = isEn ? 'FEATURED SHOWCASE' : 'SOROTAN PRODUK';
-  if (heading) heading.textContent = isEn ? 'Featured & Newest Products' : 'Produk Unggulan & Terbaru';
+let spotlightPicks = [];
+let spotlightActiveIdx = 0;
 
+function getSpotlightPicks() {
   const picks = [];
   FEATURED_CAROUSEL_IDS.forEach((id) => {
     const found = productsState.find((p) => p.id === id);
@@ -1721,113 +1716,127 @@ function renderFeaturedCarousel() {
   productsState.forEach((p) => {
     if (picks.length < 10 && !picks.some((x) => x.id === p.id)) picks.push(p);
   });
-
-  track.innerHTML = picks.map((p, idx) => {
-    const disp = getProdDisplay(p);
-    const cat = localizeCategoryTag((p.categories && p.categories[0]) || 'Web App', disp.isEn);
-    const disc = getDiscountPercent(p.price, p.oldPrice);
-    const stackText = String(p.stack || '')
-      .split('+')
-      .map((s) => s.trim())
-      .filter(Boolean)
-      .slice(0, 2)
-      .join(' • ') || 'HTML5 • JS';
-
-    let rankClass = '';
-    let rankLabel = `#${String(idx + 1).padStart(2, '0')}`;
-    if (idx === 0) {
-      rankClass = 'is-new';
-      rankLabel = disp.isEn ? 'NEW' : 'BARU';
-    } else if (idx <= 2) {
-      rankClass = 'is-hot';
-      rankLabel = disp.isEn ? 'TOP PICK' : 'UNGGULAN';
-    }
-
-    return `
-      <article class="c-card">
-        <div class="c-thumb" onclick="openDetailById('${p.id}')">
-          <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" loading="lazy" />
-          <span class="c-rank ${rankClass}">${rankLabel}</span>
-          ${disc > 0 ? `<span class="c-disc">-${disc}%</span>` : ''}
-          <span class="c-tag">${cat}</span>
-        </div>
-        <div class="c-body">
-          <div class="c-stack">${stackText}</div>
-          <h3 class="c-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
-          <div class="c-foot">
-            <div class="c-price-wrap">
-              ${disp.oldPrice ? `<span class="c-old-price">${disp.oldPrice}</span>` : ''}
-              <span class="c-price">${disp.price}</span>
-            </div>
-            <div class="c-btns">
-              <button type="button" class="c-btn" onclick="openLiveDemoById('${p.id}')">Demo</button>
-              <button type="button" class="c-btn buy" onclick="openInstantCheckoutById('${p.id}')">${disp.isEn ? 'Buy' : 'Beli'}</button>
-            </div>
-          </div>
-        </div>
-      </article>
-    `;
-  }).join('');
-  updateFeaturedCarouselUI();
+  return picks;
 }
 
-function updateFeaturedCarouselUI() {
-  const track = document.getElementById('featuredCarouselTrack');
-  const counter = document.getElementById('carouselCounter');
-  const bar = document.getElementById('carouselProgressBar');
-  if (!track) return;
-  const total = track.children.length || 10;
-  const stepWidth = window.innerWidth <= 640 ? 264 : 292;
-  const maxScroll = Math.max(1, track.scrollWidth - track.clientWidth);
-  const ratio = Math.min(1, Math.max(0, track.scrollLeft / maxScroll));
-  const currentIdx = Math.min(total, Math.max(1, Math.round(track.scrollLeft / stepWidth) + 1));
-  if (counter) {
-    counter.textContent = `${String(currentIdx).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+function renderSpotlightSlide(animate = false) {
+  const slideEl = document.getElementById('spotlightSlide');
+  const dotsEl = document.getElementById('spotlightDots');
+  const counterEl = document.getElementById('carouselCounter');
+  if (!slideEl || !spotlightPicks.length) return;
+
+  const total = spotlightPicks.length;
+  spotlightActiveIdx = ((spotlightActiveIdx % total) + total) % total;
+  const p = spotlightPicks[spotlightActiveIdx];
+  const disp = getProdDisplay(p);
+  const cat = localizeCategoryTag((p.categories && p.categories[0]) || 'Web App', disp.isEn);
+  const disc = getDiscountPercent(p.price, p.oldPrice);
+  const stackText = String(p.stack || '')
+    .split('+')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(' • ') || 'HTML5 • JS';
+
+  const isNew = spotlightActiveIdx === 0;
+  const tagLabel = isNew
+    ? (disp.isEn ? 'NEW RELEASE' : 'RILIS TERBARU')
+    : spotlightActiveIdx <= 2
+      ? (disp.isEn ? 'BEST SELLER' : 'PRODUK UNGGULAN')
+      : (disp.isEn ? `SPOTLIGHT #${spotlightActiveIdx + 1}` : `SOROTAN #${spotlightActiveIdx + 1}`);
+
+  slideEl.classList.remove('is-animating');
+  if (animate) void slideEl.offsetWidth;
+
+  slideEl.innerHTML = `
+    <div class="spotlight-media" onclick="openLiveDemoById('${p.id}')">
+      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" />
+      <span class="spotlight-media-badge">${cat}</span>
+    </div>
+    <div class="spotlight-content">
+      <div class="spotlight-eyebrow">
+        <span class="spotlight-pill ${isNew ? 'is-new' : ''}">${tagLabel}</span>
+        <span class="spotlight-stack">${stackText}</span>
+      </div>
+      <h3 class="spotlight-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
+      <p class="spotlight-desc">${disp.summary}</p>
+      <div class="spotlight-metrics">
+        <div>
+          <div class="spotlight-metric-val is-price">
+            <span>${disp.price}</span>
+            ${disp.oldPrice ? `<span class="spotlight-old-price">${disp.oldPrice}</span>` : ''}
+          </div>
+          <div class="spotlight-metric-lbl">${disc > 0 ? (disp.isEn ? `One-Time License • Save ${disc}%` : `Sekali Bayar • Hemat ${disc}%`) : (disp.isEn ? 'One-Time Commercial License' : 'Lisensi Sekali Bayar Selamanya')}</div>
+        </div>
+        <div>
+          <div class="spotlight-metric-val">100% Open Code</div>
+          <div class="spotlight-metric-lbl">${disp.isEn ? 'Full .ZIP + Interactive Demo' : 'File .ZIP Lengkap & Live Demo'}</div>
+        </div>
+      </div>
+      <div class="spotlight-actions">
+        <button type="button" class="spotlight-btn-demo" onclick="openLiveDemoById('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          <span>${disp.isEn ? 'Preview Live Demo' : 'Preview Live Demo'}</span>
+        </button>
+        <button type="button" class="spotlight-btn-buy" onclick="openInstantCheckoutById('${p.id}')">
+          ${disp.isEn ? `Buy Source Code` : `Beli Source Code`}
+        </button>
+      </div>
+    </div>
+  `;
+
+  if (animate) slideEl.classList.add('is-animating');
+
+  if (counterEl) {
+    counterEl.textContent = `${String(spotlightActiveIdx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
   }
-  if (bar) {
-    const pct = Math.round(28 + ratio * 72);
-    bar.style.width = `${pct}%`;
+
+  if (dotsEl) {
+    dotsEl.innerHTML = spotlightPicks
+      .map((item, idx) => {
+        const itemDisp = getProdDisplay(item);
+        return `<button type="button" class="s-dot ${idx === spotlightActiveIdx ? 'active' : ''}" data-idx="${idx}" aria-label="${itemDisp.title}" aria-selected="${idx === spotlightActiveIdx ? 'true' : 'false'}"></button>`;
+      })
+      .join('');
+    dotsEl.querySelectorAll('.s-dot').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        spotlightActiveIdx = Number(btn.getAttribute('data-idx')) || 0;
+        renderSpotlightSlide(true);
+      });
+    });
   }
+}
+
+function renderFeaturedCarousel() {
+  spotlightPicks = getSpotlightPicks();
+  renderSpotlightSlide(false);
 }
 
 function initFeaturedCarouselControls() {
-  const track = document.getElementById('featuredCarouselTrack');
+  const section = document.getElementById('featuredCarouselSection');
   const prev = document.getElementById('carouselPrevBtn');
   const next = document.getElementById('carouselNextBtn');
-  if (!track) return;
+  if (!section) return;
 
-  const step = () => (window.innerWidth <= 640 ? 264 : 292);
   if (prev) prev.addEventListener('click', () => {
-    if (track.scrollLeft <= 6) {
-      track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: -step(), behavior: 'smooth' });
-    }
+    spotlightActiveIdx -= 1;
+    renderSpotlightSlide(true);
   });
   if (next) next.addEventListener('click', () => {
-    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: step(), behavior: 'smooth' });
-    }
+    spotlightActiveIdx += 1;
+    renderSpotlightSlide(true);
   });
 
-  track.addEventListener('scroll', updateFeaturedCarouselUI, { passive: true });
-  window.addEventListener('resize', updateFeaturedCarouselUI, { passive: true });
-
   let paused = false;
-  track.addEventListener('mouseenter', () => { paused = true; });
-  track.addEventListener('mouseleave', () => { paused = false; });
-  track.addEventListener('touchstart', () => { paused = true; }, { passive: true });
-  track.addEventListener('touchend', () => { paused = false; }, { passive: true });
+  section.addEventListener('mouseenter', () => { paused = true; });
+  section.addEventListener('mouseleave', () => { paused = false; });
+  section.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+  section.addEventListener('touchend', () => { paused = false; }, { passive: true });
   setInterval(() => {
-    if (paused) return;
-    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: step(), behavior: 'smooth' });
-    }
-  }, 4500);
+    if (paused || !spotlightPicks.length) return;
+    spotlightActiveIdx += 1;
+    renderSpotlightSlide(true);
+  }, 5000);
 }
 
 window.resetCatalogFilter = function () {
