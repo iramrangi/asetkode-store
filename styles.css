@@ -2315,8 +2315,8 @@ html, body {
 
 /* ================= FEATURED PRODUCTS CAROUSEL ================= */
 .carousel-showcase {
-  margin-top: 28px;
-  margin-bottom: 10px;
+  margin-top: 4px;
+  margin-bottom: 18px;
 }
 
 .carousel-head {
@@ -2520,7 +2520,7 @@ html[data-theme="dark"] .c-price {
   gap: 24px;
   align-items: center;
   padding: 26px 28px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   border-radius: var(--radius-xl);
   background: linear-gradient(135deg, var(--bg-surface) 0%, var(--accent-soft) 100%);
   border: 1px solid var(--border-color);
