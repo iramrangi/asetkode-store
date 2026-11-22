@@ -1899,8 +1899,8 @@ function updateCartUI() {
         : `✓ Diskon Bundling 20% Aktif (Hemat ${fmtTotal(rawTotal - finalTotal)})`;
     } else if (cartState.some((i) => i.id === 'vip-bundle-all')) {
       hintEl.textContent = isEn
-        ? '✓ VIP All-Access Bundle Active (Save $200+ off individual prices)'
-        : '✓ Paket VIP All-Access Aktif (Hemat Rp 455.000 dari harga satuan)';
+        ? '✓ VIP All-Access Bundle Active (Save $233 / 83% off $282 total)'
+        : '✓ Paket VIP All-Access Aktif (Hemat Rp 1.469.000 / 85% dari total Rp 1.718.000)';
     } else {
       hintEl.textContent = isEn
         ? 'Tip: Add 1 more product to unlock an automatic 20% bundle discount.'
@@ -1973,8 +1973,9 @@ function launchCheckoutGateway(order) {
     const body = `Hello ${SITE_CONFIG.brandName},\n\nI would like to purchase:\n- Product: ${order.title}\n- Total: ${order.price} USD\n\nPlease assist with checkout / .ZIP delivery. Thank you.`;
     const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
     const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
-    const directPayHref = isHttpPayLink ? order.paymentUrl : (SITE_CONFIG.polarBundleUrl || gmailHref);
-    if (isHttpPayLink) {
+    const hasMultiPolar = Array.isArray(order.polarItems) && order.polarItems.length > 1;
+    const directPayHref = hasMultiPolar ? SITE_CONFIG.polarBundleUrl : (isHttpPayLink ? order.paymentUrl : (SITE_CONFIG.polarBundleUrl || gmailHref));
+    if (isHttpPayLink && !hasMultiPolar) {
       try { window.open(order.paymentUrl, '_blank', 'noopener'); } catch (e) {}
     }
     if (extLink) {
@@ -2023,9 +2024,11 @@ function buildGlobalUsdCheckoutHTML(order) {
   const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}body{margin:0;padding:24px;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06);}.badge{display:inline-block;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px;}h2{margin:0 0 6px;font-size:19px;}.price{font-size:24px;font-weight:800;color:#059669;margin-bottom:12px;}.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}.pill{font-size:12px;font-weight:700;padding:4px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#334155;}.btn{display:block;text-align:center;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;}.btn-primary{background:linear-gradient(135deg,#4f46e5,#2563eb);color:#fff;}.btn-sec{background:#fff;color:#0f172a;border:1px solid #cbd5e1;}.note{font-size:12px;color:#64748b;line-height:1.5;background:#f1f5f9;padding:12px;border-radius:10px;}</style></head>
-  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div>${order.directPayUrl
-  ? `<a class="btn btn-primary" href="${esc(order.directPayUrl)}" target="_blank" rel="noopener">Proceed to Polar.sh Secure Checkout ↗</a><a class="btn btn-sec" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Need Invoice / Custom Help? Email Us</a>`
-  : `<a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a>`}<div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
+  <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div>${Array.isArray(order.polarItems) && order.polarItems.length > 1
+  ? `${order.polarItems.map((it, idx) => `<a class="btn btn-sec" href="${esc(it.url)}" target="_blank" rel="noopener" style="margin-bottom:6px;text-align:left;display:flex;justify-content:space-between;"><span>${idx + 1}. ${esc(it.title)}</span><strong>${esc(it.price)} ↗</strong></a>`).join('')}<a class="btn btn-primary" href="${esc(SITE_CONFIG.polarBundleUrl)}" target="_blank" rel="noopener" style="margin-top:6px;">Or Unlock All 24 Apps Bundle ($49 USD — Save 83%) ↗</a>`
+  : (order.directPayUrl
+      ? `<a class="btn btn-primary" href="${esc(order.directPayUrl)}" target="_blank" rel="noopener">Proceed to Polar.sh Secure Checkout ↗</a><a class="btn btn-sec" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Need Invoice / Custom Help? Email Us</a>`
+      : `<a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a>`)}<div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
 }
 
 function buildEmailOrderHTML(order) {
@@ -2393,19 +2396,31 @@ function applyStorefrontLocaleUI() {
   if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Browse Products →' : 'Lihat Semua Produk →';
   if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'All-Access Bundle ($49)' : 'Paket Bundling Hemat';
 
-  const metricLabels = document.querySelectorAll('.hero-metrics .metric-label');
-  const metricVals = document.querySelectorAll('.hero-metrics .metric-val');
-  if (metricVals[2]) metricVals[2].textContent = isEn ? 'Commercial' : 'Komersial';
-  if (metricLabels[0]) metricLabels[0].textContent = isEn ? 'Full Unencrypted Source Code' : 'Full Source Code Tanpa Enkripsi';
-  if (metricLabels[1]) metricLabels[1].textContent = isEn ? 'Instant .ZIP Delivery to Inbox' : 'Dikirim Rapi ke Email Pembeli';
-  if (metricLabels[2]) metricLabels[2].textContent = isEn ? 'Unlimited Business & Client Projects' : 'Bebas Dipakai Usaha & Klien';
-
   const studioTabs = document.querySelectorAll('.studio-tab');
-  if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'Savings Calculator' : 'Kalkulator Hemat';
-  if (studioTabs[1]) studioTabs[1].textContent = isEn ? 'Inside .ZIP Pack' : 'Isi File .ZIP';
-  if (studioTabs[2]) studioTabs[2].textContent = isEn ? 'Global Architecture' : 'GitHub × Blogger';
+  if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'ROI Calculator' : 'Kalkulator Hemat';
+  if (studioTabs[1]) studioTabs[1].textContent = isEn ? '.ZIP Bundle' : 'Isi File .ZIP';
+  if (studioTabs[2]) studioTabs[2].textContent = isEn ? 'Stack' : 'GitHub × Blogger';
 
-  setLocalizedInner(document.querySelector('label[for="roiProjectSelect"]'), isEn, 'Choose the software project you want to launch:');
+  setLocalizedInner(
+    document.getElementById('tab-zip'),
+    isEn,
+    '<div style="font-size:0.75rem; color:#a1a1aa; margin-bottom:10px;">Standard folder structure inside every <code>.zip</code>:</div>' +
+    '<ul class="zip-tree"><li class="zip-row"><span>/full-source-code/ (Unencrypted)</span><span class="zip-badge">Editable</span></li>' +
+    '<li class="zip-row"><span>/database/schema_sample.sql</span><span class="zip-badge">Ready</span></li>' +
+    '<li class="zip-row"><span>SETUP_GUIDE_EN_ID.md</span><span class="zip-badge">English + ID</span></li>' +
+    '<li class="zip-row"><span>COMMERCIAL_LICENSE.txt</span><span class="zip-badge">Included</span></li></ul>'
+  );
+  setLocalizedInner(
+    document.getElementById('tab-arch'),
+    isEn,
+    '<div style="font-size:0.75rem; color:#a1a1aa; margin-bottom:10px;">Global Commerce Architecture:</div>' +
+    '<ul class="zip-tree"><li class="zip-row"><span>Storefront: Cloudflare Edge SPA</span><span class="zip-badge">Ultra Fast</span></li>' +
+    '<li class="zip-row"><span>Live Demos: 24 Interactive Sandboxes</span><span class="zip-badge">Online</span></li>' +
+    '<li class="zip-row"><span>Global USD: Polar.sh (Card / Apple Pay)</span><span class="zip-badge">Verified</span></li>' +
+    '<li class="zip-row"><span>Delivery: Auto .ZIP Email Dispatch</span><span class="zip-badge">24/7 Active</span></li></ul>'
+  );
+
+  setLocalizedInner(document.querySelector('label[for="roiProjectSelect"]'), isEn, 'Choose your software project:');
   const roiOpts = document.querySelectorAll('#roiProjectSelect option');
   if (roiOpts[0]) roiOpts[0].textContent = isEn ? 'POS Cashier & Warehouse Inventory Web App' : 'Aplikasi Kasir & Inventori Toko (POS)';
   if (roiOpts[1]) roiOpts[1].textContent = isEn ? 'Online Store & E-Commerce Catalog System' : 'Website Toko Online & Katalog Checkout QRIS';
@@ -2413,13 +2428,19 @@ function applyStorefrontLocaleUI() {
   if (roiOpts[3]) roiOpts[3].textContent = isEn ? 'Python Scraper & Automated Reporter Bot' : 'Bot Otomatisasi Scraper & Laporan Python';
   updateRoiCalculatorUI();
 
+  document.querySelectorAll('.hero-inline-trust span').forEach((sp, i) => {
+    const enT = ['✓ 100% Open Source', '✓ Live Demo Ready', '✓ Commercial License'];
+    const idT = ['✓ 100% Open Code', '✓ Live Demo Browser', '✓ Lisensi Komersial'];
+    sp.textContent = isEn ? enT[i] : idT[i];
+  });
+
   const bundleBox = document.getElementById('bundleDeal');
-  document.querySelectorAll('.hero-inline-trust span').forEach((sp, i) => { const enT = ['✓ 100% Open Source', '✓ Live Demo Ready', '✓ Commercial License']; const idT = ['✓ 100% Open Code', '✓ Live Demo Browser', '✓ Lisensi Komersial']; sp.textContent = isEn ? enT[i] : idT[i]; });
   if (bundleBox) {
+    setLocalizedInner(bundleBox.querySelector('.bundle-tag'), isEn, 'VIP BUNDLE • SAVE 83%');
     setLocalizedInner(bundleBox.querySelector('h2'), isEn, 'Get All 24 Source Codes &amp; Templates Together');
-    setLocalizedInner(bundleBox.querySelector('p'), isEn, 'POS, Invoice, Booking, Laundry, Blogger XML Themes &amp; Python Bots — all 24 <code>.ZIP</code> bundles (Save 80%).');
+    setLocalizedInner(bundleBox.querySelector('p'), isEn, 'POS, Invoice, Booking, Laundry, Blogger XML Themes &amp; Python Bots — all 24 <code>.ZIP</code> bundles.');
     const oldBundleEl = bundleBox.querySelector('.bundle-action > div > div:first-child');
-    if (oldBundleEl) oldBundleEl.textContent = isEn ? 'Individual Total: $249' : 'Total Satuan: Rp 419.000';
+    if (oldBundleEl) oldBundleEl.textContent = isEn ? 'Individual Total: $282' : 'Total Satuan: Rp 1.718.000';
     const newBundleEl = bundleBox.querySelector('.bundle-price-num');
     if (newBundleEl) newBundleEl.textContent = isEn ? '$49 USD' : 'Rp 249.000';
     const addBundleBtnEl = document.getElementById('addBundleBtn');
@@ -2456,17 +2477,6 @@ function applyStorefrontLocaleUI() {
     '<div class="step-card"><span class="step-num">01</span><h3>Try Demo &amp; Pick</h3><p>Test any <strong>Live Demo</strong>, then click <strong>Buy</strong> or add 2+ to Cart.</p></div>' +
     '<div class="step-card"><span class="step-num">02</span><h3>Pay via Polar.sh</h3><p>Fast USD checkout with Visa, Mastercard, or Apple Pay.</p></div>' +
     '<div class="step-card"><span class="step-num">03</span><h3>Get .ZIP Bundle</h3><p>Full source code &amp; setup guide delivered to your email.</p></div></div>'
-  );
-
-  setLocalizedInner(
-    document.getElementById('standar-paket'),
-    isEn,
-    '<div class="section-header"><span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">.ZIP BUNDLE STANDARD</span><h2>Included With Every Purchase</h2></div>' +
-    '<div class="testimonial-grid">' +
-    '<div class="testimonial-card"><div><div class="brand-badge" style="font-size:0.7rem;">01 • FULL SOURCE CODE</div><p class="testimonial-quote" style="margin-top:10px;">Clean modular code with zero obfuscators or domain locks. Customize branding, colors, and business logic freely.</p></div><div class="testimonial-author"><div class="testimonial-name">100% Unlocked</div><div class="testimonial-role">HTML5, CSS3, JS, PHP 8 &amp; Python 3</div></div></div>' +
-    '<div class="testimonial-card"><div><div class="brand-badge" style="font-size:0.7rem;">02 • DOCS &amp; SAMPLE DATA</div><p class="testimonial-quote" style="margin-top:10px;">Every <code>.ZIP</code> archive includes setup instructions, ready-to-import SQL/Excel templates, and quick launchers.</p></div><div class="testimonial-author"><div class="testimonial-name">Launch Fast</div><div class="testimonial-role">Direct Setup Support via Email</div></div></div>' +
-    '<div class="testimonial-card"><div><div class="brand-badge" style="font-size:0.7rem;">03 • COMMERCIAL LICENSE</div><p class="testimonial-quote" style="margin-top:10px;">One-time fee with no subscriptions. Use freely across your own SaaS/storefronts or unlimited client deliveries.</p></div><div class="testimonial-author"><div class="testimonial-name">Lifetime Access</div><div class="testimonial-role">Includes Official <code>LISENSI.txt</code></div></div></div>' +
-    '</div>'
   );
 
   setLocalizedInner(
@@ -2601,12 +2611,18 @@ document.addEventListener('DOMContentLoaded', () => {
           ? singleTitle
           : (isEn ? `Bundle (${cartState.length} Products)` : `Paket Bundling (${cartState.length} Produk)`);
       closeModal('cartBackdrop');
+      const polarItemsList = isEn ? cartState.map((c) => ({
+        title: c.titleEn || c.title,
+        price: formatUsd(c.priceUsdNum || idrToCleanUsdNum(c.priceNum)),
+        url: c.usdPaymentUrl || SITE_CONFIG.polarBundleUrl
+      })) : [];
       launchCheckoutGateway({
         title: orderTitle,
         price: totalStr,
         paymentUrl: isEn
-          ? (cartState.length === 1 ? (cartState[0].usdPaymentUrl || SITE_CONFIG.usdStoreUrl || '#checkout-usd') : (SITE_CONFIG.usdStoreUrl || '#checkout-usd'))
+          ? (cartState.length === 1 ? (cartState[0].usdPaymentUrl || SITE_CONFIG.polarBundleUrl) : SITE_CONFIG.polarBundleUrl)
           : (cartState.length === 1 ? cartState[0].paymentUrl : '#checkout-mayar'),
+        polarItems: polarItemsList,
         stack: titles,
         isUsd: isEn
       });
