@@ -1722,19 +1722,43 @@ function renderFeaturedCarousel() {
     if (picks.length < 10 && !picks.some((x) => x.id === p.id)) picks.push(p);
   });
 
-  track.innerHTML = picks.map((p) => {
+  track.innerHTML = picks.map((p, idx) => {
     const disp = getProdDisplay(p);
     const cat = localizeCategoryTag((p.categories && p.categories[0]) || 'Web App', disp.isEn);
+    const disc = getDiscountPercent(p.price, p.oldPrice);
+    const stackText = String(p.stack || '')
+      .split('+')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .slice(0, 2)
+      .join(' • ') || 'HTML5 • JS';
+
+    let rankClass = '';
+    let rankLabel = `#${String(idx + 1).padStart(2, '0')}`;
+    if (idx === 0) {
+      rankClass = 'is-new';
+      rankLabel = disp.isEn ? 'NEW' : 'BARU';
+    } else if (idx <= 2) {
+      rankClass = 'is-hot';
+      rankLabel = disp.isEn ? 'TOP PICK' : 'UNGGULAN';
+    }
+
     return `
       <article class="c-card">
         <div class="c-thumb" onclick="openDetailById('${p.id}')">
           <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" loading="lazy" />
+          <span class="c-rank ${rankClass}">${rankLabel}</span>
+          ${disc > 0 ? `<span class="c-disc">-${disc}%</span>` : ''}
           <span class="c-tag">${cat}</span>
         </div>
         <div class="c-body">
+          <div class="c-stack">${stackText}</div>
           <h3 class="c-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
           <div class="c-foot">
-            <span class="c-price">${disp.price}</span>
+            <div class="c-price-wrap">
+              ${disp.oldPrice ? `<span class="c-old-price">${disp.oldPrice}</span>` : ''}
+              <span class="c-price">${disp.price}</span>
+            </div>
             <div class="c-btns">
               <button type="button" class="c-btn" onclick="openLiveDemoById('${p.id}')">Demo</button>
               <button type="button" class="c-btn buy" onclick="openInstantCheckoutById('${p.id}')">${disp.isEn ? 'Buy' : 'Beli'}</button>
@@ -1744,6 +1768,26 @@ function renderFeaturedCarousel() {
       </article>
     `;
   }).join('');
+  updateFeaturedCarouselUI();
+}
+
+function updateFeaturedCarouselUI() {
+  const track = document.getElementById('featuredCarouselTrack');
+  const counter = document.getElementById('carouselCounter');
+  const bar = document.getElementById('carouselProgressBar');
+  if (!track) return;
+  const total = track.children.length || 10;
+  const stepWidth = window.innerWidth <= 640 ? 264 : 292;
+  const maxScroll = Math.max(1, track.scrollWidth - track.clientWidth);
+  const ratio = Math.min(1, Math.max(0, track.scrollLeft / maxScroll));
+  const currentIdx = Math.min(total, Math.max(1, Math.round(track.scrollLeft / stepWidth) + 1));
+  if (counter) {
+    counter.textContent = `${String(currentIdx).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  }
+  if (bar) {
+    const pct = Math.round(28 + ratio * 72);
+    bar.style.width = `${pct}%`;
+  }
 }
 
 function initFeaturedCarouselControls() {
@@ -1752,8 +1796,14 @@ function initFeaturedCarouselControls() {
   const next = document.getElementById('carouselNextBtn');
   if (!track) return;
 
-  const step = () => (window.innerWidth <= 640 ? 272 : 298);
-  if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  const step = () => (window.innerWidth <= 640 ? 264 : 292);
+  if (prev) prev.addEventListener('click', () => {
+    if (track.scrollLeft <= 6) {
+      track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    }
+  });
   if (next) next.addEventListener('click', () => {
     if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
       track.scrollTo({ left: 0, behavior: 'smooth' });
@@ -1761,6 +1811,9 @@ function initFeaturedCarouselControls() {
       track.scrollBy({ left: step(), behavior: 'smooth' });
     }
   });
+
+  track.addEventListener('scroll', updateFeaturedCarouselUI, { passive: true });
+  window.addEventListener('resize', updateFeaturedCarouselUI, { passive: true });
 
   let paused = false;
   track.addEventListener('mouseenter', () => { paused = true; });

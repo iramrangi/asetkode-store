@@ -285,6 +285,7 @@
         <h2 class="carousel-heading" id="carouselHeading">Produk Unggulan &amp; Terbaru</h2>
       </div>
       <div class="carousel-nav">
+        <span class="carousel-counter" id="carouselCounter">01 / 10</span>
         <button type="button" class="carousel-arrow" id="carouselPrevBtn" aria-label="Geser Kiri">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
@@ -293,7 +294,12 @@
         </button>
       </div>
     </div>
-    <div class="carousel-track" id="featuredCarouselTrack"></div>
+    <div class="carousel-track-wrap">
+      <div class="carousel-track" id="featuredCarouselTrack"></div>
+    </div>
+    <div class="carousel-progress-rail" aria-hidden="true">
+      <div class="carousel-progress-bar" id="carouselProgressBar"></div>
+    </div>
   </section>
 
   <!-- MAIN STORE CATALOG -->
