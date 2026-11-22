@@ -1514,6 +1514,7 @@ function renderProductsGrid() {
     })
     .join('');
   renderCatalogPagination(totalItems, totalPages, startIdx, pagedList.length);
+  renderFeaturedCarousel();
 }
 
 function renderCatalogPagination(totalItems, totalPages, startIdx, pageCount) {
@@ -1558,6 +1559,80 @@ window.goToCatalogPage = function (pageNum) {
   const kat = document.getElementById('katalog');
   if (kat) kat.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
+
+const FEATURED_CAROUSEL_IDS = ['prod-25', 'prod-1', 'prod-4', 'prod-19', 'prod-18', 'prod-20', 'prod-16', 'prod-24', 'prod-6', 'prod-3'];
+function renderFeaturedCarousel() {
+  const track = document.getElementById('featuredCarouselTrack');
+  if (!track) return;
+  const isEn = currentLocale === 'en';
+  const pill = document.getElementById('carouselPill');
+  const heading = document.getElementById('carouselHeading');
+  if (pill) pill.textContent = isEn ? 'FEATURED SHOWCASE' : 'SOROTAN PRODUK';
+  if (heading) heading.textContent = isEn ? 'Featured & Newest Products' : 'Produk Unggulan & Terbaru';
+
+  const picks = [];
+  FEATURED_CAROUSEL_IDS.forEach((id) => {
+    const found = productsState.find((p) => p.id === id);
+    if (found) picks.push(found);
+  });
+  productsState.forEach((p) => {
+    if (picks.length < 10 && !picks.some((x) => x.id === p.id)) picks.push(p);
+  });
+
+  track.innerHTML = picks.map((p) => {
+    const disp = getProdDisplay(p);
+    const cat = localizeCategoryTag((p.categories && p.categories[0]) || 'Web App', disp.isEn);
+    return `
+      <article class="c-card">
+        <div class="c-thumb" onclick="openDetailById('${p.id}')">
+          <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" loading="lazy" />
+          <span class="c-tag">${cat}</span>
+        </div>
+        <div class="c-body">
+          <h3 class="c-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
+          <div class="c-foot">
+            <span class="c-price">${disp.price}</span>
+            <div class="c-btns">
+              <button type="button" class="c-btn" onclick="openLiveDemoById('${p.id}')">Demo</button>
+              <button type="button" class="c-btn buy" onclick="openInstantCheckoutById('${p.id}')">${disp.isEn ? 'Buy' : 'Beli'}</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function initFeaturedCarouselControls() {
+  const track = document.getElementById('featuredCarouselTrack');
+  const prev = document.getElementById('carouselPrevBtn');
+  const next = document.getElementById('carouselNextBtn');
+  if (!track) return;
+
+  const step = () => (window.innerWidth <= 640 ? 272 : 298);
+  if (prev) prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  if (next) next.addEventListener('click', () => {
+    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    }
+  });
+
+  let paused = false;
+  track.addEventListener('mouseenter', () => { paused = true; });
+  track.addEventListener('mouseleave', () => { paused = false; });
+  track.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+  track.addEventListener('touchend', () => { paused = false; }, { passive: true });
+  setInterval(() => {
+    if (paused) return;
+    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    }
+  }, 4500);
+}
 
 window.resetCatalogFilter = function () {
   activeCategory = 'all';
@@ -3359,6 +3434,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applySiteBranding();
   initThemeToggle();
   initHeroStudioAndROI();
+  initFeaturedCarouselControls();
   initFaqAccordion();
   loadCartFromStorage();
   loadWishlistFromStorage();
