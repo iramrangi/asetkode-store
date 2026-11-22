@@ -22,7 +22,8 @@ const SITE_CONFIG = {
   bundlePriceUsd: '$49',
   bundlePriceUsdNum: 49,
   usdStoreUrl: 'https://polar.sh/ddev-studio',
-  polarBundleUrl: 'https://buy.polar.sh/polar_cl_dxsnzbBhCtf4KGKygvpm8agB1rd8yLFe0PY6F2Vx1E6'
+  polarBundleUrl: 'https://buy.polar.sh/polar_cl_dxsnzbBhCtf4KGKygvpm8agB1rd8yLFe0PY6F2Vx1E6',
+  gasWebAppUrl: 'https://script.google.com/macros/s/AKfycbyOP0ljBzNyNmHFR9V3S7nwusTeIHFvpH2iQ0VfZMT8yauk2wJ_vJY5ApIGYwF5Dp_5/exec'
 };
 
 const STORAGE_LOCALE_KEY = 'ddev_locale_v1';
@@ -2523,6 +2524,22 @@ function applyStorefrontLocaleUI() {
   const checkoutCartBtn = document.getElementById('checkoutCartBtn');
   if (checkoutCartBtn) checkoutCartBtn.textContent = isEn ? '⚡ Global Checkout (USD / Card / PayPal)' : '⚡ Checkout Sekarang (Mayar / QRIS)';
 
+  const aiLauncherLbl = document.getElementById('aiLauncherLabel');
+  if (aiLauncherLbl) aiLauncherLbl.textContent = isEn ? 'AI Assistant' : 'Asisten AI';
+  const aiHeadTitle = document.getElementById('aiHeadTitle');
+  if (aiHeadTitle) aiHeadTitle.textContent = isEn ? 'Ddev Studio AI Assistant' : 'Asisten AI Ddev Studio';
+  const aiHeadSub = document.getElementById('aiHeadSub');
+  if (aiHeadSub) aiHeadSub.textContent = isEn ? 'Product Finder, Live Demos & USD Checkout' : 'Bantu Pilih Produk, Demo & Cara Bayar';
+  const aiIn = document.getElementById('aiChatInput');
+  if (aiIn) aiIn.placeholder = isEn ? 'Ask about apps, live demos, USD checkout, or license...' : 'Tanya produk, live demo, Order ID (DDV-...), atau cara bayar...';
+  const aiSendBtn = document.getElementById('aiChatSendBtn');
+  if (aiSendBtn) aiSendBtn.textContent = isEn ? 'Send' : 'Kirim';
+  const chipLabelsId = ['💳 Cara Bayar', '📦 Rekomendasi', '⚡ Paket VIP'];
+  const chipLabelsEn = ['💳 How to Pay', '📦 Best Apps', '⚡ $49 Bundle'];
+  document.querySelectorAll('.js-ai-chip').forEach((chip, idx) => {
+    chip.textContent = isEn ? (chipLabelsEn[idx] || chip.textContent) : (chipLabelsId[idx] || chip.textContent);
+  });
+
   const statusEl = document.getElementById('catalogStatusText');
   if (statusEl && statusEl.textContent) {
     if (isEn && statusEl.textContent.indexOf('asetkode.blogspot.com') !== -1) {
@@ -2536,6 +2553,395 @@ function applyStorefrontLocaleUI() {
   updateCartUI();
 }
 
+// ================= FLOATING BILINGUAL AI ASSISTANT =================
+let aiAssistantBooted = false;
+let aiChatHistoryState = [];
+let aiServerGeminiFlag = null;
+
+function escAiHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function addAiChatMessage(role, htmlText, actionButtons) {
+  const aiMessages = document.getElementById('aiChatMessages');
+  if (!aiMessages) return null;
+  const box = document.createElement('div');
+  box.className = 'ai-msg ' + (role === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
+  box.innerHTML = '<div>' + htmlText + '</div>';
+
+  if (Array.isArray(actionButtons) && actionButtons.length > 0) {
+    const actWrap = document.createElement('div');
+    actWrap.className = 'ai-msg-actions';
+    actionButtons.forEach((btnCfg) => {
+      if (btnCfg.href) {
+        const a = document.createElement('a');
+        a.className = 'ai-msg-btn' + (btnCfg.primary ? ' ai-msg-btn-primary' : '');
+        a.href = btnCfg.href;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = btnCfg.label;
+        actWrap.appendChild(a);
+      } else {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ai-msg-btn' + (btnCfg.primary ? ' ai-msg-btn-primary' : '');
+        b.textContent = btnCfg.label;
+        b.addEventListener('click', btnCfg.onClick);
+        actWrap.appendChild(b);
+      }
+    });
+    box.appendChild(actWrap);
+  }
+
+  aiMessages.appendChild(box);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+  return box;
+}
+
+function buildStorefrontAiFallback(userText) {
+  const q = String(userText || '').toLowerCase().trim();
+  const isEn = currentLocale === 'en';
+  const supportEmail = SITE_CONFIG.orderEmail || 'dekamayooo@gmail.com';
+  const emailMatch = userText.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+
+  // 1. Keluhan / Refund
+  if (/(refund|pengembalian|uang\s+kembali|corrupt|broken|rusak|kendala|\berror\b|gagal\s+jalan|not\s+working)/i.test(q)) {
+    return {
+      html: isEn
+        ? `We're sorry for any issue! Digital <code>.ZIP</code> purchases include full setup assistance — if a package is corrupted or fails after troubleshooting, we'll process a refund.<br/><br/>Please email your Order ID + screenshot to <strong>${escAiHtml(supportEmail)}</strong>.`
+        : `Mohon maaf atas kendalanya. Semua pembelian <code>.ZIP</code> disertai <strong>bantuan setup penuh</strong> — dan jika file terbukti rusak/gagal berjalan setelah dibantu tim kami, <strong>refund kami proses</strong>.<br/><br/>Kirim Order ID + tangkapan layar kendala ke <strong>${escAiHtml(supportEmail)}</strong>.`,
+      actions: [
+        {
+          label: isEn ? '✉️ Contact Support / Refund' : '✉️ Ajukan Bantuan / Refund',
+          href: `mailto:${encodeURIComponent(supportEmail)}?subject=${encodeURIComponent('Support / Refund Request - ' + SITE_CONFIG.brandName)}`,
+          primary: true
+        },
+        {
+          label: isEn ? 'Read Refund Policy' : 'Kebijakan Refund',
+          primary: false,
+          onClick: () => { if (window.openLegalModal) window.openLegalModal('refund'); }
+        }
+      ]
+    };
+  }
+
+  // 2. Sapaan / Terima kasih
+  if (/^((halo|hai|hi|hey|hello|good\s+(morning|afternoon|evening)|selamat\s+(pagi|siang|sore|malam)|permisi)(\s+(admin|min|there))?)[!.?\s]*$/i.test(q)) {
+    return {
+      html: isEn
+        ? 'Hello! How can I help you today? Ask about any of our <strong>24 live-demo apps</strong>, USD checkout via <strong>Polar.sh</strong>, or the <strong>$49 VIP Bundle</strong>.'
+        : 'Halo! Ada yang bisa saya bantu? Anda bisa tanya rekomendasi <strong>aplikasi/source code</strong>, cara bayar <strong>QRIS / Polar.sh</strong>, <strong>VIP Bundle Rp 249.000</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
+      actions: []
+    };
+  }
+  if (/^(terima\s*kasih|makasih|thanks|thank\s+you|thx|ok|oke|siap|sip|got\s+it)[!.?\s]*$/i.test(q)) {
+    return {
+      html: isEn
+        ? 'You\'re welcome! Feel free to ask anytime if you need help picking an app or checking out.'
+        : 'Sama-sama! Kalau nanti butuh rekomendasi aplikasi atau bantuan setup, langsung chat di sini ya.',
+      actions: []
+    };
+  }
+
+  // 3. Klaim .ZIP / Status Order
+  if (/(klaim|claim|kirim\s+ulang|belum\s+(masuk|terima|dapat)|download\s+link|cek\s+(status|order)|track\s+order|already\s+paid|sudah\s+(bayar|transfer))/i.test(q) || emailMatch) {
+    return {
+      html: isEn
+        ? `After payment via <strong>Polar.sh</strong> (USD) or QRIS, your Google Drive <code>.ZIP</code> link is emailed automatically. If you haven't received it, email <strong>${escAiHtml(supportEmail)}</strong> with your payment receipt or Order ID (e.g. <code>DDV-...</code> / <code>USD-...</code>).`
+        : `Setelah pembayaran selesai, link <code>.ZIP</code> dikirim otomatis ke email Anda. Anda bisa mengetikkan <strong>Order ID (<code>DDV-...</code>)</strong> di chat ini atau kirim bukti pembayaran ke <strong>${escAiHtml(supportEmail)}</strong>.`,
+      actions: [{
+        label: isEn ? '✉️ Send Proof to Support' : '✉️ Kirim Bukti ke Admin',
+        href: `mailto:${encodeURIComponent(supportEmail)}?subject=${encodeURIComponent('Order / Download Support - ' + SITE_CONFIG.brandName)}`,
+        primary: true
+      }]
+    };
+  }
+
+  // 4. Cara bayar (ID QRIS/Mayar & Global Polar.sh)
+  if (/(cara\s+bayar|pembayaran|how\s+to\s+pay|payment|\bmayar\b|\bqris\b|\bpolar\b|visa|mastercard|apple\s+pay|\busd\b|dana|gopay|ovo)/i.test(q)) {
+    return {
+      html: isEn
+        ? 'Global buyers pay securely in <strong>USD</strong> via <strong>Polar.sh</strong> (Visa, Mastercard, Apple Pay). Click <strong>Buy Now</strong> or checkout from your Cart, and your Google Drive <code>.ZIP</code> link is delivered automatically after payment.'
+        : 'Pembayaran bisa lewat:<br/>&#8226; <strong>Indonesia (IDR):</strong> Scan <strong>QRIS Ddev Studio</strong> (DANA, GoPay, OVO, ShopeePay, m-Banking) lewat tombol <strong>Beli Instan</strong> + konfirmasi email.<br/>&#8226; <strong>Global (USD):</strong> Kartu/Apple Pay otomatis via <strong>Polar.sh</strong>.',
+      actions: []
+    };
+  }
+
+  // 5. VIP Bundle / Diskon
+  if (/(bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|all\s+24|24\s+produk)/i.test(q)) {
+    return {
+      html: isEn
+        ? `Unlock all <strong>24 apps &amp; templates</strong> in our <strong>VIP All-Access Bundle for $49 USD</strong> (save 83% off the $282 individual total), or add 2+ apps to your cart for an automatic <strong>20% discount</strong>!`
+        : `Dapatkan semua <strong>24 source code &amp; template</strong> sekaligus di <strong>Paket Bundling VIP Rp 249.000</strong> (hemat 85% dari total satuan Rp 1.718.000), atau pilih 2+ produk ke keranjang untuk <strong>diskon otomatis 20%</strong>.`,
+      actions: [{
+        label: isEn ? '⚡ Add $49 VIP Bundle' : '⚡ Ambil Paket Bundling',
+        primary: true,
+        onClick: () => {
+          toggleAiChatWindow(false);
+          addAllBundleToCart();
+        }
+      }]
+    };
+  }
+
+  // 6. Instalasi / Teknis
+  if (/(how\s+to\s+(install|run|setup)|cara\s+(install|instal|pasang|pakai|jalankan|setup)|butuh\s+(xampp|server|hosting)|setup\s+guide|installation|\bxampp\b|\blaragon\b|\bcpanel\b|\.bat\b|panduan|beginner|pemula)/i.test(q)) {
+    return {
+      html: isEn
+        ? 'Every download includes clean source code + <code>SETUP_GUIDE_EN_ID.md</code> / <code>PANDUAN.md</code>:<br/>&#8226; <strong>POS / Web Apps:</strong> Zero-Config launcher (<code>.bat</code> / browser-ready).<br/>&#8226; <strong>PHP 8 Apps:</strong> Includes <code>.sql</code> schema ready for XAMPP/Laragon/cPanel.<br/>&#8226; <strong>Python Tools:</strong> Step-by-step setup guide included.'
+        : 'Setiap paket dilengkapi <code>PANDUAN.md</code>:<br/>&#8226; <strong>Kasir &amp; Web Zero-Config:</strong> Tinggal klik file pembuka (<code>.bat</code>) langsung jalan di browser.<br/>&#8226; <strong>PHP 8:</strong> Lengkap file database <code>.sql</code> untuk XAMPP/Laragon/cPanel.<br/>&#8226; <strong>Python Script:</strong> Tinggal ikuti panduan instalasi langkah demi langkah.',
+      actions: []
+    };
+  }
+
+  // 7. Lisensi Komersial
+  if (/(lisensi|license|commercial|komersial|subscription|langganan|open\s+source|client|klien)/i.test(q)) {
+    return {
+      html: isEn
+        ? 'All packages are <strong>one-time purchase</strong> (no recurring fees) with <strong>100% unencrypted source code</strong> and a personal + commercial client-project license.'
+        : 'Semua produk sistemnya <strong>1x bayar selamanya</strong> (tanpa langganan) dengan <strong>100% source code terbuka tanpa enkripsi</strong> dan boleh dipakai untuk proyek bisnis sendiri maupun klien komersial.',
+      actions: [{
+        label: isEn ? 'Read Terms & License' : 'Syarat & Lisensi',
+        primary: false,
+        onClick: () => { if (window.openLegalModal) window.openLegalModal('terms'); }
+      }]
+    };
+  }
+
+  // 8. Rekomendasi umum
+  if (/(rekomendasi|rekomen|recommend|best\s+app|popular|catalog|katalog|daftar\s+produk|list|what\s+do\s+you\s+sell|jual\s+apa)/i.test(q)) {
+    const picks = productsState.slice(0, 4);
+    const listHtml = picks.map((p) => {
+      const disp = getProdDisplay(p);
+      return `&#8226; <strong>${escAiHtml(disp.title)}</strong> (${escAiHtml(disp.price)})`;
+    }).join('<br/>');
+    const first = picks[0];
+    const acts = first ? [
+      {
+        label: isEn ? '▶ Test Flagship Demo' : '▶ Coba Demo Terlaris',
+        primary: false,
+        onClick: () => { toggleAiChatWindow(false); window.openLiveDemoById(first.id); }
+      },
+      {
+        label: isEn ? '⚡ Buy Now' : '⚡ Beli Sekarang',
+        primary: true,
+        onClick: () => { toggleAiChatWindow(false); window.openInstantCheckoutById(first.id); }
+      }
+    ] : [];
+    return {
+      html: (isEn
+        ? `Here are our top-selling tools right now:<br/><br/>${listHtml}<br/><br/>Tell me what you want to build (e.g. <em>POS cashier, Python scraper, admin dashboard, or booking app</em>) for a tailored pick!`
+        : `Berikut beberapa produk unggulan <strong>Ddev Studio</strong>:<br/><br/>${listHtml}<br/><br/>Sebutkan kebutuhan Anda (misalnya <em>kasir toko, web UMKM, absensi QR, antrian, atau bot Python</em>) agar saya pilihkan yang paling pas!`),
+      actions: acts
+    };
+  }
+
+  // 9. Smart Keyword + Synonym Search across all 24 products
+  const syn = [
+    [/toko|warung|kasir|pos|struk|stok|gudang|cashier|inventory|retail/i, 'kasir pos inventaris warehouse'],
+    [/cafe|kafe|kuliner|restoran|umkm|company|bisnis|agency|sme/i, 'umkm cafe agency profile'],
+    [/nikah|pernikahan|wedding|event|undangan|invitation/i, 'undangan wedding'],
+    [/keuangan|pengeluaran|budget|finance|finansial|expense/i, 'finansial budget expense'],
+    [/pdf|ocr|word|convert|dokumen/i, 'pdf converter ocr'],
+    [/scraping|crawl|scraper|excel|sheets/i, 'scraper excel sheets'],
+    [/absen|kehadiran|attendance|pegawai|karyawan|siswa/i, 'absensi attendance qr'],
+    [/antri|antrian|queue|loket|klinik/i, 'antrian queue'],
+    [/telegram|bot|notif|tagihan|billing|reminder/i, 'bot telegram tagihan responder'],
+    [/payment|midtrans|checkout|qris|mayar/i, 'payment gateway ecommerce'],
+    [/bio|biolink|linktree|portofolio|portfolio/i, 'biolink portfolio'],
+    [/dashboard|admin|grafik|analytics|ui\s*kit|saas|component/i, 'dashboard ui kit components'],
+    [/invoice|faktur|kwitansi|quotation|receipt/i, 'invoice quotation'],
+    [/booking|reservasi|appointment|jadwal|salon|laundry/i, 'booking laundry']
+  ];
+  let expanded = q;
+  syn.forEach(([re, words]) => { if (re.test(q)) expanded += ' ' + words; });
+  const stop = { yang:1, dan:1, atau:1, ada:1, bisa:1, untuk:1, buat:1, mau:1, cari:1, butuh:1, dengan:1, dari:1, ini:1, itu:1, apa:1, the:1, and:1, for:1, with:1, best:1, app:1, apps:1, web:1, source:1, code:1 };
+  const kw = expanded.split(/[^a-z0-9]+/).filter((w) => w.length >= 3 && !stop[w]);
+  const scored = productsState.map((p) => {
+    const disp = getProdDisplay(p);
+    const titleLow = disp.title.toLowerCase();
+    const hay = `${p.title} ${p.titleEn || ''} ${p.summary} ${p.summaryEn || ''} ${p.stack} ${(p.categories || []).join(' ')}`.toLowerCase();
+    let score = 0;
+    kw.forEach((k) => {
+      if (titleLow.includes(k)) score += 3;
+      else if (hay.includes(k)) score += 1;
+    });
+    return { p, disp, score };
+  }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score);
+
+  if (scored.length > 0) {
+    const picks = scored.slice(0, 2);
+    const lines = picks.map((x) => `&#8226; <strong>${escAiHtml(x.disp.title)}</strong> (${escAiHtml(x.disp.price)})`).join('<br/>');
+    const first = picks[0].p;
+    return {
+      html: (isEn ? 'Best matches for your request:<br/><br/>' : 'Produk yang paling cocok dengan kebutuhan Anda:<br/><br/>') + lines,
+      actions: [
+        {
+          label: isEn ? '▶ Live Demo' : '▶ Coba Live Demo',
+          primary: false,
+          onClick: () => { toggleAiChatWindow(false); window.openLiveDemoById(first.id); }
+        },
+        {
+          label: isEn ? '⚡ Buy Now' : '⚡ Beli Sekarang',
+          primary: true,
+          onClick: () => { toggleAiChatWindow(false); window.openInstantCheckoutById(first.id); }
+        }
+      ]
+    };
+  }
+
+  return {
+    html: isEn
+      ? `I didn't find an exact match for that query. You can ask about specific tools (<em>POS cashier, Python scraper, admin dashboard, laundry, booking</em>), <strong>USD checkout via Polar.sh</strong>, or the <strong>$49 VIP Bundle</strong>.<br/><br/>Need human help? Contact <strong>${escAiHtml(supportEmail)}</strong>.`
+      : `Maaf, saya belum menemukan jawaban spesifik untuk pertanyaan tersebut. Coba tanya soal produk tertentu (<em>kasir POS, bot Python, web UMKM, absensi QR, UI kit</em>), <strong>cara bayar QRIS/Polar</strong>, <strong>VIP Bundle Rp 249.000</strong>, atau cek Order ID <code>DDV-...</code>.<br/><br/>Atau hubungi admin di <strong>${escAiHtml(supportEmail)}</strong>.`,
+    actions: [{
+      label: isEn ? '✉️ Contact Admin' : '✉️ Hubungi Admin',
+      href: `mailto:${encodeURIComponent(supportEmail)}?subject=${encodeURIComponent('Question - ' + SITE_CONFIG.brandName)}`,
+      primary: false
+    }]
+  };
+}
+
+function sendToAiAssistant(rawText) {
+  const text = String(rawText || '').trim();
+  if (!text) return;
+  const isEn = currentLocale === 'en';
+  addAiChatMessage('user', escAiHtml(text), []);
+
+  const gasUrl = String(SITE_CONFIG.gasWebAppUrl || '').trim();
+  const orderIdMatch = text.match(/DDV-\d{4,8}-\d{2,4}/i);
+
+  // 1. Live Order ID status check
+  if (orderIdMatch && gasUrl) {
+    const oid = orderIdMatch[0].toUpperCase();
+    const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'Checking order' : 'Mengecek status pesanan'} ${escAiHtml(oid)}...</em>`, []);
+    fetch(`${gasUrl}?action=status&orderId=${encodeURIComponent(oid)}`)
+      .then((r) => r.json())
+      .then((st) => {
+        if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+        if (!st || !st.ok) {
+          addAiChatMessage('bot', isEn
+            ? `Order <code>${escAiHtml(oid)}</code> was not found. Check the ID or contact <strong>${escAiHtml(SITE_CONFIG.orderEmail)}</strong>.`
+            : `Pesanan <code>${escAiHtml(oid)}</code> tidak ditemukan. Pastikan format Order ID benar atau hubungi <strong>${escAiHtml(SITE_CONFIG.orderEmail)}</strong>.`, []);
+          return;
+        }
+        if (st.status === 'PAID') {
+          const btns = (st.downloadLinks || []).map((d) => ({
+            label: (isEn ? '⬇ Download: ' : '⬇ Unduh: ') + String(d.name || 'File').slice(0, 32),
+            href: d.url,
+            primary: true
+          }));
+          addAiChatMessage('bot', isEn
+            ? `Order <code>${escAiHtml(oid)}</code> (<strong>${escAiHtml(st.productTitle)}</strong>) is <strong>PAID</strong>! Download your files below:`
+            : `Pesanan <code>${escAiHtml(oid)}</code> untuk <strong>${escAiHtml(st.productTitle)}</strong> sudah <strong>LUNAS (PAID)</strong>! Silakan unduh lewat tombol di bawah:`, btns);
+        } else {
+          addAiChatMessage('bot', isEn
+            ? `Order <code>${escAiHtml(oid)}</code> is currently <strong>PENDING PAYMENT</strong>.`
+            : `Pesanan <code>${escAiHtml(oid)}</code> saat ini masih berstatus <strong>MENUNGGU PEMBAYARAN (PENDING)</strong>.`, []);
+        }
+      })
+      .catch(() => {
+        if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+        addAiChatMessage('bot', isEn
+          ? `Could not verify order right now. Please contact <strong>${escAiHtml(SITE_CONFIG.orderEmail)}</strong>.`
+          : `Gagal mengecek status sekarang. Hubungi <strong>${escAiHtml(SITE_CONFIG.orderEmail)}</strong>.`, []);
+      });
+    return;
+  }
+
+  // 2. Try live Gemini LLM on Apps Script (Indonesian or natural bilingual prompt), else local smart fallback
+  if (gasUrl && aiServerGeminiFlag !== false) {
+    const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'AI Assistant is typing...' : 'Asisten sedang mengetik...'}</em>`, []);
+    fetch(gasUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'chat',
+        message: (isEn ? '[Reply concisely in English, USD pricing where relevant] ' : '') + text,
+        history: aiChatHistoryState.slice(-6),
+        pageTitle: document.title
+      })
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+        if (data && data.mode === 'gemini' && data.reply) {
+          aiServerGeminiFlag = true;
+          aiChatHistoryState.push({ role: 'user', text });
+          aiChatHistoryState.push({ role: 'model', text: data.reply });
+          const formatted = escAiHtml(data.reply)
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+            .replace(/`([^`]+)`/g, '<code>$1</code>')
+            .replace(/\n/g, '<br/>');
+          addAiChatMessage('bot', formatted, []);
+          return;
+        }
+        if (data && data.mode === 'local_fallback') aiServerGeminiFlag = false;
+        const fb = buildStorefrontAiFallback(text);
+        aiChatHistoryState.push({ role: 'user', text });
+        addAiChatMessage('bot', fb.html, fb.actions);
+      })
+      .catch(() => {
+        if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+        const fb = buildStorefrontAiFallback(text);
+        addAiChatMessage('bot', fb.html, fb.actions);
+      });
+    return;
+  }
+
+  // 3. Fast bilingual local fallback
+  const fb = buildStorefrontAiFallback(text);
+  aiChatHistoryState.push({ role: 'user', text });
+  addAiChatMessage('bot', fb.html, fb.actions);
+}
+
+function toggleAiChatWindow(forceOpen) {
+  const aiWindow = document.getElementById('aiChatWindow');
+  const aiInput = document.getElementById('aiChatInput');
+  if (!aiWindow) return;
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !aiWindow.classList.contains('open');
+  aiWindow.classList.toggle('open', shouldOpen);
+  aiWindow.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+  if (shouldOpen && !aiAssistantBooted) {
+    aiAssistantBooted = true;
+    const isEn = currentLocale === 'en';
+    addAiChatMessage(
+      'bot',
+      isEn
+        ? 'Hi! I\'m the <strong>Ddev Studio AI Assistant</strong>. Ask me to recommend an app, explain <strong>USD checkout via Polar.sh</strong>, or help with the <strong>$49 VIP Bundle</strong>.'
+        : 'Halo! Saya <strong>Asisten AI Ddev Studio</strong>. Saya bisa bantu carikan source code yang pas, jelaskan cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
+      []
+    );
+  }
+  if (shouldOpen && aiInput) aiInput.focus();
+}
+
+function initAiAssistantWidget() {
+  const launcher = document.getElementById('aiChatLauncher');
+  const closeBtn = document.getElementById('closeAiChatBtn');
+  const form = document.getElementById('aiChatForm');
+  const input = document.getElementById('aiChatInput');
+  if (launcher) launcher.addEventListener('click', () => toggleAiChatWindow());
+  if (closeBtn) closeBtn.addEventListener('click', () => toggleAiChatWindow(false));
+  document.querySelectorAll('.js-ai-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const prompt = currentLocale === 'en'
+        ? (chip.getAttribute('data-prompt-en') || chip.textContent)
+        : (chip.getAttribute('data-prompt-id') || chip.textContent);
+      sendToAiAssistant(prompt);
+    });
+  });
+  if (form && input) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = input.value;
+      input.value = '';
+      sendToAiAssistant(val);
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   applySiteBranding();
   initThemeToggle();
@@ -2543,6 +2949,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   loadCartFromStorage();
   applyStorefrontLocaleUI();
+  initAiAssistantWidget();
   syncFromBloggerCloud();
 
   const langBtn = document.getElementById('langCurrencyBtn');
@@ -2648,6 +3055,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       ['demoSimModal', 'detailModal', 'cartBackdrop', 'checkoutModal'].forEach(closeModal);
+      toggleAiChatWindow(false);
     }
   });
 });

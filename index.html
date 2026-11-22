@@ -499,6 +499,35 @@
     </div>
   </div>
 
+  <!-- FLOATING AI ASSISTANT WIDGET -->
+  <button type="button" class="ai-chat-launcher" id="aiChatLauncher" aria-label="Buka Asisten AI Ddev Studio">
+    <span class="ai-online-dot"></span>
+    <span id="aiLauncherLabel">Asisten AI</span>
+  </button>
+
+  <div class="ai-chat-window" id="aiChatWindow" aria-hidden="true">
+    <div class="ai-chat-head">
+      <div>
+        <div id="aiHeadTitle" style="font-size:0.94rem; font-weight:800;">Asisten AI Ddev Studio</div>
+        <div class="ai-chat-head-sub">
+          <span class="ai-online-dot"></span>
+          <span id="aiHeadSub">Bantu Pilih Produk, Demo &amp; Cara Bayar</span>
+        </div>
+      </div>
+      <button type="button" class="close-x" id="closeAiChatBtn" aria-label="Tutup Asisten AI" style="background:rgba(255,255,255,0.14); color:#ffffff; border-color:rgba(255,255,255,0.22);">×</button>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages"></div>
+    <div class="ai-chat-chips" id="aiChatChips">
+      <button type="button" class="ai-chip-btn js-ai-chip" data-chip-idx="0" data-prompt-id="Cara bayar via QRIS atau kartu USD bagaimana?" data-prompt-en="How do I pay in USD or IDR and download the .ZIP?">💳 Cara Bayar</button>
+      <button type="button" class="ai-chip-btn js-ai-chip" data-chip-idx="1" data-prompt-id="Rekomendasi source code atau template terbaik" data-prompt-en="Recommend your best apps and source codes">📦 Rekomendasi</button>
+      <button type="button" class="ai-chip-btn js-ai-chip" data-chip-idx="2" data-prompt-id="Info paket bundling 24 produk Rp 249.000" data-prompt-en="Tell me about the $49 VIP 24-app bundle">⚡ Paket VIP</button>
+    </div>
+    <form class="ai-chat-form" id="aiChatForm">
+      <input type="text" class="ai-chat-input" id="aiChatInput" autocomplete="off" placeholder="Tanya produk, live demo, Order ID (DDV-...), atau cara bayar..." />
+      <button type="submit" class="ai-chat-send" id="aiChatSendBtn">Kirim</button>
+    </form>
+  </div>
+
   <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
   <script src="app.js"></script>
