@@ -1303,31 +1303,7 @@ window.__asetkodeBloggerCallback = function (data) {
     if (syncedProducts.length > 0) {
       productsState = syncedProducts;
       renderProductsGrid();
-      const savedFilterBtn = document.getElementById('savedFilterBtn');
-  if (savedFilterBtn) {
-    const cnt = wishlistState.length;
-    savedFilterBtn.innerHTML = isEn
-      ? `♥ Saved (<span id="savedCountNum">${cnt}</span>)`
-      : `♥ Disimpan (<span id="savedCountNum">${cnt}</span>)`;
-  }
-  const customBanner = document.getElementById('customOrderSection');
-  if (customBanner) {
-    const h3 = customBanner.querySelector('h3');
-    const p = customBanner.querySelector('p');
-    const a = document.getElementById('customOrderBtn');
-    if (h3) h3.textContent = isEn ? 'Need Custom Software or Tailored Features?' : 'Butuh Custom Program atau Modifikasi Fitur Khusus?';
-    if (p) p.textContent = isEn
-      ? 'Our team can customize branding, integrate APIs, or build bespoke web systems for your business.'
-      : 'Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.';
-    if (a) a.textContent = isEn ? '✉ Request Custom Project' : '✉ Konsultasi Custom Project';
-  }
-  const bttBtn = document.getElementById('backToTopBtn');
-  if (bttBtn) {
-    bttBtn.title = isEn ? 'Back to Top' : 'Kembali ke Atas';
-    bttBtn.setAttribute('aria-label', bttBtn.title);
-  }
-
-  const statusEl = document.getElementById('catalogStatusText');
+      const statusEl = document.getElementById('catalogStatusText');
       if (statusEl) {
         statusEl.textContent = currentLocale === 'en'
           ? `Live Synced with asetkode.blogspot.com (${syncedProducts.length} active products)`
@@ -2611,7 +2587,28 @@ function applyStorefrontLocaleUI() {
   if (roiOpts[1]) roiOpts[1].textContent = isEn ? 'Online Store & E-Commerce Catalog System' : 'Website Toko Online & Katalog Checkout QRIS';
   if (roiOpts[2]) roiOpts[2].textContent = isEn ? 'SaaS / Agency Landing Page Template' : 'Landing Page SaaS / Company Profile';
   if (roiOpts[3]) roiOpts[3].textContent = isEn ? 'Python Scraper & Automated Reporter Bot' : 'Bot Otomatisasi Scraper & Laporan Python';
+  const roiScratchLbl = document.querySelector('#tab-roi .roi-card:first-child > div:first-child');
+  setLocalizedInner(roiScratchLbl, isEn, 'Build from Scratch / Agency');
+  const roiBestTitle = document.querySelector('#tab-roi .roi-card.best > div:first-child');
+  setLocalizedInner(roiBestTitle, isEn, 'Use <span data-brand-name>Ddev Studio</span> Code');
+  const roiBestTime = document.querySelector('#tab-roi .roi-card.best > div:last-child');
+  setLocalizedInner(roiBestTime, isEn, 'Setup: Ready in 10 Mins');
   updateRoiCalculatorUI();
+
+  const filterAllChip = document.querySelector('#filterBar [data-cat="all"]');
+  if (filterAllChip) filterAllChip.textContent = isEn ? 'All Products' : 'Semua Karya';
+  const filterDesignChip = document.querySelector('#filterBar [data-cat="Desain Web"]');
+  if (filterDesignChip) filterDesignChip.textContent = isEn ? 'Web Design' : 'Desain Web';
+  const filterTplChip = document.querySelector('#filterBar [data-cat="Template"]');
+  if (filterTplChip) filterTplChip.textContent = isEn ? 'Templates / UI' : 'Template / UI';
+
+  const sortLbl = document.querySelector('label[for="sortSelect"]');
+  if (sortLbl) sortLbl.textContent = isEn ? 'Sort:' : 'Urutkan:';
+  const sortOpts = document.querySelectorAll('#sortSelect option');
+  if (sortOpts[0]) sortOpts[0].textContent = isEn ? 'Newest' : 'Terbaru';
+  if (sortOpts[1]) sortOpts[1].textContent = isEn ? 'Lowest Price' : 'Harga Terendah';
+  if (sortOpts[2]) sortOpts[2].textContent = isEn ? 'Highest Price' : 'Harga Tertinggi';
+  if (sortOpts[3]) sortOpts[3].textContent = isEn ? 'Biggest Discount' : 'Diskon Terbesar';
 
   document.querySelectorAll('.hero-inline-trust span').forEach((sp, i) => {
     const enT = ['✓ 100% Open Source', '✓ Live Demo Ready', '✓ Commercial License'];
@@ -2671,8 +2668,40 @@ function applyStorefrontLocaleUI() {
 
   const cartDrawerTitle = document.querySelector('#cartBackdrop .modal-top-title');
   if (cartDrawerTitle) cartDrawerTitle.textContent = isEn ? 'Your Shopping Cart' : 'Keranjang Belanja Anda';
+  const cartTotalLbl = document.querySelector('#cartBackdrop .cart-footer > div:nth-child(2) > span:first-child');
+  if (cartTotalLbl) cartTotalLbl.textContent = isEn ? 'Total Payment:' : 'Total Pembayaran:';
   const checkoutCartBtn = document.getElementById('checkoutCartBtn');
   if (checkoutCartBtn) checkoutCartBtn.textContent = isEn ? '⚡ Global Checkout (USD / Card / PayPal)' : '⚡ Checkout Sekarang (Mayar / QRIS)';
+  const checkoutNotice = document.getElementById('checkoutModalNotice');
+  setLocalizedInner(checkoutNotice, isEn, 'Your <code>.ZIP</code> package &amp; setup guide will be sent via email after payment');
+  const checkoutNewTabSpan = document.querySelector('#checkoutModal .modal-window > .modal-top:last-child span');
+  setLocalizedInner(checkoutNewTabSpan, isEn, 'Need fullscreen or open in a new tab?');
+  const footerRight = document.querySelector('.footer-bottom > div:last-child');
+  setLocalizedInner(footerRight, isEn, '100% Open Source Code • One-Time Payment');
+
+  const savedFilterBtn = document.getElementById('savedFilterBtn');
+  if (savedFilterBtn) {
+    const cnt = wishlistState.length;
+    savedFilterBtn.innerHTML = isEn
+      ? `♥ Saved (<span id="savedCountNum">${cnt}</span>)`
+      : `♥ Disimpan (<span id="savedCountNum">${cnt}</span>)`;
+  }
+  const customBanner = document.getElementById('customOrderSection');
+  if (customBanner) {
+    const h3 = customBanner.querySelector('h3');
+    const p = customBanner.querySelector('p');
+    const a = document.getElementById('customOrderBtn');
+    if (h3) h3.textContent = isEn ? 'Need Custom Software or Tailored Features?' : 'Butuh Custom Program atau Modifikasi Fitur Khusus?';
+    if (p) p.textContent = isEn
+      ? 'Our team can customize branding, integrate APIs, or build bespoke web systems for your business.'
+      : 'Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.';
+    if (a) a.textContent = isEn ? '✉ Request Custom Project' : '✉ Konsultasi Custom Project';
+  }
+  const bttBtn = document.getElementById('backToTopBtn');
+  if (bttBtn) {
+    bttBtn.title = isEn ? 'Back to Top' : 'Kembali ke Atas';
+    bttBtn.setAttribute('aria-label', bttBtn.title);
+  }
 
   const aiLauncherLbl = document.getElementById('aiLauncherLabel');
   if (aiLauncherLbl) aiLauncherLbl.textContent = isEn ? 'AI Assistant' : 'Asisten AI';
