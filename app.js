@@ -1553,6 +1553,98 @@ function renderCatalogPagination(totalItems, totalPages, startIdx, pageCount) {
   `;
 }
 
+window.openCustomConsultModal = function () {
+  const isEn = currentLocale === 'en';
+  const modal = document.getElementById('detailModal');
+  const titleEl = document.getElementById('detailModalTitle');
+  const bodyEl = document.getElementById('detailModalBody');
+  if (!modal || !bodyEl) return;
+
+  const email = SITE_CONFIG.orderEmail || 'dekamayooo@gmail.com';
+  if (titleEl) titleEl.textContent = isEn ? 'Custom Project Consultation' : 'Konsultasi Custom Project & Modifikasi';
+
+  bodyEl.innerHTML = `
+    <div style="display:grid; gap:14px; max-width:620px; margin:0 auto;">
+      <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6;">
+        ${isEn
+          ? 'Describe your custom web app, feature modification, or branding needs below. Send directly via <strong>Gmail Web</strong> or copy the formatted brief.'
+          : 'Tuliskan kebutuhan aplikasi khusus, modifikasi fitur, atau kustomisasi logo/domain Anda. Kirim langsung lewat <strong>Gmail Web</strong> atau salin format brief ke clipboard.'}
+      </p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Your Name' : 'Nama Anda'}</label>
+          <input id="custConsultName" type="text" placeholder="${isEn ? 'e.g. Alex / Acme Studio' : 'Misal: Budi / Toko Maju'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Email / WhatsApp' : 'Email / No. WhatsApp'}</label>
+          <input id="custConsultContact" type="text" placeholder="${isEn ? 'you@domain.com' : '0812xxx / email@domain.com'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);" />
+        </div>
+      </div>
+      <div>
+        <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Project Type' : 'Jenis Kebutuhan'}</label>
+        <select id="custConsultType" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);">
+          <option value="${isEn ? 'Customize Existing Ddev Studio App' : 'Modifikasi Aplikasi Ddev Studio'}">${isEn ? 'Customize Existing Ddev Studio App' : 'Modifikasi Aplikasi Ddev Studio (Logo/Fitur)'}</option>
+          <option value="${isEn ? 'Build Custom Web / POS / Booking App' : 'Pembuatan Sistem Web / POS / Travel Baru'}">${isEn ? 'Build Custom Web / POS / Booking App' : 'Pembuatan Sistem Web / POS / Travel Baru'}</option>
+          <option value="${isEn ? 'Custom Blogger XML Theme / Integration' : 'Integrasi Payment Gateway / API / Blogger'}">${isEn ? 'Custom Blogger XML Theme / API Integration' : 'Integrasi Payment Gateway / API / Blogger'}</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Feature & Requirement Details' : 'Detail Fitur / Deskripsi Singkat'}</label>
+        <textarea id="custConsultNotes" rows="4" placeholder="${isEn ? 'Describe features, deadline, or target budget...' : 'Ceritakan fitur yang diinginkan, estimasi waktu, atau produk referensi...'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary); resize:vertical;"></textarea>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; padding-top:4px;">
+        <button type="button" class="btn btn-primary" id="custSendGmailBtn">${isEn ? 'Open Gmail Web & Send →' : 'Kirim via Gmail Web →'}</button>
+        <button type="button" class="btn btn-ghost" id="custCopyBriefBtn">${isEn ? 'Copy Email & Brief' : 'Salin Brief & Email'}</button>
+        <a id="custMailtoFallback" class="btn btn-ghost" href="mailto:${email}">${isEn ? 'Default Mail App' : 'Aplikasi Email'}</a>
+      </div>
+      <div style="font-size:0.78rem; color:var(--text-muted);">
+        ${isEn ? 'Direct admin email:' : 'Email admin langsung:'} <strong>${email}</strong>
+      </div>
+    </div>
+  `;
+
+  const buildConsultText = () => {
+    const nm = (document.getElementById('custConsultName')?.value || '').trim() || '-';
+    const ct = (document.getElementById('custConsultContact')?.value || '').trim() || '-';
+    const tp = document.getElementById('custConsultType')?.value || 'Custom Project';
+    const nt = (document.getElementById('custConsultNotes')?.value || '').trim() || '-';
+    const subj = `Custom Project Inquiry: ${tp} - Ddev Studio`;
+    const body = isEn
+      ? `Hi Ddev Studio Team,\n\nI would like to request a custom project:\n- Name: ${nm}\n- Contact: ${ct}\n- Type: ${tp}\n- Details:\n${nt}\n\nLooking forward to your quote and timeline.`
+      : `Halo Tim Ddev Studio,\n\nSaya ingin konsultasi pembuatan/modifikasi custom project:\n- Nama: ${nm}\n- Kontak: ${ct}\n- Jenis Kebutuhan: ${tp}\n- Detail Kebutuhan:\n${nt}\n\nMohon info estimasi biaya dan waktu pengerjaannya. Terima kasih!`;
+    return { subj, body };
+  };
+
+  const syncMailto = () => {
+    const { subj, body } = buildConsultText();
+    const link = document.getElementById('custMailtoFallback');
+    if (link) link.href = `mailto:${email}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+  };
+  ['custConsultName', 'custConsultContact', 'custConsultType', 'custConsultNotes'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', syncMailto);
+  });
+  syncMailto();
+
+  document.getElementById('custSendGmailBtn')?.addEventListener('click', () => {
+    const { subj, body } = buildConsultText();
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+    window.open(gmailUrl, '_blank', 'noopener');
+  });
+
+  document.getElementById('custCopyBriefBtn')?.addEventListener('click', () => {
+    const { subj, body } = buildConsultText();
+    const full = `To: ${email}\nSubject: ${subj}\n\n${body}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(full).then(() => {
+        showToast(isEn ? 'Brief & email copied!' : 'Brief & email admin tersalin!');
+      });
+    }
+  });
+
+  modal.classList.add('open');
+};
+
 window.goToCatalogPage = function (pageNum) {
   currentCatalogPage = Math.max(1, Number(pageNum) || 1);
   renderProductsGrid();
@@ -2886,7 +2978,11 @@ function applyStorefrontLocaleUI() {
     if (p) p.textContent = isEn
       ? 'Our team can customize branding, integrate APIs, or build bespoke web systems for your business.'
       : 'Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.';
-    if (a) a.textContent = isEn ? '✉ Request Custom Project' : '✉ Konsultasi Custom Project';
+    if (a) {
+      const txtEl = a.querySelector('.custom-order-text');
+      if (txtEl) txtEl.textContent = isEn ? 'Request Custom Project' : 'Konsultasi Custom Project';
+      else a.textContent = isEn ? 'Request Custom Project' : 'Konsultasi Custom Project';
+    }
   }
   const bttBtn = document.getElementById('backToTopBtn');
   if (bttBtn) {
@@ -3548,6 +3644,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const closeCheckoutBtn = document.getElementById('closeCheckoutBtn');
   if (closeCheckoutBtn) closeCheckoutBtn.addEventListener('click', () => closeModal('checkoutModal'));
+
+  const customOrderBtn = document.getElementById('customOrderBtn');
+  if (customOrderBtn) {
+    customOrderBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.openCustomConsultModal();
+    });
+  }
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
