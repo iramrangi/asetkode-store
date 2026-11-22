@@ -77,6 +77,7 @@ function idrToCleanUsdNum(idrNum) {
 
 const CATEGORY_EN_MAP = {
   'Aplikasi': 'Web App',
+  'Aplikasi Web': 'Web App',
   'Source Code': 'Source Code',
   'Web App': 'Web App',
   'JavaScript': 'JavaScript',
@@ -314,8 +315,10 @@ const FALLBACK_PRODUCTS = [
     "titleEn": "Modern Admin Dashboard & Analytics UI Kit (Dark & Light Mode)",
     "categories": [
       "JavaScript",
+      "Desain Web",
       "Template",
-      "Web App"
+      "Web App",
+      "Source Code"
     ],
     "price": "Rp 89.000",
     "oldPrice": "Rp 179.000",
@@ -403,7 +406,8 @@ const FALLBACK_PRODUCTS = [
     "categories": [
       "JavaScript",
       "Template",
-      "Web App"
+      "Web App",
+      "Source Code"
     ],
     "price": "Rp 45.000",
     "oldPrice": "Rp 99.000",
@@ -490,7 +494,9 @@ const FALLBACK_PRODUCTS = [
     "titleEn": "Responsive Digital Wedding & Event Invitation Landing Page",
     "categories": [
       "JavaScript",
-      "Template"
+      "Desain Web",
+      "Template",
+      "Source Code"
     ],
     "price": "Rp 45.000",
     "oldPrice": "Rp 99.000",
@@ -755,7 +761,8 @@ const FALLBACK_PRODUCTS = [
     "categories": [
       "Desain Web",
       "Template",
-      "JavaScript"
+      "JavaScript",
+      "Source Code"
     ],
     "price": "Rp 39.000",
     "oldPrice": "Rp 89.000",
@@ -841,6 +848,7 @@ const FALLBACK_PRODUCTS = [
       "Desain Web",
       "Template",
       "Web App",
+      "JavaScript",
       "Source Code"
     ],
     "price": "Rp 69.000",
@@ -974,6 +982,7 @@ const FALLBACK_PRODUCTS = [
       "Aplikasi",
       "Program",
       "Web App",
+      "JavaScript",
       "Source Code"
     ],
     "price": "Rp 85.000",
@@ -1192,9 +1201,10 @@ const FALLBACK_PRODUCTS = [
     "title": "Website Agen Travel & Booking Wisata (NusantaraVoyage Pro)",
     "titleEn": "Travel Agency & Tour Booking Platform (NusantaraVoyage Pro)",
     "categories": [
-      "Aplikasi Web",
+      "Web App",
       "Template",
       "Desain Web",
+      "JavaScript",
       "Source Code"
     ],
     "price": "Rp 149.000",
@@ -1325,11 +1335,12 @@ window.__asetkodeBloggerCallback = function (data) {
       const featuresEn = Array.from(doc.querySelectorAll('.ddev-prose-en ul li')).map((li) => li.textContent.trim()).filter(Boolean);
       const deliverablesEn = Array.from(doc.querySelectorAll('.ddev-prose-en ol li')).map((li) => li.textContent.trim()).filter(Boolean);
 
+      const mergedCats = Array.from(new Set([...(fbMatch && Array.isArray(fbMatch.categories) ? fbMatch.categories : []), ...categories]));
       return {
         id: (fbMatch && fbMatch.id) || ('blogger-prod-' + idx),
         title,
         titleEn: explicitTitleEn || (fbMatch && fbMatch.titleEn) || '',
-        categories: categories.length ? categories : ['Source Code'],
+        categories: mergedCats.length ? mergedCats : ['Source Code'],
         price,
         oldPrice,
         priceUsd: priceUsd || (fbMatch && fbMatch.priceUsd) || '',
@@ -1384,23 +1395,63 @@ function syncFromBloggerCloud() {
   document.body.appendChild(script);
 }
 
+function matchesProductCategory(item, cat) {
+  if (!cat || cat === 'all') return true;
+  if (cat === '__saved__') return wishlistState.includes(item.id);
+  const cats = (item.categories || []).map((c) => String(c).toLowerCase());
+  const stack = String(item.stack || '').toLowerCase();
+  const key = String(cat).toLowerCase();
+  if (cats.includes(key)) return true;
+  if (key === 'web app') return cats.some((c) => c === 'aplikasi' || c === 'aplikasi web' || c === 'web app');
+  if (key === 'php') return cats.some((c) => c.includes('php') || c.includes('laravel')) || stack.includes('php') || stack.includes('laravel');
+  if (key === 'python') return stack.includes('python');
+  if (key === 'javascript') return stack.includes('javascript') || stack.includes('vanilla js') || stack.includes('modular js');
+  if (key === 'blogger') return stack.includes('blogger') || cats.some((c) => c.includes('blogger'));
+  if (key === 'desain web') return cats.some((c) => c.includes('desain') || c.includes('ui'));
+  return false;
+}
+
+function getReadyCatalogBase() {
+  return productsState.filter((item) => {
+    if (!SITE_CONFIG.onlyReadyProducts) return true;
+    const isReadyId = Array.isArray(SITE_CONFIG.readyIds) && SITE_CONFIG.readyIds.includes(item.id);
+    const hasLocalDemo = Boolean(item.demoUrl && item.demoUrl.includes('demo/'));
+    return isReadyId || hasLocalDemo;
+  });
+}
+
+function updateFilterChipCounts() {
+  const ready = getReadyCatalogBase();
+  const isEn = currentLocale === 'en';
+  const labels = {
+    all: isEn ? 'All Products' : 'Semua Karya',
+    'Web App': 'Web App',
+    'Source Code': 'Source Code',
+    PHP: 'PHP & Laravel',
+    Python: 'Python',
+    JavaScript: 'JavaScript',
+    'Desain Web': isEn ? 'Web Design' : 'Desain Web',
+    Template: isEn ? 'Templates / UI' : 'Template / UI',
+    Blogger: 'Blogger XML'
+  };
+  document.querySelectorAll('#filterBar .filter-chip').forEach((chip) => {
+    const cat = chip.getAttribute('data-cat');
+    if (!cat || cat === '__saved__') return;
+    const cnt = cat === 'all' ? ready.length : ready.filter((item) => matchesProductCategory(item, cat)).length;
+    const baseLbl = labels[cat] || cat;
+    chip.textContent = `${baseLbl} (${cnt})`;
+  });
+}
+
 // ================= 2. RENDER PRODUCT CATALOG GRID =================
 function renderProductsGrid() {
   const grid = document.getElementById('productGrid');
   if (!grid) return;
 
-  let list = productsState.filter((item) => {
-    if (SITE_CONFIG.onlyReadyProducts) {
-      const isReadyId = Array.isArray(SITE_CONFIG.readyIds) && SITE_CONFIG.readyIds.includes(item.id);
-      const hasLocalDemo = Boolean(item.demoUrl && item.demoUrl.includes('demo/'));
-      if (!isReadyId && !hasLocalDemo) return false;
-    }
+  updateFilterChipCounts();
 
-    const matchesCat =
-      activeCategory === 'all' ||
-      (activeCategory === '__saved__'
-        ? wishlistState.includes(item.id)
-        : item.categories.some((c) => c.toLowerCase() === activeCategory.toLowerCase()));
+  let list = getReadyCatalogBase().filter((item) => {
+    const matchesCat = matchesProductCategory(item, activeCategory);
 
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch =
