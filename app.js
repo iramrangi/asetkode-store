@@ -1367,26 +1367,17 @@ function renderProductsGrid() {
         .split('+')
         .map((s) => s.trim())
         .filter(Boolean)
-        .slice(0, 3);
+        .slice(0, 2);
+      const shortVer = String(p.version || 'v1.0').split(' ')[0];
 
       return `
         <article class="product-card" data-id="${p.id}">
-          <div class="card-window-top">
-            <div class="window-dots">
-              <span class="win-dot r"></span>
-              <span class="win-dot y"></span>
-              <span class="win-dot g"></span>
-            </div>
-            <span class="card-version-text">${p.version} • ZIP Ready</span>
-          </div>
-
           <div class="card-thumb">
             <img src="${p.thumbnailUrl}" alt="${disp.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
-            ${hasRealDemo ? `<span class="live-app-pill">● Live App</span>` : ''}
             <div class="thumb-tags">
               ${p.categories
-                .slice(0, 3)
+                .slice(0, 1)
                 .map((cat) => `<span class="thumb-tag">${cat}</span>`)
                 .join('')}
             </div>
@@ -1395,7 +1386,7 @@ function renderProductsGrid() {
                 Live Demo
               </button>
               <button type="button" class="overlay-btn" onclick="openDetailById('${p.id}')">
-                ${disp.isEn ? 'Details &amp; .ZIP' : 'Detail &amp; Isi .ZIP'}
+                ${disp.isEn ? 'Details' : 'Detail'}
               </button>
             </div>
           </div>
@@ -1406,7 +1397,6 @@ function renderProductsGrid() {
 
             <div class="stack-row">
               ${stackChips.map((st) => `<span class="stack-chip">${st}</span>`).join('')}
-              <span class="stack-chip">${disp.isEn ? 'Instant ZIP' : 'Auto-Download'}</span>
             </div>
 
             <div class="card-footer">
@@ -1415,18 +1405,18 @@ function renderProductsGrid() {
                   <span class="price-current">${disp.price}</span>
                   ${disp.oldPrice ? `<span class="price-old">${disp.oldPrice}</span>` : ''}
                 </div>
-                <span class="verified-pill">✓ Instant ZIP</span>
+                <span class="verified-pill">${shortVer}</span>
               </div>
 
               <div class="card-actions">
-                <button type="button" class="btn-card" onclick="openLiveDemoById('${p.id}')" title="${disp.isEn ? 'Launch Interactive Demo' : 'Coba Simulasi Live Demo'}">
+                <button type="button" class="btn-card" onclick="openLiveDemoById('${p.id}')" title="${disp.isEn ? 'Launch Interactive Demo' : 'Coba Live Demo'}">
                   Demo
                 </button>
-                <button type="button" class="btn-card" onclick="toggleCartItemById('${p.id}')" title="${disp.isEn ? 'Add to Cart' : 'Masukkan ke Keranjang'}">
-                  ${inCart ? (disp.isEn ? '✓ In Cart' : '✓ Keranjang') : (disp.isEn ? '+ Cart' : '+ Keranjang')}
+                <button type="button" class="btn-card" onclick="toggleCartItemById('${p.id}')" title="${disp.isEn ? 'Add to Cart' : 'Tambah ke Keranjang'}">
+                  ${inCart ? (disp.isEn ? '✓ Added' : '✓ Di Cart') : (disp.isEn ? '+ Cart' : '+ Cart')}
                 </button>
                 <button type="button" class="btn-card buy" onclick="openInstantCheckoutById('${p.id}')">
-                  ${disp.isEn ? 'Buy Now' : 'Beli Instan'}
+                  ${disp.isEn ? 'Buy' : 'Beli'}
                 </button>
               </div>
             </div>
@@ -2372,7 +2362,7 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.querySelector('.promo-ribbon-inner'),
     isEn,
-    '<span class="promo-pill">GLOBAL LAUNCH</span><span>Save up to <strong>50%</strong> + Extra 20% Auto-Bundle Discount in Cart • Card / Polar.sh / Email Order: <strong data-order-email>dekamayooo@gmail.com</strong></span>'
+    '<span class="promo-pill">PROMO</span><span>Up to <strong>50% Off</strong> + 20% Cart Discount (2+ Items) • Card / Polar.sh Checkout</span>'
   );
 
   const searchInput = document.getElementById('searchInput');
@@ -2392,16 +2382,16 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.querySelector('.hero-title'),
     isEn,
-    'Launch Projects &amp; Businesses 10x Faster with <span class="gradient-text">Production Code</span>'
+    'Production Web Apps &amp; Templates <span class="gradient-text">Ready to Ship</span>'
   );
   setLocalizedInner(
     document.querySelector('.hero-desc'),
     isEn,
-    'Explore ready-to-launch web apps, Python automation scripts, Blogger XML themes &amp; modern UI kits. Test the <strong>Interactive Live Demo</strong> right in your browser before purchasing, and receive the complete open-source <code>.ZIP</code> bundle.'
+    'Test <strong>Live Demos</strong> right in your browser, pay once in USD, and download the complete <code>.ZIP</code> bundle.'
   );
   const heroCtas = document.querySelectorAll('.hero-cta-row a');
-  if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Explore Catalog & Live Demo →' : 'Eksplor Katalog & Live Demo →';
-  if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'All-In-One Pack ($49 USD • Save 80%)' : 'All-In-One Pack (Hemat 65%)';
+  if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Browse Products →' : 'Lihat Semua Produk →';
+  if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'All-Access Bundle ($49)' : 'Paket Bundling Hemat';
 
   const metricLabels = document.querySelectorAll('.hero-metrics .metric-label');
   const metricVals = document.querySelectorAll('.hero-metrics .metric-val');
@@ -2424,9 +2414,10 @@ function applyStorefrontLocaleUI() {
   updateRoiCalculatorUI();
 
   const bundleBox = document.getElementById('bundleDeal');
+  document.querySelectorAll('.hero-inline-trust span').forEach((sp, i) => { const enT = ['✓ 100% Open Source', '✓ Live Demo Ready', '✓ Commercial License']; const idT = ['✓ 100% Open Code', '✓ Live Demo Browser', '✓ Lisensi Komersial']; sp.textContent = isEn ? enT[i] : idT[i]; });
   if (bundleBox) {
-    setLocalizedInner(bundleBox.querySelector('h2'), isEn, 'Get All 24 Production Apps &amp; Templates Together (Save 80%)');
-    setLocalizedInner(bundleBox.querySelector('p'), isEn, 'Unlock every flagship <code>.ZIP</code> bundle &amp; Live Demo (POS Inventory, Invoice Pro, Booking System, Laundry POS, QR Attendance, Blogger XML Themes &amp; UI Kits).');
+    setLocalizedInner(bundleBox.querySelector('h2'), isEn, 'Get All 24 Source Codes &amp; Templates Together');
+    setLocalizedInner(bundleBox.querySelector('p'), isEn, 'POS, Invoice, Booking, Laundry, Blogger XML Themes &amp; Python Bots — all 24 <code>.ZIP</code> bundles (Save 80%).');
     const oldBundleEl = bundleBox.querySelector('.bundle-action > div > div:first-child');
     if (oldBundleEl) oldBundleEl.textContent = isEn ? 'Individual Total: $249' : 'Total Satuan: Rp 419.000';
     const newBundleEl = bundleBox.querySelector('.bundle-price-num');
@@ -2452,23 +2443,19 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.getElementById('keunggulan'),
     isEn,
-    '<div class="section-header"><span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">WHY DDEV STUDIO?</span><h2>Engineered for Fast Developer &amp; Business Launch</h2></div>' +
-    '<div class="bento-grid">' +
-    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.78rem; font-weight:800; margin-bottom:10px; color:var(--text-muted);">01 / LIVE SIMULATOR</div><h3 style="font-size:1rem; font-weight:800; margin-bottom:6px;">Interactive Live Demo in Browser</h3><p style="font-size:0.85rem; color:var(--text-secondary);">Test real POS workflows, booking slots, themes, and responsive mobile views directly in your browser before purchasing.</p></div>' +
-    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.78rem; font-weight:800; margin-bottom:10px; color:var(--text-muted);">02 / SMART CART</div><h3 style="font-size:1rem; font-weight:800; margin-bottom:6px;">Multi-Item Cart &amp; 20% Bundle Off</h3><p style="font-size:0.85rem; color:var(--text-secondary);">Add 2 or more source code items to your cart to automatically unlock an instant 20% bundle discount.</p></div>' +
-    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.78rem; font-weight:800; margin-bottom:10px; color:var(--text-muted);">03 / UNLOCKED CODE</div><h3 style="font-size:1rem; font-weight:800; margin-bottom:6px;">100% Clean Unencrypted Code</h3><p style="font-size:0.85rem; color:var(--text-secondary);">Every release ships clean and organized with sample datasets, setup docs, and commercial client usage rights.</p></div>' +
-    '</div>'
+    '<div class="section-header"><h2>Why Ddev Studio?</h2></div><div class="bento-grid">' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Test Before Buying</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Preview Desktop &amp; Mobile workflows live in browser.</p></div>' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / BUNDLE 20%</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Auto Cart Discount</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Add 2+ products to unlock 20% off automatically.</p></div>' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open &amp; Licensed</h3><p style="font-size:0.83rem; color:var(--text-secondary);">No obfuscation, includes sample data &amp; commercial rights.</p></div></div>'
   );
 
   setLocalizedInner(
     document.getElementById('cara-order'),
     isEn,
-    '<div class="section-header"><span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">HOW TO ORDER</span><h2>Get Your Source Code in 3 Simple Steps</h2><p>One-time payment with zero monthly subscriptions — ready to run locally or deploy to the cloud.</p></div>' +
-    '<div class="steps-grid">' +
-    '<div class="step-card"><span class="step-num">01</span><h3>Test Live Demo &amp; Pick Tools</h3><p>Click <strong>Live Demo</strong> on any item to test features interactively. Add 2+ products to unlock an automatic 20% cart discount.</p></div>' +
-    '<div class="step-card"><span class="step-num">02</span><h3>Pay Securely in USD</h3><p>Click <strong>Buy Now</strong> to pay globally via Polar.sh (Visa, Mastercard, Apple Pay, PayPal) or request an instant USD invoice via <strong data-order-email>dekamayooo@gmail.com</strong>.</p></div>' +
-    '<div class="step-card"><span class="step-num">03</span><h3>Receive .ZIP &amp; Deploy</h3><p>Your complete open-source <code>.ZIP</code> bundle + English setup guide are delivered straight to your inbox. Unzip and go live in minutes.</p></div>' +
-    '</div>'
+    '<div class="section-header"><h2>How to Buy in 3 Steps</h2></div><div class="steps-grid">' +
+    '<div class="step-card"><span class="step-num">01</span><h3>Try Demo &amp; Pick</h3><p>Test any <strong>Live Demo</strong>, then click <strong>Buy</strong> or add 2+ to Cart.</p></div>' +
+    '<div class="step-card"><span class="step-num">02</span><h3>Pay via Polar.sh</h3><p>Fast USD checkout with Visa, Mastercard, or Apple Pay.</p></div>' +
+    '<div class="step-card"><span class="step-num">03</span><h3>Get .ZIP Bundle</h3><p>Full source code &amp; setup guide delivered to your email.</p></div></div>'
   );
 
   setLocalizedInner(
