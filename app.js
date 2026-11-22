@@ -3131,20 +3131,27 @@ function sendToAiAssistant(rawText) {
   // 1b. Route authoritative pricing/bundle/payment/refund/license intents locally so replies are 100% accurate with action buttons
   if (/(cara\s+bayar|pembayaran|how\s+to\s+pay|payment|\bmayar\b|\bqris\b|\bpolar\b|visa|mastercard|apple\s+pay|\busd\b|bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|berapa\s+harga|kisaran\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much|refund|pengembalian|lisensi|license|how\s+to\s+(install|run|setup)|cara\s+(install|instal|pasang|pakai|setup)|USD-\d{4,8}-\d{2,4}|klaim|claim|kirim\s+ulang|belum\s+(masuk|terima|dapat))/i.test(text)) {
     const directRes = buildStorefrontAiFallback(text);
+    const hasDemoAsk = /\b(demo|trial|preview|coba)\b/i.test(text);
+    const demoLead = hasDemoAsk
+      ? (isEn ? 'Yes! Every app includes an interactive <strong>Live Demo</strong> button you can test in your browser first.<br/><br/>' : 'Tentu! Hampir semua produk punya tombol <strong>Live Demo</strong> yang bisa dicoba langsung di browser.<br/><br/>')
+      : '';
     aiChatHistoryState.push({ role: 'user', text });
-    addAiChatMessage('bot', directRes.html, directRes.actions);
+    addAiChatMessage('bot', demoLead + directRes.html, directRes.actions);
     return;
   }
 
   // 2. Try live Gemini LLM on Apps Script (Indonesian or natural bilingual prompt), else local smart fallback
   if (gasUrl && aiServerGeminiFlag !== false) {
     const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'AI Assistant is typing...' : 'Asisten sedang mengetik...'}</em>`, []);
+    const enPricesHint = isEn
+      ? '[IMPORTANT FOR EN/GLOBAL USER: Reply in English ONLY. Prices are in USD ($7-$25 individual, $49 VIP Bundle of all 24 apps, 20% discount for 2+ cart items). Global payment is via Polar.sh (Visa, Mastercard, Apple Pay) — NEVER mention IDR/Rupiah/QRIS/Virtual Account/Mayar to USD buyers.] '
+      : '[Catatan: Diskon keranjang 2+ produk adalah 20%, tersedia VIP Bundle 24 produk Rp 249.000.] ';
     fetch(gasUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
         action: 'chat',
-        message: (isEn ? '[Reply concisely in English, USD pricing where relevant] ' : '') + text,
+        message: enPricesHint + text,
         history: aiChatHistoryState.slice(-6),
         pageTitle: document.title
       })
@@ -3153,16 +3160,21 @@ function sendToAiAssistant(rawText) {
       .then((data) => {
         if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
         if (data && data.mode === 'gemini' && data.reply) {
-          if (/tidak menyediakan paket bundling|tidak ada paket bundling|no longer offer a vip bundle/i.test(data.reply)) {
+          const stalePattern = /tidak menyediakan paket bundling|tidak ada paket bundling|no longer offer a vip bundle/i;
+          const wrongEnCurrency = isEn && /(\bRp\s*\d|Rupiah|\bQRIS\b|Virtual Account|Mayar)/i.test(data.reply);
+          if (stalePattern.test(data.reply) || wrongEnCurrency) {
             const safeFb = buildStorefrontAiFallback(text);
             aiChatHistoryState.push({ role: 'user', text });
             addAiChatMessage('bot', safeFb.html, safeFb.actions);
             return;
           }
+          const normalizedReply = data.reply
+            .replace(/diskon(\s+(?:spesial|otomatis))?\s+15%/gi, 'diskon$1 20%')
+            .replace(/15%(\s+(?:automatic\s+)?)?discount/gi, '20%$1discount');
           aiServerGeminiFlag = true;
           aiChatHistoryState.push({ role: 'user', text });
-          aiChatHistoryState.push({ role: 'model', text: data.reply });
-          const formatted = escAiHtml(data.reply)
+          aiChatHistoryState.push({ role: 'model', text: normalizedReply });
+          const formatted = escAiHtml(normalizedReply)
             .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
             .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
             .replace(/`([^`]+)`/g, '<code>$1</code>')
