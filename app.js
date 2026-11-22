@@ -105,6 +105,7 @@ function localizeDemoUrl(url) {
 
 const BLOGGER_ORIGIN = SITE_CONFIG.bloggerOrigin;
 const STORAGE_CART_KEY = 'asetkode_pro_cart_v1';
+const STORAGE_WISHLIST_KEY = 'asetkode_wishlist_v1';
 const STORAGE_THEME_KEY = 'asetkode_bw_theme_v2';
 
 // Built-in fallback catalog (synced with asetkode.blogspot.com)
@@ -1290,7 +1291,31 @@ window.__asetkodeBloggerCallback = function (data) {
     if (syncedProducts.length > 0) {
       productsState = syncedProducts;
       renderProductsGrid();
-      const statusEl = document.getElementById('catalogStatusText');
+      const savedFilterBtn = document.getElementById('savedFilterBtn');
+  if (savedFilterBtn) {
+    const cnt = wishlistState.length;
+    savedFilterBtn.innerHTML = isEn
+      ? `♥ Saved (<span id="savedCountNum">${cnt}</span>)`
+      : `♥ Disimpan (<span id="savedCountNum">${cnt}</span>)`;
+  }
+  const customBanner = document.getElementById('customOrderSection');
+  if (customBanner) {
+    const h3 = customBanner.querySelector('h3');
+    const p = customBanner.querySelector('p');
+    const a = document.getElementById('customOrderBtn');
+    if (h3) h3.textContent = isEn ? 'Need Custom Software or Tailored Features?' : 'Butuh Custom Program atau Modifikasi Fitur Khusus?';
+    if (p) p.textContent = isEn
+      ? 'Our team can customize branding, integrate APIs, or build bespoke web systems for your business.'
+      : 'Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.';
+    if (a) a.textContent = isEn ? '✉ Request Custom Project' : '✉ Konsultasi Custom Project';
+  }
+  const bttBtn = document.getElementById('backToTopBtn');
+  if (bttBtn) {
+    bttBtn.title = isEn ? 'Back to Top' : 'Kembali ke Atas';
+    bttBtn.setAttribute('aria-label', bttBtn.title);
+  }
+
+  const statusEl = document.getElementById('catalogStatusText');
       if (statusEl) {
         statusEl.textContent = currentLocale === 'en'
           ? `Live Synced with asetkode.blogspot.com (${syncedProducts.length} active products)`
@@ -1329,7 +1354,9 @@ function renderProductsGrid() {
 
     const matchesCat =
       activeCategory === 'all' ||
-      item.categories.some((c) => c.toLowerCase() === activeCategory.toLowerCase());
+      (activeCategory === '__saved__'
+        ? wishlistState.includes(item.id)
+        : item.categories.some((c) => c.toLowerCase() === activeCategory.toLowerCase()));
 
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch =
@@ -1370,6 +1397,7 @@ function renderProductsGrid() {
       const disp = getProdDisplay(p);
       const disc = getDiscountPercent(p.price, p.oldPrice);
       const inCart = cartState.some((c) => c.id === p.id);
+      const isSaved = wishlistState.includes(p.id);
       const hasRealDemo = Boolean(p.demoUrl && !p.demoUrl.startsWith('http'));
       const stackChips = p.stack
         .split('+')
@@ -1382,6 +1410,7 @@ function renderProductsGrid() {
         <article class="product-card" data-id="${p.id}">
           <div class="card-thumb">
             <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
+            <button type="button" class="save-heart-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleWishlistById('${p.id}')" title="${disp.isEn ? 'Save product' : 'Simpan produk'}" aria-label="${disp.isEn ? 'Save product' : 'Simpan produk'}">${isSaved ? '♥' : '♡'}</button>
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             <div class="thumb-tags">
               ${p.categories
@@ -1759,7 +1788,7 @@ window.openDetailById = function (productId) {
               ${disc > 0 ? `<span class="discount-pill" style="position:static;">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             </div>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
               <button type="button" class="btn btn-ghost" onclick="closeModal('detailModal'); openLiveDemoById('${prod.id}')">
                 Live Demo
               </button>
@@ -1767,9 +1796,18 @@ window.openDetailById = function (productId) {
                 ${disp.isEn ? 'Buy &amp; Download' : 'Beli &amp; Download'}
               </button>
             </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" onclick="toggleWishlistById('${prod.id}'); openDetailById('${prod.id}')">
+                ${wishlistState.includes(prod.id) ? (disp.isEn ? '♥ Saved' : '♥ Disimpan') : (disp.isEn ? '♡ Save' : '♡ Simpan')}
+              </button>
+              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" onclick="copyProductLinkById('${prod.id}')">
+                ${disp.isEn ? '🔗 Copy Link' : '🔗 Salin Link'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      ${buildRelatedProductsHtml(prod, disp.isEn)}
     `;
   }
 
@@ -2095,6 +2133,12 @@ function buildBuiltInPaymentGatewayHTML(order) {
   const baseBody = `Halo Admin ${SITE_CONFIG.brandName},\n\nSaya sudah melakukan pembayaran QRIS untuk:\n- Produk: ${order.title}\n- Total: ${order.price}\n`;
   const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
   const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
+  const qrisAbsUrl = new URL(resolveStoreAssetUrl('qris-ddev-studio.jpg'), (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/')).href;
+  const gasUrl = String(SITE_CONFIG.gasWebAppUrl || '').trim();
+  const basePriceNum = parsePriceNum(order.price);
+  const orderItems = Array.isArray(order.items) && order.items.length
+    ? order.items
+    : [{ id: order.id || 'prod', name: order.title, price: basePriceNum, quantity: 1 }];
 
   return `<!DOCTYPE html>
     <html lang="id">
@@ -2112,37 +2156,163 @@ function buildBuiltInPaymentGatewayHTML(order) {
         .qris-box { display: inline-block; border: 1px solid #d4d4d8; border-radius: 12px; padding: 10px; background: #fff; margin-bottom: 12px; }
         .qris-box img { max-width: 220px; width: 100%; height: auto; display: block; border-radius: 6px; }
         input { width: 100%; padding: 10px 13px; border: 1px solid #d4d4d8; border-radius: 9px; font-size: 13.5px; margin-bottom: 10px; outline: none; }
-        input:focus { border-color: #09090b; }
-        .btn { display: block; width: 100%; background: #09090b; color: #fff; text-decoration: none; border: none; padding: 12px; border-radius: 9px; font-size: 13.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; }
-        .btn-sec { display: block; width: 100%; background: #fff; color: #09090b; text-decoration: none; border: 1px solid #cbd5e1; padding: 10px; border-radius: 9px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+        input:focus { border-color: #4f46e5; }
+        .btn { display: block; width: 100%; background: #4f46e5; color: #fff; text-decoration: none; border: none; padding: 12px; border-radius: 9px; font-size: 13.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; }
+        .btn-dark { background: #09090b; }
+        .btn-sec { display: block; width: 100%; background: #fff; color: #09090b; text-decoration: none; border: 1px solid #cbd5e1; padding: 10px; border-radius: 9px; font-size: 13px; font-weight: 700; margin-bottom: 10px; cursor: pointer; }
         .note { font-size: 12px; color: #52525b; background: #f4f4f5; padding: 10px; border-radius: 9px; line-height: 1.5; }
+        .alert { font-size: 12px; color: #92400e; background: #fef3c7; border: 1px solid #fde68a; padding: 9px 11px; border-radius: 9px; margin-bottom: 12px; display: none; text-align: left; }
+        .dl-btn { display: block; width: 100%; background: #059669; color: #fff; padding: 11px; border-radius: 9px; text-decoration: none; font-weight: 800; font-size: 13.5px; margin-bottom: 8px; }
       </style>
     </head>
     <body>
       <div class="card">
-        <span class="badge">PEMBAYARAN QRIS • SEMUA BANK &amp; E-WALLET</span>
-        <div class="title">${esc(order.title)}</div>
-        <div class="price">${esc(order.price)}</div>
-        <div class="qris-box">
-          <img src="${resolveStoreAssetUrl('qris-ddev-studio.jpg')}" alt="QRIS Ddev Studio" />
+        <div id="stepMayarForm">
+          <span class="badge">CHECKOUT INDONESIA • MAYAR / QRIS</span>
+          <div class="title">${esc(order.title)}</div>
+          <div class="price">${esc(order.price)}</div>
+          <form id="mayarInitForm">
+            <input type="text" id="custName" placeholder="Nama Lengkap Anda" required />
+            <input type="email" id="custEmail" placeholder="Email aktif penerima file (.ZIP)" required />
+            <input type="tel" id="custPhone" placeholder="No. WhatsApp (opsional)" />
+            <button type="submit" class="btn" id="mayarCreateBtn">Lanjut Pembayaran Instan →</button>
+          </form>
+          <button type="button" class="btn-sec" id="showQrisDirectBtn">Atau Bayar Langsung via Scan QRIS</button>
+          <div class="note">File <code>.ZIP</code> + panduan instalasi langsung dikirim ke email Anda setelah pembayaran berhasil.</div>
         </div>
-        <input type="email" id="buyerEmail" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
-        <a id="qrisGmailBtn" class="btn" href="${esc(gmailHref)}" target="_blank" rel="noopener">Sudah Scan Bayar? Konfirmasi via Gmail ↗</a>
-        <a class="btn-sec" href="${esc(mailHref)}">Buka Aplikasi Email Lain</a>
-        <div class="note">
-          Scan QRIS di atas melalui DANA, GoPay, OVO, ShopeePay, atau m-Banking sebesar <strong>${esc(order.price)}</strong>, lalu klik konfirmasi di atas agar paket <code>.ZIP</code> dikirim ke email Anda.
+
+        <div id="stepMayarWait" style="display:none;">
+          <span class="badge">INVOICE MAYAR AKTIF</span>
+          <div class="title" id="waitOrderLabel">Menunggu Pembayaran</div>
+          <div class="price">${esc(order.price)}</div>
+          <a href="#" id="mayarPayAnchor" class="btn" target="_blank" rel="noopener">Buka Halaman Bayar Mayar ↗</a>
+          <div class="note" id="waitStatusNote">Sedang memantau status pembayaran otomatis setiap 5 detik... Begitu lunas, tombol unduh <code>.ZIP</code> langsung muncul di sini.</div>
+        </div>
+
+        <div id="stepQrisFallback" style="display:none;">
+          <span class="badge">PEMBAYARAN QRIS • SEMUA BANK &amp; E-WALLET</span>
+          <div class="title">${esc(order.title)}</div>
+          <div class="price">${esc(order.price)}</div>
+          <div id="qrisReasonAlert" class="alert"></div>
+          <div class="qris-box">
+            <img src="${esc(qrisAbsUrl)}" alt="QRIS Ddev Studio" />
+          </div>
+          <input type="email" id="buyerEmail" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
+          <a id="qrisGmailBtn" class="btn btn-dark" href="${esc(gmailHref)}" target="_blank" rel="noopener">Sudah Scan Bayar? Konfirmasi via Gmail ↗</a>
+          <a class="btn-sec" href="${esc(mailHref)}">Buka Aplikasi Email Lain</a>
+          <div class="note">
+            Scan QRIS di atas melalui DANA, GoPay, OVO, ShopeePay, atau m-Banking sebesar <strong>${esc(order.price)}</strong>, lalu klik konfirmasi di atas agar paket <code>.ZIP</code> dikirim ke email Anda.
+          </div>
+        </div>
+
+        <div id="stepPaidSuccess" style="display:none;">
+          <span class="badge">✓ PEMBAYARAN LUNAS</span>
+          <div class="title">Terima Kasih! Paket .ZIP Anda Siap Diunduh</div>
+          <div id="paidLinksWrap" style="margin:14px 0;"></div>
+          <div class="note">Salinan link download juga otomatis dikirim ke email Anda.</div>
         </div>
       </div>
       <script>
-        var em = document.getElementById('buyerEmail');
-        var btn = document.getElementById('qrisGmailBtn');
-        if (em && btn) {
-          em.addEventListener('input', function () {
-            var v = em.value.trim();
-            var b = ${JSON.stringify(baseBody)} + (v ? '- Email Penerima .ZIP: ' + v + '\n' : '') + '\nTerlampir bukti bayar QRIS saya. Terima kasih!';
-            btn.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(${JSON.stringify(SITE_CONFIG.orderEmail)}) + '&su=' + encodeURIComponent(${JSON.stringify(subj)}) + '&body=' + encodeURIComponent(b);
-          });
+        var gasUrl = ${JSON.stringify(gasUrl)};
+        var orderTitle = ${JSON.stringify(order.title)};
+        var orderItems = ${JSON.stringify(orderItems)};
+        var baseBody = ${JSON.stringify(baseBody)};
+        var orderEmailTo = ${JSON.stringify(SITE_CONFIG.orderEmail)};
+        var subj = ${JSON.stringify(subj)};
+
+        function syncGmailHref(val) {
+          var v = String(val || '').trim();
+          var btn = document.getElementById('qrisGmailBtn');
+          if (!btn) return;
+          var b = baseBody + (v ? '- Email Penerima .ZIP: ' + v + '\n' : '') + '\nTerlampir bukti bayar QRIS saya. Terima kasih!';
+          btn.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(orderEmailTo) + '&su=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(b);
         }
+
+        function switchToQris(prefillEmail, reasonText) {
+          document.getElementById('stepMayarForm').style.display = 'none';
+          document.getElementById('stepMayarWait').style.display = 'none';
+          document.getElementById('stepQrisFallback').style.display = 'block';
+          var emInput = document.getElementById('buyerEmail');
+          if (emInput && prefillEmail) {
+            emInput.value = prefillEmail;
+            syncGmailHref(prefillEmail);
+          }
+          var al = document.getElementById('qrisReasonAlert');
+          if (al && reasonText) {
+            al.textContent = reasonText;
+            al.style.display = 'block';
+          }
+        }
+
+        document.getElementById('buyerEmail').addEventListener('input', function () {
+          syncGmailHref(this.value);
+        });
+        document.getElementById('showQrisDirectBtn').addEventListener('click', function () {
+          switchToQris(document.getElementById('custEmail').value, '');
+        });
+
+        var pollTimer = null;
+        function startStatusPolling(oid) {
+          if (pollTimer) clearInterval(pollTimer);
+          pollTimer = setInterval(function () {
+            fetch(gasUrl + '?action=status&orderId=' + encodeURIComponent(oid))
+              .then(function (r) { return r.json(); })
+              .then(function (st) {
+                if (st && st.status === 'PAID') {
+                  clearInterval(pollTimer);
+                  document.getElementById('stepMayarWait').style.display = 'none';
+                  document.getElementById('stepPaidSuccess').style.display = 'block';
+                  var wrap = document.getElementById('paidLinksWrap');
+                  wrap.innerHTML = (st.downloadLinks || []).map(function (d) {
+                    return '<a class="dl-btn" href="' + d.url + '" target="_blank" rel="noopener">⬇ Unduh: ' + (d.name || 'File .ZIP') + '</a>';
+                  }).join('');
+                }
+              })
+              .catch(function () {});
+          }, 5000);
+        }
+
+        document.getElementById('mayarInitForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name = document.getElementById('custName').value.trim();
+          var email = document.getElementById('custEmail').value.trim();
+          var phone = document.getElementById('custPhone').value.trim();
+          var btn = document.getElementById('mayarCreateBtn');
+          if (!gasUrl) {
+            switchToQris(email, '');
+            return;
+          }
+          btn.disabled = true;
+          btn.textContent = 'Menyiapkan Invoice...';
+          fetch(gasUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'create',
+              customerName: name,
+              customerEmail: email,
+              customerPhone: phone,
+              productTitle: orderTitle,
+              items: orderItems
+            })
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (res) {
+              if (res && res.ok && res.paymentUrl) {
+                document.getElementById('stepMayarForm').style.display = 'none';
+                document.getElementById('stepMayarWait').style.display = 'block';
+                document.getElementById('waitOrderLabel').textContent = 'Order ID: ' + res.orderId;
+                document.getElementById('mayarPayAnchor').href = res.paymentUrl;
+                try { window.open(res.paymentUrl, '_blank', 'noopener'); } catch (err) {}
+                startStatusPolling(res.orderId);
+              } else {
+                switchToQris(email, 'Gateway Mayar sedang menunggu aktivasi — silakan bayar cepat via QRIS resmi di bawah ini.');
+              }
+            })
+            .catch(function () {
+              switchToQris(email, 'Silakan selesaikan pembayaran cepat via QRIS Ddev Studio di bawah ini.');
+            });
+        });
       </script>
     </body>
     </html>`;
@@ -2553,6 +2723,98 @@ function applyStorefrontLocaleUI() {
   updateCartUI();
 }
 
+// ================= WISHLIST, DEEP LINK & RELATED PRODUCTS =================
+let wishlistState = [];
+function loadWishlistFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_WISHLIST_KEY);
+    if (raw) wishlistState = JSON.parse(raw) || [];
+  } catch (e) { wishlistState = []; }
+  updateWishlistCounter();
+}
+
+function updateWishlistCounter() {
+  const cnt = wishlistState.length;
+  const hNum = document.getElementById('headerSavedNum');
+  const fNum = document.getElementById('savedCountNum');
+  if (hNum) hNum.textContent = cnt;
+  if (fNum) fNum.textContent = cnt;
+}
+
+window.toggleWishlistById = function (productId) {
+  const isEn = currentLocale === 'en';
+  const idx = wishlistState.indexOf(productId);
+  if (idx >= 0) {
+    wishlistState.splice(idx, 1);
+    showToast(isEn ? 'Removed from saved list.' : 'Dihapus dari daftar disimpan.');
+  } else {
+    wishlistState.push(productId);
+    showToast(isEn ? 'Saved to wishlist!' : 'Produk disimpan ke wishlist!');
+  }
+  try { localStorage.setItem(STORAGE_WISHLIST_KEY, JSON.stringify(wishlistState)); } catch (e) {}
+  updateWishlistCounter();
+  renderProductsGrid();
+};
+
+window.copyProductLinkById = function (productId) {
+  const isEn = currentLocale === 'en';
+  const base = window.location.origin + window.location.pathname;
+  const shareUrl = `${base}?product=${encodeURIComponent(productId)}`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      showToast(isEn ? 'Product link copied to clipboard!' : 'Link produk berhasil disalin!');
+    }).catch(() => {
+      showToast(shareUrl);
+    });
+  } else {
+    showToast(shareUrl);
+  }
+};
+
+function buildRelatedProductsHtml(prod, isEn) {
+  const cats = prod.categories || [];
+  const related = productsState.filter((p) =>
+    p.id !== prod.id && p.categories.some((c) => cats.includes(c))
+  ).slice(0, 3);
+  if (!related.length) return '';
+  return `
+    <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border-color);">
+      <div style="font-size:0.84rem; font-weight:800;">${isEn ? 'Related Products You May Like:' : 'Produk Terkait Lainnya:'}</div>
+      <div class="related-mini-grid">
+        ${related.map((r) => {
+          const d = getProdDisplay(r);
+          return `
+            <button type="button" class="related-mini-card" onclick="openDetailById('${r.id}')">
+              <div style="font-size:0.78rem; font-weight:800; line-height:1.35; margin-bottom:4px;">${escAiHtml(d.title)}</div>
+              <div style="font-size:0.76rem; font-weight:800; color:#059669; font-family:var(--font-mono);">${escAiHtml(d.price)}</div>
+            </button>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function initBackToTopAndSavedBtn() {
+  const btt = document.getElementById('backToTopBtn');
+  if (btt) {
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 360);
+    }, { passive: true });
+    btt.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+  const hSaved = document.getElementById('headerSavedBtn');
+  const sChip = document.getElementById('savedFilterBtn');
+  if (hSaved && sChip) {
+    hSaved.addEventListener('click', () => {
+      sChip.click();
+      sChip.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+}
+
 // ================= FLOATING BILINGUAL AI ASSISTANT =================
 let aiAssistantBooted = false;
 let aiChatHistoryState = [];
@@ -2948,9 +3210,17 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroStudioAndROI();
   initFaqAccordion();
   loadCartFromStorage();
+  loadWishlistFromStorage();
   applyStorefrontLocaleUI();
+  initBackToTopAndSavedBtn();
   initAiAssistantWidget();
   syncFromBloggerCloud();
+  try {
+    const deepProd = new URLSearchParams(window.location.search).get('product');
+    if (deepProd && productsState.some((p) => p.id === deepProd)) {
+      window.openDetailById(deepProd);
+    }
+  } catch (e) {}
 
   const langBtn = document.getElementById('langCurrencyBtn');
   if (langBtn) {

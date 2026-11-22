@@ -83,6 +83,7 @@
       </nav>
 
       <div class="nav-actions">
+        <button type="button" class="icon-btn" id="headerSavedBtn" title="Produk Disimpan" aria-label="Produk Disimpan" style="padding:0 10px;gap:5px;font-weight:700;font-size:0.78rem;">♥ <span id="headerSavedNum">0</span></button>
         <button type="button" class="icon-btn" id="langCurrencyBtn" title="Switch Language &amp; Currency (IDR / USD)" aria-label="Switch Language &amp; Currency" style="padding:0 10px;gap:5px;font-weight:800;font-size:0.78rem;">
           <span id="langCurrencyFlag">🇮🇩</span>
           <span id="langCurrencyLabel">IDR</span>
@@ -272,6 +273,7 @@
       <button type="button" class="filter-chip" data-cat="JavaScript">JavaScript</button>
       <button type="button" class="filter-chip" data-cat="Desain Web">Desain Web</button>
       <button type="button" class="filter-chip" data-cat="Template">Template / UI</button>
+      <button type="button" class="filter-chip" data-cat="__saved__" id="savedFilterBtn">♥ Disimpan (<span id="savedCountNum">0</span>)</button>
     </div>
 
     <!-- TOOLBAR: LIVE BLOGGER SYNC INDICATOR & SORT -->
@@ -343,6 +345,16 @@
     </section>
 
     <section id="standar-paket" class="section-block" style="display:none;"></section>
+
+    <!-- CUSTOM PROJECT BANNER -->
+    <div class="custom-service-banner" id="customOrderSection">
+      <div>
+        <div style="font-family:var(--font-mono); font-size:0.72rem; font-weight:800; color:var(--accent); margin-bottom:4px;">CUSTOM STUDIO</div>
+        <h3 style="font-size:1.08rem; font-weight:800; margin-bottom:4px;">Butuh Custom Program atau Modifikasi Fitur Khusus?</h3>
+        <p style="font-size:0.84rem; color:var(--text-secondary);">Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.</p>
+      </div>
+      <a class="btn btn-primary" id="customOrderBtn" href="mailto:dekamayooo@gmail.com?subject=Request%20Custom%20Program%20Ddev%20Studio">✉ Konsultasi Custom Project</a>
+    </div>
 
     <!-- INTERACTIVE FAQ -->
     <section id="faq" class="section-block">
@@ -498,6 +510,8 @@
       </div>
     </div>
   </div>
+
+  <button type="button" class="back-to-top-btn" id="backToTopBtn" title="Kembali ke Atas" aria-label="Kembali ke Atas">↑</button>
 
   <!-- FLOATING AI ASSISTANT WIDGET -->
   <button type="button" class="ai-chat-launcher" id="aiChatLauncher" aria-label="Buka Asisten AI Ddev Studio">
