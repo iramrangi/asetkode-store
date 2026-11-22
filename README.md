@@ -13,7 +13,7 @@
 
 - **Indonesia (IDR / QRIS & Mayar):** [https://asetkode-store.pages.dev/](https://asetkode-store.pages.dev/)
 - **Global (English / USD via Polar.sh):** [https://asetkode-store.pages.dev/en/](https://asetkode-store.pages.dev/en/)
-- **10 Free Open-Source Tools (MIT):** [https://asetkode-store.pages.dev/free/](https://asetkode-store.pages.dev/free/)
+- **12 Free Open-Source Products (MIT — Web Template, Blogger XML & 10 Tools):** [https://asetkode-store.pages.dev/free/](https://asetkode-store.pages.dev/free/)
 - **Blog Katalog:** [https://asetkode.blogspot.com/](https://asetkode.blogspot.com/)
 - **Support / Custom Order:** `dekamayooo@gmail.com`
 

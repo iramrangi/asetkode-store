@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleanPress Lite Demo — Free Blogger XML v3 Theme (MIT Open Source)</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    :root { --bg:#f8fafc; --surface:#ffffff; --ink:#0f172a; --muted:#475569; --border:#e2e8f0; --accent:#4f46e5; }
+    html[data-theme="dark"] { --bg:#070b14; --surface:#0f172a; --ink:#f8fafc; --muted:#94a3b8; --border:#1e293b; --accent:#6366f1; }
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:var(--bg); color:var(--ink); line-height:1.65; }
+    a { color:inherit; text-decoration:none; }
+    .top-bar { background:#0b1020; color:#fff; padding:9px 20px; font-size:12.5px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+    .wrap { max-width:1100px; margin:0 auto; padding:0 20px; }
+    .head { background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:30; }
+    .head-in { min-height:66px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .layout { display:grid; grid-template-columns:1fr 300px; gap:24px; padding:28px 0 56px; align-items:start; }
+    .post-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:16px; }
+    .post-card h2 { font-size:1.25rem; font-weight:800; margin:6px 0 8px; }
+    .meta { font-size:0.78rem; color:var(--muted); font-weight:700; }
+    .widget { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:16px; }
+    .widget h3 { font-size:0.95rem; font-weight:800; margin-bottom:10px; }
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 13px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--ink); font-weight:700; font-size:0.82rem; cursor:pointer; }
+    .btn-primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:none; align-items:center; justify-content:center; padding:16px; z-index:90; }
+    .modal-bg.open { display:flex; }
+    .modal-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; max-width:680px; width:100%; max-height:85vh; overflow-y:auto; padding:26px; }
+    @media (max-width:840px) { .layout { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <span><strong>CleanPress Lite</strong> — Live Preview Tema Blogger XML v3 (Gratis / MIT)</span>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="btn" style="background:#059669;border-color:#059669;color:#fff;" href="free-cleanpress-blogger-theme.xml" download="cleanpress-lite-blogger-theme.xml" id="btnDlXml">Unduh Tema (.XML)</a>
+      <a class="btn" style="background:#1e293b;border-color:#334155;color:#fff;" href="../" id="btnBack">Kembali ke Free Tools</a>
+    </div>
+  </div>
+
+  <header class="head">
+    <div class="wrap head-in">
+      <strong style="font-size:1.25rem;">Jurnal Teknologi &amp; Bisnis</strong>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="search" id="searchBox" placeholder="Cari artikel..." style="padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--ink);" />
+        <button type="button" class="btn" id="themeBtn">Dark / Light</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <div id="postsList"></div>
+    <aside>
+      <div class="widget">
+        <h3 id="tCat">Kategori Label</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;" id="labelList"></div>
+      </div>
+      <div class="widget">
+        <h3 id="tHow">Cara Pasang di Blogger</h3>
+        <p style="font-size:0.84rem;color:var(--muted);" id="tHowDesc">Klik Unduh Tema (.XML) di bar atas → buka Blogger Dashboard → Tema → Pulihkan → Upload file cleanpress-lite-blogger-theme.xml.</p>
+      </div>
+    </aside>
+  </main>
+
+  <div class="modal-bg" id="readerModal">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;">
+        <h2 id="mTitle" style="font-size:1.35rem;font-weight:800;"></h2>
+        <button type="button" class="btn" id="mClose">Tutup</button>
+      </div>
+      <div id="mMeta" class="meta" style="margin-bottom:14px;"></div>
+      <div id="mBody" style="font-size:0.95rem;color:var(--muted);line-height:1.75;"></div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    const POSTS = IS_EN ? [
+      { id: 1, date: 'Nov 22, 2026', label: 'Architecture', title: 'Why Static Sites + Cloudflare Edge Beat Heavy Shared Hosting', snip: 'Discover how decoupled static HTML & JSON feeds load in under 150ms worldwide with near-zero maintenance.', body: 'Moving promotional catalogs and editorial blogs onto edge CDNs removes MySQL bottlenecks completely. Pair Blogger JSON feeds or plain markdown JSON with clean CSS variables for instant page loads and built-in DDoS protection.' },
+      { id: 2, date: 'Nov 19, 2026', label: 'SEO', title: 'Core Web Vitals Checklist for Technical Blogs in 2026', snip: 'Practical tweaks for LCP, CLS stability, canonical tags, and automatic Schema.org structured data.', body: 'Keep system fonts ready or preconnected, reserve image dimensions to eliminate layout shifts, and always separate canonical URLs between Indonesian and English routes using hreflang alternate tags.' },
+      { id: 3, date: 'Nov 15, 2026', label: 'Business', title: 'How Small Agencies Package Reusable Web Templates Ethically', snip: 'Structuring MIT starter kits vs full commercial licensing for local SME clients.', body: 'Separating open-source starter utilities from full business packages builds strong developer trust before a buyer commits to your commercial storefront.' }
+    ] : [
+      { id: 1, date: '22 Nov 2026', label: 'Arsitektur', title: 'Mengapa Situs Statis &amp; Blogspot Cepat Menang di Google Core Web Vitals', snip: 'Pelajari mengapa layout ringan tanpa beban skrip eksternal mampu memuat halaman di bawah 200ms secara global.', body: 'Mengurangi ketergantungan skrip eksternal membuat blog Blogger tampil sangat cepat di jaringan seluler Indonesia. CleanPress Lite meminimalkan CSS overhead agar skor PageSpeed selalu optimal.' },
+      { id: 2, date: '19 Nov 2026', label: 'SEO', title: 'Checklist Tag Canonical, Sitemap &amp; Schema untuk Blog Baru', snip: 'Langkah praktis agar artikel baru cepat dirayapi Googlebot dan bebas dari masalah konten duplikat.', body: 'Pastikan halaman arsip pencarian diberi noindex, judul halaman otomatis membedakan beranda dan artikel tunggal, serta sertakan markup JSON-LD secara konsisten.' },
+      { id: 3, date: '15 Nov 2026', label: 'Bisnis', title: 'Strategi Produk Gratis Open Source untuk Membangun Kepercayaan Pembeli', snip: 'Cara menautkan free web tools sebagai jembatan alami menuju penjualan produk flagship berbayar.', body: 'Dengan memberikan tool dan tema gratis yang benar-benar layak dipakai, pengunjung merasakan langsung kerapian kode Anda sebelum memutuskan membeli aplikasi bisnis lengkap.' }
+    ];
+
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('btnDlXml').textContent = 'Download Theme (.XML)';
+      document.getElementById('btnBack').textContent = 'Back to Free Tools';
+      document.getElementById('btnBack').href = '../?lang=en';
+      document.getElementById('searchBox').placeholder = 'Search articles...';
+      document.getElementById('tCat').textContent = 'Categories';
+      document.getElementById('tHow').textContent = 'How to Install on Blogger';
+      document.getElementById('tHowDesc').textContent = 'Download cleanpress-lite-blogger-theme.xml above -> Blogger Dashboard -> Theme -> Restore -> Upload XML.';
+      document.getElementById('mClose').textContent = 'Close';
+    }
+
+    let activeLabel = 'ALL';
+    let q = '';
+    const labels = ['ALL', ...new Set(POSTS.map((p) => p.label))];
+    function render() {
+      document.getElementById('labelList').innerHTML = labels.map((l) =>
+        `<button type="button" class="btn ${activeLabel === l ? 'btn-primary' : ''}" data-lbl="${l}">${l === 'ALL' ? (IS_EN ? 'All' : 'Semua') : l}</button>`
+      ).join('');
+      const filtered = POSTS.filter((p) => (activeLabel === 'ALL' || p.label === activeLabel) && (!q || (p.title + ' ' + p.snip).toLowerCase().includes(q)));
+      document.getElementById('postsList').innerHTML = filtered.map((p) => `
+        <article class="post-card">
+          <div class="meta">${p.date} &bull; ${p.label}</div>
+          <h2>${p.title}</h2>
+          <p style="color:var(--muted);font-size:0.93rem;margin-bottom:12px;">${p.snip}</p>
+          <button type="button" class="btn btn-primary" data-open="${p.id}">${IS_EN ? 'Read Article →' : 'Baca Artikel →'}</button>
+        </article>
+      `).join('');
+    }
+
+    document.getElementById('labelList').addEventListener('click', (e) => {
+      const lbl = e.target.getAttribute('data-lbl');
+      if (lbl) { activeLabel = lbl; render(); }
+    });
+    document.getElementById('searchBox').addEventListener('input', (e) => { q = e.target.value.toLowerCase(); render(); });
+    document.getElementById('postsList').addEventListener('click', (e) => {
+      const id = Number(e.target.getAttribute('data-open'));
+      const post = POSTS.find((p) => p.id === id);
+      if (!post) return;
+      document.getElementById('mTitle').innerHTML = post.title;
+      document.getElementById('mMeta').textContent = `${post.date} • ${post.label}`;
+      document.getElementById('mBody').textContent = post.body;
+      document.getElementById('readerModal').classList.add('open');
+    });
+    document.getElementById('mClose').addEventListener('click', () => document.getElementById('readerModal').classList.remove('open'));
+    const KEY = 'cp_demo_theme';
+    const setT = (t) => { document.documentElement.setAttribute('data-theme', t); localStorage.setItem(KEY, t); };
+    setT(localStorage.getItem(KEY) || 'light');
+    document.getElementById('themeBtn').addEventListener('click', () => setT(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+    render();
+  </script>
+</body>
+</html>

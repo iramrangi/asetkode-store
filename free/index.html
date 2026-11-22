@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>10 Produk &amp; Source Code Gratis (MIT Open Source) — Ddev Studio</title>
-  <meta name="description" content="10 web tools &amp; source code open source gratis berlisensi MIT dari Ddev Studio: BioCard vCard, JSON/CSV/SQL, WA Link Builder, Invoice PDF, WCAG Color Palette, SEO Schema, Pomodoro Audio, Markdown Studio, Kalkulator HPP, dan Regex Tester." />
+  <title>12 Produk &amp; Source Code Gratis (MIT Open Source) — Ddev Studio</title>
+  <meta name="description" content="12 produk &amp; source code open source gratis berlisensi MIT dari Ddev Studio: template website HTML, tema Blogger XML v3, plus 10 web tools bisnis &amp; developer." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://asetkode-store.pages.dev/free/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Ddev Studio Free — 10 Web Tools &amp; Source Code Open Source (MIT)" />
-  <meta property="og:description" content="Jalankan langsung di browser atau unduh gratis 10 source code HTML/CSS/JS lisensi MIT tanpa login dan tanpa biaya." />
+  <meta property="og:title" content="Ddev Studio Free — 12 Produk, Template Web &amp; Blogger Open Source (MIT)" />
+  <meta property="og:description" content="Jalankan langsung di browser atau unduh gratis 12 produk, template web, tema Blogger XML &amp; tools HTML/CSS/JS lisensi MIT tanpa login." />
   <meta property="og:image" content="https://asetkode-store.pages.dev/free/screenshot.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -77,23 +77,24 @@
 
   <main class="container">
     <section class="free-hero">
-      <div class="free-pill" id="heroPill">10 PRODUK GRATIS &bull; MIT OPEN SOURCE</div>
-      <h1 class="free-title" id="heroTitle">10 Tools &amp; Source Code Open Source Gratis Kualitas Produksi</h1>
-      <p class="free-sub" id="heroSub">Bukan program dummy — seluruh 10 aplikasi di bawah berjalan penuh di browser tanpa login dan bebas diunduh source code HTML/CSS/JS-nya (lisensi MIT).</p>
+      <div class="free-pill" id="heroPill">12 PRODUK GRATIS &bull; MIT OPEN SOURCE</div>
+      <h1 class="free-title" id="heroTitle">12 Produk Web, Template Blogger &amp; Tools Open Source Gratis</h1>
+      <p class="free-sub" id="heroSub">Bukan program dummy — seluruh 12 karya di bawah (termasuk Template Website &amp; Tema Blogger XML v3) berjalan penuh di browser tanpa login dan bebas diunduh kode sumbernya (MIT).</p>
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px;">
-        <a href="#free-catalog" class="btn btn-primary" id="heroCta1">Jelajahi 10 Tool Gratis</a>
+        <a href="#free-catalog" class="btn btn-primary" id="heroCta1">Jelajahi 12 Produk Gratis</a>
         <a href="../" class="btn btn-outline" id="heroCta2">Lihat 25 Produk Flagship Pro &rarr;</a>
       </div>
     </section>
 
     <div class="free-controls">
       <div class="free-tabs" id="catTabs">
-        <button type="button" class="free-tab active" data-cat="all" id="tabAll">Semua (10)</button>
+        <button type="button" class="free-tab active" data-cat="all" id="tabAll">Semua (12)</button>
+        <button type="button" class="free-tab" data-cat="templates" id="tabTpl">Web &amp; Blogger (2)</button>
         <button type="button" class="free-tab" data-cat="business" id="tabBiz">Bisnis &amp; UMKM (4)</button>
         <button type="button" class="free-tab" data-cat="dev" id="tabDev">Developer (4)</button>
         <button type="button" class="free-tab" data-cat="design" id="tabDesign">Desain &amp; SEO (2)</button>
       </div>
-      <input type="search" class="free-search" id="freeSearch" placeholder="Cari tool gratis..." />
+      <input type="search" class="free-search" id="freeSearch" placeholder="Cari produk gratis..." />
     </div>
 
     <section class="free-grid" id="free-catalog"></section>
@@ -118,6 +119,40 @@
 
   <script>
     const FREE_TOOLS = [
+      {
+        cat: 'templates',
+        file: 'apps/free-starter-landing-page.html',
+        dlFile: 'apps/free-starter-landing-page.html',
+        dlLabelId: 'Unduh Web (.HTML)',
+        dlLabelEn: 'Download .HTML',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>',
+        titleId: 'LaunchLite — Template Website Landing Page SaaS/Bisnis',
+        titleEn: 'LaunchLite — Free SaaS & Business Landing Page Template',
+        descId: 'Template website lengkap (Navbar sticky, Hero metrik, Kartu Layanan, Harga 3 Paket, FAQ interaktif, & Mode Gelap/Terang) siap upload ke Cloudflare Pages/cPanel.',
+        descEn: 'Complete single-file landing page template featuring Hero cards, pricing tiers, interactive FAQ accordion, and Dark/Light toggle.',
+        proId: 'prod-14',
+        proNameId: 'Butuh Template Agency Multi-Halaman Pro?',
+        proNameEn: 'Need Pro Digital Agency Template?',
+        proPriceId: 'Rp 59.000',
+        proPriceEn: '$9'
+      },
+      {
+        cat: 'templates',
+        file: 'apps/free-cleanpress-blogger-demo.html',
+        dlFile: 'apps/free-cleanpress-blogger-theme.xml',
+        dlLabelId: 'Unduh Tema (.XML)',
+        dlLabelEn: 'Download .XML',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8"/><path d="M8 13h8"/><path d="M8 17h4"/></svg>',
+        titleId: 'CleanPress Lite — Template Blogger XML v3 Gratis',
+        titleEn: 'CleanPress Lite — Free Blogger XML v3 Theme',
+        descId: 'Tema Blogger v3 resmi & valid untuk Blogspot: layout responsif 2 kolom, Dark/Light toggle, warna kustom di Theme Designer, SEO Title otomatis & Schema.',
+        descEn: 'Valid Blogger Layout v3 XML theme ready for Restore upload: 2-column blog grid, Dark/Light mode toggle, Theme Designer variables & SEO tags.',
+        proId: 'prod-21',
+        proNameId: 'Butuh NewsPro / TokoKu / DocsPro Pro?',
+        proNameEn: 'Need NewsPro / TokoKu / DocsPro Pro?',
+        proPriceId: 'Rp 69.000',
+        proPriceEn: '$12'
+      },
       {
         cat: 'business',
         file: 'apps/hpp-margin-calculator.html',
@@ -278,25 +313,26 @@
       document.getElementById('langLabel').textContent = isEn ? 'EN' : 'ID';
       document.getElementById('navHome').textContent = isEn ? 'Pro Catalog (25)' : 'Katalog Pro (25)';
       document.getElementById('navHome').href = isEn ? '../en/' : '../';
-      document.getElementById('heroPill').textContent = isEn ? '10 FREE PRODUCTS • MIT OPEN SOURCE' : '10 PRODUK GRATIS • MIT OPEN SOURCE';
+      document.getElementById('heroPill').textContent = isEn ? '12 FREE PRODUCTS • MIT OPEN SOURCE' : '12 PRODUK GRATIS • MIT OPEN SOURCE';
       document.getElementById('heroTitle').textContent = isEn
-        ? '10 Free Production-Grade Open-Source Web Tools'
-        : '10 Tools & Source Code Open Source Gratis Kualitas Produksi';
+        ? '12 Free Open-Source Web Templates, Blogger Themes & Tools'
+        : '12 Produk Web, Template Blogger & Tools Open Source Gratis';
       document.getElementById('heroSub').textContent = isEn
-        ? 'No dummy stubs — all 10 tools run completely inside your browser with zero login and come with clean, downloadable MIT HTML/CSS/JS source code.'
-        : 'Bukan program dummy — seluruh 10 aplikasi di bawah berjalan penuh di browser tanpa login dan bebas diunduh source code HTML/CSS/JS-nya (lisensi MIT).';
-      document.getElementById('heroCta1').textContent = isEn ? 'Explore 10 Free Tools' : 'Jelajahi 10 Tool Gratis';
+        ? 'No dummy stubs — all 12 products (including full HTML Landing Page & Blogger XML v3 Theme) run in browser with zero login and free MIT source download.'
+        : 'Bukan program dummy — seluruh 12 karya di bawah (termasuk Template Website & Tema Blogger XML v3) berjalan penuh di browser tanpa login dan bebas diunduh kode sumbernya (MIT).';
+      document.getElementById('heroCta1').textContent = isEn ? 'Explore 12 Free Products' : 'Jelajahi 12 Produk Gratis';
       document.getElementById('heroCta2').textContent = isEn ? 'Browse 25 Pro Products →' : 'Lihat 25 Produk Flagship Pro →';
       document.getElementById('heroCta2').href = isEn ? '../en/' : '../';
-      document.getElementById('tabAll').textContent = isEn ? 'All (10)' : 'Semua (10)';
+      document.getElementById('tabAll').textContent = isEn ? 'All (12)' : 'Semua (12)';
+      document.getElementById('tabTpl').textContent = isEn ? 'Web & Blogger (2)' : 'Web & Blogger (2)';
       document.getElementById('tabBiz').textContent = isEn ? 'Business (4)' : 'Bisnis & UMKM (4)';
       document.getElementById('tabDev').textContent = isEn ? 'Developer (4)' : 'Developer (4)';
       document.getElementById('tabDesign').textContent = isEn ? 'Design & SEO (2)' : 'Desain & SEO (2)';
-      document.getElementById('freeSearch').placeholder = isEn ? 'Search free tools...' : 'Cari tool gratis...';
+      document.getElementById('freeSearch').placeholder = isEn ? 'Search free products...' : 'Cari produk gratis...';
       document.getElementById('bannerTitle').textContent = isEn ? 'Need Full Production Business Software?' : 'Butuh Sistem Siap Bisnis Skala Penuh?';
       document.getElementById('bannerSub').textContent = isEn
-        ? 'If these 10 open-source tools help your workflow, explore 25 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, Invoicing, & Blogger Themes).'
-        : 'Jika 10 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 25 aplikasi bisnis & source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, dan Tema Blogger).';
+        ? 'If these 12 open-source products help your workflow, explore 25 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, Invoicing, & Blogger Themes).'
+        : 'Jika 12 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 25 aplikasi bisnis & source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, dan Tema Blogger).';
       document.getElementById('bannerBtn').textContent = isEn ? 'Open Full Ddev Studio Catalog →' : 'Buka Katalog Lengkap Ddev Studio →';
       document.getElementById('bannerBtn').href = isEn ? '../en/' : '../';
 
@@ -310,6 +346,8 @@
       const grid = document.getElementById('free-catalog');
       grid.innerHTML = filtered.map((t) => {
         const launchHref = t.file + (isEn ? '?lang=en' : '');
+        const dlHref = t.dlFile || t.file;
+        const dlText = isEn ? (t.dlLabelEn || 'Download .HTML') : (t.dlLabelId || 'Unduh Source');
         const proHref = (isEn ? '../en/' : '../') + '?product=' + t.proId;
         return `
           <article class="free-card">
@@ -321,7 +359,7 @@
             <p>${isEn ? t.descEn : t.descId}</p>
             <div class="free-actions">
               <a class="btn btn-primary" href="${launchHref}">${isEn ? 'Run Live' : 'Jalankan Live'}</a>
-              <a class="btn btn-outline" href="${t.file}" download>${isEn ? 'Download .HTML' : 'Unduh Source'}</a>
+              <a class="btn btn-outline" href="${dlHref}" download>${dlText}</a>
             </div>
             <div class="free-upsell">
               <span>${isEn ? t.proNameEn : t.proNameId}</span>

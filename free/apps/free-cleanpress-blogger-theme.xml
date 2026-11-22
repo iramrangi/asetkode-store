@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateVersion='3.0.0' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <meta charset='utf-8'/>
+  <meta content='width=device-width, initial-scale=1, maximum-scale=5' name='viewport'/>
+  <!-- MIT License | CleanPress Lite Blogger XML Theme by Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <b:if cond='data:view.isHomepage'>
+    <title><data:blog.title/></title>
+  <b:elseif cond='data:view.isSingleItem'/>
+    <title><data:view.title/> - <data:blog.title/></title>
+  <b:else/>
+    <title><data:blog.pageTitle/></title>
+  </b:if>
+  <b:include data='blog' name='all-head-content'/>
+
+  <b:skin><![CDATA[
+/*
+<Group description="CleanPress Lite Colors">
+  <Variable name="cp.bg" description="Background" type="color" default="#f8fafc" value="#f8fafc"/>
+  <Variable name="cp.surface" description="Card Surface" type="color" default="#ffffff" value="#ffffff"/>
+  <Variable name="cp.ink" description="Main Text" type="color" default="#0f172a" value="#0f172a"/>
+  <Variable name="cp.muted" description="Secondary Text" type="color" default="#475569" value="#475569"/>
+  <Variable name="cp.border" description="Border Color" type="color" default="#e2e8f0" value="#e2e8f0"/>
+  <Variable name="cp.accent" description="Brand Accent" type="color" default="#4f46e5" value="#4f46e5"/>
+</Group>
+*/
+:root { --bg:$(cp.bg); --surface:$(cp.surface); --ink:$(cp.ink); --muted:$(cp.muted); --border:$(cp.border); --accent:$(cp.accent); }
+html[data-theme='dark'] { --bg:#070b14; --surface:#0f172a; --ink:#f8fafc; --muted:#94a3b8; --border:#1e293b; --accent:#6366f1; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; line-height:1.65; }
+a { color:inherit; text-decoration:none; }
+.cp-wrap { max-width:1120px; margin:0 auto; padding:0 20px; }
+.cp-head { position:sticky; top:0; z-index:40; background:var(--surface); border-bottom:1px solid var(--border); }
+.cp-head-in { min-height:66px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.cp-brand { font-size:1.25rem; font-weight:800; letter-spacing:-0.02em; }
+.cp-layout { display:grid; grid-template-columns:1fr 300px; gap:28px; padding:32px 0 48px; align-items:start; }
+.cp-post-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; }
+.cp-post-card h2 { font-size:1.3rem; font-weight:800; line-height:1.3; margin-bottom:8px; }
+.cp-meta { font-size:0.8rem; color:var(--muted); margin-bottom:10px; font-weight:600; }
+.cp-snippet { color:var(--muted); font-size:0.95rem; margin-bottom:14px; }
+.cp-readmore { display:inline-block; color:var(--accent); font-weight:700; font-size:0.88rem; }
+.cp-widget { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:18px; }
+.cp-widget h3 { font-size:0.95rem; font-weight:800; margin-bottom:10px; }
+.cp-btn { padding:7px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--ink); font-weight:700; font-size:0.82rem; cursor:pointer; }
+.cp-foot { border-top:1px solid var(--border); padding:24px 0; text-align:center; color:var(--muted); font-size:0.85rem; }
+@media (max-width:860px) { .cp-layout { grid-template-columns:1fr; } }
+  ]]></b:skin>
+</head>
+<body>
+  <header class='cp-head'>
+    <div class='cp-wrap cp-head-in'>
+      <b:section id='header' maxwidgets='1' showaddelement='no'>
+        <b:widget id='Header1' locked='true' title='Header' type='Header' version='2' visible='true'>
+          <b:includable id='main'>
+            <a class='cp-brand' expr:href='data:blog.homepageUrl'><data:title/></a>
+          </b:includable>
+        </b:widget>
+      </b:section>
+      <button class='cp-btn' id='cpThemeBtn' type='button'>Dark / Light</button>
+    </div>
+  </header>
+
+  <main class='cp-wrap cp-layout'>
+    <div class='cp-main-col'>
+      <b:section id='main' maxwidgets='1' showaddelement='yes'>
+        <b:widget id='Blog1' locked='false' title='Blog Posts' type='Blog' version='2' visible='true'>
+          <b:includable id='main' var='top'>
+            <b:loop values='data:posts' var='post'>
+              <article class='cp-post-card'>
+                <div class='cp-meta'><data:post.dateHeader/></div>
+                <h2><a expr:href='data:post.url'><data:post.title/></a></h2>
+                <b:if cond='data:view.isSingleItem'>
+                  <div class='cp-body'><data:post.body/></div>
+                <b:else/>
+                  <p class='cp-snippet'><data:post.snippets.long.escaped/></p>
+                  <a class='cp-readmore' expr:href='data:post.url'>Baca Selengkapnya &#8594;</a>
+                </b:if>
+              </article>
+            </b:loop>
+            <div style='display:flex;justify-content:space-between;margin-top:16px;'>
+              <b:if cond='data:newerPageUrl'><a class='cp-btn' expr:href='data:newerPageUrl'>&#8592; Artikel Terbaru</a></b:if>
+              <b:if cond='data:olderPageUrl'><a class='cp-btn' expr:href='data:olderPageUrl'>Artikel Sebelumnya &#8594;</a></b:if>
+            </div>
+          </b:includable>
+        </b:widget>
+      </b:section>
+    </div>
+
+    <aside class='cp-side-col'>
+      <b:section id='sidebar' showaddelement='yes'>
+        <b:widget id='Label1' locked='false' title='Kategori Label' type='Label' version='2' visible='true'>
+          <b:includable id='main'>
+            <div class='cp-widget'>
+              <h3><data:title/></h3>
+              <div style='display:flex;flex-wrap:wrap;gap:6px;'>
+                <b:loop values='data:labels' var='label'>
+                  <a class='cp-btn' expr:href='data:label.url'><data:label.name/> (<data:label.count/>)</a>
+                </b:loop>
+              </div>
+            </div>
+          </b:includable>
+        </b:widget>
+      </b:section>
+    </aside>
+  </main>
+
+  <footer class='cp-foot'>
+    <div class='cp-wrap'>
+      <b:section id='footer' maxwidgets='1' showaddelement='yes'/>
+      <span>&#169; <data:blog.title/> &#8226; CleanPress Lite Theme (MIT Open Source)</span>
+    </div>
+  </footer>
+
+  <script>//<![CDATA[
+    (function(){
+      var key='cp_theme';
+      function apply(t){ document.documentElement.setAttribute('data-theme', t); localStorage.setItem(key,t); }
+      apply(localStorage.getItem(key)||'light');
+      var btn=document.getElementById('cpThemeBtn');
+      if(btn){ btn.addEventListener('click', function(){ apply(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); }); }
+    })();
+  //]]></script>
+</body>
+</html>

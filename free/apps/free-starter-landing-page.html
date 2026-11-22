@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LaunchLite — Free SaaS &amp; Business Landing Page Template (MIT Open Source)</title>
+  <meta name="description" content="Template website landing page bisnis, agency, & produk digital gratis berlisensi MIT lengkap dengan Dark/Light Mode, mobile drawer, & FAQ interaktif." />
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    :root { --bg:#ffffff; --surface:#f8fafc; --ink:#0f172a; --muted:#475569; --border:#e2e8f0; --accent:#4f46e5; --accent-fg:#ffffff; --soft:#eef2ff; }
+    html[data-theme="dark"] { --bg:#070b14; --surface:#0f172a; --ink:#f8fafc; --muted:#94a3b8; --border:#1e293b; --accent:#6366f1; --soft:rgba(99,102,241,0.16); }
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--ink); line-height:1.65; transition:background 0.2s,color 0.2s; }
+    a { color:inherit; text-decoration:none; }
+    .container { width:100%; max-width:1140px; margin:0 auto; padding:0 20px; }
+    .nav { position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border); }
+    .nav-in { height:68px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.1rem; }
+    .logo-box { width:34px; height:34px; border-radius:9px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; }
+    .menu { display:flex; gap:24px; font-size:0.9rem; font-weight:600; color:var(--muted); }
+    .menu a:hover { color:var(--ink); }
+    .actions { display:flex; gap:8px; align-items:center; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 18px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-weight:700; font-size:0.88rem; cursor:pointer; }
+    .btn-primary { background:var(--accent); border-color:var(--accent); color:var(--accent-fg); }
+    .hero { padding:68px 0 56px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:36px; align-items:center; }
+    .pill { display:inline-block; background:var(--soft); color:var(--accent); padding:5px 12px; border-radius:99px; font-size:0.78rem; font-weight:800; margin-bottom:14px; }
+    h1 { font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.15; letter-spacing:-0.03em; margin-bottom:16px; }
+    .hero p { color:var(--muted); font-size:1.05rem; margin-bottom:24px; }
+    .hero-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:26px; }
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+    .stat-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:16px; }
+    .stat-num { font-size:1.6rem; font-weight:800; color:var(--accent); }
+    .sec { padding:56px 0; border-top:1px solid var(--border); }
+    .sec-head { text-align:center; max-width:620px; margin:0 auto 34px; }
+    .sec-head h2 { font-size:1.8rem; font-weight:800; margin-bottom:8px; }
+    .sec-head p { color:var(--muted); }
+    .grid3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:24px; }
+    .ico { width:42px; height:42px; border-radius:10px; background:var(--soft); color:var(--accent); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+    .card h3 { font-size:1.1rem; font-weight:800; margin-bottom:8px; }
+    .card p { font-size:0.9rem; color:var(--muted); }
+    .faq-list { max-width:740px; margin:0 auto; display:grid; gap:10px; }
+    .faq-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    .faq-q { width:100%; background:none; border:none; padding:16px 20px; text-align:left; font-size:0.95rem; font-weight:700; color:var(--ink); cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+    .faq-a { display:none; padding:0 20px 16px; font-size:0.9rem; color:var(--muted); }
+    .faq-item.open .faq-a { display:block; }
+    footer { border-top:1px solid var(--border); padding:28px 0; color:var(--muted); font-size:0.86rem; }
+    @media (max-width:860px) { .hero { grid-template-columns:1fr; padding:42px 0; } .menu { display:none; } }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-in">
+      <a href="#" class="logo">
+        <span class="logo-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        <span>LaunchLite</span>
+      </a>
+      <nav class="menu">
+        <a href="#features" id="navFeat">Keunggulan</a>
+        <a href="#pricing" id="navPrice">Paket Layanan</a>
+        <a href="#faq" id="navFaq">FAQ</a>
+      </nav>
+      <div class="actions">
+        <button type="button" class="btn" id="themeBtn" aria-label="Toggle Theme">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="../" class="btn" id="navBack">Semua Free Tools</a>
+        <a href="#pricing" class="btn btn-primary" id="navCta">Mulai Sekarang</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="pill" id="hPill">MIT OPEN SOURCE WEBSITE TEMPLATE</span>
+        <h1 id="hTitle">Bangun Website Bisnis &amp; Produk Digital Anda dalam 10 Menit</h1>
+        <p id="hDesc">Template landing page statis berkecepatan tinggi, responsif di seluruh perangkat, mendukung mode gelap/terang otomatis, dan nol biaya langganan server.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="#pricing" class="btn btn-primary" id="hBtn1">Lihat Paket Layanan</a>
+          <a href="free-starter-landing-page.html" download class="btn" id="hBtn2">Unduh Source (.HTML)</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <strong style="font-size:0.95rem;" id="cHead">Performa &amp; Siap Produksi</strong>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="stat-num">100%</div><div style="font-size:0.82rem;color:var(--muted);" id="st1">Tanpa Ketergantungan CDN</div></div>
+          <div class="stat-box"><div class="stat-num">&lt;15KB</div><div style="font-size:0.82rem;color:var(--muted);" id="st2">Ringan &amp; Cepat Dibuka</div></div>
+          <div class="stat-box"><div class="stat-num">MIT</div><div style="font-size:0.82rem;color:var(--muted);" id="st3">Bebas Pakai Komersial</div></div>
+          <div class="stat-box"><div class="stat-num">2 Mode</div><div style="font-size:0.82rem;color:var(--muted);" id="st4">Terang &amp; Gelap Otomatis</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="features">
+      <div class="sec-head">
+        <h2 id="fHead">Dirancang untuk Konversi &amp; Kecepatan</h2>
+        <p id="fSub">Kode HTML5, CSS3 Variables, dan Vanilla JS bersih yang mudah Anda ubah warna, logo, maupun kontennya dalam hitungan menit.</p>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <h3 id="f1T">Responsif Multi-Layar</h3>
+          <p id="f1D">Layout CSS Grid fleksibel yang menyesuaikan layar monitor desktop, tablet, maupun ponsel secara otomatis.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 id="f2T">100% Kode Bersih &amp; Aman</h3>
+          <p id="f2D">Bebas skrip pelacak tersembunyi, mudah di-deploy gratis ke Cloudflare Pages, Vercel, Netlify, atau cPanel.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <h3 id="f3T">Siap Publikasi Cepat</h3>
+          <p id="f3D">Cukup edit teks dan ganti nomor WhatsApp atau tautan checkout pada file HTML tunggal ini.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="pricing">
+      <div class="sec-head">
+        <h2 id="pHead">Contoh Kartu Penawaran Jasa / Produk</h2>
+        <p id="pSub">Ganti judul, harga, dan tombol CTA di bawah ini agar mengarah langsung ke WhatsApp atau halaman pembayaran Anda.</p>
+      </div>
+      <div class="grid3">
+        <div class="card">
+          <span class="pill">STARTER</span>
+          <div style="font-size:1.8rem;font-weight:800;margin-bottom:10px;">Rp 199.000</div>
+          <p style="margin-bottom:16px;" id="p1D">Cocok untuk halaman profil produk tunggal, acara, atau promosi jasa lokal.</p>
+          <a href="#" class="btn" style="width:100%;">Pilih Paket</a>
+        </div>
+        <div class="card" style="border-color:var(--accent);">
+          <span class="pill">POPULAR</span>
+          <div style="font-size:1.8rem;font-weight:800;margin-bottom:10px;">Rp 499.000</div>
+          <p style="margin-bottom:16px;" id="p2D">Lengkap dengan integrasi formulir pemesanan WhatsApp, domain, dan optimasi SEO dasar.</p>
+          <a href="#" class="btn btn-primary" style="width:100%;">Pesan Sekarang</a>
+        </div>
+        <div class="card">
+          <span class="pill">ENTERPRISE</span>
+          <div style="font-size:1.8rem;font-weight:800;margin-bottom:10px;">Custom</div>
+          <p style="margin-bottom:16px;" id="p3D">Pengembangan sistem web khusus beserta integrasi API &amp; dashboard manajemen.</p>
+          <a href="#" class="btn" style="width:100%;">Hubungi Tim</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="faq">
+      <div class="sec-head"><h2 id="qHead">Pertanyaan Umum (FAQ)</h2></div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button type="button" class="faq-q"><span id="q1">Apakah template website ini boleh dipakai untuk proyek klien komersial?</span><span>+</span></button>
+          <div class="faq-a" id="a1">Ya. LaunchLite dirilis di bawah lisensi MIT sehingga bebas Anda pakai untuk website bisnis pribadi maupun proyek komersial klien tanpa biaya royalti.</div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-q"><span id="q2">Bagaimana cara meng-online-kan website ini secara gratis?</span><span>+</span></button>
+          <div class="faq-a" id="a2">Simpan file ini sebagai <code>index.html</code> lalu unggah ke Cloudflare Pages, Netlify Drop, atau GitHub Pages — langsung aktif HTTPS gratis dalam hitungan detik.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <span>&copy; 2026 LaunchLite &bull; Free MIT Open Source Web Template by Ddev Studio</span>
+      <a href="../../">Ddev Studio Store &rarr;</a>
+    </div>
+  </footer>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('navFeat').textContent = 'Features';
+      document.getElementById('navPrice').textContent = 'Pricing';
+      document.getElementById('navBack').textContent = 'All Free Tools';
+      document.getElementById('navBack').href = '../?lang=en';
+      document.getElementById('navCta').textContent = 'Get Started';
+      document.getElementById('hTitle').textContent = 'Launch Your Business Website in 10 Minutes';
+      document.getElementById('hDesc').textContent = 'Ultra-fast responsive static landing page template featuring Light/Dark mode, clean CSS variables, and zero server subscription cost.';
+      document.getElementById('hBtn1').textContent = 'View Plans';
+      document.getElementById('hBtn2').textContent = 'Download HTML';
+      document.getElementById('fHead').textContent = 'Built for Speed & Conversion';
+      document.getElementById('fSub').textContent = 'Clean HTML5, CSS Variables, and Vanilla JS easy to customize in minutes.';
+      document.getElementById('pHead').textContent = 'Pricing & Service Tiers Showcase';
+      document.getElementById('pSub').textContent = 'Customize titles, pricing, and buttons to link directly to your checkout or WhatsApp.';
+      document.getElementById('qHead').textContent = 'Frequently Asked Questions';
+      document.getElementById('q1').textContent = 'Can I use this free template for client commercial projects?';
+      document.getElementById('a1').textContent = 'Yes. Licensed under MIT so you are free to use it for personal and commercial websites.';
+      document.getElementById('q2').textContent = 'How can I host this template for free?';
+      document.getElementById('a2').textContent = 'Rename this file to index.html and deploy to Cloudflare Pages, Netlify, or GitHub Pages with free HTTPS.';
+    }
+    const KEY = 'launchlite_theme';
+    function setTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem(KEY, t); }
+    setTheme(localStorage.getItem(KEY) || 'light');
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+    document.querySelectorAll('.faq-q').forEach((btn) => {
+      btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
+    });
+  </script>
+</body>
+</html>
