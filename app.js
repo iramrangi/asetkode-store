@@ -15,7 +15,7 @@ const SITE_CONFIG = {
   paymentMode: 'mayar', // otomatis membuka link Mayar bila tersedia di data-payment-url, atau fallback email jika masih mailto:
   bloggerOrigin: 'https://asetkode.blogspot.com',
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
-  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24'],
+  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24', 'prod-25'],
   usdStoreUrl: 'https://polar.sh/ddev-studio',
   gasWebAppUrl: 'https://script.google.com/macros/s/AKfycbyOP0ljBzNyNmHFR9V3S7nwusTeIHFvpH2iQ0VfZMT8yauk2wJ_vJY5ApIGYwF5Dp_5/exec'
 };
@@ -1180,6 +1180,50 @@ const FALLBACK_PRODUCTS = [
       "Ready-to-use Blogger XML Docs Theme (template-blogger-tech-docs.xml).",
       "Interactive offline preview with 7 API docs articles & Ctrl+K search.",
       "Setup Documentation & Commercial License."
+    ]
+  },
+  {
+    "id": "prod-25",
+    "title": "Website Agen Travel & Booking Wisata (NusantaraVoyage Pro)",
+    "titleEn": "Travel Agency & Tour Booking Platform (NusantaraVoyage Pro)",
+    "categories": [
+      "Aplikasi Web",
+      "Template",
+      "Desain Web",
+      "Source Code"
+    ],
+    "price": "Rp 129.000",
+    "oldPrice": "Rp 299.000",
+    "priceUsd": "$19",
+    "oldPriceUsd": "$39",
+    "usdPaymentUrl": "https://polar.sh/ddev-studio",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/travel/",
+    "postUrl": "https://asetkode.blogspot.com/",
+    "version": "v1.0 (Offline Booking + E-Voucher)",
+    "stack": "HTML5 + CSS3 + Vanilla JS (47 Vector SVG Icons)",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/travel/screenshot.png",
+    "summary": "Platform website agen travel & sistem reservasi paket wisata siap pakai dengan 8 paket destinasi unggulan, kalkulator biaya otomatis, E-Voucher verifikasi anti-palsu (kode tanda tangan VRF-), integrasi WhatsApp, serta Admin Panel pengelola paket & pesanan ber-PIN keamanan.",
+    "summaryEn": "Production-ready tour & travel agency storefront featuring 8 illustrated tour packages, dynamic pax & date booking calculator, tamper-evident VRF E-Vouchers, WhatsApp checkout, and PIN-protected Admin Panel.",
+    "features": [
+      "Booking Engine Interaktif 8 Paket Wisata: Filter destinasi/kategori, validasi kuota tanggal tersedia, & hitung total biaya peserta otomatis.",
+      "E-Voucher Anti-Pemalsuan (VRF Signature) & Cetak Struk Siap Print untuk verifikasi tamu di lokasi penjemputan.",
+      "Admin Panel Terproteksi PIN Keamanan (123456) untuk kelola daftar paket wisata, harga, kuota tanggal, & status reservasi.",
+      "100% Offline-First + 47 Ikon Vektor SVG Presisi & Dukungan Dwibahasa Otomatis (?lang=en) tanpa ketergantungan server."
+    ],
+    "featuresEn": [
+      "Interactive Booking Engine with 8 curated tour packages, real-time pax pricing & sold-out date guards.",
+      "Tamper-evident VRF E-Voucher generator with printable confirmation pass & WhatsApp booking relay.",
+      "PIN-gated Admin Dashboard for managing tours, departures, pricing, and customer bookings.",
+      "100% Offline-First architecture with crisp custom SVG illustrations, zero external CDN dependencies & ?lang=en support."
+    ],
+    "deliverablesEn": [
+      "Complete Unlocked HTML/CSS/JS Travel Agency Source Code + Batch Launcher.",
+      "Preloaded 8 Tour Packages & Tamper-Evident E-Voucher System.",
+      "Bilingual Setup Guide (EN + ID) & Commercial License."
     ]
   }
 ];
@@ -2576,7 +2620,7 @@ function applyStorefrontLocaleUI() {
     isEn,
     '<div style="font-size:0.75rem; color:#a1a1aa; margin-bottom:10px;">Global Commerce Architecture:</div>' +
     '<ul class="zip-tree"><li class="zip-row"><span>Storefront: Cloudflare Edge SPA</span><span class="zip-badge">Ultra Fast</span></li>' +
-    '<li class="zip-row"><span>Live Demos: 24 Interactive Sandboxes</span><span class="zip-badge">Online</span></li>' +
+    '<li class="zip-row"><span>Live Demos: 25 Interactive Sandboxes</span><span class="zip-badge">Online</span></li>' +
     '<li class="zip-row"><span>Global USD: Polar.sh (Card / Apple Pay)</span><span class="zip-badge">Verified</span></li>' +
     '<li class="zip-row"><span>Delivery: Auto .ZIP Email Dispatch</span><span class="zip-badge">24/7 Active</span></li></ul>'
   );
@@ -2901,7 +2945,7 @@ function buildStorefrontAiFallback(userText) {
   if (/^((halo|hai|hi|hey|hello|good\s+(morning|afternoon|evening)|selamat\s+(pagi|siang|sore|malam)|permisi)(\s+(admin|min|there))?)[!.?\s]*$/i.test(q)) {
     return {
       html: isEn
-        ? 'Hello! How can I help you today? Ask about any of our <strong>24 live-demo apps</strong>, individual USD pricing ($7–$25), or checkout via <strong>Polar.sh</strong>.'
+        ? 'Hello! How can I help you today? Ask about any of our <strong>25 live-demo apps</strong>, individual USD pricing ($7–$25), or checkout via <strong>Polar.sh</strong>.'
         : 'Halo! Ada yang bisa saya bantu? Anda bisa tanya rekomendasi <strong>aplikasi/source code</strong>, daftar harga satuan, cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
       actions: []
     };
@@ -2940,11 +2984,11 @@ function buildStorefrontAiFallback(userText) {
   }
 
   // 5. Pertanyaan Bundling / Diskon / Kisaran Harga (Semua produk harga satuan)
-  if (/(bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|all\s+24|24\s+produk|berapa\s+harga|kisaran\s+harga|daftar\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much)/i.test(q)) {
+  if (/(bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|all\s+2[45]|2[45]\s+produk|berapa\s+harga|kisaran\s+harga|daftar\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much)/i.test(q)) {
     return {
       html: isEn
-        ? 'All 24 products at <strong>Ddev Studio</strong> are sold individually at transparent unit prices ranging from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access, commercial license — no bundle packages). Pick any tool you need from the catalog!'
-        : 'Seluruh 24 produk di <strong>Ddev Studio</strong> dijual dengan <strong>harga satuan transparan mulai Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa paket bundling & tanpa biaya langganan). Silakan pilih langsung produk yang sesuai kebutuhan Anda!',
+        ? 'All 25 products at <strong>Ddev Studio</strong> are sold individually at transparent unit prices ranging from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access, commercial license — no bundle packages). Pick any tool you need from the catalog!'
+        : 'Seluruh 25 produk di <strong>Ddev Studio</strong> dijual dengan <strong>harga satuan transparan mulai Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa paket bundling & tanpa biaya langganan). Silakan pilih langsung produk yang sesuai kebutuhan Anda!',
       actions: [{
         label: isEn ? '📋 Browse Catalog' : '📋 Lihat Katalog Produk',
         primary: true,
@@ -3138,8 +3182,8 @@ function sendToAiAssistant(rawText) {
   if (gasUrl && aiServerGeminiFlag !== false) {
     const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'AI Assistant is typing...' : 'Asisten sedang mengetik...'}</em>`, []);
     const enPricesHint = isEn
-      ? '[IMPORTANT FOR EN/GLOBAL USER: Reply in English ONLY. All 24 apps are sold individually ONLY ($7-$25 USD one-time payment per app; NO bundle packages and NO multi-item cart discounts). Global payment is via Polar.sh (Visa, Mastercard, Apple Pay) — NEVER mention IDR/Rupiah/QRIS/Virtual Account/Mayar to USD buyers.] '
-      : '[Catatan: Semua 24 produk dijual dengan harga satuan Rp 39.000–Rp 169.000. Tidak ada paket bundling atau diskon tambahan keranjang.] ';
+      ? '[IMPORTANT FOR EN/GLOBAL USER: Reply in English ONLY. All 25 apps are sold individually ONLY ($7-$25 USD one-time payment per app; NO bundle packages and NO multi-item cart discounts). Global payment is via Polar.sh (Visa, Mastercard, Apple Pay) — NEVER mention IDR/Rupiah/QRIS/Virtual Account/Mayar to USD buyers.] '
+      : '[Catatan: Semua 25 produk dijual dengan harga satuan Rp 39.000–Rp 169.000. Tidak ada paket bundling atau diskon tambahan keranjang.] ';
     fetch(gasUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
