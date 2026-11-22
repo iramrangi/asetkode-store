@@ -22,8 +22,13 @@ const SITE_CONFIG = {
 
 const STORAGE_LOCALE_KEY = 'ddev_locale_v1';
 const IS_EN_SUBPATH = /^\/en(\/|$)/i.test((typeof window !== 'undefined' && window.location && window.location.pathname) || '');
-function resolveStoreAssetUrl(url) {
+function normalizeLocalDemoUrl(url) {
   const raw = String(url || '').trim();
+  const m = raw.match(/^https?:\/\/(?:[a-z0-9-]+\.)?asetkode-store\.pages\.dev\/(demo\/.*)$/i);
+  return m ? m[1] : raw;
+}
+function resolveStoreAssetUrl(url) {
+  const raw = normalizeLocalDemoUrl(url);
   if (!raw || raw.startsWith('#') || raw.startsWith('/') || /^(https?:|data:|mailto:)/i.test(raw)) return raw;
   return (IS_EN_SUBPATH ? '../' : '') + raw;
 }
@@ -1285,23 +1290,24 @@ window.__asetkodeBloggerCallback = function (data) {
       const descEl = doc.querySelector('.product-description p') || doc.querySelector('p');
       const featEls = doc.querySelectorAll('.product-features li');
 
-      const price = (metaEl && metaEl.getAttribute('data-price')) || 'Rp 99.000';
-      const oldPrice = (metaEl && metaEl.getAttribute('data-old-price')) || '';
-      const priceUsd = (metaEl && metaEl.getAttribute('data-price-usd')) || '';
-      const oldPriceUsd = (metaEl && metaEl.getAttribute('data-old-price-usd')) || '';
-      const usdPaymentUrl = (metaEl && metaEl.getAttribute('data-usd-url')) || '#checkout-usd';
+      const rawDemoAttr = (metaEl && metaEl.getAttribute('data-demo-url')) || postUrl;
+      const fbMatch = FALLBACK_PRODUCTS.find((f) => f.title.toLowerCase() === title.toLowerCase() || (f.demoUrl && normalizeLocalDemoUrl(rawDemoAttr).includes(f.demoUrl)));
+      const price = (fbMatch && fbMatch.price) || (metaEl && metaEl.getAttribute('data-price')) || 'Rp 99.000';
+      const oldPrice = (fbMatch && fbMatch.oldPrice) || (metaEl && metaEl.getAttribute('data-old-price')) || '';
+      const priceUsd = (fbMatch && fbMatch.priceUsd) || (metaEl && metaEl.getAttribute('data-price-usd')) || '';
+      const oldPriceUsd = (fbMatch && fbMatch.oldPriceUsd) || (metaEl && metaEl.getAttribute('data-old-price-usd')) || '';
+      const usdPaymentUrl = (fbMatch && fbMatch.usdPaymentUrl) || (metaEl && metaEl.getAttribute('data-usd-url')) || '#checkout-usd';
       const explicitTitleEn = (metaEl && metaEl.getAttribute('data-title-en')) || '';
-      const fbMatch = FALLBACK_PRODUCTS.find((f) => f.title.toLowerCase() === title.toLowerCase() || (f.demoUrl && metaEl && (metaEl.getAttribute('data-demo-url') || '').includes(f.demoUrl)));
-      const paymentUrl = (metaEl && metaEl.getAttribute('data-payment-url')) || postUrl;
-      const demoUrl = (metaEl && metaEl.getAttribute('data-demo-url')) || postUrl;
-      const version = (metaEl && metaEl.getAttribute('data-version')) || 'v1.0';
-      const stack = (metaEl && metaEl.getAttribute('data-stack')) || (categories.join(' • ') || 'Full Source Code');
-      const license = (metaEl && metaEl.getAttribute('data-license')) || 'Personal & Komersial';
+      const paymentUrl = (fbMatch && fbMatch.paymentUrl) || (metaEl && metaEl.getAttribute('data-payment-url')) || postUrl;
+      const demoUrl = normalizeLocalDemoUrl((fbMatch && fbMatch.demoUrl) || rawDemoAttr);
+      const version = (fbMatch && fbMatch.version) || (metaEl && metaEl.getAttribute('data-version')) || 'v1.0';
+      const stack = (fbMatch && fbMatch.stack) || (metaEl && metaEl.getAttribute('data-stack')) || (categories.join(' • ') || 'Full Source Code');
+      const license = (fbMatch && fbMatch.license) || (metaEl && metaEl.getAttribute('data-license')) || 'Personal & Komersial';
       const openMode = (metaEl && metaEl.getAttribute('data-open-mode')) || 'modal';
 
       let features = Array.from(featEls).map((li) => li.textContent.trim()).filter(Boolean);
       if (!features.length) {
-        features = [
+        features = (fbMatch && fbMatch.features) || [
           '100% Full Source Code Tanpa Enkripsi (Siap Kustomisasi)',
           'Database SQL Lengkap + Dokumentasi Panduan Instalasi',
           'Pengiriman Otomatis Detik Itu Juga via Email & Web',
@@ -1318,7 +1324,7 @@ window.__asetkodeBloggerCallback = function (data) {
       const deliverablesEn = Array.from(doc.querySelectorAll('.ddev-prose-en ol li')).map((li) => li.textContent.trim()).filter(Boolean);
 
       return {
-        id: 'blogger-prod-' + idx,
+        id: (fbMatch && fbMatch.id) || ('blogger-prod-' + idx),
         title,
         titleEn: explicitTitleEn || (fbMatch && fbMatch.titleEn) || '',
         categories: categories.length ? categories : ['Source Code'],
@@ -1334,8 +1340,8 @@ window.__asetkodeBloggerCallback = function (data) {
         stack,
         license,
         openMode,
-        demoType: inferDemoType(title, categories),
-        thumbnailUrl: firstImg ? firstImg.src : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80',
+        demoType: (fbMatch && fbMatch.demoType) || (demoUrl.includes('demo/') ? 'live_frame' : inferDemoType(title, categories)),
+        thumbnailUrl: (fbMatch && fbMatch.thumbnailUrl) || (firstImg ? firstImg.src : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80'),
         summary: summaryText,
         summaryEn: explicitDescEn || (fbMatch && fbMatch.summaryEn) || '',
         features,
@@ -1345,13 +1351,15 @@ window.__asetkodeBloggerCallback = function (data) {
     });
 
     if (syncedProducts.length > 0) {
-      productsState = syncedProducts;
+      const syncedIds = new Set(syncedProducts.map((p) => p.id));
+      const missingFallbacks = FALLBACK_PRODUCTS.filter((fb) => !syncedIds.has(fb.id));
+      productsState = [...missingFallbacks, ...syncedProducts];
       renderProductsGrid();
       const statusEl = document.getElementById('catalogStatusText');
       if (statusEl) {
         statusEl.textContent = currentLocale === 'en'
-          ? `Live Synced with asetkode.blogspot.com (${syncedProducts.length} active products)`
-          : `Terhubung Live dengan asetkode.blogspot.com (${syncedProducts.length} produk aktif)`;
+          ? `Live Synced (${productsState.length} active products)`
+          : `Terhubung Live (${productsState.length} produk aktif)`;
       }
     }
   } catch (err) {
@@ -1547,16 +1555,16 @@ function buildInteractiveDemoHTML(prod) {
   const type = prod.demoType || inferDemoType(prod.title, prod.categories);
   const disp = getProdDisplay(prod);
 
-  if (type === 'live_frame' || (prod.demoUrl && prod.demoUrl.startsWith('demo/'))) {
+  if (type === 'live_frame' || (prod.demoUrl && prod.demoUrl.includes('demo/'))) {
     const targetDemoUrl = localizeDemoUrl(prod.demoUrl);
     return `
       <div style="width:100%; height:620px; position:relative; background:#09090b;">
         <div style="background:#09090b; color:#fff; padding:10px 18px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #27272a;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
-            <span style="font-size:0.8rem; font-weight:700;">LIVE PREVIEW: ${disp.title}</span>
+          <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+            <span style="display:inline-block; width:8px; height:8px; flex-shrink:0; border-radius:50%; background:#10b981;"></span>
+            <span style="font-size:0.8rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">LIVE PREVIEW: ${disp.title}</span>
           </div>
-          <a href="${targetDemoUrl}" target="_blank" rel="noopener" style="background:#fff; color:#09090b; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700; text-decoration:none;">${disp.isEn ? 'Open Fullscreen ↗' : 'Buka Layar Penuh ↗'}</a>
+          <a href="${targetDemoUrl}" target="_blank" rel="noopener" style="background:#fff; color:#09090b; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700; text-decoration:none; white-space:nowrap; flex-shrink:0;">${disp.isEn ? 'Open Fullscreen ↗' : 'Buka Layar Penuh ↗'}</a>
         </div>
         <iframe src="${targetDemoUrl}" style="width:100%; height:calc(100% - 41px); border:0; background:#fff;" allow="autoplay; clipboard-write"></iframe>
       </div>
