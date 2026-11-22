@@ -1278,7 +1278,7 @@ html[data-theme="dark"] .price-current {
   }
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1100px) {
   .nav-menu {
     display: none;
   }

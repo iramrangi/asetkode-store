@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Order Link &amp; HTML Button Builder — Ddev Studio Open Source (MIT)</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:#f8fafc; color:#0f172a; padding:20px; }
+    .wrap { max-width:960px; margin:0 auto; }
+    .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid #e2e8f0; }
+    .badge { display:inline-block; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:4px 10px; border-radius:99px; font-size:12px; font-weight:700; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:20px; }
+    .field { margin-bottom:12px; }
+    label { display:block; font-size:12px; font-weight:700; color:#475569; margin-bottom:5px; }
+    input, textarea { width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; }
+    textarea { min-height:90px; resize:vertical; font-family:ui-monospace,Consolas,monospace; font-size:12.5px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#fff; color:#0f172a; font-weight:700; font-size:13px; cursor:pointer; text-decoration:none; }
+    .btn-wa { background:#16a34a; color:#fff; border-color:#16a34a; }
+    .btn-primary { background:#4f46e5; color:#fff; border-color:#4f46e5; }
+    .status { font-size:12.5px; font-weight:700; color:#059669; margin-top:8px; min-height:18px; }
+    @media (max-width:780px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <span class="badge">MIT Open Source &bull; Free</span>
+        <h1 style="font-size:20px;margin-top:6px;" id="tTitle">WhatsApp Order Link &amp; CTA Snippet Builder</h1>
+      </div>
+      <a class="btn" href="../" id="tBack">Kembali ke Halaman Gratis</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="field">
+          <label id="lPhone">Nomor WhatsApp Admin (otomatis normalisasi ke 62)</label>
+          <input id="inPhone" value="081234567890" />
+        </div>
+        <div class="field">
+          <label id="lLabel">Teks Tombol CTA</label>
+          <input id="inLabel" value="Pesan Sekarang via WhatsApp" />
+        </div>
+        <div class="field">
+          <label id="lMsg">Template Pesan Otomatis</label>
+          <textarea id="inMsg" style="font-family:inherit;min-height:110px;">Halo Admin, saya ingin memesan produk:
+- Nama Paket: Paket Hemat UMKM
+- Jumlah: 1
+- Catatan: Mohon info total &amp; rekening pembayarannya ya.</textarea>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary" id="btnCopyUrl">Salin Link wa.me</button>
+          <a class="btn btn-wa" id="btnTestWa" href="#" target="_blank" rel="noopener">Uji Buka WhatsApp</a>
+        </div>
+        <div class="status" id="msgOut"></div>
+      </div>
+
+      <div class="card">
+        <label id="lPreview">Preview Tombol Website</label>
+        <div style="padding:20px;background:#f1f5f9;border-radius:12px;text-align:center;margin-bottom:14px;" id="pvWrap"></div>
+        <label id="lLinkOut">Hasil URL WhatsApp</label>
+        <input id="outUrl" readonly style="margin-bottom:12px;font-family:ui-monospace,Consolas,monospace;font-size:12px;" />
+        <label id="lSnippet">Cuplikan Kode HTML Siap Tempel</label>
+        <textarea id="outSnippet" readonly></textarea>
+        <button type="button" class="btn" id="btnCopyHtml" style="margin-top:10px;">Salin Kode HTML</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('tBack').textContent = 'Back to Free Tools';
+      document.getElementById('tBack').href = '../?lang=en';
+      document.getElementById('lPhone').textContent = 'Admin WhatsApp Number (international digits)';
+      document.getElementById('lLabel').textContent = 'CTA Button Label';
+      document.getElementById('lMsg').textContent = 'Pre-filled Order Message';
+      document.getElementById('btnCopyUrl').textContent = 'Copy wa.me URL';
+      document.getElementById('btnTestWa').textContent = 'Test WhatsApp Link';
+      document.getElementById('lPreview').textContent = 'Live Button Preview';
+      document.getElementById('lLinkOut').textContent = 'Generated WhatsApp URL';
+      document.getElementById('lSnippet').textContent = 'Copy-Paste HTML Button Snippet';
+      document.getElementById('btnCopyHtml').textContent = 'Copy HTML Snippet';
+      document.getElementById('inLabel').value = 'Order Now on WhatsApp';
+      document.getElementById('inMsg').value = 'Hi, I would like to order:\n- Item: Starter Package\n- Qty: 1\n- Notes: Please share payment details.';
+    }
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function normalizePhone(raw) {
+      let digits = String(raw || '').replace(/[^0-9]/g, '');
+      if (digits.startsWith('0')) digits = '62' + digits.slice(1);
+      return digits || '6281234567890';
+    }
+    function update() {
+      const phone = normalizePhone(document.getElementById('inPhone').value);
+      const label = document.getElementById('inLabel').value.trim() || 'WhatsApp';
+      const msg = document.getElementById('inMsg').value;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      const snippet = `<a href="${url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:#16a34a;color:#ffffff;font-weight:700;border-radius:10px;text-decoration:none;">${esc(label)}</a>`;
+      document.getElementById('outUrl').value = url;
+      document.getElementById('outSnippet').value = snippet;
+      document.getElementById('btnTestWa').href = url;
+      document.getElementById('pvWrap').innerHTML = snippet;
+    }
+    ['inPhone', 'inLabel', 'inMsg'].forEach((id) => document.getElementById(id).addEventListener('input', update));
+    document.getElementById('btnCopyUrl').addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('outUrl').value).then(() => {
+        document.getElementById('msgOut').textContent = IS_EN ? 'WhatsApp link copied!' : 'Link WhatsApp tersalin!';
+      });
+    });
+    document.getElementById('btnCopyHtml').addEventListener('click', () => {
+      navigator.clipboard.writeText(document.getElementById('outSnippet').value).then(() => {
+        document.getElementById('msgOut').textContent = IS_EN ? 'HTML snippet copied!' : 'Kode HTML tombol tersalin!';
+      });
+    });
+    update();
+  </script>
+</body>
+</html>

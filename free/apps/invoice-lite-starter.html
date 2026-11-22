@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Invoice Starter (MIT Open Source) — Ddev Studio</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:#f1f5f9; color:#0f172a; padding:20px; }
+    .toolbar { max-width:780px; margin:0 auto 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+    .sheet { max-width:780px; margin:0 auto; background:#fff; border:1px solid #cbd5e1; border-radius:14px; padding:32px; box-shadow:0 12px 30px rgba(15,23,42,0.06); }
+    .head { display:flex; justify-content:space-between; gap:16px; padding-bottom:18px; border-bottom:2px solid #0f172a; margin-bottom:20px; }
+    input { border:1px dashed #cbd5e1; border-radius:6px; padding:5px 8px; font-size:inherit; font-weight:inherit; color:inherit; background:transparent; }
+    input:focus { outline:none; border-color:#4f46e5; background:#eef2ff; }
+    table { width:100%; border-collapse:collapse; margin:18px 0; }
+    th, td { padding:10px 8px; border-bottom:1px solid #e2e8f0; text-align:left; font-size:14px; }
+    th { font-size:12px; text-transform:uppercase; color:#475569; }
+    .num { text-align:right; }
+    .total-box { display:flex; justify-content:flex-end; margin-top:16px; }
+    .total-inner { min-width:240px; background:#0f172a; color:#fff; padding:14px 18px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; font-weight:800; }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:9px; border:1px solid #cbd5e1; background:#fff; color:#0f172a; font-weight:700; font-size:13px; cursor:pointer; text-decoration:none; }
+    .btn-primary { background:#4f46e5; border-color:#4f46e5; color:#fff; }
+    @media print { .no-print { display:none !important; } body { background:#fff; padding:0; } .sheet { border:none; box-shadow:none; padding:12px; } input { border:none !important; padding:0; } }
+  </style>
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="btn" href="../" id="tBack">Kembali</a>
+      <button type="button" class="btn" id="btnAdd">+ Baris Item</button>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button type="button" class="btn" id="btnCurr">IDR / USD</button>
+      <button type="button" class="btn btn-primary" onclick="window.print()" id="btnPrint">Cetak / Simpan PDF</button>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <div class="head">
+      <div>
+        <div style="font-size:22px;font-weight:800;"><input id="bizName" value="Studio Digital Nusantara" /></div>
+        <div style="font-size:13px;color:#475569;margin-top:4px;"><input id="bizMeta" value="billing@studio-anda.com | WhatsApp: 0812-0000-0000" style="width:320px;" /></div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:24px;font-weight:900;letter-spacing:0.04em;">INVOICE</div>
+        <div style="font-size:13px;color:#475569;"><input id="invNo" value="INV-2026-001" style="text-align:right;width:140px;" /></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;color:#475569;margin-bottom:6px;" id="tBillTo">Kepada / Tagihan Untuk:</div>
+    <div style="font-size:15px;font-weight:700;"><input id="clientName" value="PT Maju Karya Bersama" style="width:280px;" /></div>
+
+    <table>
+      <thead>
+        <tr>
+          <th id="thDesc">Deskripsi Jasa / Produk</th>
+          <th class="num" style="width:80px;" id="thQty">Qty</th>
+          <th class="num" style="width:140px;" id="thPrice">Harga Satuan</th>
+          <th class="num" style="width:140px;" id="thSub">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody id="rowsBody"></tbody>
+    </table>
+
+    <div class="total-box">
+      <div class="total-inner">
+        <span id="tTotal">TOTAL</span>
+        <span id="grandTotal">Rp 0</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    let useUsd = IS_EN;
+    let items = IS_EN
+      ? [{ name: 'Landing Page Setup & Branding', qty: 1, price: 45 }, { name: 'Custom UI Component Tweaks', qty: 2, price: 15 }]
+      : [{ name: 'Pembuatan Website Profil Usaha', qty: 1, price: 350000 }, { name: 'Konfigurasi Domain & SSL', qty: 1, price: 150000 }];
+
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('tBack').textContent = 'Back';
+      document.getElementById('tBack').href = '../?lang=en';
+      document.getElementById('btnAdd').textContent = '+ Add Line';
+      document.getElementById('btnPrint').textContent = 'Print / Save PDF';
+      document.getElementById('tBillTo').textContent = 'Bill To:';
+      document.getElementById('thDesc').textContent = 'Description';
+      document.getElementById('thPrice').textContent = 'Unit Price';
+    }
+
+    function fmt(n) {
+      return useUsd ? ('$' + Number(n || 0).toFixed(2)) : ('Rp ' + Math.round(n || 0).toLocaleString('id-ID'));
+    }
+    function render() {
+      const tb = document.getElementById('rowsBody');
+      let sum = 0;
+      tb.innerHTML = items.map((it, idx) => {
+        const sub = (Number(it.qty) || 0) * (Number(it.price) || 0);
+        sum += sub;
+        return `<tr>
+          <td><input data-idx="${idx}" data-k="name" value="${String(it.name).replace(/"/g, '&quot;')}" style="width:100%;"/></td>
+          <td class="num"><input data-idx="${idx}" data-k="qty" type="number" min="1" value="${it.qty}" style="width:65px;text-align:right;"/></td>
+          <td class="num"><input data-idx="${idx}" data-k="price" type="number" min="0" value="${it.price}" style="width:120px;text-align:right;"/></td>
+          <td class="num" style="font-weight:700;">${fmt(sub)}</td>
+        </tr>`;
+      }).join('');
+      document.getElementById('grandTotal').textContent = fmt(sum);
+    }
+    document.getElementById('rowsBody').addEventListener('input', (e) => {
+      const idx = Number(e.target.getAttribute('data-idx'));
+      const k = e.target.getAttribute('data-k');
+      if (!Number.isInteger(idx) || !k) return;
+      items[idx][k] = k === 'name' ? e.target.value : Number(e.target.value);
+      render();
+    });
+    document.getElementById('btnAdd').addEventListener('click', () => {
+      items.push({ name: IS_EN ? 'Additional Item' : 'Item Tambahan', qty: 1, price: useUsd ? 10 : 50000 });
+      render();
+    });
+    document.getElementById('btnCurr').addEventListener('click', () => {
+      useUsd = !useUsd;
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>

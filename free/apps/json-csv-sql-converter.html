@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON to CSV &amp; SQL Schema Tool — Ddev Studio Open Source (MIT)</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:#0b1020; color:#f8fafc; min-height:100vh; padding:20px; }
+    .wrap { max-width:1080px; margin:0 auto; }
+    .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid #1e293b; }
+    .badge { display:inline-block; background:#064e3b; color:#6ee7b7; border:1px solid #059669; padding:4px 10px; border-radius:99px; font-size:12px; font-weight:700; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .card { background:#0f172a; border:1px solid #1e293b; border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+    label { font-size:12px; font-weight:700; color:#94a3b8; }
+    textarea, input { width:100%; background:#020617; color:#e2e8f0; border:1px solid #334155; border-radius:10px; padding:12px; font-family:ui-monospace,Consolas,monospace; font-size:13px; line-height:1.5; }
+    textarea { min-height:300px; resize:vertical; }
+    .btns { display:flex; flex-wrap:wrap; gap:8px; }
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:9px 13px; border-radius:9px; border:1px solid #334155; background:#1e293b; color:#fff; font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:none; }
+    .btn-primary { background:#4f46e5; border-color:#6366f1; }
+    .btn-green { background:#059669; border-color:#10b981; }
+    .msg { font-size:12.5px; font-weight:700; color:#34d399; min-height:18px; }
+    .msg.err { color:#f87171; }
+    @media (max-width:820px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <span class="badge">MIT Open Source &bull; Free</span>
+        <h1 style="font-size:20px;margin-top:6px;" id="tHeading">JSON Formatter, CSV Converter &amp; SQL Schema</h1>
+      </div>
+      <a class="btn" href="../" id="tBack">Kembali ke Halaman Gratis</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <label id="lIn">Input JSON Array / Object</label>
+        <textarea id="inJson">[
+  { "id": 1, "product": "Tour Bali 3H2M", "price": 2450000, "active": true },
+  { "id": 2, "product": "Open Trip Bromo", "price": 650000, "active": true },
+  { "id": 3, "product": "Labuan Bajo Sailing", "price": 4200000, "active": false }
+]</textarea>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <label for="tblName" style="white-space:nowrap;" id="lTbl">Nama Tabel SQL:</label>
+          <input id="tblName" value="products" />
+        </div>
+        <div class="btns">
+          <button type="button" class="btn btn-primary" id="btnFormat">Format JSON</button>
+          <button type="button" class="btn" id="btnMinify">Minify</button>
+          <button type="button" class="btn btn-green" id="btnCsv">JSON &rarr; CSV</button>
+          <button type="button" class="btn" id="btnSql">JSON &rarr; SQL</button>
+        </div>
+        <div class="msg" id="statusMsg"></div>
+      </div>
+
+      <div class="card">
+        <label id="lOut">Output Hasil</label>
+        <textarea id="outText" readonly></textarea>
+        <div class="btns">
+          <button type="button" class="btn btn-primary" id="btnCopy">Salin Output</button>
+          <button type="button" class="btn" id="btnDlCsv">Unduh .CSV</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('tBack').textContent = 'Back to Free Tools';
+      document.getElementById('tBack').href = '../?lang=en';
+      document.getElementById('lIn').textContent = 'Input JSON Array / Object';
+      document.getElementById('lTbl').textContent = 'SQL Table Name:';
+      document.getElementById('lOut').textContent = 'Converted Output';
+      document.getElementById('btnCopy').textContent = 'Copy Output';
+      document.getElementById('btnDlCsv').textContent = 'Download .CSV';
+    }
+    const inEl = document.getElementById('inJson');
+    const outEl = document.getElementById('outText');
+    const msgEl = document.getElementById('statusMsg');
+
+    function setMsg(text, isErr) {
+      msgEl.textContent = text;
+      msgEl.className = isErr ? 'msg err' : 'msg';
+    }
+    function parseInput() {
+      try {
+        return JSON.parse(inEl.value);
+      } catch (e) {
+        setMsg((IS_EN ? 'Invalid JSON: ' : 'JSON tidak valid: ') + e.message, true);
+        return null;
+      }
+    }
+    function csvCell(v) {
+      const s = v === null || v === undefined ? '' : (typeof v === 'object' ? JSON.stringify(v) : String(v));
+      return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }
+    function toCsv(data) {
+      const rows = Array.isArray(data) ? data : [data];
+      const keys = [...new Set(rows.flatMap((r) => (r && typeof r === 'object' ? Object.keys(r) : [])))];
+      if (!keys.length) return '';
+      return [keys.map(csvCell).join(','), ...rows.map((r) => keys.map((k) => csvCell(r ? r[k] : '')).join(','))].join('\r\n');
+    }
+    function inferSqlType(v) {
+      if (typeof v === 'boolean') return 'BOOLEAN';
+      if (typeof v === 'number') return Number.isInteger(v) ? 'INT' : 'DECIMAL(12,2)';
+      return 'VARCHAR(255)';
+    }
+    function toSql(data) {
+      const rows = Array.isArray(data) ? data : [data];
+      const sample = rows.find((r) => r && typeof r === 'object') || {};
+      const tbl = (document.getElementById('tblName').value || 'items').replace(/[^a-zA-Z0-9_]/g, '_') || 'items';
+      const cols = Object.keys(sample).map((k) => `  \`${k.replace(/[^a-zA-Z0-9_]/g, '_')}\` ${inferSqlType(sample[k])}`);
+      return `CREATE TABLE IF NOT EXISTS \`${tbl}\` (\n${cols.join(',\n')}\n);`;
+    }
+
+    document.getElementById('btnFormat').addEventListener('click', () => {
+      const d = parseInput();
+      if (d !== null) { outEl.value = JSON.stringify(d, null, 2); setMsg('JSON Valid (Pretty Printed)', false); }
+    });
+    document.getElementById('btnMinify').addEventListener('click', () => {
+      const d = parseInput();
+      if (d !== null) { outEl.value = JSON.stringify(d); setMsg('JSON Minified', false); }
+    });
+    document.getElementById('btnCsv').addEventListener('click', () => {
+      const d = parseInput();
+      if (d !== null) { outEl.value = toCsv(d); setMsg('CSV ready!', false); }
+    });
+    document.getElementById('btnSql').addEventListener('click', () => {
+      const d = parseInput();
+      if (d !== null) { outEl.value = toSql(d); setMsg('SQL CREATE TABLE generated!', false); }
+    });
+    document.getElementById('btnCopy').addEventListener('click', () => {
+      navigator.clipboard.writeText(outEl.value).then(() => setMsg(IS_EN ? 'Copied!' : 'Tersalin ke clipboard!', false));
+    });
+    document.getElementById('btnDlCsv').addEventListener('click', () => {
+      const d = parseInput();
+      if (d === null) return;
+      const csv = toCsv(d);
+      outEl.value = csv;
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const u = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = u; a.download = 'export.csv'; a.click();
+      URL.revokeObjectURL(u);
+      setMsg('Downloaded export.csv', false);
+    });
+    outEl.value = toCsv(parseInput());
+  </script>
+</body>
+</html>
