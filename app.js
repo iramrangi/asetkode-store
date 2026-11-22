@@ -2642,7 +2642,9 @@ function applyStorefrontLocaleUI() {
   if (navLinks[0]) navLinks[0].textContent = isEn ? 'Catalog' : 'Katalog';
   if (navLinks[1]) navLinks[1].textContent = isEn ? 'How to Buy' : 'Cara Order';
   if (navLinks[2]) {
-    navLinks[2].textContent = isEn ? 'Free' : 'Gratis';
+    const freeLbl = navLinks[2].querySelector('.nav-free-text');
+    if (freeLbl) freeLbl.textContent = isEn ? 'Free' : 'Gratis';
+    else navLinks[2].textContent = isEn ? 'Free' : 'Gratis';
     navLinks[2].setAttribute('href', resolveStoreAssetUrl('free/') + (isEn ? '?lang=en' : ''));
   }
 
@@ -2664,7 +2666,12 @@ function applyStorefrontLocaleUI() {
   );
   const heroCtas = document.querySelectorAll('.hero-cta-row a');
   if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Browse Products →' : 'Lihat Semua Produk →';
-  if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'How to Buy' : 'Cara Order';
+  if (heroCtas[1]) {
+    const heroFreeTxt = heroCtas[1].querySelector('.hero-free-text');
+    if (heroFreeTxt) heroFreeTxt.textContent = isEn ? '12 Free Products (MIT)' : '12 Produk Gratis (MIT)';
+    heroCtas[1].setAttribute('href', resolveStoreAssetUrl('free/') + (isEn ? '?lang=en' : ''));
+  }
+  if (heroCtas[2]) heroCtas[2].textContent = isEn ? 'How to Buy' : 'Cara Order';
 
   const studioTabs = document.querySelectorAll('.studio-tab');
   if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'ROI Calculator' : 'Kalkulator Hemat';
