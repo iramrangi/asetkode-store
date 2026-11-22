@@ -2906,11 +2906,11 @@ function buildStorefrontAiFallback(userText) {
   }
 
   // 3. Klaim .ZIP / Status Order
-  if (/(klaim|claim|kirim\s+ulang|belum\s+(masuk|terima|dapat)|download\s+link|cek\s+(status|order)|track\s+order|already\s+paid|sudah\s+(bayar|transfer))/i.test(q) || emailMatch) {
+  if (/(klaim|claim|kirim\s+ulang|belum\s+(masuk|terima|dapat)|download\s+link|cek\s+(status|order)|track\s+order|already\s+paid|sudah\s+(bayar|transfer)|USD-\d{4,8}-\d{2,4})/i.test(q) || emailMatch) {
     return {
       html: isEn
-        ? `After payment via <strong>Polar.sh</strong> (USD) or QRIS, your Google Drive <code>.ZIP</code> link is emailed automatically. If you haven't received it, email <strong>${escAiHtml(supportEmail)}</strong> with your payment receipt or Order ID (e.g. <code>DDV-...</code> / <code>USD-...</code>).`
-        : `Setelah pembayaran selesai, link <code>.ZIP</code> dikirim otomatis ke email Anda. Anda bisa mengetikkan <strong>Order ID (<code>DDV-...</code>)</strong> di chat ini atau kirim bukti pembayaran ke <strong>${escAiHtml(supportEmail)}</strong>.`,
+        ? `After payment via <strong>Polar.sh</strong> (USD) or QRIS, your Google Drive <code>.ZIP</code> link is emailed automatically. If you haven't received it, email <strong>${escAiHtml(supportEmail)}</strong> with your payment receipt or Order ID (e.g. <code>USD-...</code> / <code>DDV-...</code>).`
+        : `Setelah pembayaran selesai, link <code>.ZIP</code> dikirim otomatis ke email Anda. Anda bisa mengetikkan <strong>Order ID (<code>DDV-...</code> / <code>USD-...</code>)</strong> di chat ini atau kirim bukti pembayaran ke <strong>${escAiHtml(supportEmail)}</strong>.`,
       actions: [{
         label: isEn ? '✉️ Send Proof to Support' : '✉️ Kirim Bukti ke Admin',
         href: `mailto:${encodeURIComponent(supportEmail)}?subject=${encodeURIComponent('Order / Download Support - ' + SITE_CONFIG.brandName)}`,
@@ -2924,7 +2924,7 @@ function buildStorefrontAiFallback(userText) {
     return {
       html: isEn
         ? 'Global buyers pay securely in <strong>USD</strong> via <strong>Polar.sh</strong> (Visa, Mastercard, Apple Pay). Click <strong>Buy Now</strong> or checkout from your Cart, and your Google Drive <code>.ZIP</code> link is delivered automatically after payment.'
-        : 'Pembayaran bisa lewat:<br/>&#8226; <strong>Indonesia (IDR):</strong> Scan <strong>QRIS Ddev Studio</strong> (DANA, GoPay, OVO, ShopeePay, m-Banking) lewat tombol <strong>Beli Instan</strong> + konfirmasi email.<br/>&#8226; <strong>Global (USD):</strong> Kartu/Apple Pay otomatis via <strong>Polar.sh</strong>.',
+        : 'Pembayaran bisa lewat:<br/>&#8226; <strong>Indonesia (IDR):</strong> Scan <strong>QRIS Ddev Studio</strong> (DANA, GoPay, OVO, ShopeePay, m-Banking) lewat tombol <strong>Beli Instan</strong> + konfirmasi email (gateway otomatis Mayar juga disiapkan).<br/>&#8226; <strong>Global (USD):</strong> Kartu/Apple Pay otomatis via <strong>Polar.sh</strong>.',
       actions: []
     };
   }
@@ -2937,6 +2937,23 @@ function buildStorefrontAiFallback(userText) {
         : `Dapatkan semua <strong>24 source code &amp; template</strong> sekaligus di <strong>Paket Bundling VIP Rp 249.000</strong> (hemat 85% dari total satuan Rp 1.718.000), atau pilih 2+ produk ke keranjang untuk <strong>diskon otomatis 20%</strong>.`,
       actions: [{
         label: isEn ? '⚡ Add $49 VIP Bundle' : '⚡ Ambil Paket Bundling',
+        primary: true,
+        onClick: () => {
+          toggleAiChatWindow(false);
+          addAllBundleToCart();
+        }
+      }]
+    };
+  }
+
+  // 5b. Kisaran harga / Termurah / Price range
+  if (/(berapa\s+harga|kisaran\s+harga|daftar\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much)/i.test(q)) {
+    return {
+      html: isEn
+        ? 'Individual source code apps range from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access). Or grab all <strong>24 apps in the VIP Bundle for $49 USD</strong> (save 83% off $282), plus automatic <strong>20% off</strong> on 2+ cart items.'
+        : 'Harga produk satuan kami mulai dari <strong>Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa langganan). Beli 2+ item di Keranjang otomatis <strong>diskon 20%</strong>, atau ambil seluruh <strong>24 produk di VIP Bundle Rp 249.000</strong> (hemat 85%).',
+      actions: [{
+        label: isEn ? '⚡ Get $49 VIP Bundle' : '⚡ Ambil VIP Bundle Rp 249rb',
         primary: true,
         onClick: () => {
           toggleAiChatWindow(false);
@@ -3111,6 +3128,14 @@ function sendToAiAssistant(rawText) {
     return;
   }
 
+  // 1b. Route authoritative pricing/bundle/payment/refund/license intents locally so replies are 100% accurate with action buttons
+  if (/(cara\s+bayar|pembayaran|how\s+to\s+pay|payment|\bmayar\b|\bqris\b|\bpolar\b|visa|mastercard|apple\s+pay|\busd\b|bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|berapa\s+harga|kisaran\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much|refund|pengembalian|lisensi|license|how\s+to\s+(install|run|setup)|cara\s+(install|instal|pasang|pakai|setup)|USD-\d{4,8}-\d{2,4}|klaim|claim|kirim\s+ulang|belum\s+(masuk|terima|dapat))/i.test(text)) {
+    const directRes = buildStorefrontAiFallback(text);
+    aiChatHistoryState.push({ role: 'user', text });
+    addAiChatMessage('bot', directRes.html, directRes.actions);
+    return;
+  }
+
   // 2. Try live Gemini LLM on Apps Script (Indonesian or natural bilingual prompt), else local smart fallback
   if (gasUrl && aiServerGeminiFlag !== false) {
     const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'AI Assistant is typing...' : 'Asisten sedang mengetik...'}</em>`, []);
@@ -3128,6 +3153,12 @@ function sendToAiAssistant(rawText) {
       .then((data) => {
         if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
         if (data && data.mode === 'gemini' && data.reply) {
+          if (/tidak menyediakan paket bundling|tidak ada paket bundling|no longer offer a vip bundle/i.test(data.reply)) {
+            const safeFb = buildStorefrontAiFallback(text);
+            aiChatHistoryState.push({ role: 'user', text });
+            addAiChatMessage('bot', safeFb.html, safeFb.actions);
+            return;
+          }
           aiServerGeminiFlag = true;
           aiChatHistoryState.push({ role: 'user', text });
           aiChatHistoryState.push({ role: 'model', text: data.reply });
