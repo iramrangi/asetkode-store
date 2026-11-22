@@ -2840,6 +2840,29 @@ function applyStorefrontLocaleUI() {
   }
   if (heroCtas[2]) heroCtas[2].textContent = isEn ? 'How to Buy' : 'Cara Order';
 
+  const openPill = document.getElementById('catalogOpenPill');
+  const openTitle = document.getElementById('catalogOpenTitle');
+  const openSub = document.getElementById('catalogOpenSub');
+  const co1 = document.getElementById('coStat1');
+  const coP = document.getElementById('coStatPriceNum');
+  const co2 = document.getElementById('coStat2');
+  const co3 = document.getElementById('coStat3');
+  const coFreeLink = document.getElementById('coStatFreeLink');
+  if (openPill) openPill.textContent = isEn ? 'OFFICIAL CATALOG • 25 PRO APPS' : 'KATALOG RESMI • 25 APLIKASI PRO';
+  if (openTitle) openTitle.textContent = isEn
+    ? 'Pick Production-Ready Source Code to Ship Faster'
+    : 'Pilih Source Code Siap Pakai untuk Mempercepat Proyek & Bisnis Anda';
+  setLocalizedInner(
+    openSub,
+    isEn,
+    'Skip weeks of boilerplate coding. Every app includes responsive UI, an <strong>interactive browser Live Demo</strong>, 100% unencrypted source code, and transparent one-time pricing with zero subscriptions.'
+  );
+  if (co1) co1.textContent = isEn ? 'Ready-to-Run Apps' : 'Aplikasi Siap Pakai';
+  if (coP) coP.textContent = isEn ? '$7+ USD' : 'Rp 39rb+';
+  if (co2) co2.textContent = isEn ? 'One-Time License' : 'Sekali Bayar Selamanya';
+  if (co3) co3.textContent = isEn ? 'Try MIT Free Tools →' : 'Coba Versi MIT Gratis →';
+  if (coFreeLink) coFreeLink.setAttribute('href', resolveStoreAssetUrl('free/') + (isEn ? '?lang=en' : ''));
+
   const studioTabs = document.querySelectorAll('.studio-tab');
   if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'ROI Calculator' : 'Kalkulator Hemat';
   if (studioTabs[1]) studioTabs[1].textContent = isEn ? '.ZIP Contents' : 'Isi File .ZIP';

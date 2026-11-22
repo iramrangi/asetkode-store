@@ -2512,3 +2512,107 @@ html[data-theme="dark"] .c-price {
     flex: 0 0 256px;
   }
 }
+
+/* ================= CATALOG OPENING HEADER ================= */
+.catalog-opening {
+  display: grid;
+  grid-template-columns: 1.35fr 0.95fr;
+  gap: 24px;
+  align-items: center;
+  padding: 26px 28px;
+  margin-bottom: 24px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--accent-soft) 100%);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.catalog-opening-pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--accent);
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  margin-bottom: 10px;
+}
+
+.catalog-opening-title {
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.catalog-opening-sub {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.catalog-opening-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.co-stat {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.co-stat-free {
+  border-color: rgba(16, 185, 129, 0.45);
+  transition: transform 0.16s ease, border-color 0.16s ease;
+}
+
+.co-stat-free:hover {
+  transform: translateY(-2px);
+  border-color: #059669;
+}
+
+.co-stat-num {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.co-stat-lbl {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+@media (max-width: 960px) {
+  .catalog-opening {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 540px) {
+  .catalog-opening-stats {
+    grid-template-columns: 1fr;
+  }
+  .co-stat {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 14px;
+  }
+}
