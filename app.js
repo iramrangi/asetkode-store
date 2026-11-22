@@ -2010,7 +2010,7 @@ function launchCheckoutGateway(order) {
   const isMailto = effectiveUrl.startsWith('mailto:');
   if (extLink) {
     extLink.href = isMailto ? buildGmailComposeUrl(effectiveUrl) : (isHttpPayLink ? effectiveUrl : 'https://asetkode.blogspot.com/');
-    extLink.textContent = isMailto ? 'Buka di Gmail Web ↗' : (isHttpPayLink ? 'Buka Halaman Pembayaran Penuh ↗' : 'Buka Checkout Mayar di Blogger ↗');
+    extLink.textContent = isMailto ? 'Buka di Gmail Web ↗' : (isHttpPayLink ? 'Buka Halaman Pembayaran Penuh ↗' : 'Konfirmasi QRIS via Gmail / Blogger ↗');
   }
 
   if (iframe) {
@@ -2089,8 +2089,13 @@ function buildEmailOrderHTML(order) {
 }
 
 function buildBuiltInPaymentGatewayHTML(order) {
-  return `
-    <!DOCTYPE html>
+  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const subj = `Konfirmasi Bayar QRIS (${order.price}): ${order.title}`;
+  const baseBody = `Halo Admin ${SITE_CONFIG.brandName},\n\nSaya sudah melakukan pembayaran QRIS untuk:\n- Produk: ${order.title}\n- Total: ${order.price}\n`;
+  const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
+  const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
+
+  return `<!DOCTYPE html>
     <html lang="id">
     <head>
       <meta charset="UTF-8" />
@@ -2098,59 +2103,48 @@ function buildBuiltInPaymentGatewayHTML(order) {
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
       <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: #fafafa; color: #09090b; padding: 22px; }
-        .card { max-width: 540px; margin: 0 auto; background: #fff; border: 1px solid #e4e4e7; border-radius: 14px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
-        .badge { display: inline-block; background: #09090b; color: #ffffff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
-        .title { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
-        .price { font-size: 22px; font-weight: 800; color: #09090b; margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; }
-        label { display: block; font-size: 12px; font-weight: 700; color: #52525b; margin-bottom: 6px; }
-        input { width: 100%; padding: 11px 14px; border: 1px solid #d4d4d8; border-radius: 8px; font-size: 14px; margin-bottom: 14px; outline: none; }
+        body { background: #fafafa; color: #09090b; padding: 20px; }
+        .card { max-width: 480px; margin: 0 auto; background: #fff; border: 1px solid #e4e4e7; border-radius: 16px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); text-align: center; }
+        .badge { display: inline-block; background: #dcfce7; color: #166534; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; }
+        .title { font-size: 15.5px; font-weight: 800; margin-bottom: 4px; }
+        .price { font-size: 22px; font-weight: 800; color: #059669; margin-bottom: 14px; font-family: 'JetBrains Mono', monospace; }
+        .qris-box { display: inline-block; border: 1px solid #d4d4d8; border-radius: 12px; padding: 10px; background: #fff; margin-bottom: 12px; }
+        .qris-box img { max-width: 220px; width: 100%; height: auto; display: block; border-radius: 6px; }
+        input { width: 100%; padding: 10px 13px; border: 1px solid #d4d4d8; border-radius: 9px; font-size: 13.5px; margin-bottom: 10px; outline: none; }
         input:focus { border-color: #09090b; }
-        .methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-        .method { border: 1.5px solid #e4e4e7; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 700; color: #52525b; }
-        .method.active { border-color: #09090b; background: #09090b; color: #ffffff; }
-        .btn { width: 100%; background: #09090b; color: #fff; border: none; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 800; cursor: pointer; }
-        .btn:hover { opacity: 0.9; }
-        .success-box { display: none; margin-top: 16px; background: #f4f4f5; border: 1px solid #09090b; border-radius: 10px; padding: 16px; text-align: center; }
+        .btn { display: block; width: 100%; background: #09090b; color: #fff; text-decoration: none; border: none; padding: 12px; border-radius: 9px; font-size: 13.5px; font-weight: 800; cursor: pointer; margin-bottom: 8px; }
+        .btn-sec { display: block; width: 100%; background: #fff; color: #09090b; text-decoration: none; border: 1px solid #cbd5e1; padding: 10px; border-radius: 9px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+        .note { font-size: 12px; color: #52525b; background: #f4f4f5; padding: 10px; border-radius: 9px; line-height: 1.5; }
       </style>
     </head>
     <body>
       <div class="card">
-        <span class="badge">GATEWAY PEMBAYARAN OTOMATIS 24/7</span>
-        <div class="title">${order.title}</div>
-        <div class="price">${order.price}</div>
-
-        <label>Email Penerima File Source Code (.ZIP):</label>
-        <input type="email" id="buyerEmail" placeholder="nama@email.com (Link download dikirim otomatis ke sini)" required />
-
-        <label>Pilih Metode Pembayaran Instan:</label>
-        <div class="methods">
-          <div class="method active" onclick="selectM(this)">QRIS Instan</div>
-          <div class="method" onclick="selectM(this)">Virtual Account</div>
-          <div class="method" onclick="selectM(this)">GoPay / DANA</div>
+        <span class="badge">PEMBAYARAN QRIS • SEMUA BANK &amp; E-WALLET</span>
+        <div class="title">${esc(order.title)}</div>
+        <div class="price">${esc(order.price)}</div>
+        <div class="qris-box">
+          <img src="qris-ddev-studio.jpg" alt="QRIS Ddev Studio" />
         </div>
-
-        <button type="button" class="btn" onclick="simulatePay()">Buat Kode QRIS &amp; Unduh Source Code</button>
-
-        <div class="success-box" id="simSuccess">
-          <div style="font-size:14px; font-weight:800; color:#09090b; margin-bottom:6px;">✓ Kode Pembayaran Siap</div>
-          <p style="font-size:12.5px; color:#52525b; line-height:1.5;">
-            Begitu Anda menempel link produk <strong>Mayar.id</strong> pada atribut <code>data-payment-url</code> di Bot Auto-Post, jendela ini otomatis menampilkan QRIS / Virtual Account asli dan mengirimkan file <code>.ZIP</code> ke email pembeli detik itu juga.
-          </p>
+        <input type="email" id="buyerEmail" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
+        <a id="qrisGmailBtn" class="btn" href="${esc(gmailHref)}" target="_blank" rel="noopener">Sudah Scan Bayar? Konfirmasi via Gmail ↗</a>
+        <a class="btn-sec" href="${esc(mailHref)}">Buka Aplikasi Email Lain</a>
+        <div class="note">
+          Scan QRIS di atas melalui DANA, GoPay, OVO, ShopeePay, atau m-Banking sebesar <strong>${esc(order.price)}</strong>, lalu klik konfirmasi di atas agar paket <code>.ZIP</code> dikirim ke email Anda.
         </div>
       </div>
       <script>
-        function selectM(el) {
-          document.querySelectorAll('.method').forEach(m => m.classList.remove('active'));
-          el.classList.add('active');
-        }
-        function simulatePay() {
-          document.getElementById('simSuccess').style.display = 'block';
+        var em = document.getElementById('buyerEmail');
+        var btn = document.getElementById('qrisGmailBtn');
+        if (em && btn) {
+          em.addEventListener('input', function () {
+            var v = em.value.trim();
+            var b = ${JSON.stringify(baseBody)} + (v ? '- Email Penerima .ZIP: ' + v + '\n' : '') + '\nTerlampir bukti bayar QRIS saya. Terima kasih!';
+            btn.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(${JSON.stringify(SITE_CONFIG.orderEmail)}) + '&su=' + encodeURIComponent(${JSON.stringify(subj)}) + '&body=' + encodeURIComponent(b);
+          });
         }
       </script>
     </body>
-    </html>
-  `;
+    </html>`;
 }
 
 // ================= 7. HERO ROI CALCULATOR & STUDIO TABS =================
