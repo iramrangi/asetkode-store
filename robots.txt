@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://asetkode-store.pages.dev/sitemap.xml

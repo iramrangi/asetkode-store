@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://asetkode-store.pages.dev/</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="https://asetkode-store.pages.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://asetkode-store.pages.dev/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://asetkode-store.pages.dev/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://asetkode-store.pages.dev/en/</loc>
+    <xhtml:link rel="alternate" hreflang="id" href="https://asetkode-store.pages.dev/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://asetkode-store.pages.dev/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://asetkode-store.pages.dev/" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url><loc>https://asetkode-store.pages.dev/demo/kasir/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/umkm/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/scraper/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/ecommerce/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/dashboard-ui/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/bot-responder/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/finansial/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/pdf-converter/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/undangan/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/bot-tagihan/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/absensi/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/payment-kit/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/kasir-php/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/agency/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/biolink/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/antrian/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/uikit/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/invoice/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/booking/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/laundry/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/blogger-news/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/blogger-toko/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/blogger-portfolio/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/demo/blogger-docs/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

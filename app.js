@@ -26,6 +26,12 @@ const SITE_CONFIG = {
 };
 
 const STORAGE_LOCALE_KEY = 'ddev_locale_v1';
+const IS_EN_SUBPATH = /^\/en(\/|$)/i.test((typeof window !== 'undefined' && window.location && window.location.pathname) || '');
+function resolveStoreAssetUrl(url) {
+  const raw = String(url || '').trim();
+  if (!raw || raw.startsWith('#') || raw.startsWith('/') || /^(https?:|data:|mailto:)/i.test(raw)) return raw;
+  return (IS_EN_SUBPATH ? '../' : '') + raw;
+}
 function detectInitialLocale() {
   try {
     const qp = new URLSearchParams(window.location.search).get('lang');
@@ -33,6 +39,7 @@ function detectInitialLocale() {
       localStorage.setItem(STORAGE_LOCALE_KEY, qp);
       return qp;
     }
+    if (IS_EN_SUBPATH) return 'en';
     const saved = localStorage.getItem(STORAGE_LOCALE_KEY);
     if (saved === 'en' || saved === 'id') return saved;
     const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '');
@@ -87,7 +94,7 @@ function getProdDisplay(p) {
 }
 
 function localizeDemoUrl(url) {
-  const raw = String(url || '').trim();
+  const raw = resolveStoreAssetUrl(url);
   if (!raw || raw.startsWith('#') || currentLocale !== 'en') return raw;
   if (raw.includes('demo/')) {
     return raw + (raw.includes('?') ? '&' : '?') + 'lang=en';
@@ -1373,7 +1380,7 @@ function renderProductsGrid() {
       return `
         <article class="product-card" data-id="${p.id}">
           <div class="card-thumb">
-            <img src="${p.thumbnailUrl}" alt="${disp.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
+            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             <div class="thumb-tags">
               ${p.categories
@@ -1649,7 +1656,7 @@ function buildInteractiveDemoHTML(prod) {
         <span style="background:#18181b; border:1px solid #27272a; padding:10px 20px; border-radius:8px; font-weight:700; font-size:0.84rem;">Clean HTML5 + Tailwind CSS</span>
       </div>
       <div style="max-width:760px; margin:0 auto; border-radius:14px; overflow:hidden; border:1px solid #27272a;">
-        <img src="${prod.thumbnailUrl}" alt="${prod.title}" style="width:100%; max-height:320px; object-fit:cover; display:block; filter:grayscale(100%);" />
+        <img src="${resolveStoreAssetUrl(prod.thumbnailUrl)}" alt="${prod.title}" style="width:100%; max-height:320px; object-fit:cover; display:block; filter:grayscale(100%);" />
       </div>
     </div>
   `;
@@ -1710,7 +1717,7 @@ window.openDetailById = function (productId) {
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:22px; align-items:start;">
         <div>
           <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border-color); margin-bottom:16px;">
-            <img src="${prod.thumbnailUrl}" alt="${disp.title}" style="width:100%; height:230px; object-fit:cover; display:block;" />
+            <img src="${resolveStoreAssetUrl(prod.thumbnailUrl)}" alt="${disp.title}" style="width:100%; height:230px; object-fit:cover; display:block;" />
           </div>
           <div style="background:#09090b; border:1px solid #27272a; border-radius:12px; padding:14px; color:#fafafa;">
             <div style="font-size:0.74rem; font-weight:800; color:#a1a1aa; margin-bottom:8px; font-family:var(--font-mono);">${disp.isEn ? 'WHAT\x27S INCLUDED (.ZIP BUNDLE):' : 'ISI PAKET UNDUHAN (.ZIP):'}</div>
@@ -2116,7 +2123,7 @@ function buildBuiltInPaymentGatewayHTML(order) {
         <div class="title">${esc(order.title)}</div>
         <div class="price">${esc(order.price)}</div>
         <div class="qris-box">
-          <img src="qris-ddev-studio.jpg" alt="QRIS Ddev Studio" />
+          <img src="${resolveStoreAssetUrl('qris-ddev-studio.jpg')}" alt="QRIS Ddev Studio" />
         </div>
         <input type="email" id="buyerEmail" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
         <a id="qrisGmailBtn" class="btn" href="${esc(gmailHref)}" target="_blank" rel="noopener">Sudah Scan Bayar? Konfirmasi via Gmail ↗</a>
