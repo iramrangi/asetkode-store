@@ -2,7 +2,7 @@
  * Ddev Studio Headless Storefront — Pure Monochrome (Hitam Putih) Edition
  * - Auto-syncs products from https://asetkode.blogspot.com/ via JSONP (zero CORS issues)
  * - Built-in Interactive Live Demo Simulator (Desktop / Tablet / Mobile viewports)
- * - Multi-item Shopping Cart with automatic 20% Bundle Discount & VIP All-Access Pass
+ * - Multi-item Shopping Cart with transparent individual unit pricing
  * - Interactive ROI Calculator & Instant QRIS/VA Checkout Simulator
  */
 
@@ -13,16 +13,10 @@ const SITE_CONFIG = {
   brandBadge: 'STORE',
   orderEmail: 'dekamayooo@gmail.com',
   paymentMode: 'mayar', // otomatis membuka link Mayar bila tersedia di data-payment-url, atau fallback email jika masih mailto:
-  mayarBundleUrl: '',   // isi Payment Link Mayar untuk Paket Bundling All-In-One
   bloggerOrigin: 'https://asetkode.blogspot.com',
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
   readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24'],
-  bundlePrice: 'Rp 249.000',
-  bundlePriceNum: 249000,
-  bundlePriceUsd: '$49',
-  bundlePriceUsdNum: 49,
   usdStoreUrl: 'https://polar.sh/ddev-studio',
-  polarBundleUrl: 'https://buy.polar.sh/polar_cl_dxsnzbBhCtf4KGKygvpm8agB1rd8yLFe0PY6F2Vx1E6',
   gasWebAppUrl: 'https://script.google.com/macros/s/AKfycbyOP0ljBzNyNmHFR9V3S7nwusTeIHFvpH2iQ0VfZMT8yauk2wJ_vJY5ApIGYwF5Dp_5/exec'
 };
 
@@ -1648,7 +1642,7 @@ function buildInteractiveDemoHTML(prod) {
             </div>
             <div style="display:flex; justify-content:space-between; padding:10px 12px; background:#09090b; border:1px solid #27272a; border-radius:8px;">
               <span>#ORD-9919 • E-Wallet GoPay</span>
-              <span style="color:#fafafa; font-weight:700;">LUNAS • Rp 249.000</span>
+              <span style="color:#fafafa; font-weight:700;">LUNAS • Rp 89.000</span>
             </div>
           </div>
         </div>
@@ -1814,11 +1808,14 @@ window.openDetailById = function (productId) {
   if (modal) modal.classList.add('open');
 };
 
-// ================= 5. SHOPPING CART & AUTOMATIC BUNDLE DISCOUNT =================
+// ================= 5. SHOPPING CART (TRANSPARENT INDIVIDUAL PRICING) =================
 function loadCartFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_CART_KEY);
-    if (raw) cartState = JSON.parse(raw) || [];
+    if (raw) {
+      const parsed = JSON.parse(raw) || [];
+      cartState = Array.isArray(parsed) ? parsed.filter((c) => c && c.id !== 'vip-bundle-all') : [];
+    }
   } catch (e) {
     cartState = [];
   }
@@ -1865,25 +1862,6 @@ window.removeCartItemById = function (productId) {
   saveCartToStorage();
 };
 
-function addAllBundleToCart() {
-  cartState = [
-    {
-      id: 'vip-bundle-all',
-      title: 'VIP All-Access Developer Pass (Seluruh 24 Source Code & Template Lengkap)',
-      titleEn: 'VIP All-Access Developer Bundle (All 24 Apps, Templates & Source Codes)',
-      price: SITE_CONFIG.bundlePrice,
-      priceNum: SITE_CONFIG.bundlePriceNum,
-      priceUsdNum: SITE_CONFIG.bundlePriceUsdNum || 49,
-      stack: 'All-In-One Pack (Hemat 80%)',
-      paymentUrl: SITE_CONFIG.mayarBundleUrl || '#checkout-mayar',
-      usdPaymentUrl: SITE_CONFIG.polarBundleUrl || SITE_CONFIG.usdStoreUrl
-    }
-  ];
-  saveCartToStorage();
-  showToast(currentLocale === 'en' ? 'VIP All-Access Bundle added!' : 'Paket VIP All-Access masuk ke keranjang!');
-  openCartDrawer();
-}
-
 function updateCartUI() {
   const badge = document.getElementById('cartCountBadge');
   const listEl = document.getElementById('cartItemsContainer');
@@ -1898,13 +1876,13 @@ function updateCartUI() {
       ? `
       <div style="text-align:center; padding:48px 16px; color:var(--text-secondary);">
         <div style="font-weight:800; font-size:0.95rem; margin-bottom:4px; color:var(--text-primary);">Your Cart is Empty</div>
-        <p style="font-size:0.8rem;">Add at least 2 products to unlock an automatic <strong>20% Bundle Discount</strong>.</p>
+        <p style="font-size:0.8rem;">Pick any source code or web app you need with transparent individual pricing.</p>
       </div>
     `
       : `
       <div style="text-align:center; padding:48px 16px; color:var(--text-secondary);">
         <div style="font-weight:800; font-size:0.95rem; margin-bottom:4px; color:var(--text-primary);">Keranjang Anda Masih Kosong</div>
-        <p style="font-size:0.8rem;">Pilih minimal 2 source code untuk mendapatkan <strong>Diskon Bundling 20% Otomatis</strong>.</p>
+        <p style="font-size:0.8rem;">Pilih source code atau aplikasi yang Anda butuhkan dengan harga satuan transparan.</p>
       </div>
     `;
     if (hintEl) hintEl.textContent = '';
@@ -1933,25 +1911,13 @@ function updateCartUI() {
     )
     .join('');
 
-  const rawTotal = cartState.reduce((acc, item) => acc + (isEn ? (item.priceUsdNum || idrToCleanUsdNum(item.priceNum)) : (item.priceNum || 0)), 0);
-  const hasBundleDiscount = cartState.length >= 2 && !cartState.some((i) => i.id === 'vip-bundle-all');
-  const finalTotal = hasBundleDiscount ? (isEn ? Math.round(rawTotal * 0.8 * 100) / 100 : Math.round(rawTotal * 0.8)) : rawTotal;
+  const finalTotal = cartState.reduce((acc, item) => acc + (isEn ? (item.priceUsdNum || idrToCleanUsdNum(item.priceNum)) : (item.priceNum || 0)), 0);
   const fmtTotal = isEn ? formatUsd : formatRupiah;
 
   if (hintEl) {
-    if (hasBundleDiscount) {
-      hintEl.textContent = isEn
-        ? `✓ 20% Bundle Discount Active (Save ${fmtTotal(rawTotal - finalTotal)})`
-        : `✓ Diskon Bundling 20% Aktif (Hemat ${fmtTotal(rawTotal - finalTotal)})`;
-    } else if (cartState.some((i) => i.id === 'vip-bundle-all')) {
-      hintEl.textContent = isEn
-        ? '✓ VIP All-Access Bundle Active (Save $233 / 83% off $282 total)'
-        : '✓ Paket VIP All-Access Aktif (Hemat Rp 1.469.000 / 85% dari total Rp 1.718.000)';
-    } else {
-      hintEl.textContent = isEn
-        ? 'Tip: Add 1 more product to unlock an automatic 20% bundle discount.'
-        : 'Tips: Tambah 1 produk lagi untuk ekstra diskon bundling 20% otomatis.';
-    }
+    hintEl.textContent = isEn
+      ? `✓ Transparent individual pricing (${cartState.length} ${cartState.length === 1 ? 'item' : 'items'})`
+      : `✓ Harga satuan transparan (${cartState.length} produk)`;
   }
 
   if (totalEl) totalEl.textContent = fmtTotal(finalTotal);
@@ -2020,13 +1986,13 @@ function launchCheckoutGateway(order) {
     const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
     const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
     const hasMultiPolar = Array.isArray(order.polarItems) && order.polarItems.length > 1;
-    const directPayHref = hasMultiPolar ? SITE_CONFIG.polarBundleUrl : (isHttpPayLink ? order.paymentUrl : (SITE_CONFIG.polarBundleUrl || gmailHref));
+    const directPayHref = hasMultiPolar ? (order.polarItems[0].url || SITE_CONFIG.usdStoreUrl) : (isHttpPayLink ? order.paymentUrl : (SITE_CONFIG.usdStoreUrl || gmailHref));
     if (isHttpPayLink && !hasMultiPolar) {
       try { window.open(order.paymentUrl, '_blank', 'noopener'); } catch (e) {}
     }
     if (extLink) {
       extLink.href = directPayHref;
-      extLink.textContent = isHttpPayLink ? 'Open Polar.sh Checkout ↗' : 'Request USD Payment Link via Gmail ↗';
+      extLink.textContent = (isHttpPayLink || hasMultiPolar) ? 'Open Polar.sh Checkout ↗' : 'Request USD Payment Link via Gmail ↗';
     }
     if (iframe) {
       iframe.removeAttribute('src');
@@ -2071,10 +2037,10 @@ function buildGlobalUsdCheckoutHTML(order) {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}body{margin:0;padding:24px;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06);}.badge{display:inline-block;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px;}h2{margin:0 0 6px;font-size:19px;}.price{font-size:24px;font-weight:800;color:#059669;margin-bottom:12px;}.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}.pill{font-size:12px;font-weight:700;padding:4px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#334155;}.btn{display:block;text-align:center;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;}.btn-primary{background:linear-gradient(135deg,#4f46e5,#2563eb);color:#fff;}.btn-sec{background:#fff;color:#0f172a;border:1px solid #cbd5e1;}.note{font-size:12px;color:#64748b;line-height:1.5;background:#f1f5f9;padding:12px;border-radius:10px;}</style></head>
   <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div>${Array.isArray(order.polarItems) && order.polarItems.length > 1
-  ? `${order.polarItems.map((it, idx) => `<a class="btn btn-sec" href="${esc(it.url)}" target="_blank" rel="noopener" style="margin-bottom:6px;text-align:left;display:flex;justify-content:space-between;"><span>${idx + 1}. ${esc(it.title)}</span><strong>${esc(it.price)} ↗</strong></a>`).join('')}<a class="btn btn-primary" href="${esc(SITE_CONFIG.polarBundleUrl)}" target="_blank" rel="noopener" style="margin-top:6px;">Or Unlock All 24 Apps Bundle ($49 USD — Save 83%) ↗</a>`
+  ? `${order.polarItems.map((it, idx) => `<a class="btn btn-primary" href="${esc(it.url)}" target="_blank" rel="noopener" style="margin-bottom:8px;text-align:left;display:flex;justify-content:space-between;"><span>${idx + 1}. ${esc(it.title)}</span><strong>${esc(it.price)} ↗</strong></a>`).join('')}<a class="btn btn-sec" href="${esc(order.gmailHref)}" target="_blank" rel="noopener" style="margin-top:4px;">Need Combined Invoice / Help? Email Us</a>`
   : (order.directPayUrl
       ? `<a class="btn btn-primary" href="${esc(order.directPayUrl)}" target="_blank" rel="noopener">Proceed to Polar.sh Secure Checkout ↗</a><a class="btn btn-sec" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Need Invoice / Custom Help? Email Us</a>`
-      : `<a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a>`)}<div class="note">Includes full open-source <code>.ZIP</code> bundle, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
+      : `<a class="btn btn-primary" href="${esc(order.gmailHref)}" target="_blank" rel="noopener">Request USD Checkout Link (Polar.sh / Card / PayPal) ↗</a><a class="btn btn-sec" href="${esc(order.mailHref)}">Open Default Email Client</a>`)}<div class="note">Includes full open-source <code>.ZIP</code> package, documentation guide, and commercial project license delivered to your inbox.</div></div></body></html>`;
 }
 
 function buildEmailOrderHTML(order) {
@@ -2543,7 +2509,7 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.querySelector('.promo-ribbon-inner'),
     isEn,
-    '<span class="promo-pill">PROMO</span><span>Up to <strong>50% Off</strong> + 20% Cart Discount (2+ Items) • Card / Polar.sh Checkout</span>'
+    '<span class="promo-pill">PROMO</span><span>Save up to <strong>50%</strong> per app • One-Time USD Payment via Polar.sh</span>'
   );
 
   const searchInput = document.getElementById('searchInput');
@@ -2551,7 +2517,7 @@ function applyStorefrontLocaleUI() {
 
   const navLinks = document.querySelectorAll('.nav-menu a');
   if (navLinks[0]) navLinks[0].textContent = isEn ? 'Catalog' : 'Katalog';
-  if (navLinks[1]) navLinks[1].textContent = isEn ? 'Bundle' : 'Bundling';
+  if (navLinks[1]) navLinks[1].textContent = isEn ? 'Why Us' : 'Keunggulan';
   if (navLinks[2]) navLinks[2].textContent = isEn ? 'How to Buy' : 'Cara Order';
 
   const cartSpan = document.querySelector('#openCartBtn span:not(.cart-count-pill)');
@@ -2568,15 +2534,15 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.querySelector('.hero-desc'),
     isEn,
-    'Test <strong>Live Demos</strong> right in your browser, pay once in USD, and download the complete <code>.ZIP</code> bundle.'
+    'Test <strong>Live Demos</strong> right in your browser, pay once in USD, and download the complete <code>.ZIP</code> package.'
   );
   const heroCtas = document.querySelectorAll('.hero-cta-row a');
   if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Browse Products →' : 'Lihat Semua Produk →';
-  if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'All-Access Bundle ($49)' : 'Paket Bundling Hemat';
+  if (heroCtas[1]) heroCtas[1].textContent = isEn ? 'How to Buy' : 'Cara Order';
 
   const studioTabs = document.querySelectorAll('.studio-tab');
   if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'ROI Calculator' : 'Kalkulator Hemat';
-  if (studioTabs[1]) studioTabs[1].textContent = isEn ? '.ZIP Bundle' : 'Isi File .ZIP';
+  if (studioTabs[1]) studioTabs[1].textContent = isEn ? '.ZIP Contents' : 'Isi File .ZIP';
   if (studioTabs[2]) studioTabs[2].textContent = isEn ? 'Stack' : 'GitHub × Blogger';
 
   setLocalizedInner(
@@ -2612,39 +2578,12 @@ function applyStorefrontLocaleUI() {
     sp.textContent = isEn ? enT[i] : idT[i];
   });
 
-  const bundleBox = document.getElementById('bundleDeal');
-  if (bundleBox) {
-    setLocalizedInner(bundleBox.querySelector('.bundle-tag'), isEn, 'VIP BUNDLE • SAVE 83%');
-    setLocalizedInner(bundleBox.querySelector('h2'), isEn, 'Get All 24 Source Codes &amp; Templates Together');
-    setLocalizedInner(bundleBox.querySelector('p'), isEn, 'POS, Invoice, Booking, Laundry, Blogger XML Themes &amp; Python Bots — all 24 <code>.ZIP</code> bundles.');
-    const oldBundleEl = bundleBox.querySelector('.bundle-action > div > div:first-child');
-    if (oldBundleEl) oldBundleEl.textContent = isEn ? 'Individual Total: $282' : 'Total Satuan: Rp 1.718.000';
-    const newBundleEl = bundleBox.querySelector('.bundle-price-num');
-    if (newBundleEl) newBundleEl.textContent = isEn ? '$49 USD' : 'Rp 249.000';
-    const addBundleBtnEl = document.getElementById('addBundleBtn');
-    if (addBundleBtnEl) addBundleBtnEl.textContent = isEn ? 'Grab All-Access Bundle →' : 'Ambil Paket Bundling →';
-  }
-
-  const filterAll = document.querySelector('#filterBar .filter-chip[data-cat="all"]');
-  if (filterAll) filterAll.textContent = isEn ? 'All Products' : 'Semua Karya';
-  const filterTemplate = document.querySelector('#filterBar .filter-chip[data-cat="Template"]');
-  if (filterTemplate) filterTemplate.textContent = isEn ? 'Templates / UI' : 'Template / UI';
-  const filterDesign = document.querySelector('#filterBar .filter-chip[data-cat="Desain Web"]');
-  if (filterDesign) filterDesign.textContent = isEn ? 'Web Design' : 'Desain Web';
-
-  setLocalizedInner(document.querySelector('label[for="sortSelect"]'), isEn, 'Sort:');
-  const sortOpts = document.querySelectorAll('#sortSelect option');
-  if (sortOpts[0]) sortOpts[0].textContent = isEn ? 'Newest' : 'Terbaru';
-  if (sortOpts[1]) sortOpts[1].textContent = isEn ? 'Price: Low to High' : 'Harga Terendah';
-  if (sortOpts[2]) sortOpts[2].textContent = isEn ? 'Price: High to Low' : 'Harga Tertinggi';
-  if (sortOpts[3]) sortOpts[3].textContent = isEn ? 'Biggest Discount' : 'Diskon Terbesar';
-
   setLocalizedInner(
     document.getElementById('keunggulan'),
     isEn,
     '<div class="section-header"><h2>Why Ddev Studio?</h2></div><div class="bento-grid">' +
     '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Test Before Buying</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Preview Desktop &amp; Mobile workflows live in browser.</p></div>' +
-    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / BUNDLE 20%</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Auto Cart Discount</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Add 2+ products to unlock 20% off automatically.</p></div>' +
+    '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / PAY PER APP</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Transparent Individual Pricing</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Buy only the tools you need from $7 USD with lifetime access.</p></div>' +
     '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open &amp; Licensed</h3><p style="font-size:0.83rem; color:var(--text-secondary);">No obfuscation, includes sample data &amp; commercial rights.</p></div></div>'
   );
 
@@ -2652,9 +2591,9 @@ function applyStorefrontLocaleUI() {
     document.getElementById('cara-order'),
     isEn,
     '<div class="section-header"><h2>How to Buy in 3 Steps</h2></div><div class="steps-grid">' +
-    '<div class="step-card"><span class="step-num">01</span><h3>Try Demo &amp; Pick</h3><p>Test any <strong>Live Demo</strong>, then click <strong>Buy</strong> or add 2+ to Cart.</p></div>' +
+    '<div class="step-card"><span class="step-num">01</span><h3>Try Demo &amp; Pick</h3><p>Test any <strong>Live Demo</strong>, then click <strong>Buy Now</strong> or add to Cart.</p></div>' +
     '<div class="step-card"><span class="step-num">02</span><h3>Pay via Polar.sh</h3><p>Fast USD checkout with Visa, Mastercard, or Apple Pay.</p></div>' +
-    '<div class="step-card"><span class="step-num">03</span><h3>Get .ZIP Bundle</h3><p>Full source code &amp; setup guide delivered to your email.</p></div></div>'
+    '<div class="step-card"><span class="step-num">03</span><h3>Get .ZIP Package</h3><p>Full source code &amp; setup guide delivered to your email.</p></div></div>'
   );
 
   setLocalizedInner(
@@ -2665,11 +2604,11 @@ function applyStorefrontLocaleUI() {
   const faqQs = document.querySelectorAll('#faqList .faq-q span:first-child');
   const faqAs = document.querySelectorAll('#faqList .faq-a');
   if (faqQs[0]) setLocalizedInner(faqQs[0], isEn, 'Is the source code 100% open and editable?');
-  if (faqAs[0]) setLocalizedInner(faqAs[0], isEn, 'Yes. Every bundle ships as unencrypted open source code without obfuscators or license keys, ready to customize for personal or client projects.');
+  if (faqAs[0]) setLocalizedInner(faqAs[0], isEn, 'Yes. Every package ships as unencrypted open source code without obfuscators or license keys, ready to customize for personal or client projects.');
   if (faqQs[1]) setLocalizedInner(faqQs[1], isEn, 'Can non-developers run these web apps easily?');
   if (faqAs[1]) setLocalizedInner(faqAs[1], isEn, 'Absolutely. Flagship tools like POS Cashier, Invoice Pro, Laundry POS, and Booking Manager are Zero-Config browser apps that run offline or host free on Cloudflare Pages.');
   if (faqQs[2]) setLocalizedInner(faqQs[2], isEn, 'How do I pay in USD and receive my .ZIP files?');
-  if (faqAs[2]) setLocalizedInner(faqAs[2], isEn, 'Click <strong>Buy Now</strong> or checkout from your Cart. Pay securely via global checkout (Polar.sh / Card / PayPal) or email <strong data-order-email>dekamayooo@gmail.com</strong> — your <code>.ZIP</code> bundle is sent directly to your email.');
+  if (faqAs[2]) setLocalizedInner(faqAs[2], isEn, 'Click <strong>Buy Now</strong> or checkout from your Cart. Pay securely via global checkout (Polar.sh / Card / PayPal) or email <strong data-order-email>dekamayooo@gmail.com</strong> — your <code>.ZIP</code> package is sent directly to your email.');
   if (faqQs[3]) setLocalizedInner(faqQs[3], isEn, 'Are there any monthly or annual fees?');
   if (faqAs[3]) setLocalizedInner(faqAs[3], isEn, 'Never. You pay <strong>once</strong> for lifetime source code access and commercial usage rights.');
 
@@ -2681,7 +2620,7 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(2) h4'), isEn, 'Quick Links');
   const fLinks1 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(2) a');
   if (fLinks1[0]) fLinks1[0].textContent = isEn ? 'Product Catalog' : 'Katalog Produk';
-  if (fLinks1[1]) fLinks1[1].textContent = isEn ? 'VIP All-Access Bundle' : 'Paket Bundling VIP';
+  if (fLinks1[1]) fLinks1[1].textContent = isEn ? 'Why Ddev Studio' : 'Keunggulan Toko';
   if (fLinks1[2]) fLinks1[2].textContent = isEn ? 'How to Order' : 'Cara Pemesanan';
   setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(3) h4'), isEn, 'Contact & Legal');
   const fLinks2 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(3) a');
@@ -2704,8 +2643,8 @@ function applyStorefrontLocaleUI() {
   if (aiIn) aiIn.placeholder = isEn ? 'Ask about apps, live demos, USD checkout, or license...' : 'Tanya produk, live demo, Order ID (DDV-...), atau cara bayar...';
   const aiSendBtn = document.getElementById('aiChatSendBtn');
   if (aiSendBtn) aiSendBtn.textContent = isEn ? 'Send' : 'Kirim';
-  const chipLabelsId = ['💳 Cara Bayar', '📦 Rekomendasi', '⚡ Paket VIP'];
-  const chipLabelsEn = ['💳 How to Pay', '📦 Best Apps', '⚡ $49 Bundle'];
+  const chipLabelsId = ['💳 Cara Bayar', '📦 Rekomendasi', '💰 Daftar Harga'];
+  const chipLabelsEn = ['💳 How to Pay', '📦 Best Apps', '💰 Price Range'];
   document.querySelectorAll('.js-ai-chip').forEach((chip, idx) => {
     chip.textContent = isEn ? (chipLabelsEn[idx] || chip.textContent) : (chipLabelsId[idx] || chip.textContent);
   });
@@ -2891,8 +2830,8 @@ function buildStorefrontAiFallback(userText) {
   if (/^((halo|hai|hi|hey|hello|good\s+(morning|afternoon|evening)|selamat\s+(pagi|siang|sore|malam)|permisi)(\s+(admin|min|there))?)[!.?\s]*$/i.test(q)) {
     return {
       html: isEn
-        ? 'Hello! How can I help you today? Ask about any of our <strong>24 live-demo apps</strong>, USD checkout via <strong>Polar.sh</strong>, or the <strong>$49 VIP Bundle</strong>.'
-        : 'Halo! Ada yang bisa saya bantu? Anda bisa tanya rekomendasi <strong>aplikasi/source code</strong>, cara bayar <strong>QRIS / Polar.sh</strong>, <strong>VIP Bundle Rp 249.000</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
+        ? 'Hello! How can I help you today? Ask about any of our <strong>24 live-demo apps</strong>, individual USD pricing ($7–$25), or checkout via <strong>Polar.sh</strong>.'
+        : 'Halo! Ada yang bisa saya bantu? Anda bisa tanya rekomendasi <strong>aplikasi/source code</strong>, daftar harga satuan, cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
       actions: []
     };
   }
@@ -2929,35 +2868,19 @@ function buildStorefrontAiFallback(userText) {
     };
   }
 
-  // 5. VIP Bundle / Diskon
-  if (/(bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|all\s+24|24\s+produk)/i.test(q)) {
+  // 5. Pertanyaan Bundling / Diskon / Kisaran Harga (Semua produk harga satuan)
+  if (/(bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|all\s+24|24\s+produk|berapa\s+harga|kisaran\s+harga|daftar\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much)/i.test(q)) {
     return {
       html: isEn
-        ? `Unlock all <strong>24 apps &amp; templates</strong> in our <strong>VIP All-Access Bundle for $49 USD</strong> (save 83% off the $282 individual total), or add 2+ apps to your cart for an automatic <strong>20% discount</strong>!`
-        : `Dapatkan semua <strong>24 source code &amp; template</strong> sekaligus di <strong>Paket Bundling VIP Rp 249.000</strong> (hemat 85% dari total satuan Rp 1.718.000), atau pilih 2+ produk ke keranjang untuk <strong>diskon otomatis 20%</strong>.`,
+        ? 'All 24 products at <strong>Ddev Studio</strong> are sold individually at transparent unit prices ranging from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access, commercial license — no bundle packages). Pick any tool you need from the catalog!'
+        : 'Seluruh 24 produk di <strong>Ddev Studio</strong> dijual dengan <strong>harga satuan transparan mulai Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa paket bundling & tanpa biaya langganan). Silakan pilih langsung produk yang sesuai kebutuhan Anda!',
       actions: [{
-        label: isEn ? '⚡ Add $49 VIP Bundle' : '⚡ Ambil Paket Bundling',
+        label: isEn ? '📋 Browse Catalog' : '📋 Lihat Katalog Produk',
         primary: true,
         onClick: () => {
           toggleAiChatWindow(false);
-          addAllBundleToCart();
-        }
-      }]
-    };
-  }
-
-  // 5b. Kisaran harga / Termurah / Price range
-  if (/(berapa\s+harga|kisaran\s+harga|daftar\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much)/i.test(q)) {
-    return {
-      html: isEn
-        ? 'Individual source code apps range from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access). Or grab all <strong>24 apps in the VIP Bundle for $49 USD</strong> (save 83% off $282), plus automatic <strong>20% off</strong> on 2+ cart items.'
-        : 'Harga produk satuan kami mulai dari <strong>Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa langganan). Beli 2+ item di Keranjang otomatis <strong>diskon 20%</strong>, atau ambil seluruh <strong>24 produk di VIP Bundle Rp 249.000</strong> (hemat 85%).',
-      actions: [{
-        label: isEn ? '⚡ Get $49 VIP Bundle' : '⚡ Ambil VIP Bundle Rp 249rb',
-        primary: true,
-        onClick: () => {
-          toggleAiChatWindow(false);
-          addAllBundleToCart();
+          const kat = document.getElementById('katalog');
+          if (kat) kat.scrollIntoView({ behavior: 'smooth' });
         }
       }]
     };
@@ -3071,8 +2994,8 @@ function buildStorefrontAiFallback(userText) {
 
   return {
     html: isEn
-      ? `I didn't find an exact match for that query. You can ask about specific tools (<em>POS cashier, Python scraper, admin dashboard, laundry, booking</em>), <strong>USD checkout via Polar.sh</strong>, or the <strong>$49 VIP Bundle</strong>.<br/><br/>Need human help? Contact <strong>${escAiHtml(supportEmail)}</strong>.`
-      : `Maaf, saya belum menemukan jawaban spesifik untuk pertanyaan tersebut. Coba tanya soal produk tertentu (<em>kasir POS, bot Python, web UMKM, absensi QR, UI kit</em>), <strong>cara bayar QRIS/Polar</strong>, <strong>VIP Bundle Rp 249.000</strong>, atau cek Order ID <code>DDV-...</code>.<br/><br/>Atau hubungi admin di <strong>${escAiHtml(supportEmail)}</strong>.`,
+      ? `I didn't find an exact match for that query. You can ask about specific tools (<em>POS cashier, Python scraper, admin dashboard, laundry, booking</em>), individual pricing (<strong>$7–$25 USD</strong>), or <strong>USD checkout via Polar.sh</strong>.<br/><br/>Need human help? Contact <strong>${escAiHtml(supportEmail)}</strong>.`
+      : `Maaf, saya belum menemukan jawaban spesifik untuk pertanyaan tersebut. Coba tanya soal produk tertentu (<em>kasir POS, bot Python, web UMKM, absensi QR, UI kit</em>), harga satuan (<strong>Rp 39rb–169rb</strong>), <strong>cara bayar QRIS/Polar</strong>, atau cek Order ID <code>DDV-...</code>.<br/><br/>Atau hubungi admin di <strong>${escAiHtml(supportEmail)}</strong>.`,
     actions: [{
       label: isEn ? '✉️ Contact Admin' : '✉️ Hubungi Admin',
       href: `mailto:${encodeURIComponent(supportEmail)}?subject=${encodeURIComponent('Question - ' + SITE_CONFIG.brandName)}`,
@@ -3144,8 +3067,8 @@ function sendToAiAssistant(rawText) {
   if (gasUrl && aiServerGeminiFlag !== false) {
     const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'AI Assistant is typing...' : 'Asisten sedang mengetik...'}</em>`, []);
     const enPricesHint = isEn
-      ? '[IMPORTANT FOR EN/GLOBAL USER: Reply in English ONLY. Prices are in USD ($7-$25 individual, $49 VIP Bundle of all 24 apps, 20% discount for 2+ cart items). Global payment is via Polar.sh (Visa, Mastercard, Apple Pay) — NEVER mention IDR/Rupiah/QRIS/Virtual Account/Mayar to USD buyers.] '
-      : '[Catatan: Diskon keranjang 2+ produk adalah 20%, tersedia VIP Bundle 24 produk Rp 249.000.] ';
+      ? '[IMPORTANT FOR EN/GLOBAL USER: Reply in English ONLY. All 24 apps are sold individually ONLY ($7-$25 USD one-time payment per app; NO bundle packages and NO multi-item cart discounts). Global payment is via Polar.sh (Visa, Mastercard, Apple Pay) — NEVER mention IDR/Rupiah/QRIS/Virtual Account/Mayar to USD buyers.] '
+      : '[Catatan: Semua 24 produk dijual dengan harga satuan Rp 39.000–Rp 169.000. Tidak ada paket bundling atau diskon tambahan keranjang.] ';
     fetch(gasUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -3160,7 +3083,7 @@ function sendToAiAssistant(rawText) {
       .then((data) => {
         if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
         if (data && data.mode === 'gemini' && data.reply) {
-          const stalePattern = /tidak menyediakan paket bundling|tidak ada paket bundling|no longer offer a vip bundle/i;
+          const stalePattern = /vip(\s+all-access)?\s+bundle|paket\s+bundling|rp\s*249\.?000|\$49\b|diskon\s+(?:keranjang\s+)?(?:15|20)%|(?:15|20)%\s+(?:automatic\s+|bundle\s+)?discount/i;
           const wrongEnCurrency = isEn && /(\bRp\s*\d|Rupiah|\bQRIS\b|Virtual Account|Mayar)/i.test(data.reply);
           if (stalePattern.test(data.reply) || wrongEnCurrency) {
             const safeFb = buildStorefrontAiFallback(text);
@@ -3168,9 +3091,7 @@ function sendToAiAssistant(rawText) {
             addAiChatMessage('bot', safeFb.html, safeFb.actions);
             return;
           }
-          const normalizedReply = data.reply
-            .replace(/diskon(\s+(?:spesial|otomatis))?\s+15%/gi, 'diskon$1 20%')
-            .replace(/15%(\s+(?:automatic\s+)?)?discount/gi, '20%$1discount');
+          const normalizedReply = data.reply;
           aiServerGeminiFlag = true;
           aiChatHistoryState.push({ role: 'user', text });
           aiChatHistoryState.push({ role: 'model', text: normalizedReply });
@@ -3214,8 +3135,8 @@ function toggleAiChatWindow(forceOpen) {
     addAiChatMessage(
       'bot',
       isEn
-        ? 'Hi! I\'m the <strong>Ddev Studio AI Assistant</strong>. Ask me to recommend an app, explain <strong>USD checkout via Polar.sh</strong>, or help with the <strong>$49 VIP Bundle</strong>.'
-        : 'Halo! Saya <strong>Asisten AI Ddev Studio</strong>. Saya bisa bantu carikan source code yang pas, jelaskan cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
+        ? 'Hi! I\'m the <strong>Ddev Studio AI Assistant</strong>. Ask me to recommend an app, check individual USD pricing ($7–$25), or explain <strong>USD checkout via Polar.sh</strong>.'
+        : 'Halo! Saya <strong>Asisten AI Ddev Studio</strong>. Saya bisa bantu carikan source code yang pas, cek harga satuan, jelaskan cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
       []
     );
   }
@@ -3309,9 +3230,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  const addBundleBtn = document.getElementById('addBundleBtn');
-  if (addBundleBtn) addBundleBtn.addEventListener('click', addAllBundleToCart);
-
   const openCartBtn = document.getElementById('openCartBtn');
   if (openCartBtn) openCartBtn.addEventListener('click', openCartDrawer);
 
@@ -3336,18 +3254,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const orderTitle =
         cartState.length === 1
           ? singleTitle
-          : (isEn ? `Bundle (${cartState.length} Products)` : `Paket Bundling (${cartState.length} Produk)`);
+          : (isEn ? `Cart Order (${cartState.length} Products)` : `Pesanan Keranjang (${cartState.length} Produk)`);
       closeModal('cartBackdrop');
       const polarItemsList = isEn ? cartState.map((c) => ({
         title: c.titleEn || c.title,
         price: formatUsd(c.priceUsdNum || idrToCleanUsdNum(c.priceNum)),
-        url: c.usdPaymentUrl || SITE_CONFIG.polarBundleUrl
+        url: c.usdPaymentUrl || SITE_CONFIG.usdStoreUrl
       })) : [];
       launchCheckoutGateway({
         title: orderTitle,
         price: totalStr,
         paymentUrl: isEn
-          ? (cartState.length === 1 ? (cartState[0].usdPaymentUrl || SITE_CONFIG.polarBundleUrl) : SITE_CONFIG.polarBundleUrl)
+          ? (cartState.length === 1 ? (cartState[0].usdPaymentUrl || SITE_CONFIG.usdStoreUrl) : (polarItemsList[0]?.url || SITE_CONFIG.usdStoreUrl))
           : (cartState.length === 1 ? cartState[0].paymentUrl : '#checkout-mayar'),
         polarItems: polarItemsList,
         stack: titles,
