@@ -150,8 +150,8 @@ button, input, select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
-  gap: 14px;
+  height: 72px;
+  gap: 24px;
 }
 
 .brand {
@@ -183,10 +183,10 @@ button, input, select {
 .brand-badge {
   flex-shrink: 0;
   white-space: nowrap;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-family: var(--font-mono);
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 2px 7px;
   border-radius: 6px;
   background: var(--bg-elevated);
   color: var(--text-primary);
@@ -196,9 +196,9 @@ button, input, select {
 }
 
 .nav-search-wrap {
-  flex: 1 1 220px;
-  min-width: 170px;
-  max-width: 300px;
+  flex: 1 1 240px;
+  min-width: 190px;
+  max-width: 310px;
   position: relative;
 }
 
@@ -235,11 +235,12 @@ button, input, select {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  gap: 16px;
-  font-size: 0.85rem;
+  gap: 24px;
+  font-size: 0.87rem;
   font-weight: 600;
   color: var(--text-secondary);
   margin-left: auto;
+  margin-right: 6px;
 }
 
 .nav-menu a {
@@ -255,7 +256,7 @@ button, input, select {
   align-items: center;
   flex-shrink: 0;
   white-space: nowrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .icon-btn {

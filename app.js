@@ -2640,8 +2640,11 @@ function applyStorefrontLocaleUI() {
 
   const navLinks = document.querySelectorAll('.nav-menu a');
   if (navLinks[0]) navLinks[0].textContent = isEn ? 'Catalog' : 'Katalog';
-  if (navLinks[1]) navLinks[1].textContent = isEn ? 'Why Us' : 'Keunggulan';
-  if (navLinks[2]) navLinks[2].textContent = isEn ? 'How to Buy' : 'Cara Order';
+  if (navLinks[1]) navLinks[1].textContent = isEn ? 'How to Buy' : 'Cara Order';
+  if (navLinks[2]) {
+    navLinks[2].textContent = isEn ? 'Free' : 'Gratis';
+    navLinks[2].setAttribute('href', resolveStoreAssetUrl('free/') + (isEn ? '?lang=en' : ''));
+  }
 
   const cartSpan = document.querySelector('#openCartBtn span:not(.cart-count-pill)');
   if (cartSpan) cartSpan.textContent = isEn ? 'Cart' : 'Keranjang';
