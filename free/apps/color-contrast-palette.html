@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCAG Contrast Checker &amp; CSS Palette Generator — Ddev Studio Open Source (MIT)</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:#f8fafc; color:#0f172a; min-height:100vh; padding:20px; }
+    .wrap { max-width:1060px; margin:0 auto; }
+    .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid #e2e8f0; }
+    .badge { display:inline-block; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:4px 10px; border-radius:99px; font-size:12px; font-weight:700; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:20px; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+    label { display:block; font-size:12px; font-weight:700; color:#475569; margin-bottom:5px; }
+    .color-box { display:flex; align-items:center; gap:8px; border:1px solid #cbd5e1; border-radius:10px; padding:5px 10px; background:#fff; }
+    .color-box input[type="color"] { width:34px; height:32px; border:none; background:none; cursor:pointer; }
+    .color-box input[type="text"] { border:none; width:100%; font-family:ui-monospace,Consolas,monospace; font-weight:700; font-size:14px; outline:none; }
+    .ratio-banner { border-radius:14px; padding:20px; text-align:center; border:1px solid #e2e8f0; margin-bottom:14px; }
+    .ratio-num { font-size:42px; font-weight:900; font-family:ui-monospace,Consolas,monospace; line-height:1.1; }
+    .wcag-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+    .wcag-pill { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; border-radius:10px; background:#f1f5f9; font-size:12.5px; font-weight:700; }
+    .pass { background:#dcfce7; color:#166534; }
+    .fail { background:#fee2e2; color:#991b1b; }
+    .scale-list { display:grid; gap:6px; margin-bottom:14px; }
+    .scale-item { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; border-radius:8px; font-family:ui-monospace,Consolas,monospace; font-size:12.5px; font-weight:700; }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#fff; color:#0f172a; font-weight:700; font-size:13px; cursor:pointer; text-decoration:none; }
+    .btn-primary { background:#4f46e5; border-color:#4f46e5; color:#fff; }
+    .status { font-size:12.5px; font-weight:700; color:#059669; min-height:18px; margin-top:8px; }
+    @media (max-width:820px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <span class="badge">MIT Open Source &bull; Free</span>
+        <h1 style="font-size:20px;margin-top:6px;" id="tTitle">WCAG 2.1 Contrast Checker &amp; CSS Palette Generator</h1>
+      </div>
+      <a class="btn" href="../" id="tBack">Kembali ke Halaman Gratis</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="row2">
+          <div>
+            <label id="lFg">Warna Teks (Foreground)</label>
+            <div class="color-box">
+              <input type="color" id="fgPick" value="#ffffff" />
+              <input type="text" id="fgHex" value="#FFFFFF" maxlength="7" />
+            </div>
+          </div>
+          <div>
+            <label id="lBg">Warna Latar (Background)</label>
+            <div class="color-box">
+              <input type="color" id="bgPick" value="#4f46e5" />
+              <input type="text" id="bgHex" value="#4F46E5" maxlength="7" />
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <button type="button" class="btn" id="btnSwap">Tukar Warna (Swap)</button>
+        </div>
+
+        <div class="ratio-banner" id="previewCard">
+          <div style="font-size:12px;font-weight:700;opacity:0.85;" id="lRatio">Rasio Kontras WCAG 2.1</div>
+          <div class="ratio-num" id="ratioVal">6.31 : 1</div>
+          <div style="font-size:15px;font-weight:700;margin-top:8px;" id="previewSampleTitle">Contoh Judul UI &amp; Teks Tombol</div>
+          <p style="font-size:12.5px;margin-top:4px;opacity:0.9;" id="previewSampleBody">Pastikan rasio minimal 4.5:1 agar nyaman dibaca pengguna desktop dan seluler.</p>
+        </div>
+
+        <div class="wcag-grid">
+          <div class="wcag-pill" id="wAANorm"><span>AA Normal (4.5:1)</span><span id="vAANorm">PASS</span></div>
+          <div class="wcag-pill" id="wAAANorm"><span>AAA Normal (7.0:1)</span><span id="vAAANorm">FAIL</span></div>
+          <div class="wcag-pill" id="wAALarge"><span>AA Large (3.0:1)</span><span id="vAALarge">PASS</span></div>
+          <div class="wcag-pill" id="wAAALarge"><span>AAA Large (4.5:1)</span><span id="vAAALarge">PASS</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <label style="margin:0;" id="lScale">Skala Warna Brand Otomatis (berdasarkan Latar)</label>
+          <button type="button" class="btn btn-primary" id="btnCopyCss">Salin CSS :root</button>
+        </div>
+        <div class="scale-list" id="scaleList"></div>
+        <div class="status" id="statusMsg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('tBack').textContent = 'Back to Free Tools';
+      document.getElementById('tBack').href = '../?lang=en';
+      document.getElementById('lFg').textContent = 'Text Color (Foreground)';
+      document.getElementById('lBg').textContent = 'Background Color';
+      document.getElementById('btnSwap').textContent = 'Swap Colors';
+      document.getElementById('lRatio').textContent = 'WCAG 2.1 Contrast Ratio';
+      document.getElementById('previewSampleTitle').textContent = 'Live UI Heading & Button Text';
+      document.getElementById('previewSampleBody').textContent = 'Aim for 4.5:1 or higher for accessible body copy readability.';
+      document.getElementById('lScale').textContent = 'Generated CSS Color Scale (50–900)';
+      document.getElementById('btnCopyCss').textContent = 'Copy CSS Variables';
+    }
+
+    function parseHex(h) {
+      let clean = String(h || '').trim().replace(/^#/, '');
+      if (clean.length === 3) clean = clean.split('').map((c) => c + c).join('');
+      if (!/^[0-9a-fA-F]{6}$/.test(clean)) return null;
+      return {
+        hex: '#' + clean.toUpperCase(),
+        r: parseInt(clean.slice(0, 2), 16),
+        g: parseInt(clean.slice(2, 4), 16),
+        b: parseInt(clean.slice(4, 6), 16)
+      };
+    }
+    function relLum(rgb) {
+      const f = (c) => {
+        const v = c / 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      };
+      return 0.2126 * f(rgb.r) + 0.7152 * f(rgb.g) + 0.0722 * f(rgb.b);
+    }
+    function contrast(a, b) {
+      const l1 = relLum(a), l2 = relLum(b);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    }
+    function mix(rgb, target, weight) {
+      const ch = (a, b) => Math.round(a * (1 - weight) + b * weight);
+      return { r: ch(rgb.r, target.r), g: ch(rgb.g, target.g), b: ch(rgb.b, target.b) };
+    }
+    function toHex(rgb) {
+      return '#' + [rgb.r, rgb.g, rgb.b].map((n) => n.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    let lastCss = '';
+    function render() {
+      const fg = parseHex(document.getElementById('fgHex').value) || { hex: '#FFFFFF', r: 255, g: 255, b: 255 };
+      const bg = parseHex(document.getElementById('bgHex').value) || { hex: '#4F46E5', r: 79, g: 70, b: 229 };
+      const r = contrast(fg, bg);
+      document.getElementById('ratioVal').textContent = r.toFixed(2) + ' : 1';
+      const pv = document.getElementById('previewCard');
+      pv.style.color = fg.hex;
+      pv.style.background = bg.hex;
+
+      const checks = [
+        ['wAANorm', 'vAANorm', r >= 4.5],
+        ['wAAANorm', 'vAAANorm', r >= 7.0],
+        ['wAALarge', 'vAALarge', r >= 3.0],
+        ['wAAALarge', 'vAAALarge', r >= 4.5]
+      ];
+      checks.forEach(([boxId, lblId, ok]) => {
+        document.getElementById(boxId).className = 'wcag-pill ' + (ok ? 'pass' : 'fail');
+        document.getElementById(lblId).textContent = ok ? 'PASS' : 'FAIL';
+      });
+
+      const white = { r: 255, g: 255, b: 255 }, black = { r: 10, g: 15, b: 28 };
+      const stops = [
+        ['50', mix(bg, white, 0.90)],
+        ['100', mix(bg, white, 0.78)],
+        ['200', mix(bg, white, 0.58)],
+        ['300', mix(bg, white, 0.36)],
+        ['500', bg],
+        ['600', mix(bg, black, 0.14)],
+        ['700', mix(bg, black, 0.30)],
+        ['900', mix(bg, black, 0.62)]
+      ];
+      lastCss = ':root {\n' + stops.map(([k, col]) => `  --brand-${k}: ${toHex(col)};`).join('\n') + '\n}';
+      document.getElementById('scaleList').innerHTML = stops.map(([k, col]) => {
+        const hx = toHex(col);
+        const txtCol = relLum(col) > 0.35 ? '#0F172A' : '#FFFFFF';
+        return `<div class="scale-item" style="background:${hx};color:${txtCol};"><span>--brand-${k}</span><span>${hx}</span></div>`;
+      }).join('');
+    }
+
+    ['fg', 'bg'].forEach((prefix) => {
+      const p = document.getElementById(prefix + 'Pick');
+      const h = document.getElementById(prefix + 'Hex');
+      p.addEventListener('input', () => { h.value = p.value.toUpperCase(); render(); });
+      h.addEventListener('input', () => { const parsed = parseHex(h.value); if (parsed) { p.value = parsed.hex; render(); } });
+    });
+    document.getElementById('btnSwap').addEventListener('click', () => {
+      const fg = document.getElementById('fgHex').value, bg = document.getElementById('bgHex').value;
+      document.getElementById('fgHex').value = bg;
+      document.getElementById('bgHex').value = fg;
+      const pFg = parseHex(bg), pBg = parseHex(fg);
+      if (pFg) document.getElementById('fgPick').value = pFg.hex;
+      if (pBg) document.getElementById('bgPick').value = pBg.hex;
+      render();
+    });
+    document.getElementById('btnCopyCss').addEventListener('click', () => {
+      navigator.clipboard.writeText(lastCss).then(() => {
+        document.getElementById('statusMsg').textContent = IS_EN ? 'CSS variables copied!' : 'Variabel CSS tersalin ke clipboard!';
+      });
+    });
+    render();
+  </script>
+</body>
+</html>

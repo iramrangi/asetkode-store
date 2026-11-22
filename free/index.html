@@ -3,36 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>Produk &amp; Source Code Gratis (MIT Open Source) — Ddev Studio</title>
-  <meta name="description" content="Kumpulan web tools &amp; template open source gratis (lisensi MIT) dari Ddev Studio: BioCard &amp; vCard Builder, JSON ke CSV/SQL, WhatsApp Order Link Builder, dan Invoice Lite Starter." />
+  <title>10 Produk &amp; Source Code Gratis (MIT Open Source) — Ddev Studio</title>
+  <meta name="description" content="10 web tools &amp; source code open source gratis berlisensi MIT dari Ddev Studio: BioCard vCard, JSON/CSV/SQL, WA Link Builder, Invoice PDF, WCAG Color Palette, SEO Schema, Pomodoro Audio, Markdown Studio, Kalkulator HPP, dan Regex Tester." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://asetkode-store.pages.dev/free/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Ddev Studio Free — Source Code Open Source Gratis (MIT)" />
-  <meta property="og:description" content="Gunakan langsung di browser atau unduh gratis source code HTML/CSS/JS lisensi MIT tanpa login dan tanpa biaya." />
-  <meta property="og:image" content="https://asetkode-store.pages.dev/promo-ig/promo-free-tools-id-slide-1.jpg" />
+  <meta property="og:title" content="Ddev Studio Free — 10 Web Tools &amp; Source Code Open Source (MIT)" />
+  <meta property="og:description" content="Jalankan langsung di browser atau unduh gratis 10 source code HTML/CSS/JS lisensi MIT tanpa login dan tanpa biaya." />
+  <meta property="og:image" content="https://asetkode-store.pages.dev/free/screenshot.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../styles.css" />
   <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='dbg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230b1020'/%3E%3Cstop offset='.55' stop-color='%23312e81'/%3E%3Cstop offset='1' stop-color='%234f46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' fill='url(%23dbg)'/%3E%3Cpath d='M16 14h17c10.5 0 16.5 6.5 16.5 18S43.5 50 33 50H16V14zm8 7.5v21h8.2c6.6 0 9.8-3.5 9.8-10.5s-3.2-10.5-9.8-10.5H24z' fill='%23fff'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml" />
   <style>
-    .free-hero { padding: 48px 0 32px; text-align: center; }
+    .free-hero { padding: 44px 0 28px; text-align: center; }
     .free-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.78rem; font-weight: 800; font-family: var(--font-mono); margin-bottom: 14px; }
     html[data-theme="dark"] .free-pill { background: rgba(16, 185, 129, 0.14); color: #34d399; border-color: rgba(16, 185, 129, 0.35); }
-    .free-title { font-size: clamp(1.75rem, 3.6vw, 2.55rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.18; max-width: 780px; margin: 0 auto 12px; }
-    .free-sub { color: var(--text-secondary); max-width: 640px; margin: 0 auto 24px; font-size: 1rem; }
-    .free-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 52px; }
-    .free-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; gap: 14px; transition: border-color 0.2s ease, transform 0.2s ease; }
+    .free-title { font-size: clamp(1.75rem, 3.6vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.18; max-width: 780px; margin: 0 auto 12px; }
+    .free-sub { color: var(--text-secondary); max-width: 650px; margin: 0 auto 22px; font-size: 0.98rem; }
+    .free-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+    .free-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .free-tab { padding: 8px 14px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+    .free-tab.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    .free-search { min-width: 240px; padding: 9px 14px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 0.86rem; outline: none; }
+    .free-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 52px; }
+    .free-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; gap: 13px; transition: border-color 0.2s ease, transform 0.2s ease; }
     .free-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .free-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
     .free-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .free-tag { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
     html[data-theme="dark"] .free-tag { background: rgba(16, 185, 129, 0.14); color: #34d399; border-color: rgba(16, 185, 129, 0.35); }
-    .free-card h2 { font-size: 1.1rem; font-weight: 800; line-height: 1.3; }
-    .free-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+    .free-card h2 { font-size: 1.08rem; font-weight: 800; line-height: 1.3; }
+    .free-card p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.6; flex: 1; }
     .free-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-    .free-upsell { font-size: 0.78rem; padding: 10px 12px; border-radius: 10px; background: var(--bg-elevated); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .free-upsell { font-size: 0.77rem; padding: 9px 12px; border-radius: 10px; background: var(--bg-elevated); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .free-upsell a { color: var(--accent); font-weight: 700; white-space: nowrap; }
     .free-banner { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 28px; text-align: center; margin-bottom: 48px; }
   </style>
@@ -60,7 +65,7 @@
 
       <div class="nav-actions">
         <button type="button" class="icon-btn" id="langBtn" style="padding:0 11px;font-weight:800;">
-          <span id="langLabel">ID / EN</span>
+          <span id="langLabel">ID</span>
         </button>
         <button type="button" class="icon-btn theme-toggle-btn" id="themeBtn" aria-label="Theme">
           <svg class="theme-icon-moon" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -72,27 +77,37 @@
 
   <main class="container">
     <section class="free-hero">
-      <div class="free-pill" id="heroPill">100% FREE &bull; MIT OPEN SOURCE</div>
-      <h1 class="free-title" id="heroTitle">Tools &amp; Source Code Open Source Gratis untuk Developer dan UMKM</h1>
-      <p class="free-sub" id="heroSub">Jalankan langsung di browser tanpa login, atau unduh file source code HTML/CSS/JS berlisensi MIT secara gratis untuk dipakai pada proyek pribadi maupun komersial Anda.</p>
+      <div class="free-pill" id="heroPill">10 PRODUK GRATIS &bull; MIT OPEN SOURCE</div>
+      <h1 class="free-title" id="heroTitle">10 Tools &amp; Source Code Open Source Gratis Kualitas Produksi</h1>
+      <p class="free-sub" id="heroSub">Bukan program dummy — seluruh 10 aplikasi di bawah berjalan penuh di browser tanpa login dan bebas diunduh source code HTML/CSS/JS-nya (lisensi MIT).</p>
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px;">
-        <a href="#free-catalog" class="btn btn-primary" id="heroCta1">Jelajahi 4 Tool Gratis</a>
+        <a href="#free-catalog" class="btn btn-primary" id="heroCta1">Jelajahi 10 Tool Gratis</a>
         <a href="../" class="btn btn-outline" id="heroCta2">Lihat 25 Produk Flagship Pro &rarr;</a>
       </div>
     </section>
+
+    <div class="free-controls">
+      <div class="free-tabs" id="catTabs">
+        <button type="button" class="free-tab active" data-cat="all" id="tabAll">Semua (10)</button>
+        <button type="button" class="free-tab" data-cat="business" id="tabBiz">Bisnis &amp; UMKM (4)</button>
+        <button type="button" class="free-tab" data-cat="dev" id="tabDev">Developer (4)</button>
+        <button type="button" class="free-tab" data-cat="design" id="tabDesign">Desain &amp; SEO (2)</button>
+      </div>
+      <input type="search" class="free-search" id="freeSearch" placeholder="Cari tool gratis..." />
+    </div>
 
     <section class="free-grid" id="free-catalog"></section>
 
     <section class="free-banner">
       <h2 style="font-size:1.35rem;font-weight:800;margin-bottom:8px;" id="bannerTitle">Butuh Sistem Siap Bisnis Skala Penuh?</h2>
-      <p style="color:var(--text-secondary);max-width:600px;margin:0 auto 18px;font-size:0.92rem;" id="bannerSub">Jika tool gratis di atas membantu pekerjaan Anda, lihat juga 25 aplikasi bisnis &amp; source code lengkap Ddev Studio (Kasir POS Excel, Web Agen Travel, E-Commerce, Antrian, dan Tema Blogger).</p>
+      <p style="color:var(--text-secondary);max-width:600px;margin:0 auto 18px;font-size:0.92rem;" id="bannerSub">Jika koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 25 aplikasi bisnis &amp; source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, dan Tema Blogger).</p>
       <a href="../" class="btn btn-primary" id="bannerBtn">Buka Katalog Lengkap Ddev Studio &rarr;</a>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;">
-      <span>&copy; 2026 Ddev Studio &bull; MIT Open Source Free Collection</span>
+      <span>&copy; 2026 Ddev Studio &bull; 10 MIT Open Source Tools</span>
       <div style="display:flex;gap:16px;">
         <a href="../">Katalog Utama (ID)</a>
         <a href="../en/">Global Store (EN)</a>
@@ -104,34 +119,37 @@
   <script>
     const FREE_TOOLS = [
       {
-        file: 'apps/bio-card-builder.html',
-        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2"/><path d="M15 12h2"/><path d="M7 16h10"/></svg>',
-        titleId: 'BioCard & vCard (.vcf) Builder',
-        titleEn: 'BioCard & vCard (.vcf) Generator',
-        descId: 'Buat kartu nama digital, pratinjau tampilan HP real-time, unduh file kontak .vcf standar, serta ekspor 1 halaman Link-in-Bio HTML siap upload.',
-        descEn: 'Create a mobile link-in-bio page with live preview, export a standard .vcf digital contact file, or download a single-file HTML page.',
-        proId: 'prod-15',
-        proNameId: 'Butuh Link-in-Bio Dark/Light lengkap?',
-        proNameEn: 'Need full Creator BioLink Pro?',
-        proPriceId: 'Rp 39.000',
-        proPriceEn: '$7'
+        cat: 'business',
+        file: 'apps/hpp-margin-calculator.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+        titleId: 'Kalkulator HPP, Biaya Admin & Harga Jual',
+        titleEn: 'COGS, Marketplace Fee & Pricing Calculator',
+        descId: 'Hitung modal per unit, potongan biaya admin marketplace (%), rekomendasi harga jual ideal, break-even unit, plus ekspor laporan .CSV & simpan otomatis.',
+        descEn: 'Compute unit COGS, marketplace fee deductions, optimal selling price, break-even volume, and export CSV reports with local persistence.',
+        proId: 'prod-1',
+        proNameId: 'Butuh Kasir POS & Sync Excel?',
+        proNameEn: 'Need full POS Cashier & Excel Sync?',
+        proPriceId: 'Rp 69.000',
+        proPriceEn: '$12'
       },
       {
-        file: 'apps/json-csv-sql-converter.html',
-        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
-        titleId: 'JSON Formatter, CSV & SQL Schema',
-        titleEn: 'JSON Formatter, CSV & SQL Generator',
-        descId: 'Validasi & rapikan data JSON, konversi array JSON langsung ke file .CSV siap buka di Excel, atau hasilkan query SQL CREATE TABLE otomatis offline.',
-        descEn: 'Format & minify JSON locally, convert JSON arrays to Excel-ready .CSV downloads, or auto-generate SQL CREATE TABLE schemas.',
-        proId: 'prod-3',
-        proNameId: 'Butuh Scraper Python otomatis ke Excel?',
-        proNameEn: 'Need automated Python Web Scraper?',
-        proPriceId: 'Rp 99.000',
-        proPriceEn: '$15'
+        cat: 'business',
+        file: 'apps/invoice-lite-starter.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+        titleId: 'Invoice Lite Starter (Cetak PDF A4)',
+        titleEn: 'Simple Invoice Starter (Print PDF)',
+        descId: 'Template tagihan siap pakai: tambah/hapus baris item dinamis, hitung total IDR atau USD otomatis, dan layout @media print bersih untuk simpan ke PDF.',
+        descEn: 'Minimalist editable invoice sheet with add/remove line items, instant IDR/USD formatting, and clean @media print PDF layout.',
+        proId: 'prod-18',
+        proNameId: 'Butuh Invoice Pro + Kwitansi + WA?',
+        proNameEn: 'Need Pro Invoice & Receipt Generator?',
+        proPriceId: 'Rp 59.000',
+        proPriceEn: '$9'
       },
       {
+        cat: 'business',
         file: 'apps/wa-order-link-builder.html',
-        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
         titleId: 'WhatsApp Order Link & HTML Button',
         titleEn: 'WhatsApp Order Link & CTA Builder',
         descId: 'Ubah nomor 08xx ke format 628xx otomatis, susun format pesan pesanan rapi, uji klik link wa.me, dan salin kode tombol HTML siap tempel.',
@@ -143,21 +161,109 @@
         proPriceEn: '$9'
       },
       {
-        file: 'apps/invoice-lite-starter.html',
-        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
-        titleId: 'Invoice Lite Starter (Cetak PDF A4)',
-        titleEn: 'Simple Invoice Starter (Print PDF)',
-        descId: 'Template tagihan sederhana bebas edit langsung di halaman: tambah baris item, hitung total IDR/USD otomatis, dan cetak/simpan PDF rapi.',
-        descEn: 'Minimalist editable invoice sheet with dynamic line items, instant IDR/USD formatting, and clean @media print PDF layout.',
-        proId: 'prod-18',
-        proNameId: 'Butuh Invoice Pro + Kwitansi + WhatsApp?',
-        proNameEn: 'Need Pro Invoice & Receipt Generator?',
-        proPriceId: 'Rp 59.000',
-        proPriceEn: '$9'
+        cat: 'business',
+        file: 'apps/bio-card-builder.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2"/><path d="M15 12h2"/><path d="M7 16h10"/></svg>',
+        titleId: 'BioCard & vCard (.vcf) Builder',
+        titleEn: 'BioCard & vCard (.vcf) Generator',
+        descId: 'Buat kartu nama digital, pratinjau tampilan HP real-time, unduh file kontak .vcf standar, serta ekspor 1 halaman Link-in-Bio HTML siap upload.',
+        descEn: 'Create a mobile link-in-bio page with live preview, export a standard .vcf digital contact file, or download a single-file HTML page.',
+        proId: 'prod-15',
+        proNameId: 'Butuh Link-in-Bio Dark/Light lengkap?',
+        proNameEn: 'Need full Creator BioLink Pro?',
+        proPriceId: 'Rp 39.000',
+        proPriceEn: '$7'
+      },
+      {
+        cat: 'dev',
+        file: 'apps/json-csv-sql-converter.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+        titleId: 'JSON Formatter, CSV & SQL Schema',
+        titleEn: 'JSON Formatter, CSV & SQL Generator',
+        descId: 'Validasi & rapikan data JSON, konversi array JSON langsung ke file .CSV siap buka di Excel, atau hasilkan query SQL CREATE TABLE otomatis offline.',
+        descEn: 'Format & minify JSON locally, convert JSON arrays to Excel-ready .CSV downloads, or auto-generate SQL CREATE TABLE schemas.',
+        proId: 'prod-3',
+        proNameId: 'Butuh Scraper Python otomatis ke Excel?',
+        proNameEn: 'Need automated Python Web Scraper?',
+        proPriceId: 'Rp 99.000',
+        proPriceEn: '$15'
+      },
+      {
+        cat: 'dev',
+        file: 'apps/regex-tester-cheat-sheet.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+        titleId: 'Regex Live Tester & Preset Library',
+        titleEn: 'Regex Live Tester & Pattern Library',
+        descId: 'Uji pola Regular Expression langsung dengan highlight warna inline, ekstrak hasil ke JSON, dan pakai preset siap klik (HP ID, Email, URL, Hex, Tanggal).',
+        descEn: 'Test Regular Expressions with inline colored match highlights, export match results to JSON, and load presets for Phone, Email, URL & Hex.',
+        proId: 'prod-24',
+        proNameId: 'Butuh Template Blog DocsPro?',
+        proNameEn: 'Need Ddev DocsPro Tech Blog Theme?',
+        proPriceId: 'Rp 65.000',
+        proPriceEn: '$10'
+      },
+      {
+        cat: 'dev',
+        file: 'apps/markdown-html-studio.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+        titleId: 'Markdown Studio & HTML Exporter',
+        titleEn: 'Markdown Studio & HTML Exporter',
+        descId: 'Editor Markdown split-pane dengan renderer aman XSS-safe, penghitung kata/karakter real-time, salin HTML, serta ekspor langsung file .HTML atau .MD.',
+        descEn: 'Split-pane Markdown editor featuring XSS-safe HTML rendering, live word count, copy HTML, and standalone .HTML / .MD file export.',
+        proId: 'prod-21',
+        proNameId: 'Butuh Tema Blogger Berita NewsPro?',
+        proNameEn: 'Need Ddev NewsPro Blogger Theme?',
+        proPriceId: 'Rp 69.000',
+        proPriceEn: '$12'
+      },
+      {
+        cat: 'dev',
+        file: 'apps/pomodoro-focus-tracker.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+        titleId: 'Pomodoro Timer & Task Tracker',
+        titleEn: 'Pomodoro Focus Timer & Task Queue',
+        descId: 'Timer fokus 25m / istirahat 5m / 15m dengan suara bel Web Audio API tanpa file eksternal, penghitung sesi harian, & daftar target kerja tersimpan di browser.',
+        descEn: '25m focus / 5m & 15m break countdown with built-in Web Audio API bell chime, session counter, and persistent task checklist.',
+        proId: 'prod-7',
+        proNameId: 'Butuh App Catatan Finansial PWA?',
+        proNameEn: 'Need Expense & Budget PWA App?',
+        proPriceId: 'Rp 45.000',
+        proPriceEn: '$7'
+      },
+      {
+        cat: 'design',
+        file: 'apps/color-contrast-palette.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>',
+        titleId: 'WCAG Contrast Checker & CSS Palette',
+        titleEn: 'WCAG Contrast Checker & CSS Palette',
+        descId: 'Hitung rasio kontras warna WCAG 2.1 akurat (AA/AAA Normal & Large) plus pembangkit skala variabel CSS :root (50–900) otomatis siap salin.',
+        descEn: 'Exact WCAG 2.1 luminance contrast checker (AA/AAA Normal & Large) plus automatic CSS :root color scale generator (50–900).',
+        proId: 'prod-17',
+        proNameId: 'Butuh 42 Komponen UI Kit SaaS?',
+        proNameEn: 'Need 42 E-Commerce & SaaS UI Kit?',
+        proPriceId: 'Rp 69.000',
+        proPriceEn: '$12'
+      },
+      {
+        cat: 'design',
+        file: 'apps/meta-seo-og-generator.html',
+        icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+        titleId: 'SEO Meta, Open Graph & JSON-LD Tool',
+        titleEn: 'SEO Meta, Open Graph & JSON-LD Tool',
+        descId: 'Pratinjau tampilan hasil Google Search (SERP), penghitung batas panjang Title/Description, serta generator tag Open Graph & JSON-LD Schema siap salin.',
+        descEn: 'Live Google SERP preview with character counters, canonical link, Open Graph, Twitter Cards, and Schema.org JSON-LD generator.',
+        proId: 'prod-25',
+        proNameId: 'Butuh Web Agen Travel NusantaraVoyage?',
+        proNameEn: 'Need NusantaraVoyage Travel Platform?',
+        proPriceId: 'Rp 149.000',
+        proPriceEn: '$22'
       }
     ];
 
     let isEn = new URLSearchParams(location.search).get('lang') === 'en';
+    let activeCat = 'all';
+    let searchQ = '';
+
     function applyTheme(t) {
       document.documentElement.setAttribute('data-theme', t);
       localStorage.setItem('asetkode_theme', t);
@@ -172,24 +278,37 @@
       document.getElementById('langLabel').textContent = isEn ? 'EN' : 'ID';
       document.getElementById('navHome').textContent = isEn ? 'Pro Catalog (25)' : 'Katalog Pro (25)';
       document.getElementById('navHome').href = isEn ? '../en/' : '../';
+      document.getElementById('heroPill').textContent = isEn ? '10 FREE PRODUCTS • MIT OPEN SOURCE' : '10 PRODUK GRATIS • MIT OPEN SOURCE';
       document.getElementById('heroTitle').textContent = isEn
-        ? 'Free Open-Source Web Tools & Starter Code (MIT)'
-        : 'Tools & Source Code Open Source Gratis untuk Developer dan UMKM';
+        ? '10 Free Production-Grade Open-Source Web Tools'
+        : '10 Tools & Source Code Open Source Gratis Kualitas Produksi';
       document.getElementById('heroSub').textContent = isEn
-        ? 'Run directly in your browser with zero sign-up, or download clean MIT-licensed HTML/CSS/JS source code for personal and commercial projects.'
-        : 'Jalankan langsung di browser tanpa login, atau unduh file source code HTML/CSS/JS berlisensi MIT secara gratis untuk dipakai pada proyek pribadi maupun komersial Anda.';
-      document.getElementById('heroCta1').textContent = isEn ? 'Explore 4 Free Tools' : 'Jelajahi 4 Tool Gratis';
+        ? 'No dummy stubs — all 10 tools run completely inside your browser with zero login and come with clean, downloadable MIT HTML/CSS/JS source code.'
+        : 'Bukan program dummy — seluruh 10 aplikasi di bawah berjalan penuh di browser tanpa login dan bebas diunduh source code HTML/CSS/JS-nya (lisensi MIT).';
+      document.getElementById('heroCta1').textContent = isEn ? 'Explore 10 Free Tools' : 'Jelajahi 10 Tool Gratis';
       document.getElementById('heroCta2').textContent = isEn ? 'Browse 25 Pro Products →' : 'Lihat 25 Produk Flagship Pro →';
       document.getElementById('heroCta2').href = isEn ? '../en/' : '../';
+      document.getElementById('tabAll').textContent = isEn ? 'All (10)' : 'Semua (10)';
+      document.getElementById('tabBiz').textContent = isEn ? 'Business (4)' : 'Bisnis & UMKM (4)';
+      document.getElementById('tabDev').textContent = isEn ? 'Developer (4)' : 'Developer (4)';
+      document.getElementById('tabDesign').textContent = isEn ? 'Design & SEO (2)' : 'Desain & SEO (2)';
+      document.getElementById('freeSearch').placeholder = isEn ? 'Search free tools...' : 'Cari tool gratis...';
       document.getElementById('bannerTitle').textContent = isEn ? 'Need Full Production Business Software?' : 'Butuh Sistem Siap Bisnis Skala Penuh?';
       document.getElementById('bannerSub').textContent = isEn
-        ? 'If these free tools help your workflow, explore 25 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, Invoicing, & Blogger Themes).'
-        : 'Jika tool gratis di atas membantu pekerjaan Anda, lihat juga 25 aplikasi bisnis & source code lengkap Ddev Studio (Kasir POS Excel, Web Agen Travel, E-Commerce, Antrian, dan Tema Blogger).';
+        ? 'If these 10 open-source tools help your workflow, explore 25 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, Invoicing, & Blogger Themes).'
+        : 'Jika 10 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 25 aplikasi bisnis & source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, dan Tema Blogger).';
       document.getElementById('bannerBtn').textContent = isEn ? 'Open Full Ddev Studio Catalog →' : 'Buka Katalog Lengkap Ddev Studio →';
       document.getElementById('bannerBtn').href = isEn ? '../en/' : '../';
 
+      const q = searchQ.toLowerCase().trim();
+      const filtered = FREE_TOOLS.filter((t) => {
+        if (activeCat !== 'all' && t.cat !== activeCat) return false;
+        if (!q) return true;
+        return (t.titleId + ' ' + t.titleEn + ' ' + t.descId + ' ' + t.descEn).toLowerCase().includes(q);
+      });
+
       const grid = document.getElementById('free-catalog');
-      grid.innerHTML = FREE_TOOLS.map((t) => {
+      grid.innerHTML = filtered.map((t) => {
         const launchHref = t.file + (isEn ? '?lang=en' : '');
         const proHref = (isEn ? '../en/' : '../') + '?product=' + t.proId;
         return `
@@ -213,6 +332,17 @@
       }).join('');
     }
 
+    document.getElementById('catTabs').addEventListener('click', (e) => {
+      const cat = e.target.getAttribute('data-cat');
+      if (!cat) return;
+      activeCat = cat;
+      document.querySelectorAll('.free-tab').forEach((b) => b.classList.toggle('active', b.getAttribute('data-cat') === cat));
+      render();
+    });
+    document.getElementById('freeSearch').addEventListener('input', (e) => {
+      searchQ = e.target.value;
+      render();
+    });
     document.getElementById('langBtn').addEventListener('click', () => {
       isEn = !isEn;
       render();

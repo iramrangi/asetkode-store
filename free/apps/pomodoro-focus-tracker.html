@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro Focus Timer &amp; Task Tracker — Ddev Studio Open Source (MIT)</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:#0b1020; color:#f8fafc; min-height:100vh; padding:20px; }
+    .wrap { max-width:760px; margin:0 auto; }
+    .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid #1e293b; }
+    .badge { display:inline-block; background:#064e3b; color:#6ee7b7; border:1px solid #059669; padding:4px 10px; border-radius:99px; font-size:12px; font-weight:700; }
+    .timer-card { background:#0f172a; border:1px solid #1e293b; border-radius:22px; padding:28px; text-align:center; margin-bottom:20px; }
+    .modes { display:flex; justify-content:center; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+    .mode-btn { padding:8px 14px; border-radius:99px; border:1px solid #334155; background:#1e293b; color:#cbd5e1; font-size:13px; font-weight:700; cursor:pointer; }
+    .mode-btn.active { background:#4f46e5; border-color:#6366f1; color:#fff; }
+    .clock { font-size:clamp(54px,12vw,84px); font-weight:900; font-family:ui-monospace,Consolas,monospace; letter-spacing:0.03em; margin:12px 0 22px; }
+    .controls { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 18px; border-radius:10px; border:1px solid #334155; background:#1e293b; color:#fff; font-weight:700; font-size:13.5px; cursor:pointer; text-decoration:none; }
+    .btn-primary { background:#10b981; border-color:#059669; color:#022c22; }
+    .tasks-card { background:#0f172a; border:1px solid #1e293b; border-radius:18px; padding:20px; }
+    .task-form { display:flex; gap:8px; margin:12px 0 16px; }
+    .task-form input { flex:1; background:#020617; color:#fff; border:1px solid #334155; border-radius:10px; padding:10px 12px; font-size:14px; }
+    .task-list { display:grid; gap:8px; }
+    .task-item { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; background:#020617; border:1px solid #1e293b; border-radius:10px; }
+    .task-item.done span { text-decoration:line-through; color:#64748b; }
+    .stats { font-size:12.5px; color:#94a3b8; font-family:ui-monospace,Consolas,monospace; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <span class="badge">MIT Open Source &bull; Offline Web Audio</span>
+        <h1 style="font-size:20px;margin-top:6px;" id="tHeading">Pomodoro Focus Timer &amp; Task Tracker</h1>
+      </div>
+      <a class="btn" href="../" id="tBack">Kembali ke Halaman Gratis</a>
+    </div>
+
+    <div class="timer-card">
+      <div class="modes">
+        <button type="button" class="mode-btn active" data-mode="focus" data-min="25" id="mFocus">Fokus (25m)</button>
+        <button type="button" class="mode-btn" data-mode="short" data-min="5" id="mShort">Istirahat (5m)</button>
+        <button type="button" class="mode-btn" data-mode="long" data-min="15" id="mLong">Istirahat Panjang (15m)</button>
+      </div>
+      <div class="clock" id="clockDisplay">25:00</div>
+      <div class="controls">
+        <button type="button" class="btn btn-primary" id="btnToggle">Mulai Timer</button>
+        <button type="button" class="btn" id="btnReset">Reset</button>
+        <button type="button" class="btn" id="btnChimeTest">Tes Suara Bel</button>
+      </div>
+      <div class="stats" style="margin-top:16px;" id="sessionStats">Sesi selesai hari ini: 0</div>
+    </div>
+
+    <div class="tasks-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 style="font-size:16px;font-weight:800;" id="tTasks">Daftar Target Kerja</h2>
+        <button type="button" class="btn" id="btnClearDone" style="padding:6px 10px;font-size:12px;">Hapus Selesai</button>
+      </div>
+      <form class="task-form" id="taskForm">
+        <input type="text" id="taskInput" placeholder="Tulis target fokus berikutnya..." required />
+        <button type="submit" class="btn btn-primary" id="btnAdd">Tambah</button>
+      </form>
+      <div class="task-list" id="taskList"></div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    const STORAGE_KEY = 'ddev_free_pomo_v1';
+    let state = { mode: 'focus', totalSec: 25 * 60, leftSec: 25 * 60, sessions: 0, tasks: [] };
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      if (Array.isArray(saved.tasks)) state.tasks = saved.tasks;
+      if (Number.isInteger(saved.sessions)) state.sessions = saved.sessions;
+    } catch (e) {}
+
+    let intervalId = null;
+
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('tBack').textContent = 'Back to Free Tools';
+      document.getElementById('tBack').href = '../?lang=en';
+      document.getElementById('mFocus').textContent = 'Focus (25m)';
+      document.getElementById('mShort').textContent = 'Short Break (5m)';
+      document.getElementById('mLong').textContent = 'Long Break (15m)';
+      document.getElementById('btnToggle').textContent = 'Start Timer';
+      document.getElementById('btnChimeTest').textContent = 'Test Chime';
+      document.getElementById('tTasks').textContent = 'Focus Task Queue';
+      document.getElementById('btnClearDone').textContent = 'Clear Completed';
+      document.getElementById('taskInput').placeholder = 'Add your next focus task...';
+      document.getElementById('btnAdd').textContent = 'Add';
+    }
+
+    function persist() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ sessions: state.sessions, tasks: state.tasks })); } catch (e) {}
+    }
+
+    function playChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        [523.25, 659.25, 783.99].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.001, ctx.currentTime + idx * 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + idx * 0.14 + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.14 + 0.45);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.14);
+          osc.stop(ctx.currentTime + idx * 0.14 + 0.5);
+        });
+      } catch (e) {}
+    }
+
+    function fmtClock(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function renderClock() {
+      const str = fmtClock(state.leftSec);
+      document.getElementById('clockDisplay').textContent = str;
+      document.title = `${str} — Pomodoro Focus`;
+      document.getElementById('sessionStats').textContent = (IS_EN ? 'Completed sessions: ' : 'Sesi selesai hari ini: ') + state.sessions;
+      document.getElementById('btnToggle').textContent = intervalId ? (IS_EN ? 'Pause' : 'Jeda') : (IS_EN ? 'Start Timer' : 'Mulai Timer');
+    }
+
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function renderTasks() {
+      const listEl = document.getElementById('taskList');
+      if (!state.tasks.length) {
+        listEl.innerHTML = `<div style="font-size:13px;color:#64748b;padding:8px 0;">${IS_EN ? 'No tasks added yet.' : 'Belum ada daftar tugas.'}</div>`;
+        return;
+      }
+      listEl.innerHTML = state.tasks.map((t, i) => `
+        <div class="task-item ${t.done ? 'done' : ''}">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:1;">
+            <input type="checkbox" data-i="${i}" ${t.done ? 'checked' : ''} style="width:16px;height:16px;" />
+            <span>${esc(t.text)}</span>
+          </label>
+          <button type="button" class="btn" data-del="${i}" style="padding:4px 9px;font-size:12px;">Hapus</button>
+        </div>
+      `).join('');
+    }
+
+    document.querySelectorAll('.mode-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+        document.querySelectorAll('.mode-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.mode = btn.dataset.mode;
+        state.totalSec = Number(btn.dataset.min) * 60;
+        state.leftSec = state.totalSec;
+        renderClock();
+      });
+    });
+
+    document.getElementById('btnToggle').addEventListener('click', () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      } else {
+        intervalId = setInterval(() => {
+          if (state.leftSec > 0) {
+            state.leftSec--;
+          } else {
+            clearInterval(intervalId);
+            intervalId = null;
+            if (state.mode === 'focus') {
+              state.sessions++;
+              persist();
+            }
+            playChime();
+            state.leftSec = state.totalSec;
+          }
+          renderClock();
+        }, 1000);
+      }
+      renderClock();
+    });
+
+    document.getElementById('btnReset').addEventListener('click', () => {
+      if (intervalId) { clearInterval(intervalId); intervalId = null; }
+      state.leftSec = state.totalSec;
+      renderClock();
+    });
+    document.getElementById('btnChimeTest').addEventListener('click', playChime);
+
+    document.getElementById('taskForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = document.getElementById('taskInput').value.trim();
+      if (!val) return;
+      state.tasks.unshift({ text: val, done: false });
+      document.getElementById('taskInput').value = '';
+      persist();
+      renderTasks();
+    });
+
+    document.getElementById('taskList').addEventListener('change', (e) => {
+      const idx = e.target.getAttribute('data-i');
+      if (idx !== null) {
+        state.tasks[Number(idx)].done = e.target.checked;
+        persist();
+        renderTasks();
+      }
+    });
+    document.getElementById('taskList').addEventListener('click', (e) => {
+      const del = e.target.getAttribute('data-del');
+      if (del !== null) {
+        state.tasks.splice(Number(del), 1);
+        persist();
+        renderTasks();
+      }
+    });
+    document.getElementById('btnClearDone').addEventListener('click', () => {
+      state.tasks = state.tasks.filter((t) => !t.done);
+      persist();
+      renderTasks();
+    });
+
+    renderClock();
+    renderTasks();
+  </script>
+</body>
+</html>

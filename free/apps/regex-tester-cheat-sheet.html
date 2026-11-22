@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regex Tester &amp; Preset Library — Ddev Studio Open Source (MIT)</title>
+  <!-- MIT License | Copyright (c) 2026 Ddev Studio (https://asetkode-store.pages.dev/free/) -->
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body { background:#0b1020; color:#f8fafc; min-height:100vh; padding:20px; }
+    .wrap { max-width:1020px; margin:0 auto; }
+    .top { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid #1e293b; }
+    .badge { display:inline-block; background:#064e3b; color:#6ee7b7; border:1px solid #059669; padding:4px 10px; border-radius:99px; font-size:12px; font-weight:700; }
+    .card { background:#0f172a; border:1px solid #1e293b; border-radius:16px; padding:18px; margin-bottom:16px; }
+    .rx-row { display:grid; grid-template-columns:1fr 110px; gap:10px; margin-bottom:12px; }
+    input, textarea { width:100%; background:#020617; color:#e2e8f0; border:1px solid #334155; border-radius:10px; padding:10px 12px; font-family:ui-monospace,Consolas,monospace; font-size:13.5px; }
+    .presets { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#fff; font-weight:700; font-size:12px; cursor:pointer; text-decoration:none; }
+    .hl-box { background:#020617; border:1px solid #334155; border-radius:10px; padding:14px; font-family:ui-monospace,Consolas,monospace; font-size:13.5px; line-height:1.7; white-space:pre-wrap; word-break:break-word; min-height:120px; }
+    .hl-box mark { background:#4f46e5; color:#fff; padding:1px 4px; border-radius:4px; }
+    .match-list { display:grid; gap:6px; margin-top:10px; font-family:ui-monospace,Consolas,monospace; font-size:12.5px; }
+    .match-row { background:#020617; border:1px solid #1e293b; padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; }
+    .err { color:#f87171; font-size:12.5px; font-weight:700; margin-top:6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <span class="badge">MIT Open Source &bull; Free Dev Tool</span>
+        <h1 style="font-size:20px;margin-top:6px;">Regex Live Tester &amp; Pattern Library</h1>
+      </div>
+      <a class="btn" href="../" id="tBack">Kembali ke Halaman Gratis</a>
+    </div>
+
+    <div class="card">
+      <div class="presets" id="presetWrap"></div>
+      <div class="rx-row">
+        <input id="rxPat" value="(\+62|62|0)8[1-9][0-9]{6,10}" placeholder="Pattern Regex..." />
+        <input id="rxFlags" value="g" placeholder="Flags (g/i/m)" />
+      </div>
+      <div id="rxErr" class="err"></div>
+      <textarea id="rxText" rows="5">Order 1: Hubungi 081234567890 atau +6285712345678 (email: buyer@example.com)
+Order 2: WA 6289911223344 tanggal 2026-11-22 SKU: #4F46E5</textarea>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <strong style="font-size:13px;color:#94a3b8;" id="matchSummary">0 matches</strong>
+        <button type="button" class="btn" id="btnCopyMatches">Salin Hasil Match (JSON)</button>
+      </div>
+      <div class="hl-box" id="hlOut"></div>
+      <div class="match-list" id="matchList"></div>
+    </div>
+  </div>
+
+  <script>
+    const IS_EN = new URLSearchParams(location.search).get('lang') === 'en';
+    if (IS_EN) {
+      document.documentElement.lang = 'en';
+      document.getElementById('tBack').textContent = 'Back to Free Tools';
+      document.getElementById('tBack').href = '../?lang=en';
+      document.getElementById('btnCopyMatches').textContent = 'Copy Matches (JSON)';
+    }
+
+    const PRESETS = [
+      { label: 'Phone ID (08/62)', pat: '(\\+62|62|0)8[1-9][0-9]{6,10}', flags: 'g' },
+      { label: 'Email', pat: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}', flags: 'g' },
+      { label: 'URL', pat: 'https?:\\/\\/[^\\s"\'<>]+', flags: 'gi' },
+      { label: 'Hex Color', pat: '#[0-9a-fA-F]{6}\\b', flags: 'g' },
+      { label: 'Date YYYY-MM-DD', pat: '\\b\\d{4}-\\d{2}-\\d{2}\\b', flags: 'g' }
+    ];
+    document.getElementById('presetWrap').innerHTML = PRESETS.map((p, i) => `<button type="button" class="btn" data-p="${i}">${p.label}</button>`).join('');
+    document.getElementById('presetWrap').addEventListener('click', (e) => {
+      const idx = e.target.getAttribute('data-p');
+      if (idx !== null) {
+        const p = PRESETS[Number(idx)];
+        document.getElementById('rxPat').value = p.pat;
+        document.getElementById('rxFlags').value = p.flags;
+        run();
+      }
+    });
+
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    let lastMatches = [];
+    function run() {
+      const pat = document.getElementById('rxPat').value;
+      const flagsRaw = document.getElementById('rxFlags').value.replace(/[^gimsuy]/g, '');
+      const text = document.getElementById('rxText').value;
+      const errEl = document.getElementById('rxErr');
+      lastMatches = [];
+      if (!pat) {
+        errEl.textContent = '';
+        document.getElementById('hlOut').innerHTML = esc(text);
+        document.getElementById('matchList').innerHTML = '';
+        document.getElementById('matchSummary').textContent = '0 matches';
+        return;
+      }
+      let rx;
+      try {
+        rx = new RegExp(pat, flagsRaw.includes('g') ? flagsRaw : flagsRaw + 'g');
+        errEl.textContent = '';
+      } catch (e) {
+        errEl.textContent = e.message;
+        return;
+      }
+      let out = '', lastIdx = 0, m;
+      while ((m = rx.exec(text)) !== null) {
+        if (m[0] === '') { rx.lastIndex++; continue; }
+        out += esc(text.slice(lastIdx, m.index)) + '<mark>' + esc(m[0]) + '</mark>';
+        lastIdx = m.index + m[0].length;
+        lastMatches.push({ match: m[0], index: m.index, groups: m.slice(1) });
+      }
+      out += esc(text.slice(lastIdx));
+      document.getElementById('hlOut').innerHTML = out;
+      document.getElementById('matchSummary').textContent = `${lastMatches.length} matches found`;
+      document.getElementById('matchList').innerHTML = lastMatches.slice(0, 20).map((it, idx) =>
+        `<div class="match-row"><span>#${idx + 1}: ${esc(it.match)}</span><span style="color:#94a3b8;">pos ${it.index}</span></div>`
+      ).join('');
+    }
+    ['rxPat', 'rxFlags', 'rxText'].forEach((id) => document.getElementById(id).addEventListener('input', run));
+    document.getElementById('btnCopyMatches').addEventListener('click', () => {
+      navigator.clipboard.writeText(JSON.stringify(lastMatches, null, 2));
+    });
+    run();
+  </script>
+</body>
+</html>
