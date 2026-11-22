@@ -199,10 +199,15 @@
 
   if (C.musikMp3) {
     audio.src = C.musikMp3;
+  } else if (musicBtn) {
+    musicBtn.title = 'Tambahkan file MP3 di config.js -> musikMp3';
   }
 
   function playMusic() {
-    if (!audio.src) return;
+    if (!audio.src) {
+      if (typeof showToast === 'function') showToast('Opsional: atur file musik di config.js (musikMp3).');
+      return;
+    }
     audio.play().then(() => {
       isPlaying = true;
       musicBtn.classList.add('playing');

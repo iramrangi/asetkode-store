@@ -47,8 +47,8 @@
         </div>
 
         <button type="button" class="kit-theme-btn" id="toggleTheme" aria-label="Ganti Mode Gelap atau Terang">
-          <span class="theme-icon-sun" aria-hidden="true">☀️</span>
-          <span class="theme-icon-moon" aria-hidden="true">🌙</span>
+          <span class="theme-icon-sun" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span>
+          <span class="theme-icon-moon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
           <span id="themeBtnLabel">Mode Gelap</span>
         </button>
       </div>
@@ -98,7 +98,7 @@
     <div id="componentsGrid" class="components-grid"></div>
 
     <div id="emptySearch" class="kit-empty-search" hidden>
-      <div class="kit-empty-icon">🔍</div>
+      <div class="kit-empty-icon" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
       <h3>Komponen tidak ditemukan</h3>
       <p>Tidak ada komponen yang cocok dengan kata kunci pencarian Anda. Coba kata lain atau reset filter.</p>
       <button type="button" class="ui-btn ui-btn-primary" id="resetFilterBtn">Reset Filter &amp; Pencarian</button>
@@ -108,6 +108,6 @@
   <div id="kitToast" class="kit-toast" role="status" aria-live="polite"></div>
 
   <script src="app.js"></script>
-  <script src="../demo-i18n.js"></script>
+  <script src="../en-translate.js" defer></script>
 </body>
 </html>

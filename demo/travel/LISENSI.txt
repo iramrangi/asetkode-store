@@ -1,0 +1,25 @@
+LISENSI PENGGUNAAN KOMERSIAL & PERSONAL
+NusantaraVoyage Pro — Website Agen Travel, Katalog Wisata & Booking Engine
+===========================================================================
+
+Dengan memiliki produk ini, Anda DIIZINKAN untuk:
+  [v] Menggunakan aplikasi ini untuk operasional biro perjalanan / agen
+      travel milik Anda sendiri (open trip, private tour, honeymoon,
+      corporate gathering, wisata halal, dll).
+  [v] Memodifikasi source code (HTML, CSS, JS), logo, warna, paket wisata,
+      harga, itinerary, dan bahasa sesuai kebutuhan bisnis maupun proyek klien.
+  [v] Meng-host atau memasang aplikasi ini di perangkat lokal maupun
+      domain/hosting milik Anda atau klien Anda (Cloudflare Pages, Netlify,
+      cPanel, Vercel, GitHub Pages).
+
+Anda TIDAK DIIZINKAN untuk:
+  [x] Menjual ulang, membagikan secara gratis, atau mengunggah file
+      source code produk ini (baik asli maupun hasil modifikasi) sebagai
+      produk template, script, atau aset digital saingan.
+  [x] Mengklaim source code asli ini sebagai karya buatan sendiri untuk
+      diperjualbelikan kembali.
+
+Produk ini disediakan "apa adanya" (as-is). Penjual tidak bertanggung jawab
+atas kerugian langsung maupun tidak langsung yang timbul dari penggunaan.
+
+(c) Ddev Studio - https://asetkode.blogspot.com

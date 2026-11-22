@@ -51,9 +51,18 @@
           </div>
 
           <div class="op-controls">
-            <button type="button" class="btn-primary btn-lg" id="callNextBtn">▶ Panggil Berikutnya</button>
-            <button type="button" class="btn-outline" id="recallBtn">🔊 Panggil Ulang</button>
-            <button type="button" class="btn-outline" id="skipBtn">⏭ Lewati</button>
+            <button type="button" class="btn-primary btn-lg" id="callNextBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              Panggil Berikutnya
+            </button>
+            <button type="button" class="btn-outline" id="recallBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:4px;" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              Panggil Ulang
+            </button>
+            <button type="button" class="btn-outline" id="skipBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:4px;" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+              Lewati
+            </button>
           </div>
 
           <div class="quick-issue">
@@ -136,7 +145,10 @@
           <div class="lbl">TIKET TERAKHIR ANDA</div>
           <div class="ticket-num" id="ticketPreviewNum">A-001</div>
           <div id="ticketPreviewMeta" style="font-size:0.85rem;color:#94a3b8;margin-bottom:12px;"></div>
-          <button type="button" class="btn-primary" id="printTicketBtn">🖨 Cetak Struk Tiket</button>
+          <button type="button" class="btn-primary" id="printTicketBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px;" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+            Cetak Struk Tiket
+          </button>
         </div>
       </div>
     </section>
@@ -152,6 +164,7 @@
   </div>
 
   <script src="app.js"></script>
-  <script src="../demo-i18n.js"></script>
+  <script src="../en-translate.js" defer></script>
 </body>
 </html>
+

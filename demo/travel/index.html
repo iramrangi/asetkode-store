@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d9488">
+  <title>NusantaraVoyage Pro — Website Agen Travel, Katalog Wisata &amp; Sistem Booking</title>
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('nv_travel_theme_v1');
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="topbar no-print">
+    <div class="container topbar-inner">
+      <div class="topbar-actions">
+        <span class="topbar-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Izin Resmi Biro Wisata</span>
+        </span>
+        <span id="topbarAgencyNotice">Gunakan kode <strong>LIBURSERU</strong> (-Rp 250.000) atau <strong>EARLYBIRD10</strong> (-10%)</span>
+      </div>
+      <div class="topbar-actions">
+        <a href="#" id="topbarWaLink" class="topbar-contact" target="_blank" rel="noopener">WhatsApp Agen</a>
+        <a href="#" id="topbarEmailLink" class="topbar-contact">booking@nusantaravoyage.id</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Sticky Navbar -->
+  <header class="site-header no-print">
+    <div class="container header-inner">
+      <a href="#catalog" class="brand" id="brandHomeLink">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13"></path>
+            <path d="M22 2L15 22l-4-9-9-4 20-7z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title" id="headerAgencyName">NusantaraVoyage Tour &amp; Travel</h1>
+          <p class="brand-tagline" id="headerAgencyTagline">Biro Perjalanan Wisata Terpercaya • Domestik &amp; Internasional</p>
+        </div>
+      </a>
+
+      <nav class="main-nav" role="tablist" aria-label="Menu Utama Agen Travel">
+        <button type="button" class="nav-tab active" role="tab" aria-selected="true" data-view="catalog">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <span data-i18n="navCatalog">Katalog Paket</span>
+        </button>
+        <button type="button" class="nav-tab" role="tab" aria-selected="false" data-view="lookup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+          <span data-i18n="navLookup">Cek Booking &amp; E-Tiket</span>
+        </button>
+        <button type="button" class="nav-tab" role="tab" aria-selected="false" data-view="admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          <span data-i18n="navAdmin">Panel Admin Agen</span>
+          <span class="nav-badge" id="adminPendingBadge" hidden>0</span>
+        </button>
+      </nav>
+
+      <div class="header-tools">
+        <button type="button" class="tool-btn wishlist-btn" id="wishlistFilterBtn" title="Tampilkan Paket Favorit Tersimpan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          <span id="wishlistCount">0</span>
+        </button>
+        <button type="button" class="tool-btn" id="currencyToggleBtn" title="Ganti Mata Uang IDR / USD">IDR</button>
+        <button type="button" class="tool-btn" id="langToggleBtn" title="Ganti Bahasa ID / EN">ID</button>
+        <button type="button" class="tool-btn" id="themeToggleBtn" aria-label="Ganti Tema Gelap atau Terang">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================================================================
+         VIEW 1: CUSTOMER STOREFRONT & CATALOG
+         ================================================================ -->
+    <section id="view-catalog">
+      <div class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="hero-eyebrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span id="heroEyebrow" data-i18n="heroEyebrow">Open Trip Pasti Berangkat &amp; Private Custom Tour</span>
+            </div>
+            <h1 id="heroTitle">Jelajahi Dunia &amp; Nusantara dengan <span>Itinerary Matang</span> dan Harga Transparan</h1>
+            <p class="hero-lead" id="heroLead">
+              Pesan paket wisata domestik maupun internasional langsung dengan kalkulator biaya real-time, skema DP 30%, e-voucher A4 otomatis, dan dukungan Tour Leader berpengalaman.
+            </p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a href="#catalog-list" class="btn btn-accent" id="heroCtaExplore">Jelajahi 8 Paket Unggulan →</a>
+              <a href="#custom-quote" class="btn btn-outline" style="background:rgba(255,255,255,0.08); color:#fff; border-color:rgba(255,255,255,0.28);" id="heroCtaCustom">Request Private / Corporate Trip</a>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <strong>12.400+</strong>
+                <span data-i18n="statTravelers">Peserta Puas Berangkat</span>
+              </div>
+              <div class="hero-stat">
+                <strong>4.9 / 5</strong>
+                <span data-i18n="statRating">Rating Ulasan Terverifikasi</span>
+              </div>
+              <div class="hero-stat">
+                <strong>100%</strong>
+                <span data-i18n="statVoucher">E-Voucher &amp; Harga Transparan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-showcase-card">
+            <div class="hero-mini-art" id="heroFeaturedArt"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:8px;">
+              <span class="badge badge-accent" id="heroFeaturedBadge">Best Seller</span>
+              <span style="font-size:0.82rem; color:#cbd5e1;" id="heroFeaturedMeta">4H 3M • ★ 4.9</span>
+            </div>
+            <h2 style="margin:0 0 10px; font-size:1.18rem; color:#fff;" id="heroFeaturedTitle">Bali Exotic &amp; Nusa Penida Luxe</h2>
+            <div class="hero-mini-meta">
+              <div>
+                <span style="display:block; font-size:0.74rem; color:#94a3b8;" data-i18n="startFrom">Mulai dari</span>
+                <span class="hero-mini-price" id="heroFeaturedPrice">Rp 3.450.000</span>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" id="heroFeaturedBtn" data-i18n="viewItinerary">Lihat Itinerary</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Search & Filter Bar -->
+      <div class="search-shell">
+        <div class="container">
+          <div class="search-card">
+            <div class="search-grid">
+              <div class="field">
+                <label for="searchKeyword" data-i18n="lblKeyword">Cari Destinasi / Kata Kunci</label>
+                <input type="search" id="searchKeyword" class="input" placeholder="Misal: Bali, Phinisi, Jepang, Turki, Bromo...">
+              </div>
+              <div class="field">
+                <label for="searchRegion" data-i18n="lblRegion">Wilayah</label>
+                <select id="searchRegion" class="input">
+                  <option value="ALL">Semua Wilayah</option>
+                  <option value="Domestik">Domestik (Indonesia)</option>
+                  <option value="Internasional">Internasional</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="searchDuration" data-i18n="lblDuration">Durasi</label>
+                <select id="searchDuration" class="input">
+                  <option value="ALL">Semua Durasi</option>
+                  <option value="short">1 – 4 Hari</option>
+                  <option value="medium">5 – 6 Hari</option>
+                  <option value="long">7+ Hari</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="searchBudget" data-i18n="lblBudget">Maks. Budget / Org</label>
+                <select id="searchBudget" class="input">
+                  <option value="ALL">Semua Harga</option>
+                  <option value="5000000">≤ Rp 5 Juta</option>
+                  <option value="10000000">≤ Rp 10 Juta</option>
+                  <option value="20000000">≤ Rp 20 Juta</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="searchSort" data-i18n="lblSort">Urutkan</label>
+                <select id="searchSort" class="input">
+                  <option value="popular">Paling Populer</option>
+                  <option value="price-asc">Harga Termurah</option>
+                  <option value="price-desc">Harga Tertinggi</option>
+                  <option value="duration-asc">Durasi Tercepat</option>
+                </select>
+              </div>
+              <div>
+                <button type="button" class="btn btn-outline" id="searchResetBtn">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Packages Catalog Section -->
+      <section class="section" id="catalog-list">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title" data-i18n="catalogHeading">Katalog Paket Wisata Pilihan</h2>
+              <p class="section-sub" id="catalogResultInfo">Menampilkan seluruh paket wisata terbaik dengan kuota keberangkatan real-time.</p>
+            </div>
+          </div>
+
+          <div class="filter-pills" id="categoryPills">
+            <button type="button" class="pill-btn active" data-cat="ALL">Semua Paket</button>
+            <button type="button" class="pill-btn" data-cat="Open Trip">Open Trip</button>
+            <button type="button" class="pill-btn" data-cat="Private Tour">Private Tour</button>
+            <button type="button" class="pill-btn" data-cat="Honeymoon">Honeymoon</button>
+            <button type="button" class="pill-btn" data-cat="Halal Tour">Halal Tour</button>
+            <button type="button" class="pill-btn" data-cat="Corporate">Corporate / Gathering</button>
+          </div>
+
+          <div class="packages-grid" id="packagesGrid"></div>
+        </div>
+      </section>
+
+      <!-- Why Choose Us -->
+      <section class="section" style="padding-top:12px;">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title" data-i18n="pillarsHeading">Keunggulan Layanan Biro Perjalanan</h2>
+              <p class="section-sub" data-i18n="pillarsSub">Standar operasional profesional untuk liburan keluarga, bulan madu, hingga outing perusahaan.</p>
+            </div>
+          </div>
+          <div class="pillars-grid">
+            <article class="pillar-card">
+              <div class="pillar-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+              </div>
+              <h3>Kalkulator &amp; DP 30% Otomatis</h3>
+              <p>Hitung biaya dewasa, anak, single room supplement, add-on, dan kode promo secara instan tanpa biaya tersembunyi.</p>
+            </article>
+            <article class="pillar-card">
+              <div class="pillar-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>
+              </div>
+              <h3>E-Voucher &amp; Invoice A4 Instan</h3>
+              <p>Setiap reservasi langsung mendapat kode booking <code>TRV-XXXX</code> lengkap dengan bukti cetak PDF dan jadwal kalender <code>.ics</code>.</p>
+            </article>
+            <article class="pillar-card">
+              <div class="pillar-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M9 21v-4a2 2 0 0 1 4 0v4"/><path d="M14 11h.01"/><path d="M10 11h.01"/></svg>
+              </div>
+              <h3>Ramah Muslim &amp; Kurasi Hotel</h3>
+              <p>Jadwal sholat terjaga, opsi kuliner halal terverifikasi, serta pilihan kelas hotel mulai 3★ nyaman hingga 5★ beachfront.</p>
+            </article>
+            <article class="pillar-card">
+              <div class="pillar-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+              <h3>Kuota Terkendali &amp; Support 24/7</h3>
+              <p>Sisa kursi setiap tanggal keberangkatan terhitung otomatis dan terhubung langsung ke WhatsApp Tour Coordinator.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Custom Private / Corporate Quote Form -->
+      <section class="section" id="custom-quote" style="padding-top:16px;">
+        <div class="container">
+          <div class="custom-banner">
+            <div>
+              <span class="badge badge-accent" style="margin-bottom:10px;">Custom Itinerary &amp; Rombongan</span>
+              <h2 style="margin:0 0 10px; font-size:1.75rem; line-height:1.2;">Butuh Jadwal Khusus Keluarga Besar atau Company Outing?</h2>
+              <p style="margin:0 0 14px; color:#cbd5e1; font-size:0.95rem;">
+                Tentukan sendiri destinasi impian, tanggal fleksibel, hotel pilihan, serta kebutuhan acara gala dinner atau team building. Kami buatkan proposal penawaran resmi dalam 1x24 jam.
+              </p>
+              <ul style="margin:0; padding-left:18px; color:#99f6e4; font-size:0.88rem; display:grid; gap:6px;">
+                <li>Gratis konsultasi rute &amp; efisiensi anggaran rombongan (10–300 pax)</li>
+                <li>Invoice perusahaan &amp; faktur penawaran resmi tersedia</li>
+                <li>Terhubung instan dengan tim WhatsApp spesialis grup</li>
+              </ul>
+            </div>
+
+            <form class="custom-form-box" id="customQuoteForm">
+              <h3 style="margin:0 0 12px; font-size:1.05rem;">Form Penawaran Custom Trip</h3>
+              <div class="form-row-2" style="margin-bottom:10px;">
+                <div class="field">
+                  <label for="cqName">Nama / Perusahaan</label>
+                  <input type="text" id="cqName" class="input" required placeholder="Misal: Andi / PT Maju Jaya">
+                </div>
+                <div class="field">
+                  <label for="cqWa">Nomor WhatsApp</label>
+                  <input type="tel" id="cqWa" class="input" required placeholder="0812xxxxxxxx">
+                </div>
+              </div>
+              <div class="form-row-3" style="margin-bottom:10px;">
+                <div class="field">
+                  <label for="cqDest">Destinasi</label>
+                  <input type="text" id="cqDest" class="input" required placeholder="Bali / Jepang / Bangkok">
+                </div>
+                <div class="field">
+                  <label for="cqDate">Perkiraan Bulan</label>
+                  <input type="month" id="cqDate" class="input" required>
+                </div>
+                <div class="field">
+                  <label for="cqPax">Jumlah Peserta</label>
+                  <input type="number" id="cqPax" class="input" min="2" value="15" required>
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <label for="cqNotes">Catatan Kebutuhan (Hotel, Gala Dinner, Visa, dll)</label>
+                <textarea id="cqNotes" class="input" rows="2" placeholder="Mohon penawaran paket 4H3M termasuk dokumentasi drone dan transport bus..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%;">Kirim Permintaan Penawaran via WhatsApp →</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Verified Reviews -->
+      <section class="section" style="padding-top:16px;">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title" data-i18n="reviewsHeading">Cerita &amp; Ulasan Traveler Terverifikasi</h2>
+              <p class="section-sub">Pengalaman nyata peserta trip domestik, honeymoon, keluarga, hingga rombongan kantor.</p>
+            </div>
+          </div>
+          <div class="reviews-grid" id="reviewsGrid"></div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="section" style="padding-top:16px;">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+              <p class="section-sub">Informasi skema DP, kepastian keberangkatan, e-voucher, serta kustomisasi website untuk agen travel.</p>
+            </div>
+          </div>
+          <div class="faq-list" id="faqList"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ================================================================
+         VIEW 2: MY BOOKING & E-TICKET LOOKUP
+         ================================================================ -->
+    <section id="view-lookup" class="section" hidden>
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Cek Status Booking &amp; Unduh E-Voucher Resmi</h2>
+            <p class="section-sub">Masukkan Kode Booking (contoh: <code>TRV-2026-0812</code>) atau alamat email pemesan untuk melihat progres pembayaran dan mencetak E-Voucher A4.</p>
+          </div>
+        </div>
+
+        <div class="panel-card" style="margin-bottom:20px;">
+          <form id="lookupForm" style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
+            <div class="field" style="flex:1; min-width:250px;">
+              <label for="lookupInput">Kode Booking atau Email Pemesan</label>
+              <input type="text" id="lookupInput" class="input" placeholder="TRV-2026-0812 atau email@contoh.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Cari Data Reservasi</button>
+          </form>
+          <div id="lookupQuickBtns" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; align-items:center;"></div>
+        </div>
+
+        <div id="lookupResultBox"></div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         VIEW 3: AGENCY ADMIN DASHBOARD (CRUD + PIPELINE + SETTINGS)
+         ================================================================ -->
+    <section id="view-admin" class="section" hidden>
+      <div class="container">
+        <!-- Admin PIN Gate -->
+        <div id="adminLockScreen" class="panel-card" style="max-width:480px; margin:28px auto; text-align:center;">
+          <div class="pillar-icon" style="margin:0 auto 12px; width:54px; height:54px; border-radius:16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h2 style="margin:0 0 6px; font-size:1.3rem;">Akses Panel Admin Agen Dilindungi PIN</h2>
+          <p style="margin:0 0 16px; font-size:0.88rem; color:var(--text-muted);">
+            Demi mencegah perubahan harga, kode promo, atau status pembayaran <strong>Lunas</strong> secara tidak sah oleh pengunjung, masukkan PIN Admin Anda.
+          </p>
+          <form id="adminUnlockForm" style="display:grid; gap:10px; text-align:left;">
+            <div class="field">
+              <label for="adminPinInput">Masukkan PIN Admin</label>
+              <input type="password" id="adminPinInput" class="input" inputmode="numeric" autocomplete="off" placeholder="Masukkan 4–12 karakter PIN..." required>
+            </div>
+            <div id="adminPinError" style="color:var(--danger); font-size:0.82rem; font-weight:600;" hidden></div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Buka Panel Admin Agen</button>
+          </form>
+          <div style="margin-top:14px; padding:10px 12px; border-radius:10px; background:var(--warning-soft); color:var(--warning); font-size:0.8rem;">
+            Mode Demo Lokal: PIN default adalah <code>123456</code>. <strong>Wajib ganti PIN ini</strong> di Pengaturan Agen / <code>data.js</code> sebelum meng-online-kan website!
+          </div>
+        </div>
+
+        <div id="adminContentWrap" hidden>
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Panel Admin Operasional Agen Travel</h2>
+            <p class="section-sub">Kelola transaksi booking pelanggan, kontrol kuota kursi otomatis, tambah/edit paket wisata, kode promo, hingga ekspor laporan Excel.</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline btn-sm" id="adminLockBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Kunci Admin
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="exportBookingsCsvBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Booking CSV
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="newPackageBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Paket Wisata
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid" id="adminKpiGrid"></div>
+
+        <!-- Mini Revenue Chart -->
+        <div class="panel-card" style="margin-bottom:22px;">
+          <h3 style="margin:0 0 12px; font-size:1rem;">Ringkasan Omzet per Paket Wisata</h3>
+          <div class="chart-bars" id="adminRevenueChart"></div>
+        </div>
+
+        <!-- Admin Subtabs -->
+        <div class="subtabs" role="tablist">
+          <button type="button" class="pill-btn active" data-admin-tab="bookings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+            Daftar Booking Pelanggan
+          </button>
+          <button type="button" class="pill-btn" data-admin-tab="packages">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Kelola Paket Wisata (CRUD)
+          </button>
+          <button type="button" class="pill-btn" data-admin-tab="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Promo &amp; Pengaturan Agen
+          </button>
+        </div>
+
+        <!-- Subtab 1: Bookings Pipeline -->
+        <div id="admin-tab-bookings">
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+            <select id="adminBookingStatusFilter" class="input" style="max-width:230px;">
+              <option value="ALL">Semua Status Booking</option>
+              <option value="Menunggu Pembayaran">Menunggu Pembayaran</option>
+              <option value="DP Terkonfirmasi">DP Terkonfirmasi</option>
+              <option value="Lunas">Lunas</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Dibatalkan">Dibatalkan</option>
+            </select>
+            <input type="search" id="adminBookingSearch" class="input" style="max-width:320px;" placeholder="Cari kode TRV, nama, paket, WA...">
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode &amp; Tanggal</th>
+                  <th>Pemesan</th>
+                  <th>Paket &amp; Keberangkatan</th>
+                  <th>Peserta</th>
+                  <th>Total / Dibayar</th>
+                  <th>Status</th>
+                  <th>Aksi Cepat</th>
+                </tr>
+              </thead>
+              <tbody id="adminBookingsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subtab 2: Packages CRUD -->
+        <div id="admin-tab-packages" hidden>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode</th>
+                  <th>Nama Paket Wisata</th>
+                  <th>Wilayah &amp; Kategori</th>
+                  <th>Durasi</th>
+                  <th>Harga Dewasa</th>
+                  <th>Jadwal &amp; Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="adminPackagesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subtab 3: Promos & Settings -->
+        <div id="admin-tab-settings" hidden>
+          <div class="detail-layout">
+            <div class="panel-card">
+              <h3 style="margin:0 0 12px; font-size:1.05rem;">Profil Biro Travel &amp; Rekening</h3>
+              <form id="agencySettingsForm" style="display:grid; gap:10px;">
+                <div class="field">
+                  <label for="setAgencyName">Nama Agen / Biro Wisata</label>
+                  <input type="text" id="setAgencyName" class="input" required>
+                </div>
+                <div class="field">
+                  <label for="setAgencyTagline">Tagline Agen</label>
+                  <input type="text" id="setAgencyTagline" class="input" required>
+                </div>
+                <div class="form-row-2">
+                  <div class="field">
+                    <label for="setWhatsapp">No. WhatsApp (628...)</label>
+                    <input type="text" id="setWhatsapp" class="input" required>
+                  </div>
+                  <div class="field">
+                    <label for="setEmail">Email Resmi</label>
+                    <input type="email" id="setEmail" class="input" required>
+                  </div>
+                </div>
+                <div class="form-row-2">
+                  <div class="field">
+                    <label for="setInstagram">Instagram</label>
+                    <input type="text" id="setInstagram" class="input">
+                  </div>
+                  <div class="field">
+                    <label for="setBankName">Nama Bank / Pembayaran</label>
+                    <input type="text" id="setBankName" class="input" required>
+                  </div>
+                </div>
+                <div class="form-row-2">
+                  <div class="field">
+                    <label for="setBankAccount">Nomor Rekening</label>
+                    <input type="text" id="setBankAccount" class="input" required>
+                  </div>
+                  <div class="field">
+                    <label for="setBankHolder">Atas Nama Rekening</label>
+                    <input type="text" id="setBankHolder" class="input" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="setAddress">Alamat Kantor</label>
+                  <input type="text" id="setAddress" class="input">
+                </div>
+                <div class="form-row-2">
+                  <div class="field">
+                    <label for="setQrisNote">Catatan QRIS / Pembayaran</label>
+                    <input type="text" id="setQrisNote" class="input">
+                  </div>
+                  <div class="field">
+                    <label for="setAdminPin">PIN Panel Admin (4–12 karakter)</label>
+                    <input type="text" id="setAdminPin" class="input" minlength="4" maxlength="12" required>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan Pengaturan Agen</button>
+              </form>
+            </div>
+
+            <div style="display:grid; gap:18px; align-content:start;">
+              <div class="panel-card">
+                <h3 style="margin:0 0 12px; font-size:1.05rem;">Kelola Kode Promo / Diskon</h3>
+                <form id="promoAddForm" style="display:grid; gap:10px; margin-bottom:14px;">
+                  <div class="form-row-2">
+                    <div class="field">
+                      <label for="promoCodeInput">Kode Promo</label>
+                      <input type="text" id="promoCodeInput" class="input" placeholder="LIBURAN2027" required>
+                    </div>
+                    <div class="field">
+                      <label for="promoTypeInput">Tipe Diskon</label>
+                      <select id="promoTypeInput" class="input">
+                        <option value="fixed">Nominal Tetap (Rp / $)</option>
+                        <option value="percent">Persentase (%)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row-3">
+                    <div class="field">
+                      <label for="promoValIdrInput">Nilai (Rp atau %)</label>
+                      <input type="number" id="promoValIdrInput" class="input" min="1" value="300000" required>
+                    </div>
+                    <div class="field">
+                      <label for="promoValUsdInput">Nilai ($ jika Tetap)</label>
+                      <input type="number" id="promoValUsdInput" class="input" min="1" value="20">
+                    </div>
+                    <div class="field">
+                      <label for="promoMinPaxInput">Min. Peserta</label>
+                      <input type="number" id="promoMinPaxInput" class="input" min="1" value="1" required>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="promoDescInput">Keterangan Singkat</label>
+                    <input type="text" id="promoDescInput" class="input" placeholder="Diskon liburan sekolah">
+                  </div>
+                  <button type="submit" class="btn btn-accent btn-sm">+ Tambah Kode Promo</button>
+                </form>
+                <div id="adminPromosList" style="display:grid; gap:8px;"></div>
+              </div>
+
+              <div class="panel-card">
+                <h3 style="margin:0 0 8px; font-size:1.05rem;">Backup, Restore &amp; Reset Database Lokal</h3>
+                <p style="margin:0 0 12px; font-size:0.85rem; color:var(--text-muted);">
+                  Semua paket, booking, promo, dan profil tersimpan di browser Anda. Lakukan ekspor JSON berkala agar aman dipindahkan antar perangkat.
+                </p>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-outline btn-sm" id="exportBackupBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Export Backup JSON
+                  </button>
+                  <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Import Restore JSON
+                    <input type="file" id="importBackupInput" accept="application/json" hidden>
+                  </label>
+                  <button type="button" class="btn btn-danger btn-sm" id="resetDemoDataBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    Reset Data Awal
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer no-print">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 style="margin:0 0 8px; color:#fff;" id="footerAgencyName">NusantaraVoyage Tour &amp; Travel</h3>
+          <p style="margin:0 0 10px; font-size:0.87rem;" id="footerAgencyAddress">Jl. Malioboro Raya No. 88, Yogyakarta &amp; Jakarta Selatan</p>
+          <p style="margin:0; font-size:0.82rem; color:#94a3b8;">Website siap pakai berbasis HTML5/CSS3/JS Offline-First — dapat langsung dijalankan lokal maupun di-deploy ke domain resmi biro perjalanan Anda.</p>
+        </div>
+        <div>
+          <h4 style="margin:0 0 10px; color:#fff; font-size:0.92rem;">Navigasi Cepat</h4>
+          <div style="display:grid; gap:6px; font-size:0.86rem;">
+            <a href="#catalog" onclick="window.scrollTo({top:0,behavior:'smooth'})">Katalog Paket Wisata</a>
+            <a href="#custom-quote">Penawaran Private &amp; Corporate</a>
+            <button type="button" class="btn btn-ghost btn-sm" style="justify-content:flex-start; padding:0; color:#5eead4;" onclick="document.querySelector('[data-view=lookup]').click()">Cek Status Booking &amp; E-Tiket</button>
+            <button type="button" class="btn btn-ghost btn-sm" style="justify-content:flex-start; padding:0; color:#5eead4;" onclick="document.querySelector('[data-view=admin]').click()">Panel Admin Agen</button>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin:0 0 10px; color:#fff; font-size:0.92rem;">Kontak &amp; Pembayaran Resmi</h4>
+          <p style="margin:0 0 6px; font-size:0.85rem;" id="footerBankInfo">Bank Mandiri / BCA • 137-00-8899221-4</p>
+          <p style="margin:0 0 6px; font-size:0.85rem;" id="footerIgInfo">Instagram: @nusantaravoyage.id</p>
+          <p style="margin:0; font-size:0.82rem; color:#5eead4;">Support 24/7 Tour Coordinator</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 NusantaraVoyage Pro — Ddev Studio Commercial Web Travel Edition</span>
+        <span>Zero-Config • Print E-Voucher A4 • Offline &amp; Static Hosting Ready</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       MODAL 1: PACKAGE DETAIL & DAY-BY-DAY ITINERARY
+       ================================================================ -->
+  <div class="modal-backdrop" id="packageDetailModal" hidden>
+    <div class="modal-dialog wide" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="modal-head">
+        <div>
+          <span class="badge badge-primary" id="detailCodeBadge">PKG-01</span>
+          <h2 id="detailTitle" style="margin-top:4px;">Detail Paket Wisata</h2>
+        </div>
+        <button type="button" class="modal-close" data-close-modal="packageDetailModal" aria-label="Tutup Detail">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="filter-pills" id="detailTabs" style="margin-bottom:16px;">
+          <button type="button" class="pill-btn active" data-dtab="overview">Ringkasan &amp; Jadwal</button>
+          <button type="button" class="pill-btn" data-dtab="itinerary">Itinerary Hari ke Hari</button>
+          <button type="button" class="pill-btn" data-dtab="facilities">Include &amp; Exclude</button>
+        </div>
+        <div id="detailBody"></div>
+      </div>
+      <div class="modal-foot">
+        <div>
+          <span style="font-size:0.78rem; color:var(--text-soft); display:block;">Harga mulai per peserta dewasa</span>
+          <strong style="font-size:1.25rem; color:var(--primary);" id="detailFootPrice">Rp 3.450.000</strong>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline" data-close-modal="packageDetailModal">Tutup</button>
+          <button type="button" class="btn btn-accent" id="detailBookBtn">Lanjut Pesan Paket Ini →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       MODAL 2: LIVE BOOKING & DYNAMIC PRICE CALCULATOR
+       ================================================================ -->
+  <div class="modal-backdrop" id="bookingModal" hidden>
+    <div class="modal-dialog wide" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+      <div class="modal-head">
+        <h2 id="bookingModalTitle">Formulir Reservasi &amp; Kalkulator Biaya Wisata</h2>
+        <button type="button" class="modal-close" data-close-modal="bookingModal" aria-label="Tutup Form Booking">✕</button>
+      </div>
+      <form id="bookingForm" class="modal-body">
+        <div class="booking-layout">
+          <div style="display:grid; gap:14px;">
+            <div class="field">
+              <label for="bkPackageId">Pilih Paket Wisata</label>
+              <select id="bkPackageId" class="input" required></select>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field">
+                <label for="bkDepartureId">Tanggal Keberangkatan</label>
+                <select id="bkDepartureId" class="input" required></select>
+              </div>
+              <div class="field">
+                <label for="bkHotelTier">Kelas Akomodasi / Hotel</label>
+                <select id="bkHotelTier" class="input" required></select>
+              </div>
+            </div>
+
+            <div class="form-row-3">
+              <div class="field">
+                <label for="bkAdults">Peserta Dewasa</label>
+                <input type="number" id="bkAdults" class="input" min="1" max="50" value="2" required>
+              </div>
+              <div class="field">
+                <label for="bkChildren">Anak (2–11 Th)</label>
+                <input type="number" id="bkChildren" class="input" min="0" max="20" value="0" required>
+              </div>
+              <div class="field">
+                <label for="bkSingleRooms">Kamar Single Supp.</label>
+                <input type="number" id="bkSingleRooms" class="input" min="0" max="20" value="0" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Layanan Tambahan Opsional (Add-On)</label>
+              <div id="bkAddonsList" style="display:grid; gap:8px;"></div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field">
+                <label for="bkCustName">Nama Lengkap Pemesan</label>
+                <input type="text" id="bkCustName" class="input" required placeholder="Sesuai KTP / Paspor">
+              </div>
+              <div class="field">
+                <label for="bkCustPhone">Nomor WhatsApp Aktif</label>
+                <input type="tel" id="bkCustPhone" class="input" required placeholder="0812xxxxxxxx">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field">
+                <label for="bkCustEmail">Email Penerima E-Voucher</label>
+                <input type="email" id="bkCustEmail" class="input" required placeholder="nama@email.com">
+              </div>
+              <div class="field">
+                <label for="bkPaymentPlan">Skema Pembayaran</label>
+                <select id="bkPaymentPlan" class="input">
+                  <option value="dp">Booking Seat via DP 30% Dahulu</option>
+                  <option value="full">Bayar Penuh (Lunas 100%)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="bkNotes">Catatan Khusus (Halal Food, Alergi, Request Kamar)</label>
+              <textarea id="bkNotes" class="input" rows="2" placeholder="Opsional: request twin bed, kursi depan, atau makanan vegetarian..."></textarea>
+            </div>
+          </div>
+
+          <div style="display:grid; gap:14px; align-content:start;">
+            <div class="summary-box">
+              <h3 style="margin:0 0 12px; font-size:1rem;">Rincian Biaya Real-Time</h3>
+              <div id="bkPriceBreakdown"></div>
+
+              <div style="display:flex; gap:8px; margin-top:12px;">
+                <input type="text" id="bkPromoCode" class="input" placeholder="Kode promo (misal: LIBURSERU)">
+                <button type="button" class="btn btn-outline btn-sm" id="bkApplyPromoBtn">Pakai</button>
+              </div>
+              <div id="bkPromoFeedback" style="font-size:0.78rem; margin-top:5px;"></div>
+
+              <div class="summary-total">
+                <span>Total Paket</span>
+                <span id="bkTotalDue">Rp 0</span>
+              </div>
+              <div class="summary-line" style="margin-top:8px; font-weight:700; color:var(--accent);">
+                <span>Nominal Bayar Sekarang:</span>
+                <span id="bkPayNowLabel">Rp 0</span>
+              </div>
+              <div class="summary-line" style="color:var(--text-soft);">
+                <span>Sisa Pelunasan (H-7):</span>
+                <span id="bkRemainingLabel">Rp 0</span>
+              </div>
+            </div>
+
+            <div class="summary-box" style="font-size:0.83rem;">
+              <strong style="display:block; margin-bottom:4px;">Rekening &amp; Konfirmasi Pembayaran:</strong>
+              <span id="bkBankInfo">Bank Mandiri / BCA • 137-00-8899221-4</span>
+              <p style="margin:8px 0 0; color:var(--text-muted);">
+                Setelah menekan tombol terbitkan reservasi, Anda langsung menerima <strong>E-Voucher A4 resmi</strong> dan dapat mengirim detailnya ke WhatsApp agen dalam 1 klik.
+              </p>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:13px;">Terbitkan Booking &amp; E-Voucher Sekarang →</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       MODAL 3: PRINTABLE A4 E-VOUCHER & OFFICIAL INVOICE
+       ================================================================ -->
+  <div class="modal-backdrop" id="voucherModal" hidden>
+    <div class="modal-dialog wide" role="dialog" aria-modal="true" aria-labelledby="voucherModalTitle">
+      <div class="modal-head no-print">
+        <h2 id="voucherModalTitle">E-Voucher Perjalanan &amp; Invoice Resmi</h2>
+        <button type="button" class="modal-close" data-close-modal="voucherModal" aria-label="Tutup E-Voucher">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="voucher-sheet" id="voucherSheet"></div>
+      </div>
+      <div class="modal-foot no-print">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline btn-sm" id="voucherDownloadIcsBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Download Kalender (.ics)
+          </button>
+          <button type="button" class="btn btn-success btn-sm" id="voucherSendWaBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            Kirim ke WhatsApp Agen
+          </button>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline" data-close-modal="voucherModal">Tutup</button>
+          <button type="button" class="btn btn-primary" id="voucherPrintBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+            Cetak / Simpan PDF (A4)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       MODAL 4: ADMIN PACKAGE CRUD EDITOR
+       ================================================================ -->
+  <div class="modal-backdrop" id="packageEditorModal" hidden>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="pkgEditorTitle">
+      <div class="modal-head">
+        <h2 id="pkgEditorTitle">Tambah / Edit Paket Wisata</h2>
+        <button type="button" class="modal-close" data-close-modal="packageEditorModal" aria-label="Tutup Editor Paket">✕</button>
+      </div>
+      <form id="pkgEditForm" class="modal-body" style="display:grid; gap:12px;">
+        <input type="hidden" id="editPkgId">
+        <div class="form-row-3">
+          <div class="field">
+            <label for="editPkgCode">Kode Paket</label>
+            <input type="text" id="editPkgCode" class="input" required placeholder="PKG-JOG-09">
+          </div>
+          <div class="field">
+            <label for="editPkgRegion">Wilayah</label>
+            <select id="editPkgRegion" class="input">
+              <option value="Domestik">Domestik</option>
+              <option value="Internasional">Internasional</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="editPkgCategory">Kategori</label>
+            <select id="editPkgCategory" class="input">
+              <option value="Open Trip">Open Trip</option>
+              <option value="Private Tour">Private Tour</option>
+              <option value="Honeymoon">Honeymoon</option>
+              <option value="Halal Tour">Halal Tour</option>
+              <option value="Corporate">Corporate</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="editPkgTitle">Nama Paket Wisata (ID / Umum)</label>
+            <input type="text" id="editPkgTitle" class="input" required placeholder="Yogyakarta Heritage & Borobudur Sunrise">
+          </div>
+          <div class="field">
+            <label for="editPkgDest">Kota / Negara Destinasi</label>
+            <input type="text" id="editPkgDest" class="input" required placeholder="Yogyakarta & Magelang">
+          </div>
+        </div>
+
+        <div class="form-row-3">
+          <div class="field">
+            <label for="editPkgDays">Durasi (Hari)</label>
+            <input type="number" id="editPkgDays" class="input" min="1" max="30" value="3" required>
+          </div>
+          <div class="field">
+            <label for="editPkgPriceIdr">Harga Dewasa (Rp)</label>
+            <input type="number" id="editPkgPriceIdr" class="input" min="100000" step="50000" value="2450000" required>
+          </div>
+          <div class="field">
+            <label for="editPkgPriceUsd">Harga Dewasa ($ USD)</label>
+            <input type="number" id="editPkgPriceUsd" class="input" min="10" value="165" required>
+          </div>
+        </div>
+
+        <div class="form-row-3">
+          <div class="field">
+            <label for="editPkgBadge">Label Badge</label>
+            <input type="text" id="editPkgBadge" class="input" placeholder="Paket Baru / Best Seller">
+          </div>
+          <div class="field">
+            <label for="editPkgArt">Tema Ilustrasi Cover</label>
+            <select id="editPkgArt" class="input">
+              <option value="bali">Pantai &amp; Sunset Pura (Bali)</option>
+              <option value="bajo">Laut Biru &amp; Kapal Phinisi (Bajo)</option>
+              <option value="bromo">Pegunungan Sunrise &amp; Jeep (Bromo)</option>
+              <option value="raja-ampat">Laguna Karst Tropis (Raja Ampat)</option>
+              <option value="japan">Gunung Salju &amp; Sakura (Jepang)</option>
+              <option value="korea">Istana Klasik &amp; Kota Malam (Korea)</option>
+              <option value="turkey">Lembah &amp; Balon Udara (Turki)</option>
+              <option value="singapore">Skyline Kota Modern (Singapura)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="editPkgQuota">Kuota Kursi / Jadwal</label>
+            <input type="number" id="editPkgQuota" class="input" min="2" max="100" value="20" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="editPkgDepartureDate">Jadwal Keberangkatan Utama (Format YYYY-MM-DD)</label>
+          <input type="date" id="editPkgDepartureDate" class="input" required>
+        </div>
+
+        <div class="field">
+          <label for="editPkgSummary">Deskripsi Singkat Paket</label>
+          <textarea id="editPkgSummary" class="input" rows="2" required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="editPkgItineraryText">Ringkasan Itinerary (1 baris per hari, format: <code>Judul Hari | Aktivitas &amp; Destinasi</code>)</label>
+          <textarea id="editPkgItineraryText" class="input" rows="4" required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="editPkgIncludesText">Fasilitas Termasuk (pisahkan dengan baris baru)</label>
+          <textarea id="editPkgIncludesText" class="input" rows="3" required></textarea>
+        </div>
+
+        <div class="modal-foot" style="margin:8px -22px -22px;">
+          <button type="button" class="btn btn-outline" data-close-modal="packageEditorModal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Paket Wisata</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container no-print" id="toastContainer" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

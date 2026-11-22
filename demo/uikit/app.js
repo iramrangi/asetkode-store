@@ -130,7 +130,7 @@
   <div class="ui-nav-actions">
     <button type="button" class="ui-btn ui-btn-outline ui-btn-sm">Masuk</button>
     <button type="button" class="ui-btn ui-btn-primary ui-btn-sm" data-action="add-nav-cart">
-      🛒 Keranjang <span class="ui-pill" data-nav-count>2</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg> Keranjang <span class="ui-pill" data-nav-count>2</span>
     </button>
   </div>
 </nav>`,
@@ -168,7 +168,7 @@
   <div class="ui-mega-panel" data-mega-panel>
     <div class="ui-mega-cols">
       <a href="#audio" class="ui-mega-item">
-        <div class="ui-mega-ico">🎧</div>
+        <div class="ui-mega-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-3px;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
         <div><strong>Audio &amp; Headset</strong><span>ANC Wireless, IEM Studio, Mic</span></div>
       </a>
       <a href="#keyboard" class="ui-mega-item">
@@ -180,7 +180,7 @@
         <div><strong>Smartwatch &amp; Fitness</strong><span>AMOLED GPS, Strap Kulit</span></div>
       </a>
       <a href="#saas" class="ui-mega-item">
-        <div class="ui-mega-ico">⚡</div>
+        <div class="ui-mega-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div><strong>Aksesoris Setup Meja</strong><span>Monitor Arm, USB-C Hub, Dock</span></div>
       </a>
     </div>
@@ -222,7 +222,7 @@
       html: `<div class="ui-breadcrumb-box">
   <nav aria-label="Breadcrumb Toko">
     <ol class="ui-breadcrumb">
-      <li><a href="#home">🏠 Beranda</a></li>
+      <li><a href="#home"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a></li>
       <li class="sep">/</li>
       <li><a href="#elektronik">Elektronik</a></li>
       <li class="sep">/</li>
@@ -269,13 +269,13 @@
     <span class="ui-badge ui-badge-brand">Mobile PWA</span>
   </div>
   <nav class="ui-bottom-nav" aria-label="Navigasi Mobile">
-    <button type="button" class="ui-bottom-tab active" data-tab="Beranda Toko"><span>🏠</span><span>Beranda</span></button>
-    <button type="button" class="ui-bottom-tab" data-tab="Kategori Produk"><span>🧭</span><span>Kategori</span></button>
-    <button type="button" class="ui-bottom-tab" data-tab="Flash Sale"><span>⚡</span><span>Promo</span></button>
+    <button type="button" class="ui-bottom-tab active" data-tab="Beranda Toko"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>Beranda</span></button>
+    <button type="button" class="ui-bottom-tab" data-tab="Kategori Produk"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><span>Kategori</span></button>
+    <button type="button" class="ui-bottom-tab" data-tab="Flash Sale"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span>Promo</span></button>
     <button type="button" class="ui-bottom-tab" data-tab="Keranjang Belanja">
-      <span>🛒</span><span>Keranjang</span><span class="ui-bottom-badge">3</span>
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></span><span>Keranjang</span><span class="ui-bottom-badge">3</span>
     </button>
-    <button type="button" class="ui-bottom-tab" data-tab="Akun Saya"><span>👤</span><span>Akun</span></button>
+    <button type="button" class="ui-bottom-tab" data-tab="Akun Saya"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span>Akun</span></button>
   </nav>
 </div>`,
       css: `.ui-bottom-nav { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--surface); border-top: 1px solid var(--border); padding: 6px 4px; }
@@ -304,7 +304,7 @@
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
     <span class="ui-badge" style="background:rgba(255,255,255,0.22);color:#fff;">PROMO GAJIAN</span>
     <span style="font-size:0.86rem;font-weight:600;">Diskon ekstra 25% semua paket SaaS &amp; Toko Online hari ini!</span>
-    <button type="button" class="ui-promo-code" data-copy-promo="HEMAT25">HEMAT25 📋</button>
+    <button type="button" class="ui-promo-code" data-copy-promo="HEMAT25">HEMAT25 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></button>
   </div>
   <button type="button" class="ui-btn ui-btn-sm" style="background:rgba(0,0,0,0.22);color:#fff;" data-dismiss-promo>Tutup ✕</button>
 </div>`,
@@ -336,10 +336,10 @@
       <strong class="sb-text" style="font-size:0.86rem;">KasirCloud</strong>
       <button type="button" class="ui-btn ui-btn-outline ui-btn-sm" data-sb-toggle title="Toggle Sidebar">⇄</button>
     </div>
-    <button type="button" class="ui-sb-link active" data-sb-page="Ringkasan Penjualan"><span>📊</span><span class="sb-text">Dashboard</span></button>
-    <button type="button" class="ui-sb-link" data-sb-page="Manajemen Produk"><span>📦</span><span class="sb-text">Produk</span></button>
-    <button type="button" class="ui-sb-link" data-sb-page="Riwayat Transaksi"><span>💳</span><span class="sb-text">Transaksi</span></button>
-    <button type="button" class="ui-sb-link" data-sb-page="Pengaturan Tim"><span>⚙️</span><span class="sb-text">Pengaturan</span></button>
+    <button type="button" class="ui-sb-link active" data-sb-page="Ringkasan Penjualan"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="sb-text">Dashboard</span></button>
+    <button type="button" class="ui-sb-link" data-sb-page="Manajemen Produk"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span><span class="sb-text">Produk</span></button>
+    <button type="button" class="ui-sb-link" data-sb-page="Riwayat Transaksi"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span><span class="sb-text">Transaksi</span></button>
+    <button type="button" class="ui-sb-link" data-sb-page="Pengaturan Tim"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span><span class="sb-text">Pengaturan</span></button>
   </aside>
   <div class="ui-sb-main">
     <span class="ui-badge ui-badge-brand">Halaman Aktif</span>
@@ -379,7 +379,7 @@
       tags: 'hero split ecommerce landing page cta',
       html: `<section class="ui-hero-split">
   <div>
-    <span class="ui-badge ui-badge-brand">✨ Koleksi Desk Setup 2026</span>
+    <span class="ui-badge ui-badge-brand">Koleksi Desk Setup 2026</span>
     <h2 class="ui-hero-title">Tingkatkan Produktivitas Kerja dengan Gear Ergonomis</h2>
     <p class="ui-muted">Garansi resmi 2 tahun, pengiriman instan hari yang sama, dan cicilan 0% via QRIS &amp; Virtual Account.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;">
@@ -416,7 +416,7 @@
       subtitle: 'Hero SaaS berpusat dengan formulir early-access interaktif & konfirmasi instan',
       tags: 'saas hero waitlist email signup landing',
       html: `<section class="ui-hero-centered">
-  <span class="ui-badge ui-badge-success">🚀 Early Access v2.0 Dibuka</span>
+  <span class="ui-badge ui-badge-success">Early Access v2.0 Dibuka</span>
   <h2 class="ui-hero-title" style="max-width:620px;margin:12px auto 8px;">Otomatiskan Pembukuan &amp; Laporan Pajak Bisnis dalam 5 Menit</h2>
   <p class="ui-muted" style="max-width:520px;margin:0 auto;">Hubungkan mutasi bank, QRIS, dan marketplace secara otomatis ke satu dashboard real-time.</p>
   <form class="ui-waitlist-form" data-waitlist-form>
@@ -448,7 +448,7 @@
       tags: 'flash sale countdown timer banner promo',
       html: `<div class="ui-flash-banner">
   <div>
-    <span class="ui-badge" style="background:#ef4444;color:#fff;">⚡ FLASH SALE 12.12</span>
+    <span class="ui-badge" style="background:#ef4444;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> FLASH SALE 12.12</span>
     <h3 style="margin-top:8px;font-size:1.25rem;">Diskon Hingga 60% Aksesoris Gaming &amp; Kerja</h3>
     <p style="font-size:0.82rem;opacity:0.82;margin-top:4px;">Berakhir sebelum tengah malam. Kuota voucher terbatas!</p>
   </div>
@@ -696,12 +696,12 @@
         <button type="button" data-qty-plus aria-label="Tambah">+</button>
       </div>
       <strong style="min-width:110px;text-align:right;" data-line-total>Rp 649.000</strong>
-      <button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-remove-row>🗑️</button>
+      <button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-remove-row><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
     </div>
   </div>
   <div class="ui-cart-row" data-cart-item data-price="489000">
     <div style="display:flex;align-items:center;gap:12px;">
-      <div class="ui-cart-thumb">🎧</div>
+      <div class="ui-cart-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-3px;"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
       <div>
         <strong style="font-size:0.9rem;">Studio ANC Wireless Pro</strong>
         <div class="ui-muted" style="font-size:0.76rem;">Varian: Matte Black • Garansi 2 Thn</div>
@@ -714,7 +714,7 @@
         <button type="button" data-qty-plus aria-label="Tambah">+</button>
       </div>
       <strong style="min-width:110px;text-align:right;" data-line-total>Rp 978.000</strong>
-      <button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-remove-row>🗑️</button>
+      <button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-remove-row><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
     </div>
   </div>
 </div>`,
@@ -1194,7 +1194,7 @@
         <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:4px;">Kata Sandi</label>
         <div style="display:flex;gap:6px;">
           <input type="password" class="ui-input" value="rahasia123" data-pw-input required />
-          <button type="button" class="ui-btn ui-btn-outline ui-btn-sm" data-pw-toggle>👁</button>
+          <button type="button" class="ui-btn ui-btn-outline ui-btn-sm" data-pw-toggle><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
       </div>
       <button type="submit" class="ui-btn ui-btn-primary ui-btn-block" data-auth-submit>Masuk ke Akun</button>
@@ -1418,13 +1418,13 @@
       html: `<div>
   <label class="ui-dropzone" data-dropzone style="display:block;">
     <input type="file" hidden multiple data-file-input />
-    <div style="font-size:1.6rem;">☁️</div>
+    <div style="font-size:1.6rem;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;color:var(--brand);"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg></div>
     <strong style="display:block;margin-top:4px;">Klik atau seret file ke area ini</strong>
     <div class="ui-muted" style="font-size:0.78rem;">Mendukung PNG, JPG, PDF, atau ZIP (Maks. 10 MB)</div>
   </label>
   <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;" data-file-list>
     <div class="ui-surface" style="padding:8px 12px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
-      <span>📄 bukti-transfer-bca.png <span class="ui-muted">(420 KB)</span></span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> bukti-transfer-bca.png <span class="ui-muted">(420 KB)</span></span>
       <span class="ui-badge ui-badge-success">100% Terunggah</span>
     </div>
   </div>
@@ -1441,7 +1441,7 @@
             const row = document.createElement('div');
             row.className = 'ui-surface';
             row.style.cssText = 'padding:8px 12px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;';
-            row.innerHTML = `<span>📄 ${f.name} <span class="ui-muted">(${kb} KB)</span></span><span class="ui-badge ui-badge-success">Siap ✓</span>`;
+            row.innerHTML = `<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> ${f.name} <span class="ui-muted">(${kb} KB)</span></span><span class="ui-badge ui-badge-success">Siap ✓</span>`;
             list.appendChild(row);
           });
         };
@@ -1731,7 +1731,7 @@
     <strong>Simulasi Modal Konfirmasi Hapus</strong>
     <div class="ui-muted" style="font-size:0.78rem;">Klik tombol di samping untuk membuka dialog modal interaktif dengan backdrop.</div>
   </div>
-  <button type="button" class="ui-btn ui-btn-danger" data-open-modal>🗑️ Hapus Produk Demo</button>
+  <button type="button" class="ui-btn ui-btn-danger" data-open-modal><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Hapus Produk Demo</button>
 
   <div class="ui-modal-backdrop" hidden data-modal-backdrop>
     <div class="ui-modal-dialog" role="dialog" aria-modal="true">
@@ -1822,7 +1822,7 @@
       tags: 'cookie privacy consent banner gdpr',
       html: `<div class="ui-surface" style="padding:18px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
   <div style="flex:1;min-width:240px;">
-    <strong>🍪 Privasi &amp; Cookie Situs</strong>
+    <strong><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg> Privasi &amp; Cookie Situs</strong>
     <p class="ui-muted" style="margin-top:4px;">Kami menggunakan cookie esensial untuk keranjang belanja serta analitik anonim guna meningkatkan layanan.</p>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -1908,7 +1908,7 @@
       tags: 'skeleton loading shimmer placeholder card',
       html: `<div>
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-    <button type="button" class="ui-btn ui-btn-outline ui-btn-sm" data-skel-toggle>🔄 Toggle Mode: Skeleton / Loaded</button>
+    <button type="button" class="ui-btn ui-btn-outline ui-btn-sm" data-skel-toggle><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Toggle Mode: Skeleton / Loaded</button>
     <span class="ui-muted" style="font-size:0.78rem;" data-skel-state>Status: Menampilkan Shimmer Skeleton + Konten Terisi</span>
   </div>
   <div class="ui-grid-2">

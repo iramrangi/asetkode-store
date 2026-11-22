@@ -70,6 +70,24 @@ function idrToCleanUsdNum(idrNum) {
   return Math.max(5, Math.round(n / 16000));
 }
 
+const CATEGORY_EN_MAP = {
+  'Aplikasi': 'Web App',
+  'Source Code': 'Source Code',
+  'Web App': 'Web App',
+  'JavaScript': 'JavaScript',
+  'Template': 'Template',
+  'Python': 'Python',
+  'PHP': 'PHP',
+  'Desain Web': 'UI Design',
+  'Program': 'Software',
+  'Blogger': 'Blogger XML'
+};
+
+function localizeCategoryTag(cat, isEn) {
+  if (!isEn) return cat;
+  return CATEGORY_EN_MAP[cat] || cat;
+}
+
 function getProdDisplay(p) {
   const isEn = currentLocale === 'en';
   const idrNum = parsePriceNum(p.price);
@@ -1251,7 +1269,7 @@ window.__asetkodeBloggerCallback = function (data) {
         ? descEl.textContent.trim().slice(0, 175)
         : 'Source code dan karya digital siap pakai lengkap dengan dokumentasi instalasi dan database.';
 
-      const explicitDescEn = meta ? meta.getAttribute('data-desc-en') || '' : '';
+      const explicitDescEn = metaEl ? metaEl.getAttribute('data-desc-en') || '' : '';
       const featuresEn = Array.from(doc.querySelectorAll('.ddev-prose-en ul li')).map((li) => li.textContent.trim()).filter(Boolean);
       const deliverablesEn = Array.from(doc.querySelectorAll('.ddev-prose-en ol li')).map((li) => li.textContent.trim()).filter(Boolean);
 
@@ -1328,7 +1346,9 @@ function syncFromBloggerCloud() {
   script.onerror = () => {
     const statusEl = document.getElementById('catalogStatusText');
     if (statusEl) {
-      statusEl.textContent = `Katalog Siap (${productsState.length} produk unggulan siap diunduh)`;
+      statusEl.textContent = currentLocale === 'en'
+        ? `Catalog Ready (${productsState.length} curated apps ready to download)`
+        : `Katalog Siap (${productsState.length} produk unggulan siap diunduh)`;
     }
   };
   document.body.appendChild(script);
@@ -1409,7 +1429,7 @@ function renderProductsGrid() {
             <div class="thumb-tags">
               ${p.categories
                 .slice(0, 1)
-                .map((cat) => `<span class="thumb-tag">${cat}</span>`)
+                .map((cat) => `<span class="thumb-tag">${localizeCategoryTag(cat, disp.isEn)}</span>`)
                 .join('')}
             </div>
             <div class="card-hover-overlay">
@@ -1524,46 +1544,47 @@ function buildInteractiveDemoHTML(prod) {
   }
 
   if (type === 'pos') {
+    const isEnPos = disp.isEn;
     return `
       <div style="font-family:'Plus Jakarta Sans',sans-serif; background:#fafafa; min-height:540px; color:#09090b;">
         <div style="background:#09090b; color:#fff; padding:14px 22px; display:flex; justify-content:space-between; align-items:center;">
           <div style="display:flex; align-items:center; gap:10px;">
-            <span style="background:#ffffff; color:#09090b; padding:4px 10px; border-radius:6px; font-weight:800; font-size:0.76rem; font-family:'JetBrains Mono',monospace;">POS KASIR PRO v2.4</span>
-            <span style="font-size:0.82rem; color:#a1a1aa;">Cabang Utama • Kasir: Admin Demo</span>
+            <span style="background:#ffffff; color:#09090b; padding:4px 10px; border-radius:6px; font-weight:800; font-size:0.76rem; font-family:'JetBrains Mono',monospace;">POS CASHIER PRO v2.4</span>
+            <span style="font-size:0.82rem; color:#a1a1aa;">${isEnPos ? 'Main Branch • Staff: Admin Demo' : 'Cabang Utama • Kasir: Admin Demo'}</span>
           </div>
-          <span style="font-size:0.74rem; background:#27272a; color:#fafafa; padding:4px 10px; border-radius:99px; font-weight:700;">● Printer Thermal Ready</span>
+          <span style="font-size:0.74rem; background:#27272a; color:#fafafa; padding:4px 10px; border-radius:99px; font-weight:700;">● Thermal Printer Ready</span>
         </div>
 
         <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:18px; padding:20px;">
           <div>
             <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-              <strong style="font-size:0.92rem;">Klik Menu untuk Tambah ke Struk Kasir:</strong>
-              <span style="font-size:0.74rem; color:#71717a;">Simulasi Interaktif Real-Time</span>
+              <strong style="font-size:0.92rem;">${isEnPos ? 'Click Menu Items to Add to Receipt:' : 'Klik Menu untuk Tambah ke Struk Kasir:'}</strong>
+              <span style="font-size:0.74rem; color:#71717a;">${isEnPos ? 'Real-Time Interactive Preview' : 'Simulasi Interaktif Real-Time'}</span>
             </div>
             <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:10px;">
-              <button type="button" class="pos-sim-item" data-name="Kopi Susu Aren" data-price="18000" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
-                <div style="font-weight:700; font-size:0.84rem; color:#09090b;">Kopi Susu Aren</div>
-                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 18.000</div>
+              <button type="button" class="pos-sim-item" data-name="Iced Palm Latte" data-price="18000" data-usd="3" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
+                <div style="font-weight:700; font-size:0.84rem; color:#09090b;">${isEnPos ? 'Iced Palm Latte' : 'Kopi Susu Aren'}</div>
+                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnPos ? '$3.00' : 'Rp 18.000'}</div>
               </button>
-              <button type="button" class="pos-sim-item" data-name="Croissant Butter" data-price="24000" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
-                <div style="font-weight:700; font-size:0.84rem; color:#09090b;">Croissant Butter</div>
-                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 24.000</div>
+              <button type="button" class="pos-sim-item" data-name="Butter Croissant" data-price="24000" data-usd="4" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
+                <div style="font-weight:700; font-size:0.84rem; color:#09090b;">${isEnPos ? 'Butter Croissant' : 'Croissant Butter'}</div>
+                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnPos ? '$4.00' : 'Rp 24.000'}</div>
               </button>
-              <button type="button" class="pos-sim-item" data-name="Matcha Latte Ice" data-price="22000" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
+              <button type="button" class="pos-sim-item" data-name="Matcha Latte Ice" data-price="22000" data-usd="4" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
                 <div style="font-weight:700; font-size:0.84rem; color:#09090b;">Matcha Latte Ice</div>
-                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 22.000</div>
+                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnPos ? '$4.00' : 'Rp 22.000'}</div>
               </button>
-              <button type="button" class="pos-sim-item" data-name="Beef Burger Deluxe" data-price="35000" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
+              <button type="button" class="pos-sim-item" data-name="Beef Burger Deluxe" data-price="35000" data-usd="6" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
                 <div style="font-weight:700; font-size:0.84rem; color:#09090b;">Beef Burger Deluxe</div>
-                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 35.000</div>
+                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnPos ? '$6.00' : 'Rp 35.000'}</div>
               </button>
-              <button type="button" class="pos-sim-item" data-name="French Fries Crispy" data-price="16000" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
+              <button type="button" class="pos-sim-item" data-name="French Fries Crispy" data-price="16000" data-usd="3" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
                 <div style="font-weight:700; font-size:0.84rem; color:#09090b;">French Fries Crispy</div>
-                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 16.000</div>
+                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnPos ? '$3.00' : 'Rp 16.000'}</div>
               </button>
-              <button type="button" class="pos-sim-item" data-name="Mineral Water 600ml" data-price="8000" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
+              <button type="button" class="pos-sim-item" data-name="Mineral Water" data-price="8000" data-usd="1" style="background:#fff; border:1px solid #e4e4e7; border-radius:10px; padding:12px; text-align:left; cursor:pointer;">
                 <div style="font-weight:700; font-size:0.84rem; color:#09090b;">Mineral Water</div>
-                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 8.000</div>
+                <div style="color:#52525b; font-weight:800; font-size:0.8rem; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnPos ? '$1.00' : 'Rp 8.000'}</div>
               </button>
             </div>
           </div>
@@ -1571,27 +1592,27 @@ function buildInteractiveDemoHTML(prod) {
           <div style="background:#fff; border:1px solid #e4e4e7; border-radius:12px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
             <div>
               <div style="font-weight:800; font-size:0.9rem; padding-bottom:10px; border-bottom:1px dashed #d4d4d8; display:flex; justify-content:space-between;">
-                <span>Struk Transaksi #INV-8092</span>
+                <span>${isEnPos ? 'Receipt #INV-8092' : 'Struk Transaksi #INV-8092'}</span>
                 <button type="button" id="posResetBtn" style="font-size:0.72rem; color:#52525b; text-decoration:underline; background:none; border:none; cursor:pointer; font-weight:700;">Reset</button>
               </div>
               <div id="posReceiptList" style="margin:12px 0; max-height:210px; overflow-y:auto; font-size:0.82rem;">
                 <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f4f4f5;">
-                  <span>1x Kopi Susu Aren</span>
-                  <strong>Rp 18.000</strong>
+                  <span>1x ${isEnPos ? 'Iced Palm Latte' : 'Kopi Susu Aren'}</span>
+                  <strong>${isEnPos ? '$3.00' : 'Rp 18.000'}</strong>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f4f4f5;">
-                  <span>1x Croissant Butter</span>
-                  <strong>Rp 24.000</strong>
+                  <span>1x ${isEnPos ? 'Butter Croissant' : 'Croissant Butter'}</span>
+                  <strong>${isEnPos ? '$4.00' : 'Rp 24.000'}</strong>
                 </div>
               </div>
             </div>
             <div style="border-top:2px solid #09090b; padding-top:12px;">
               <div style="display:flex; justify-content:space-between; font-size:0.98rem; font-weight:800; margin-bottom:12px; font-family:'JetBrains Mono',monospace;">
-                <span>Total Tagihan:</span>
-                <span id="posTotalVal">Rp 42.000</span>
+                <span>${isEnPos ? 'Total Bill:' : 'Total Tagihan:'}</span>
+                <span id="posTotalVal">${isEnPos ? '$7.00' : 'Rp 42.000'}</span>
               </div>
               <button type="button" id="posPrintBtn" style="width:100%; background:#09090b; color:#fff; border:none; padding:11px; border-radius:8px; font-weight:800; cursor:pointer;">
-                Bayar QRIS &amp; Cetak Struk Thermal
+                ${isEnPos ? 'Checkout &amp; Print Thermal Receipt' : 'Bayar QRIS &amp; Cetak Struk Thermal'}
               </button>
             </div>
           </div>
@@ -1601,48 +1622,49 @@ function buildInteractiveDemoHTML(prod) {
   }
 
   if (type === 'dashboard' || type === 'ecom') {
+    const isEnDash = disp.isEn;
     return `
       <div style="font-family:'Plus Jakarta Sans',sans-serif; background:#09090b; min-height:540px; color:#fafafa; padding:22px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid #27272a;">
           <div>
             <span style="background:#27272a; color:#fafafa; padding:4px 10px; border-radius:6px; font-size:0.72rem; font-weight:800; font-family:'JetBrains Mono',monospace;">LIVE INTERACTIVE DASHBOARD</span>
-            <h3 style="font-size:1.12rem; font-weight:800; margin-top:6px;">${prod.title}</h3>
+            <h3 style="font-size:1.12rem; font-weight:800; margin-top:6px;">${disp.title}</h3>
           </div>
           <div style="font-size:0.78rem; color:#a1a1aa; font-weight:700;">● Real-Time Analytics Active</div>
         </div>
 
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom:22px;">
           <div style="background:#18181b; border:1px solid #27272a; padding:16px; border-radius:12px;">
-            <div style="font-size:0.74rem; color:#a1a1aa;">Total Pendapatan Bulan Ini</div>
-            <div style="font-size:1.3rem; font-weight:800; color:#fafafa; margin-top:4px; font-family:'JetBrains Mono',monospace;">Rp 48.920.000</div>
-            <div style="font-size:0.72rem; color:#a1a1aa; margin-top:4px;">▲ +28.4% vs bulan lalu</div>
+            <div style="font-size:0.74rem; color:#a1a1aa;">${isEnDash ? 'Monthly Revenue' : 'Total Pendapatan Bulan Ini'}</div>
+            <div style="font-size:1.3rem; font-weight:800; color:#fafafa; margin-top:4px; font-family:'JetBrains Mono',monospace;">${isEnDash ? '$4,890.00' : 'Rp 48.920.000'}</div>
+            <div style="font-size:0.72rem; color:#a1a1aa; margin-top:4px;">${isEnDash ? '▲ +28.4% vs last month' : '▲ +28.4% vs bulan lalu'}</div>
           </div>
           <div style="background:#18181b; border:1px solid #27272a; padding:16px; border-radius:12px;">
-            <div style="font-size:0.74rem; color:#a1a1aa;">Pesanan Lunas (QRIS/VA)</div>
-            <div style="font-size:1.3rem; font-weight:800; color:#fafafa; margin-top:4px; font-family:'JetBrains Mono',monospace;">342 Order</div>
-            <div style="font-size:0.72rem; color:#a1a1aa; margin-top:4px;">Konversi Checkout 94.2%</div>
+            <div style="font-size:0.74rem; color:#a1a1aa;">${isEnDash ? 'Paid Orders' : 'Pesanan Lunas (QRIS/VA)'}</div>
+            <div style="font-size:1.3rem; font-weight:800; color:#fafafa; margin-top:4px; font-family:'JetBrains Mono',monospace;">342 Orders</div>
+            <div style="font-size:0.72rem; color:#a1a1aa; margin-top:4px;">${isEnDash ? 'Checkout Conversion 94.2%' : 'Konversi Checkout 94.2%'}</div>
           </div>
           <div style="background:#18181b; border:1px solid #27272a; padding:16px; border-radius:12px;">
-            <div style="font-size:0.74rem; color:#a1a1aa;">Pelanggan Aktif</div>
-            <div style="font-size:1.3rem; font-weight:800; color:#fafafa; margin-top:4px; font-family:'JetBrains Mono',monospace;">1,284 User</div>
-            <div style="font-size:0.72rem; color:#a1a1aa; margin-top:4px;">Lisensi Termasuk Source Code</div>
+            <div style="font-size:0.74rem; color:#a1a1aa;">${isEnDash ? 'Active Users' : 'Pelanggan Aktif'}</div>
+            <div style="font-size:1.3rem; font-weight:800; color:#fafafa; margin-top:4px; font-family:'JetBrains Mono',monospace;">1,284 Users</div>
+            <div style="font-size:0.72rem; color:#a1a1aa; margin-top:4px;">${isEnDash ? 'Commercial License Included' : 'Lisensi Termasuk Source Code'}</div>
           </div>
         </div>
 
         <div style="background:#18181b; border:1px solid #27272a; border-radius:12px; padding:18px;">
-          <div style="font-weight:700; font-size:0.86rem; margin-bottom:12px;">Transaksi Otomatis Terbaru</div>
+          <div style="font-weight:700; font-size:0.86rem; margin-bottom:12px;">${isEnDash ? 'Latest Automated Transactions' : 'Transaksi Otomatis Terbaru'}</div>
           <div style="display:grid; gap:8px; font-size:0.8rem; font-family:'JetBrains Mono',monospace;">
             <div style="display:flex; justify-content:space-between; padding:10px 12px; background:#09090b; border:1px solid #27272a; border-radius:8px;">
-              <span>#ORD-9921 • Pembayaran QRIS Otomatis</span>
-              <span style="color:#fafafa; font-weight:700;">LUNAS • Rp 169.000</span>
+              <span>#ORD-9921 • ${isEnDash ? 'Polar / Card Checkout' : 'Pembayaran QRIS Otomatis'}</span>
+              <span style="color:#fafafa; font-weight:700;">${isEnDash ? 'PAID • $25.00' : 'LUNAS • Rp 169.000'}</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding:10px 12px; background:#09090b; border:1px solid #27272a; border-radius:8px;">
-              <span>#ORD-9920 • Virtual Account BCA</span>
-              <span style="color:#fafafa; font-weight:700;">LUNAS • Rp 149.000</span>
+              <span>#ORD-9920 • ${isEnDash ? 'Apple Pay / Stripe' : 'Virtual Account BCA'}</span>
+              <span style="color:#fafafa; font-weight:700;">${isEnDash ? 'PAID • $14.00' : 'LUNAS • Rp 149.000'}</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding:10px 12px; background:#09090b; border:1px solid #27272a; border-radius:8px;">
-              <span>#ORD-9919 • E-Wallet GoPay</span>
-              <span style="color:#fafafa; font-weight:700;">LUNAS • Rp 89.000</span>
+              <span>#ORD-9919 • PayPal Express</span>
+              <span style="color:#fafafa; font-weight:700;">${isEnDash ? 'PAID • $12.00' : 'LUNAS • Rp 89.000'}</span>
             </div>
           </div>
         </div>
@@ -1651,18 +1673,19 @@ function buildInteractiveDemoHTML(prod) {
   }
 
   if (type === 'bot') {
+    const isEnBot = disp.isEn;
     return `
       <div style="font-family:'JetBrains Mono',monospace; background:#09090b; min-height:540px; color:#e4e4e7; padding:24px;">
         <div style="background:#18181b; border:1px solid #27272a; border-radius:12px; padding:18px;">
           <div style="color:#ffffff; font-weight:700; margin-bottom:12px;">$ python main_automation_bot.py --mode=production</div>
           <div style="font-size:0.8rem; line-height:1.75; color:#a1a1aa;">
-            <div>[09:00:01] Initializing <strong style="color:#fff;">${prod.title}</strong>...</div>
+            <div>[09:00:01] Initializing <strong style="color:#fff;">${disp.title}</strong>...</div>
             <div>[09:00:02] ✓ Loaded config.json &amp; multi-thread worker pool (8 threads)</div>
             <div>[09:00:03] ✓ Fetching target data &amp; running automation pipeline...</div>
-            <div style="color:#fafafa;">[09:00:04] → Processed 250 records → Exported to /output/laporan_otomatis.xlsx</div>
-            <div style="color:#ffffff;">[09:00:05] ✓ Telegram Webhook Notification Sent: "Laporan Harian Selesai (250 Baris)"</div>
+            <div style="color:#fafafa;">[09:00:04] → Processed 250 records → Exported to /output/report_export.xlsx</div>
+            <div style="color:#ffffff;">[09:00:05] ✓ Telegram Webhook Notification Sent: "Daily Job Completed (250 Rows)"</div>
             <div style="margin-top:16px; padding:12px; background:#09090b; border:1px solid #3f3f46; border-radius:8px; color:#fafafa;">
-              ✓ Full Source Code Python (.py) + Requirements.txt + Panduan Instalasi disertakan di dalam paket download.
+              ✓ ${isEnBot ? 'Full Python Source Code (.py) + requirements.txt + SETUP_GUIDE_EN_ID.md included in download.' : 'Full Source Code Python (.py) + Requirements.txt + Panduan Instalasi disertakan di dalam paket download.'}
             </div>
           </div>
         </div>
@@ -1672,22 +1695,23 @@ function buildInteractiveDemoHTML(prod) {
 
   return `
     <div style="font-family:'Plus Jakarta Sans',sans-serif; background:#09090b; min-height:540px; color:#fff; padding:36px 24px; text-align:center;">
-      <span style="background:#27272a; color:#fafafa; padding:6px 14px; border-radius:99px; font-size:0.74rem; font-weight:800; font-family:'JetBrains Mono',monospace;">LIGHTHOUSE SCORE 99/100 • SAAS UI TEMPLATE</span>
-      <h2 style="font-size:1.95rem; font-weight:800; max-width:640px; margin:16px auto 12px; line-height:1.2;">${prod.title}</h2>
-      <p style="color:#a1a1aa; max-width:540px; margin:0 auto 24px; font-size:0.92rem;">${prod.summary}</p>
+      <span style="background:#27272a; color:#fafafa; padding:6px 14px; border-radius:99px; font-size:0.74rem; font-weight:800; font-family:'JetBrains Mono',monospace;">LIGHTHOUSE SCORE 99/100 • UI TEMPLATE</span>
+      <h2 style="font-size:1.95rem; font-weight:800; max-width:640px; margin:16px auto 12px; line-height:1.2;">${disp.title}</h2>
+      <p style="color:#a1a1aa; max-width:540px; margin:0 auto 24px; font-size:0.92rem;">${disp.summary}</p>
       <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:32px;">
         <span style="background:#ffffff; color:#09090b; padding:10px 20px; border-radius:8px; font-weight:800; font-size:0.84rem;">Responsive Desktop, Tablet &amp; Mobile</span>
-        <span style="background:#18181b; border:1px solid #27272a; padding:10px 20px; border-radius:8px; font-weight:700; font-size:0.84rem;">Clean HTML5 + Tailwind CSS</span>
+        <span style="background:#18181b; border:1px solid #27272a; padding:10px 20px; border-radius:8px; font-weight:700; font-size:0.84rem;">Clean Unencrypted Code</span>
       </div>
       <div style="max-width:760px; margin:0 auto; border-radius:14px; overflow:hidden; border:1px solid #27272a;">
-        <img src="${resolveStoreAssetUrl(prod.thumbnailUrl)}" alt="${prod.title}" style="width:100%; max-height:320px; object-fit:cover; display:block; filter:grayscale(100%);" />
+        <img src="${resolveStoreAssetUrl(prod.thumbnailUrl)}" alt="${disp.title}" style="width:100%; max-height:320px; object-fit:cover; display:block; filter:grayscale(100%);" />
       </div>
     </div>
   `;
 }
 
 function bindPosSimulatorEvents() {
-  let currentTotal = 42000;
+  const isEnPos = currentLocale === 'en';
+  let currentTotal = isEnPos ? 7 : 42000;
   const listEl = document.getElementById('posReceiptList');
   const totalEl = document.getElementById('posTotalVal');
   const resetBtn = document.getElementById('posResetBtn');
@@ -1696,30 +1720,34 @@ function bindPosSimulatorEvents() {
   document.querySelectorAll('.pos-sim-item').forEach((btn) => {
     btn.addEventListener('click', () => {
       const name = btn.getAttribute('data-name');
-      const price = parseInt(btn.getAttribute('data-price') || '0', 10);
-      currentTotal += price;
+      const unitAmt = isEnPos ? parseFloat(btn.getAttribute('data-usd') || '3') : parseInt(btn.getAttribute('data-price') || '0', 10);
+      currentTotal += unitAmt;
       if (listEl) {
         const row = document.createElement('div');
         row.style.cssText = 'display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f4f4f5;';
-        row.innerHTML = `<span>1x ${name}</span><strong>${formatRupiah(price)}</strong>`;
+        row.innerHTML = `<span>1x ${name}</span><strong>${isEnPos ? ('$' + unitAmt.toFixed(2)) : formatRupiah(unitAmt)}</strong>`;
         listEl.appendChild(row);
         listEl.scrollTop = listEl.scrollHeight;
       }
-      if (totalEl) totalEl.textContent = formatRupiah(currentTotal);
+      if (totalEl) totalEl.textContent = isEnPos ? ('$' + currentTotal.toFixed(2)) : formatRupiah(currentTotal);
     });
   });
 
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       currentTotal = 0;
-      if (listEl) listEl.innerHTML = '<div style="color:#71717a; padding:12px 0; text-align:center;">Klik item di sebelah kiri untuk simulasi transaksi kasir.</div>';
-      if (totalEl) totalEl.textContent = 'Rp 0';
+      if (listEl) {
+        listEl.innerHTML = isEnPos
+          ? '<div style="color:#71717a; padding:12px 0; text-align:center;">Click items on the left to test live POS checkout.</div>'
+          : '<div style="color:#71717a; padding:12px 0; text-align:center;">Klik item di sebelah kiri untuk simulasi transaksi kasir.</div>';
+      }
+      if (totalEl) totalEl.textContent = isEnPos ? '$0.00' : 'Rp 0';
     });
   }
 
   if (printBtn) {
     printBtn.addEventListener('click', () => {
-      printBtn.textContent = '✓ Struk Tercetak! Silakan Beli Source Code Ini';
+      printBtn.textContent = isEnPos ? '✓ Receipt Printed! Ready to Purchase Full Source Code' : '✓ Struk Tercetak! Silakan Beli Source Code Ini';
     });
   }
 }
@@ -1747,15 +1775,18 @@ window.openDetailById = function (productId) {
             <div style="font-size:0.74rem; font-weight:800; color:#a1a1aa; margin-bottom:8px; font-family:var(--font-mono);">${disp.isEn ? 'WHAT\x27S INCLUDED (.ZIP BUNDLE):' : 'ISI PAKET UNDUHAN (.ZIP):'}</div>
             <ul class="zip-tree">
               <li class="zip-row"><span>/full-source-code/ (${prod.stack})</span><span class="zip-badge">Unlocked</span></li>
-              <li class="zip-row"><span>/database/schema_sample.sql</span><span class="zip-badge">Ready</span></li>
-              <li class="zip-row"><span>${disp.isEn ? 'SETUP_GUIDE_EN_ID.md' : 'PANDUAN_INSTALASI.pdf'}</span><span class="zip-badge">${disp.isEn ? 'English + ID' : 'Bahasa ID'}</span></li>
+              ${Array.isArray(disp.deliverables) && disp.deliverables.length > 0
+                ? disp.deliverables.map((dItem) => `<li class="zip-row"><span>${escAiHtml(dItem)}</span><span class="zip-badge">Included</span></li>`).join('')
+                : `<li class="zip-row"><span>${/mysql|sql|php/i.test(prod.stack || '') ? '/database/database.sql' : (disp.isEn ? '/LICENSE_COMMERCIAL.txt' : '/LISENSI.txt')}</span><span class="zip-badge">Ready</span></li>
+                   <li class="zip-row"><span>${disp.isEn ? 'SETUP_GUIDE_EN_ID.md' : 'PANDUAN.md'}</span><span class="zip-badge">${disp.isEn ? 'English + ID' : 'Bahasa ID'}</span></li>`
+              }
             </ul>
           </div>
         </div>
 
         <div>
           <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
-            ${prod.categories.map((c) => `<span class="brand-badge">${c}</span>`).join('')}
+            ${prod.categories.map((c) => `<span class="brand-badge">${localizeCategoryTag(c, disp.isEn)}</span>`).join('')}
             <span class="verified-pill">${prod.version}</span>
           </div>
 
@@ -1837,7 +1868,7 @@ window.toggleCartItemById = function (productId) {
   const existingIdx = cartState.findIndex((c) => c.id === productId);
   if (existingIdx >= 0) {
     cartState.splice(existingIdx, 1);
-    showToast('Produk dihapus dari keranjang.');
+    showToast(currentLocale === 'en' ? 'Removed from cart.' : 'Produk dihapus dari keranjang.');
   } else {
     cartState.push({
       id: prod.id,
@@ -1858,7 +1889,7 @@ window.toggleCartItemById = function (productId) {
 
 window.removeCartItemById = function (productId) {
   cartState = cartState.filter((c) => c.id !== productId);
-  showToast('Item dihapus dari keranjang.');
+  showToast(currentLocale === 'en' ? 'Item removed from cart.' : 'Item dihapus dari keranjang.');
   saveCartToStorage();
 };
 
@@ -2348,19 +2379,29 @@ window.closeModal = function (id) {
   }
 };
 
+function syncThemeBtnTitle() {
+  const btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const isEn = currentLocale === 'en';
+  btn.setAttribute('title', isDark
+    ? (isEn ? 'Switch to Light Mode' : 'Ganti ke Mode Terang')
+    : (isEn ? 'Switch to Dark Mode' : 'Ganti ke Mode Gelap'));
+}
+
 function initThemeToggle() {
   const saved = localStorage.getItem(STORAGE_THEME_KEY) || 'light';
   document.documentElement.setAttribute('data-theme', saved);
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.setAttribute('title', saved === 'dark' ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap');
+  syncThemeBtnTitle();
 
+  const btn = document.getElementById('themeBtn');
   if (btn) {
     btn.addEventListener('click', () => {
       const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem(STORAGE_THEME_KEY, next);
-      btn.setAttribute('title', next === 'dark' ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap');
+      syncThemeBtnTitle();
     });
   }
 }
@@ -2660,6 +2701,7 @@ function applyStorefrontLocaleUI() {
 
   renderProductsGrid();
   updateCartUI();
+  syncThemeBtnTitle();
 }
 
 // ================= WISHLIST, DEEP LINK & RELATED PRODUCTS =================

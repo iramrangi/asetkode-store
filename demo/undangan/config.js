@@ -76,8 +76,8 @@ const CONFIG = {
   rsvpWhatsapp: '6281234567890', // Awali 62, tanpa + dan tanpa 0
 
   // ---------- MUSIK LATAR (BACKGROUND AUDIO) ----------
-  // Anda bisa mengganti URL lagu ini dengan file MP3 lain
-  musikMp3: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-piano-112199.mp3',
+  // Isi dengan path file lokal (misal 'assets/audio/musik.mp3') atau URL MP3 langsung milik Anda
+  musikMp3: '',
 
   // ---------- TEMA WARNA ----------
   warnaAksen: '#8c6b4e' // Warna nuansa earth tone / champagne gold elegan
