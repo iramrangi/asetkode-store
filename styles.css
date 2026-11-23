@@ -2320,16 +2320,16 @@ html, body {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
-  padding: 28px 32px 20px;
+  padding: 28px 36px 22px;
   box-shadow: var(--shadow-sm);
 }
 
 .spotlight-slide {
   display: grid;
-  grid-template-columns: 0.96fr 1.04fr;
+  grid-template-columns: 0.94fr 1.06fr;
   gap: 36px;
   align-items: center;
-  min-height: 316px;
+  min-height: 286px;
 }
 
 .spotlight-slide.is-animating {
@@ -2624,12 +2624,12 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
 /* ================= CATALOG OPENING HEADER ================= */
 .catalog-opening {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 36px;
+  grid-template-columns: 1.24fr 1fr;
+  gap: 32px;
   align-items: center;
-  padding: 40px 42px;
-  min-height: 228px;
-  margin-bottom: 26px;
+  padding: 36px 36px;
+  min-height: 290px;
+  margin-bottom: 22px;
   border-radius: var(--radius-xl);
   background: linear-gradient(135deg, var(--bg-surface) 0%, var(--accent-soft) 100%);
   border: 1px solid var(--border-color);
@@ -2674,8 +2674,8 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 22px 16px;
-  min-height: 112px;
+  padding: 22px 14px;
+  min-height: 120px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -2695,9 +2695,10 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
 
 .co-stat-num {
   font-family: var(--font-mono);
-  font-size: 1.48rem;
+  font-size: 1.32rem;
   font-weight: 800;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .co-stat-lbl {
