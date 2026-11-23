@@ -385,12 +385,24 @@ html[data-theme="dark"] .theme-icon-moon {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(58px, 7.5vw, 96px) 0 clamp(56px, 7vw, 92px);
+  padding: clamp(46px, 6vw, 76px) 0 clamp(44px, 5.5vw, 70px);
   border-bottom: 1px solid var(--border-color);
   background:
     radial-gradient(ellipse 70% 60% at 10% 10%, rgba(79, 70, 229, 0.12), transparent 60%),
     radial-gradient(ellipse 60% 55% at 90% 20%, rgba(16, 185, 129, 0.11), transparent 55%),
     var(--bg-surface);
+}
+
+.hero .catalog-opening-stats {
+  width: 100%;
+  max-width: 740px;
+  margin: 28px auto 0;
+}
+
+.hero .co-stat {
+  min-height: 98px;
+  padding: 18px 14px;
+  box-shadow: var(--shadow-sm);
 }
 
 .hero-grid {
