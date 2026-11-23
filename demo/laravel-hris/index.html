@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KaryaHR Pro — Laravel 12 HRIS &amp; Payroll Interactive Demo</title>
+  <style>
+    :root {
+      --bg: #f8fafc; --surface: #ffffff; --elevated: #f1f5f9;
+      --text: #0f172a; --sec: #475569; --muted: #64748b;
+      --border: #e2e8f0; --strong: #cbd5e1;
+      --accent: #4f46e5; --accent-soft: rgba(79,70,229,.1);
+      --emerald: #059669; --emerald-soft: rgba(5,150,105,.12);
+      --amber: #d97706; --amber-soft: rgba(217,119,6,.12);
+      --rose: #e11d48; --rose-soft: rgba(225,29,72,.12);
+    }
+    html[data-theme="dark"] {
+      --bg: #09090b; --surface: #111318; --elevated: #1c1f26;
+      --text: #f8fafc; --sec: #cbd5e1; --muted: #94a3b8;
+      --border: #27272a; --strong: #3f3f46;
+      --accent: #6366f1; --accent-soft: rgba(99,102,241,.18);
+      --emerald: #34d399; --emerald-soft: rgba(52,211,153,.14);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 13.5px; line-height: 1.5; }
+    button, input, select { font: inherit; color: inherit; }
+    .shell { display: flex; min-height: 100vh; }
+    .sidebar { width: 236px; background: var(--surface); border-right: 1px solid var(--border); padding: 18px 12px; display: flex; flex-direction: column; gap: 16px; flex-shrink: 0; }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; }
+    .brand-icon { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5, #059669); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand-name { font-weight: 800; font-size: 0.98rem; letter-spacing: -0.02em; }
+    .brand-sub { font-size: 0.67rem; font-weight: 700; color: var(--muted); }
+    .nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .nav-btn { display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-radius: 9px; border: 0; background: transparent; color: var(--sec); font-weight: 600; cursor: pointer; text-align: left; }
+    .nav-btn:hover { background: var(--elevated); color: var(--text); }
+    .nav-btn.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+    .role-card { background: var(--elevated); border-radius: 10px; padding: 11px; font-size: 0.76rem; }
+    .role-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; background: var(--accent-soft); color: var(--accent); margin-top: 4px; }
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .topbar { height: 56px; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .topbar-title { font-weight: 800; font-size: 0.98rem; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .content { padding: 20px; max-width: 1160px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+    .kpi-lbl { font-size: 0.71rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .kpi-val { font-size: 1.38rem; font-weight: 800; margin-top: 4px; letter-spacing: -0.02em; }
+    .kpi-sub { font-size: 0.73rem; color: var(--sec); margin-top: 2px; }
+    .grid-2 { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 16px; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .card-title { font-size: 0.94rem; font-weight: 800; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border-radius: 9px; border: 1px solid var(--strong); background: var(--surface); font-weight: 700; font-size: 0.78rem; cursor: pointer; white-space: nowrap; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-emerald { background: var(--emerald); border-color: var(--emerald); color: #fff; }
+    .btn-danger { background: var(--rose); border-color: var(--rose); color: #fff; }
+    .btn-sm { padding: 5px 9px; font-size: 0.72rem; border-radius: 7px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.81rem; }
+    th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-size: 0.7rem; text-transform: uppercase; color: var(--muted); font-weight: 800; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.68rem; font-weight: 800; }
+    .b-green { background: var(--emerald-soft); color: var(--emerald); }
+    .b-amber { background: var(--amber-soft); color: var(--amber); }
+    .b-red { background: var(--rose-soft); color: var(--rose); }
+    .b-indigo { background: var(--accent-soft); color: var(--accent); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+    .field label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--sec); margin-bottom: 4px; }
+    .field input, .field select { width: 100%; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--strong); background: var(--surface); }
+    .toast { position: fixed; bottom: 18px; right: 18px; background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; z-index: 90; display: none; box-shadow: 0 10px 25px rgba(0,0,0,.22); }
+    .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,.55); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 80; }
+    .modal-bg.open { display: flex; }
+    .modal-box { background: var(--surface); border-radius: 16px; max-width: 680px; width: 100%; padding: 24px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2,1fr); } .grid-2 { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .shell { flex-direction: column; } .sidebar { width: 100%; border-right: 0; border-bottom: 1px solid var(--border); } .nav { flex-direction: row; overflow-x: auto; } }
+    @media print { .sidebar, .topbar, .no-print { display: none !important; } .modal-bg { position: static; background: #fff; display: block !important; padding: 0; } .modal-box { border: 0; max-width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">KaryaHR Pro</div>
+        <div class="brand-sub">Laravel 12 HRIS &amp; Payroll</div>
+      </div>
+    </div>
+    <nav class="nav" id="navMenu"></nav>
+    <div class="role-card">
+      <div style="font-weight:800;" id="activeUserLabel">Rina Kusuma</div>
+      <div class="role-pill" id="activeRoleBadge">ADMIN HR</div>
+      <div style="margin-top:9px; display:flex; gap:6px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-sm" id="switchRoleBtn"></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="topHeading">Dashboard Operasional HRIS</div>
+      <div class="topbar-actions">
+        <span class="badge b-indigo mono">PHP 8.2 • Laravel 12 MVC</span>
+        <button type="button" class="btn btn-sm" id="langToggleBtn">EN</button>
+        <button type="button" class="btn btn-sm" id="themeBtn">Dark</button>
+      </div>
+    </header>
+    <main class="content" id="mainContent"></main>
+  </div>
+</div>
+
+<div class="modal-bg" id="slipModal">
+  <div class="modal-box" id="slipModalBody"></div>
+</div>
+<div class="toast" id="toastEl"></div>
+
+<script>
+(function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  let lang = urlParams.get('lang') === 'en' ? 'en' : 'id';
+  let activeTab = 'dashboard';
+  let activeRole = 'admin';
+  let adminPinUnlocked = true;
+
+  const employees = [
+    { id: 1, nip: 'EMP-001', name: 'Rina Kusuma', dept: 'Keuangan & HR', deptEn: 'Finance & HR', roleTitle: 'HR & Finance Manager', salary: 12500000, allow: 2000000, leaveBal: 11, status: 'active' },
+    { id: 2, nip: 'EMP-002', name: 'Dimas Pratama', dept: 'Engineering & Produk', deptEn: 'Engineering & Product', roleTitle: 'Lead Software Engineer', salary: 14500000, allow: 2500000, leaveBal: 10, status: 'active' },
+    { id: 3, nip: 'EMP-003', name: 'Budi Santoso', dept: 'Engineering & Produk', deptEn: 'Engineering & Product', roleTitle: 'Fullstack Laravel Developer', salary: 9500000, allow: 1250000, leaveBal: 12, status: 'active' },
+    { id: 4, nip: 'EMP-004', name: 'Nadia Putri', dept: 'Engineering & Produk', deptEn: 'Engineering & Product', roleTitle: 'UI/UX Product Designer', salary: 8200000, allow: 1000000, leaveBal: 12, status: 'active' },
+    { id: 5, nip: 'EMP-005', name: 'Sari Wijayanti', dept: 'Operasional & CS', deptEn: 'Operations & CS', roleTitle: 'Operations Supervisor', salary: 7800000, allow: 950000, leaveBal: 9, status: 'active' },
+    { id: 6, nip: 'EMP-006', name: 'Fajar Nugroho', dept: 'Sales & Kemitraan', deptEn: 'Sales & Partnerships', roleTitle: 'B2B Account Executive', salary: 6800000, allow: 1500000, leaveBal: 12, status: 'active' },
+    { id: 7, nip: 'EMP-007', name: 'Dewi Anggraini', dept: 'Keuangan & HR', deptEn: 'Finance & HR', roleTitle: 'Tax & Accounting Staff', salary: 6200000, allow: 750000, leaveBal: 10, status: 'active' },
+    { id: 8, nip: 'EMP-008', name: 'Rizky Ramadhan', dept: 'Operasional & CS', deptEn: 'Operations & CS', roleTitle: 'Customer Success Specialist', salary: 5200000, allow: 600000, leaveBal: 12, status: 'active' }
+  ];
+
+  const attendances = [
+    { empId: 1, date: '2026-11-23', inAt: '08:12:00', outAt: '', status: 'present', lateMin: 0 },
+    { empId: 2, date: '2026-11-23', inAt: '08:19:00', outAt: '', status: 'present', lateMin: 0 },
+    { empId: 6, date: '2026-11-23', inAt: '08:42:00', outAt: '', status: 'late', lateMin: 12 },
+    { empId: 3, date: '2026-11-22', inAt: '08:14:00', outAt: '17:15:00', status: 'present', lateMin: 0 },
+    { empId: 4, date: '2026-11-22', inAt: '08:48:00', outAt: '17:20:00', status: 'late', lateMin: 18 }
+  ];
+
+  const leaves = [
+    { id: 1, empId: 3, type: 'annual', start: '2026-11-27', end: '2026-11-28', days: 2, reason: 'Acara keluarga di luar kota', status: 'pending' },
+    { id: 2, empId: 4, type: 'permit', start: '2026-11-30', end: '2026-11-30', days: 1, reason: 'Administrasi perbankan', status: 'pending' },
+    { id: 3, empId: 5, type: 'annual', start: '2026-11-12', end: '2026-11-14', days: 3, reason: 'Cuti tahunan terjadwal', status: 'approved' }
+  ];
+
+  let payrolls = employees.map((e, i) => computePayroll(e, '2026-11', i === 2 ? 450000 : 0, i < 4 ? 'paid' : 'draft'));
+
+  function computePayroll(emp, month, overtime, status) {
+    const lateCount = attendances.filter(a => a.empId === emp.id && a.status === 'late').length;
+    const lateDed = Math.min(emp.salary, lateCount * 50000);
+    const gross = emp.salary + emp.allow + Math.max(0, overtime);
+    const bpjs = Math.round(emp.salary * 0.02);
+    const tax = gross <= 5000000 ? 0 : gross <= 10000000 ? Math.round((gross - 5000000) * 0.025) : Math.round(125000 + (gross - 10000000) * 0.05);
+    const net = Math.max(0, gross - lateDed - bpjs - tax);
+    const code = 'VRF-' + month.replace('-', '') + '-' + emp.nip.replace('-', '') + '-' + String(100000 + ((emp.id * 7919 + net) % 899999)).slice(0, 6);
+    return { empId: emp.id, month, base: emp.salary, allow: emp.allow, overtime, lateCount, lateDed, bpjs, tax, net, status, code };
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function rp(n) { return 'Rp ' + Number(n || 0).toLocaleString('id-ID'); }
+  function toast(msg) {
+    const el = document.getElementById('toastEl');
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(window.__tTimer);
+    window.__tTimer = setTimeout(() => { el.style.display = 'none'; }, 2800);
+  }
+
+  function getMyAttendanceToday() {
+    const myId = activeRole === 'admin' ? 1 : 3;
+    return attendances.find(a => a.empId === myId && a.date === '2026-11-23');
+  }
+
+  function renderNav() {
+    const isEn = lang === 'en';
+    const items = [
+      { id: 'dashboard', label: isEn ? 'Dashboard' : 'Dashboard' },
+      ...(activeRole === 'admin' ? [{ id: 'employees', label: isEn ? 'Employees' : 'Karyawan & Divisi' }] : []),
+      { id: 'attendances', label: isEn ? 'Attendance' : 'Absensi Harian' },
+      { id: 'leaves', label: isEn ? 'Leave Approval' : 'Cuti & Izin' },
+      { id: 'payrolls', label: isEn ? 'Payroll & Slips' : 'Payroll & Slip Gaji' }
+    ];
+    if (!items.some(i => i.id === activeTab)) activeTab = 'dashboard';
+    document.getElementById('navMenu').innerHTML = items.map(i =>
+      `<button type="button" class="nav-btn ${activeTab === i.id ? 'active' : ''}" data-tab="${i.id}">${i.label}</button>`
+    ).join('');
+    document.querySelectorAll('.nav-btn').forEach(b => b.onclick = () => { activeTab = b.getAttribute('data-tab'); render(); });
+
+    document.getElementById('activeUserLabel').textContent = activeRole === 'admin' ? 'Rina Kusuma' : 'Budi Santoso';
+    document.getElementById('activeRoleBadge').textContent = activeRole === 'admin' ? 'ADMIN HR' : (isEn ? 'EMPLOYEE' : 'KARYAWAN');
+    document.getElementById('switchRoleBtn').textContent = activeRole === 'admin'
+      ? (isEn ? 'Switch to Employee' : 'Mode Karyawan')
+      : (isEn ? 'Switch to Admin HR' : 'Mode Admin HR');
+    document.getElementById('langToggleBtn').textContent = isEn ? 'ID' : 'EN';
+  }
+
+  function render() {
+    renderNav();
+    const isEn = lang === 'en';
+    const main = document.getElementById('mainContent');
+    const titleEl = document.getElementById('topHeading');
+    const myId = activeRole === 'admin' ? 1 : 3;
+    const myEmp = employees.find(e => e.id === myId);
+    const myAtt = getMyAttendanceToday();
+
+    if (activeTab === 'dashboard') {
+      titleEl.textContent = isEn ? 'HRIS Operations Dashboard' : 'Dashboard Operasional HRIS';
+      const totalPayroll = payrolls.filter(p => activeRole === 'admin' || p.empId === myId).reduce((s, p) => s + p.net, 0);
+      const pendingCount = leaves.filter(l => l.status === 'pending' && (activeRole === 'admin' || l.empId === myId)).length;
+      const presentCount = attendances.filter(a => a.date === '2026-11-23').length;
+
+      main.innerHTML = `
+        <div class="kpi-grid">
+          <div class="card"><div class="kpi-lbl">${isEn ? 'Active Staff' : 'Karyawan Aktif'}</div><div class="kpi-val">${employees.length}</div><div class="kpi-sub">${isEn ? 'Across 4 departments' : 'Pada 4 departemen aktif'}</div></div>
+          <div class="card"><div class="kpi-lbl">${isEn ? 'Present Today' : 'Hadir Hari Ini'}</div><div class="kpi-val" style="color:var(--emerald)">${presentCount}</div><div class="kpi-sub">2026-11-23</div></div>
+          <div class="card"><div class="kpi-lbl">${isEn ? 'Pending Leaves' : 'Cuti Menunggu'}</div><div class="kpi-val" style="color:var(--amber)">${pendingCount}</div><div class="kpi-sub">${isEn ? 'Awaiting HR approval' : 'Menunggu persetujuan'}</div></div>
+          <div class="card"><div class="kpi-lbl">${isEn ? 'Payroll (2026-11)' : 'Payroll (2026-11)'}</div><div class="kpi-val">${rp(totalPayroll)}</div><div class="kpi-sub">${isEn ? 'Server-verified take-home' : 'Total gaji bersih'}</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">${isEn ? 'Quick Daily Clock-In' : 'Absensi Cepat Hari Ini'}</h2>
+              ${!myAtt ? `<button class="btn btn-emerald btn-sm" id="dashClockIn">${isEn ? 'Check-In Now' : 'Check-In Sekarang'}</button>` :
+                !myAtt.outAt ? `<button class="btn btn-primary btn-sm" id="dashClockOut">${isEn ? 'Check-Out' : 'Check-Out Pulang'}</button>` :
+                `<span class="badge b-green">${isEn ? 'Completed' : 'Selesai'}</span>`}
+            </div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>${isEn ? 'Date' : 'Tanggal'}</th><th>${isEn ? 'Employee' : 'Nama'}</th><th>${isEn ? 'In' : 'Masuk'}</th><th>Status</th></tr></thead>
+              <tbody>
+                ${attendances.slice(0, 5).map(a => {
+                  const e = employees.find(x => x.id === a.empId);
+                  return `<tr><td class="mono">${a.date}</td><td><strong>${esc(e.name)}</strong></td><td class="mono">${a.inAt}</td><td><span class="badge ${a.status === 'present' ? 'b-green' : 'b-amber'}">${a.status === 'present' ? (isEn ? 'On Time' : 'Tepat Waktu') : (isEn ? 'Late' : 'Terlambat')}</span></td></tr>`;
+                }).join('')}
+              </tbody>
+            </table></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2 class="card-title">${isEn ? 'Recent Leave Requests' : 'Pengajuan Cuti Terbaru'}</h2></div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              ${leaves.slice(0, 4).map(l => {
+                const e = employees.find(x => x.id === l.empId);
+                return `<div style="padding:10px; border:1px solid var(--border); border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                  <div><strong>${esc(e.name)}</strong><div style="font-size:0.74rem; color:var(--sec);">${l.start} (${l.days}d)</div></div>
+                  <span class="badge ${l.status === 'approved' ? 'b-green' : l.status === 'rejected' ? 'b-red' : 'b-amber'}">${l.status.toUpperCase()}</span>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+        </div>`;
+      const ci = document.getElementById('dashClockIn');
+      if (ci) ci.onclick = () => { attendances.unshift({ empId: myId, date: '2026-11-23', inAt: '08:25:00', outAt: '', status: 'present', lateMin: 0 }); toast(isEn ? 'Checked in!' : 'Check-in berhasil dicatat!'); render(); };
+      const co = document.getElementById('dashClockOut');
+      if (co) co.onclick = () => { myAtt.outAt = '17:05:00'; toast(isEn ? 'Checked out!' : 'Check-out pulang berhasil!'); render(); };
+    }
+
+    if (activeTab === 'employees') {
+      titleEl.textContent = isEn ? 'Employee Directory' : 'Direktori Karyawan & Departemen';
+      main.innerHTML = `
+        <div class="card">
+          <div class="card-head"><h2 class="card-title">${isEn ? 'Add Employee' : 'Tambah Karyawan Baru'}</h2></div>
+          <form id="addEmpForm" class="form-grid" style="align-items:end;">
+            <div class="field"><label>NIP</label><input id="empNip" placeholder="EMP-009" required /></div>
+            <div class="field"><label>${isEn ? 'Full Name' : 'Nama'}</label><input id="empName" placeholder="Andi Wijaya" required /></div>
+            <div class="field"><label>${isEn ? 'Position' : 'Jabatan'}</label><input id="empPos" placeholder="Laravel Developer" required /></div>
+            <div class="field"><label>${isEn ? 'Base Salary (Rp)' : 'Gaji Pokok (Rp)'}</label><input id="empSal" type="number" min="0" value="7500000" required /></div>
+            <div><button type="submit" class="btn btn-primary" style="width:100%;">${isEn ? 'Save Employee' : 'Simpan Karyawan'}</button></div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2 class="card-title">${isEn ? 'Staff List' : 'Daftar Karyawan'} (${employees.length})</h2></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>NIP</th><th>${isEn ? 'Name' : 'Nama'}</th><th>${isEn ? 'Department & Role' : 'Divisi & Jabatan'}</th><th>${isEn ? 'Salary' : 'Gaji Pokok'}</th><th>${isEn ? 'Leave Bal' : 'Cuti'}</th></tr></thead>
+            <tbody>${employees.map(e => `<tr><td class="mono"><strong>${esc(e.nip)}</strong></td><td>${esc(e.name)}</td><td>${esc(e.roleTitle)} <div style="font-size:0.72rem; color:var(--muted);">${esc(isEn ? e.deptEn : e.dept)}</div></td><td class="mono">${rp(e.salary)}</td><td><span class="badge b-indigo">${e.leaveBal}d</span></td></tr>`).join('')}</tbody>
+          </table></div>
+        </div>`;
+      document.getElementById('addEmpForm').onsubmit = (ev) => {
+        ev.preventDefault();
+        const sal = Math.max(0, Number(document.getElementById('empSal').value) || 0);
+        const newEmp = { id: employees.length + 1, nip: document.getElementById('empNip').value.trim().toUpperCase(), name: document.getElementById('empName').value.trim(), dept: 'Engineering & Produk', deptEn: 'Engineering & Product', roleTitle: document.getElementById('empPos').value.trim(), salary: sal, allow: 750000, leaveBal: 12, status: 'active' };
+        employees.push(newEmp);
+        payrolls.push(computePayroll(newEmp, '2026-11', 0, 'draft'));
+        toast(isEn ? 'Employee saved!' : 'Karyawan baru berhasil disimpan!');
+        render();
+      };
+    }
+
+    if (activeTab === 'attendances') {
+      titleEl.textContent = isEn ? 'Daily Attendance Log' : 'Rekap Absensi Harian';
+      const list = activeRole === 'admin' ? attendances : attendances.filter(a => a.empId === myId);
+      main.innerHTML = `
+        <div class="card">
+          <div class="card-head">
+            <h2 class="card-title">${isEn ? 'Attendance History' : 'Riwayat Presensi'} (${list.length})</h2>
+            <div style="display:flex; gap:8px;">
+              ${activeRole === 'admin' ? `<button type="button" class="btn btn-emerald btn-sm" id="exportCsvBtn">Export CSV Excel</button>` : ''}
+            </div>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>${isEn ? 'Date' : 'Tanggal'}</th><th>NIP</th><th>${isEn ? 'Name' : 'Nama'}</th><th>${isEn ? 'Check-In' : 'Masuk'}</th><th>${isEn ? 'Check-Out' : 'Pulang'}</th><th>Status</th></tr></thead>
+            <tbody>${list.map(a => { const e = employees.find(x => x.id === a.empId); return `<tr><td class="mono">${a.date}</td><td class="mono">${esc(e.nip)}</td><td><strong>${esc(e.name)}</strong></td><td class="mono">${a.inAt}</td><td class="mono">${a.outAt || '-'}</td><td><span class="badge ${a.status === 'present' ? 'b-green' : 'b-amber'}">${a.status === 'present' ? (isEn ? 'On Time' : 'Tepat Waktu') : (isEn ? 'Late' : 'Terlambat') + ' ' + a.lateMin + 'm'}</span></td></tr>`; }).join('')}</tbody>
+          </table></div>
+        </div>`;
+      const exp = document.getElementById('exportCsvBtn');
+      if (exp) exp.onclick = () => {
+        const csv = '\uFEFFTanggal,NIP,Nama,Masuk,Pulang,Status\n' + attendances.map(a => { const e = employees.find(x => x.id === a.empId); return `${a.date},${e.nip},"${e.name}",${a.inAt},${a.outAt || '-'},${a.status}`; }).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const aEl = document.createElement('a'); aEl.href = URL.createObjectURL(blob); aEl.download = 'rekap-absensi-karyahr.csv'; aEl.click();
+        toast('CSV downloaded!');
+      };
+    }
+
+    if (activeTab === 'leaves') {
+      titleEl.textContent = isEn ? 'Leave Requests & Approval' : 'Manajemen Cuti & Persetujuan';
+      const list = activeRole === 'admin' ? leaves : leaves.filter(l => l.empId === myId);
+      main.innerHTML = `
+        <div class="card">
+          <div class="card-head"><h2 class="card-title">${isEn ? 'Submit Leave' : 'Ajukan Cuti Baru'}</h2><span class="badge b-indigo">${isEn ? 'Remaining Quota' : 'Saldo Cuti'}: ${myEmp.leaveBal}d</span></div>
+          <form id="leaveForm" class="form-grid" style="align-items:end;">
+            <div class="field"><label>${isEn ? 'Days' : 'Durasi (Hari)'}</label><input id="lvDays" type="number" min="1" max="15" value="2" required /></div>
+            <div class="field"><label>${isEn ? 'Reason' : 'Alasan'}</label><input id="lvReason" placeholder="${isEn ? 'Family trip' : 'Keperluan keluarga'}" required /></div>
+            <div><button type="submit" class="btn btn-primary" style="width:100%;">${isEn ? 'Submit Request' : 'Kirim Pengajuan'}</button></div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2 class="card-title">${isEn ? 'Requests List' : 'Daftar Pengajuan Cuti'}</h2></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>${isEn ? 'Employee' : 'Karyawan'}</th><th>${isEn ? 'Days' : 'Durasi'}</th><th>${isEn ? 'Reason' : 'Alasan'}</th><th>Status</th><th>${isEn ? 'Action' : 'Aksi'}</th></tr></thead>
+            <tbody>${list.map(l => { const e = employees.find(x => x.id === l.empId); return `<tr><td><strong>${esc(e.name)}</strong></td><td class="mono">${l.days}d</td><td>${esc(l.reason)}</td><td><span class="badge ${l.status === 'approved' ? 'b-green' : l.status === 'rejected' ? 'b-red' : 'b-amber'}">${l.status.toUpperCase()}</span></td><td>${activeRole === 'admin' && l.status === 'pending' ? `<button class="btn btn-emerald btn-sm lv-app" data-id="${l.id}">${isEn ? 'Approve' : 'Setujui'}</button> <button class="btn btn-danger btn-sm lv-rej" data-id="${l.id}">${isEn ? 'Reject' : 'Tolak'}</button>` : '-'}</td></tr>`; }).join('')}</tbody>
+          </table></div>
+        </div>`;
+      document.getElementById('leaveForm').onsubmit = (ev) => {
+        ev.preventDefault();
+        const days = Math.max(1, Number(document.getElementById('lvDays').value) || 1);
+        if (days > myEmp.leaveBal) { toast(isEn ? 'Insufficient leave balance!' : 'Saldo cuti tidak mencukupi!'); return; }
+        leaves.unshift({ id: Date.now(), empId: myId, type: 'annual', start: '2026-12-02', end: '2026-12-03', days, reason: document.getElementById('lvReason').value.trim(), status: 'pending' });
+        toast(isEn ? 'Leave submitted!' : 'Pengajuan cuti dikirim!');
+        render();
+      };
+      document.querySelectorAll('.lv-app').forEach(b => b.onclick = () => {
+        const l = leaves.find(x => x.id === Number(b.getAttribute('data-id')));
+        const e = employees.find(x => x.id === l.empId);
+        if (e.leaveBal < l.days) return;
+        e.leaveBal -= l.days; l.status = 'approved';
+        toast(isEn ? 'Approved & balance updated!' : 'Disetujui & saldo cuti berkurang!'); render();
+      });
+      document.querySelectorAll('.lv-rej').forEach(b => b.onclick = () => {
+        const l = leaves.find(x => x.id === Number(b.getAttribute('data-id')));
+        l.status = 'rejected'; toast(isEn ? 'Rejected' : 'Pengajuan ditolak'); render();
+      });
+    }
+
+    if (activeTab === 'payrolls') {
+      titleEl.textContent = isEn ? 'Server-Verified Payroll & Pay Slips' : 'Payroll & Slip Gaji Resmi';
+      const list = activeRole === 'admin' ? payrolls : payrolls.filter(p => p.empId === myId);
+      main.innerHTML = `
+        <div class="card">
+          <div class="card-head">
+            <h2 class="card-title">${isEn ? 'Payroll List (2026-11)' : 'Daftar Slip Gaji (2026-11)'}</h2>
+            ${activeRole === 'admin' ? `<button type="button" class="btn btn-primary btn-sm" id="recalcPayBtn">${isEn ? 'Recalculate All' : 'Hitung Ulang Masal'}</button>` : ''}
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>${isEn ? 'Employee' : 'Karyawan'}</th><th>${isEn ? 'Gross' : 'Gaji Kotor'}</th><th>${isEn ? 'Deductions' : 'Potongan'}</th><th>${isEn ? 'Take-Home Pay' : 'Gaji Bersih'}</th><th>Status</th><th>${isEn ? 'Action' : 'Aksi'}</th></tr></thead>
+            <tbody>${list.map(p => { const e = employees.find(x => x.id === p.empId); return `<tr><td><strong>${esc(e.name)}</strong><div class="mono" style="font-size:0.7rem; color:var(--muted);">${p.code}</div></td><td class="mono">${rp(p.base + p.allow + p.overtime)}</td><td class="mono" style="color:var(--rose);">- ${rp(p.lateDed + p.bpjs + p.tax)}</td><td class="mono" style="color:var(--emerald); font-weight:800;">${rp(p.net)}</td><td><span class="badge ${p.status === 'paid' ? 'b-green' : 'b-amber'}">${p.status === 'paid' ? (isEn ? 'Paid' : 'Lunas') : 'Draft'}</span></td><td><button class="btn btn-sm slip-open" data-emp="${p.empId}">Slip A4</button> ${activeRole === 'admin' && p.status !== 'paid' ? `<button class="btn btn-emerald btn-sm pay-mark" data-emp="${p.empId}">${isEn ? 'Mark Paid' : 'Lunas'}</button>` : ''}</td></tr>`; }).join('')}</tbody>
+          </table></div>
+        </div>`;
+      const rc = document.getElementById('recalcPayBtn');
+      if (rc) rc.onclick = () => { payrolls = payrolls.map(p => computePayroll(employees.find(x => x.id === p.empId), '2026-11', p.overtime, p.status)); toast(isEn ? 'All slips recalculated!' : 'Seluruh slip gaji dihitung ulang!'); render(); };
+      document.querySelectorAll('.pay-mark').forEach(b => b.onclick = () => {
+        const p = payrolls.find(x => x.empId === Number(b.getAttribute('data-emp')));
+        p.status = 'paid'; toast(isEn ? 'Marked Paid!' : 'Status diperbarui Lunas!'); render();
+      });
+      document.querySelectorAll('.slip-open').forEach(b => b.onclick = () => openSlip(Number(b.getAttribute('data-emp'))));
+    }
+  }
+
+  function openSlip(empId) {
+    const isEn = lang === 'en';
+    const e = employees.find(x => x.id === empId);
+    const p = payrolls.find(x => x.empId === empId);
+    document.getElementById('slipModalBody').innerHTML = `
+      <div class="no-print" style="display:flex; justify-content:space-between; margin-bottom:14px;">
+        <button type="button" class="btn btn-sm" onclick="document.getElementById('slipModal').classList.remove('open')">${isEn ? 'Close' : 'Tutup'}</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">${isEn ? 'Print Pay Slip (A4)' : 'Cetak Slip (PDF A4)'}</button>
+      </div>
+      <div style="border-bottom:2px solid var(--border); padding-bottom:12px; display:flex; justify-content:space-between; align-items:flex-start;">
+        <div><div style="font-weight:800; font-size:1.1rem;">PT NUSANTARA DIGITAL SOLUSI</div><div style="font-size:0.78rem; color:var(--sec);">Official Laravel 12 Payroll Slip • ${p.month}</div></div>
+        <div style="text-align:right;"><span class="badge ${p.status === 'paid' ? 'b-green' : 'b-amber'}">${p.status.toUpperCase()}</span><div class="mono" style="font-size:0.72rem; margin-top:4px;">${p.code}</div></div>
+      </div>
+      <div style="padding:12px 0; border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.82rem;">
+        <div>${isEn ? 'Name' : 'Nama'}: <strong>${esc(e.name)}</strong><br/>NIP: <span class="mono">${esc(e.nip)}</span></div>
+        <div>${isEn ? 'Department' : 'Divisi'}: <strong>${esc(isEn ? e.deptEn : e.dept)}</strong><br/>${isEn ? 'Position' : 'Jabatan'}: <strong>${esc(e.roleTitle)}</strong></div>
+      </div>
+      <div style="padding:14px 0; display:grid; grid-template-columns:1fr 1fr; gap:18px; font-size:0.82rem;">
+        <div><strong>${isEn ? 'EARNINGS' : 'PENERIMAAN'}</strong><div style="display:flex; justify-content:space-between; margin-top:6px;"><span>${isEn ? 'Base Salary' : 'Gaji Pokok'}</span><span class="mono">${rp(p.base)}</span></div><div style="display:flex; justify-content:space-between; margin-top:4px;"><span>${isEn ? 'Allowance' : 'Tunjangan'}</span><span class="mono">${rp(p.allow)}</span></div><div style="display:flex; justify-content:space-between; margin-top:4px;"><span>${isEn ? 'Overtime' : 'Lembur'}</span><span class="mono">${rp(p.overtime)}</span></div></div>
+        <div><strong>${isEn ? 'DEDUCTIONS' : 'POTONGAN'}</strong><div style="display:flex; justify-content:space-between; margin-top:6px;"><span>${isEn ? 'Late Penalty' : 'Denda Telat'} (${p.lateCount}x)</span><span class="mono">- ${rp(p.lateDed)}</span></div><div style="display:flex; justify-content:space-between; margin-top:4px;"><span>BPJS (2%)</span><span class="mono">- ${rp(p.bpjs)}</span></div><div style="display:flex; justify-content:space-between; margin-top:4px;"><span>Tax / PPh21</span><span class="mono">- ${rp(p.tax)}</span></div></div>
+      </div>
+      <div style="padding:14px; border-radius:10px; background:var(--emerald-soft); display:flex; justify-content:space-between; align-items:center;">
+        <div><strong style="color:var(--emerald);">${isEn ? 'NET TAKE-HOME PAY' : 'GAJI BERSIH'}</strong><div class="mono" style="font-size:0.72rem; color:var(--sec);">HMAC Seal: ${p.code}</div></div>
+        <div class="mono" style="font-size:1.25rem; font-weight:800; color:var(--emerald);">${rp(p.net)}</div>
+      </div>`;
+    document.getElementById('slipModal').classList.add('open');
+  }
+
+  document.getElementById('switchRoleBtn').onclick = () => {
+    if (activeRole === 'admin') {
+      activeRole = 'employee';
+    } else {
+      if (!adminPinUnlocked) {
+        const pin = prompt(lang === 'en' ? 'Enter Demo Admin PIN (default: 123456):' : 'Masukkan PIN Admin Demo (default: 123456):');
+        if (pin !== '123456') { toast('PIN salah'); return; }
+        adminPinUnlocked = true;
+      }
+      activeRole = 'admin';
+    }
+    render();
+  };
+  document.getElementById('langToggleBtn').onclick = () => { lang = lang === 'en' ? 'id' : 'en'; render(); };
+  document.getElementById('themeBtn').onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', cur);
+    document.getElementById('themeBtn').textContent = cur === 'dark' ? 'Light' : 'Dark';
+  };
+  render();
+})();
+</script>
+</body>
+</html>

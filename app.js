@@ -15,7 +15,7 @@ const SITE_CONFIG = {
   paymentMode: 'mayar', // otomatis membuka link Mayar bila tersedia di data-payment-url, atau fallback email jika masih mailto:
   bloggerOrigin: 'https://asetkode.blogspot.com',
   onlyReadyProducts: true, // true = hanya tampilkan produk yang sudah punya paket .ZIP & demo siap kirim
-  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24', 'prod-25'],
+  readyIds: ['prod-1', 'prod-2', 'prod-3', 'prod-4', 'prod-5', 'prod-6', 'prod-7', 'prod-8', 'prod-9', 'prod-10', 'prod-11', 'prod-12', 'prod-13', 'prod-14', 'prod-15', 'prod-16', 'prod-17', 'prod-18', 'prod-19', 'prod-20', 'prod-21', 'prod-22', 'prod-23', 'prod-24', 'prod-25', 'prod-26'],
   usdStoreUrl: 'https://polar.sh/ddev-studio',
   gasWebAppUrl: 'https://script.google.com/macros/s/AKfycbyOP0ljBzNyNmHFR9V3S7nwusTeIHFvpH2iQ0VfZMT8yauk2wJ_vJY5ApIGYwF5Dp_5/exec'
 };
@@ -1240,6 +1240,50 @@ const FALLBACK_PRODUCTS = [
       "Preloaded 8 Tour Packages & Tamper-Evident E-Voucher System.",
       "Bilingual Setup Guide (EN + ID) & Commercial License."
     ]
+  },
+  {
+    "id": "prod-26",
+    "title": "Sistem HRIS, Absensi, Cuti & Payroll Karyawan (KaryaHR Pro Laravel 12)",
+    "titleEn": "Enterprise HRIS, Attendance, Leave & Payroll System (Laravel 12 MVC)",
+    "categories": [
+      "Web App",
+      "PHP",
+      "Laravel",
+      "Source Code"
+    ],
+    "price": "Rp 189.000",
+    "oldPrice": "Rp 449.000",
+    "priceUsd": "$29",
+    "oldPriceUsd": "$59",
+    "usdPaymentUrl": "",
+    "paymentUrl": "#checkout-mayar",
+    "demoUrl": "demo/laravel-hris/",
+    "postUrl": "https://asetkode.blogspot.com/",
+    "version": "v1.0 (Laravel 12 + SQLite & MySQL)",
+    "stack": "Laravel 12 (PHP 8.2) + Eloquent ORM + Blade + SQLite/MySQL",
+    "license": "Personal & Komersial",
+    "openMode": "modal",
+    "demoType": "live_frame",
+    "thumbnailUrl": "demo/laravel-hris/screenshot.png",
+    "summary": "Aplikasi web HRIS & penggajian berbasis framework Laravel 12 MVC asli (bukan PHP biasa). Lengkap dengan Multi-Role Auth (Admin HR, Manager, Karyawan), Direktori Departemen & Karyawan, Check-In/Out Absensi + Ekspor CSV Excel, Workflow Persetujuan Cuti Anti-Double Approve, serta Mesin Hitung Payroll Server-Side & Cetak Slip Gaji A4 bertanda tangan HMAC VRF-.",
+    "summaryEn": "Production-grade Laravel 12 MVC HRIS & Payroll application featuring Role-Based Access Control (Admin HR, Manager, Employee), Department & Staff CRUD, Daily Attendance Check-In/Out with UTF-8 BOM CSV export, Leave Balance Approval Workflow, and Server-Side Payroll Engine with printable VRF-verified Pay Slips.",
+    "features": [
+      "Framework Laravel 12 Asli (Migrations, Eloquent ORM, Middleware Role RBAC, & 5 PHPUnit Feature Tests LOLOS).",
+      "Keamanan Anti-Fraud: Hitung gaji, lembur, denda telat, BPJS 2%, PPh21, & checksum VRF- dihitung penuh di Server Laravel.",
+      "SQLite Pre-Seeded Siap Klik (Buka_Aplikasi_Laravel.bat + vendor/ lengkap) + database.sql siap impor ke MySQL XAMPP/cPanel.",
+      "Absensi Harian Check-In/Out, Pengajuan & Approval Cuti (saldo otomatis berkurang), & Cetak Slip Gaji A4."
+    ],
+    "featuresEn": [
+      "Authentic Laravel 12 MVC Architecture with Migrations, Eloquent ORM, Role Middleware & passing PHPUnit Feature Tests.",
+      "Anti-Fraud Server-Side Payroll Engine calculating late penalties, 2% BPJS, income tax & HMAC VRF- slip codes.",
+      "Zero-Friction Pre-Seeded SQLite + included vendor/ dependencies plus MySQL database.sql schema for cPanel/VPS.",
+      "Daily Check-In/Out Attendance, Leave Balance Approval Workflow, Excel UTF-8 BOM CSV Export & Printable A4 Pay Slips."
+    ],
+    "deliverablesEn": [
+      "Complete Laravel 12 Source Code + Vendor Dependencies + Pre-Seeded SQLite DB.",
+      "MySQL database.sql Schema + PHPUnit Feature Tests + 1-Click Windows Launcher.",
+      "Bilingual Setup Guide (EN + ID) & Commercial License."
+    ]
   }
 ];
 
@@ -1427,7 +1471,7 @@ function updateFilterChipCounts() {
     all: isEn ? 'All Products' : 'Semua Karya',
     'Web App': 'Web App',
     'Source Code': 'Source Code',
-    PHP: 'PHP & MySQL',
+    PHP: 'PHP & Laravel',
     Python: 'Python',
     JavaScript: 'JavaScript',
     'Desain Web': isEn ? 'Web Design' : 'Desain Web',
@@ -1703,7 +1747,7 @@ window.goToCatalogPage = function (pageNum) {
   if (kat) kat.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-const FEATURED_CAROUSEL_IDS = ['prod-25', 'prod-1', 'prod-4', 'prod-19', 'prod-18', 'prod-20', 'prod-16', 'prod-24', 'prod-6', 'prod-3'];
+const FEATURED_CAROUSEL_IDS = ['prod-26', 'prod-25', 'prod-1', 'prod-4', 'prod-19', 'prod-18', 'prod-20', 'prod-16', 'prod-24', 'prod-6'];
 let spotlightPicks = [];
 let spotlightActiveIdx = 0;
 
@@ -2961,7 +3005,7 @@ function applyStorefrontLocaleUI() {
   const co2 = document.getElementById('coStat2');
   const co3 = document.getElementById('coStat3');
   const coFreeLink = document.getElementById('coStatFreeLink');
-  if (openPill) openPill.textContent = isEn ? 'OFFICIAL CATALOG • 25 PRO APPS' : 'KATALOG RESMI • 25 APLIKASI PRO';
+  if (openPill) openPill.textContent = isEn ? 'OFFICIAL CATALOG • 26 PRO APPS' : 'KATALOG RESMI • 26 APLIKASI PRO';
   if (openTitle) openTitle.textContent = isEn
     ? 'Pick Production-Ready Source Code to Ship Faster'
     : 'Pilih Source Code Siap Pakai untuk Mempercepat Proyek & Bisnis Anda';
