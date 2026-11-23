@@ -2624,11 +2624,12 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
 /* ================= CATALOG OPENING HEADER ================= */
 .catalog-opening {
   display: grid;
-  grid-template-columns: 1.35fr 0.95fr;
-  gap: 24px;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 36px;
   align-items: center;
-  padding: 26px 28px;
-  margin-bottom: 22px;
+  padding: 40px 42px;
+  min-height: 228px;
+  margin-bottom: 26px;
   border-radius: var(--radius-xl);
   background: linear-gradient(135deg, var(--bg-surface) 0%, var(--accent-soft) 100%);
   border: 1px solid var(--border-color);
@@ -2638,47 +2639,48 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
 .catalog-opening-pill {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.05em;
-  padding: 4px 11px;
+  padding: 6px 14px;
   border-radius: 999px;
   background: var(--bg-surface);
   color: var(--accent);
   border: 1px solid rgba(79, 70, 229, 0.25);
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .catalog-opening-title {
-  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  font-size: clamp(1.55rem, 2.75vw, 2.15rem);
   font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  margin-bottom: 12px;
 }
 
 .catalog-opening-sub {
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.68;
 }
 
 .catalog-opening-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 14px;
 }
 
 .co-stat {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 14px 12px;
+  padding: 22px 16px;
+  min-height: 112px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .co-stat-free {
@@ -2693,23 +2695,24 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
 
 .co-stat-num {
   font-family: var(--font-mono);
-  font-size: 1.15rem;
+  font-size: 1.48rem;
   font-weight: 800;
   color: var(--text-primary);
 }
 
 .co-stat-lbl {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 @media (max-width: 960px) {
   .catalog-opening {
     grid-template-columns: 1fr;
-    padding: 20px;
-    gap: 18px;
+    padding: 28px 24px;
+    min-height: auto;
+    gap: 22px;
   }
 }
 
