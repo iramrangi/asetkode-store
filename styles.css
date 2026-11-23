@@ -467,6 +467,8 @@ html[data-theme="dark"] .hero {
 .status-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 10px;
   padding: 5px 14px 5px 8px;
   border-radius: 999px;
@@ -477,6 +479,7 @@ html[data-theme="dark"] .hero {
   color: var(--text-secondary);
   margin-bottom: 24px;
   box-shadow: var(--shadow-sm);
+  max-width: 100%;
 }
 
 .status-pill-badge {
@@ -842,19 +845,18 @@ html[data-theme="dark"] .hero {
 .filter-bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 12px;
-  scrollbar-width: none;
+  padding: 4px 0 12px;
 }
 
 .filter-chip {
-  padding: 8px 16px;
+  padding: 7px 14px;
   border-radius: 999px;
   border: 1px solid var(--border-color);
   background: var(--bg-surface);
   color: var(--text-secondary);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -1537,10 +1539,12 @@ html, body {
 
   /* --- Katalog --- */
   .filter-bar {
-    margin-left: calc(-1 * clamp(16px, 4vw, 28px));
-    margin-right: calc(-1 * clamp(16px, 4vw, 28px));
-    padding-left: clamp(16px, 4vw, 28px);
-    padding-right: clamp(16px, 4vw, 28px);
+    gap: 7px;
+    padding: 4px 0 10px;
+  }
+  .filter-chip {
+    padding: 7px 12px;
+    font-size: 0.76rem;
   }
   .toolbar-row {
     flex-direction: column;
