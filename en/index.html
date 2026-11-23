@@ -261,101 +261,106 @@
     <!-- DYNAMIC PRODUCT GRID -->
     <div class="product-grid" id="productGrid"></div>
     <div class="catalog-pagination" id="catalogPagination"></div>
-
-    <!-- BENTO ADVANTAGES SECTION -->
-    <section id="keunggulan" class="section-block">
-      <div class="section-header">
-        <h2>Why Ddev Studio?</h2>
-      </div>
-      <div class="bento-grid">
-        <div class="bento-box">
-          <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div>
-          <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Test Live in Browser</h3>
-          <p style="font-size:0.83rem; color:var(--text-secondary);">Preview desktop, tablet, and mobile flows before purchasing.</p>
-        </div>
-        <div class="bento-box">
-          <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / PAY PER APP</div>
-          <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Transparent Individual Pricing</h3>
-          <p style="font-size:0.83rem; color:var(--text-secondary);">Buy only the tools you need from $7 USD with lifetime access.</p>
-        </div>
-        <div class="bento-box">
-          <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div>
-          <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open Source Code</h3>
-          <p style="font-size:0.83rem; color:var(--text-secondary);">Zero obfuscation, sample SQL/data, and commercial usage license.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW TO ORDER: 3 STEPS -->
-    <section id="cara-order" class="section-block">
-      <div class="section-header">
-        <h2>How to Buy in 3 Steps</h2>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <span class="step-num">01</span>
-          <h3>Test Demo &amp; Pick</h3>
-          <p>Launch the interactive <strong>Demo</strong> then click <strong>Buy Now</strong> or add to Cart.</p>
-        </div>
-        <div class="step-card">
-          <span class="step-num">02</span>
-          <h3>Pay Securely (USD)</h3>
-          <p>Complete checkout with Card / Apple Pay via <strong>Polar.sh</strong> or QRIS in Indonesia.</p>
-        </div>
-        <div class="step-card">
-          <span class="step-num">03</span>
-          <h3>Download .ZIP</h3>
-          <p>Receive your full <code>.ZIP</code> package + setup docs directly by email.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="standar-paket" class="section-block" style="display:none;"></section>
-
-    <!-- CUSTOM PROJECT BANNER -->
-    <div class="custom-service-banner" id="customOrderSection">
-      <div>
-        <div style="font-family:var(--font-mono); font-size:0.72rem; font-weight:800; color:var(--accent); margin-bottom:4px;">CUSTOM STUDIO</div>
-        <h3 style="font-size:1.08rem; font-weight:800; margin-bottom:4px;">Need Custom Software or Tailored Features?</h3>
-        <p style="font-size:0.84rem; color:var(--text-secondary);">Our team can customize branding, integrate APIs, or build bespoke web systems for your business.</p>
-      </div>
-      <button type="button" class="btn btn-primary" id="customOrderBtn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <span class="custom-order-text">Request Custom Project</span>
-      </button>
-    </div>
-
-    <!-- INTERACTIVE FAQ -->
-    <section id="faq" class="section-block">
-      <div class="section-header">
-        <span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">FAQ</span>
-        <h2>Frequently Asked Questions</h2>
-      </div>
-      <div class="faq-list" id="faqList">
-        <div class="faq-item open">
-          <button type="button" class="faq-q">
-            <span>Is the source code 100% unlocked and customizable?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">Yes. Every package is delivered as clean, readable source code with zero obfuscation, so you can rebrand, modify features, and deploy for yourself or clients.</div>
-        </div>
-        <div class="faq-item">
-          <button type="button" class="faq-q">
-            <span>How are international USD orders delivered?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">Global purchases are processed via <strong>Polar.sh</strong> (Visa, Mastercard, Apple Pay). Once payment confirms, your Google Drive download link is automatically emailed to you and support is available at <strong data-order-email>dekamayooo@gmail.com</strong>.</div>
-        </div>
-        <div class="faq-item">
-          <button type="button" class="faq-q">
-            <span>Are there any monthly or recurring fees?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">No. You pay <strong>once</strong> for lifetime access and a personal + commercial usage license.</div>
-        </div>
-      </div>
-    </section>
   </main>
+
+  <!-- DARK VALUE & HOW-TO-ORDER SHOWCASE BAND -->
+  <section class="dark-showcase-band">
+    <div class="container">
+      <!-- BENTO ADVANTAGES SECTION -->
+      <section id="keunggulan" class="section-block">
+        <div class="section-header">
+          <h2>Why Ddev Studio?</h2>
+        </div>
+        <div class="bento-grid">
+          <div class="bento-box">
+            <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div>
+            <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Test Live in Browser</h3>
+            <p style="font-size:0.83rem; color:var(--text-secondary);">Preview desktop, tablet, and mobile flows before purchasing.</p>
+          </div>
+          <div class="bento-box">
+            <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / PAY PER APP</div>
+            <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Transparent Individual Pricing</h3>
+            <p style="font-size:0.83rem; color:var(--text-secondary);">Buy only the tools you need from $7 USD with lifetime access.</p>
+          </div>
+          <div class="bento-box">
+            <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div>
+            <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open Source Code</h3>
+            <p style="font-size:0.83rem; color:var(--text-secondary);">Zero obfuscation, sample SQL/data, and commercial usage license.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW TO ORDER: 3 STEPS -->
+      <section id="cara-order" class="section-block">
+        <div class="section-header">
+          <h2>How to Buy in 3 Steps</h2>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">01</span>
+            <h3>Test Demo &amp; Pick</h3>
+            <p>Launch the interactive <strong>Demo</strong> then click <strong>Buy Now</strong> or add to Cart.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">02</span>
+            <h3>Pay Securely (USD)</h3>
+            <p>Complete checkout with Card / Apple Pay via <strong>Polar.sh</strong> or QRIS in Indonesia.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">03</span>
+            <h3>Download .ZIP</h3>
+            <p>Receive your full <code>.ZIP</code> package + setup docs directly by email.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="standar-paket" class="section-block" style="display:none;"></section>
+
+      <!-- CUSTOM PROJECT BANNER -->
+      <div class="custom-service-banner" id="customOrderSection">
+        <div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; font-weight:800; color:var(--accent); margin-bottom:4px;">CUSTOM STUDIO</div>
+          <h3 style="font-size:1.08rem; font-weight:800; margin-bottom:4px;">Need Custom Software or Tailored Features?</h3>
+          <p style="font-size:0.84rem; color:var(--text-secondary);">Our team can customize branding, integrate APIs, or build bespoke web systems for your business.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="customOrderBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span class="custom-order-text">Request Custom Project</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE FAQ -->
+  <section id="faq" class="container section-block faq-section-wrap">
+    <div class="section-header">
+      <span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">FAQ</span>
+      <h2>Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item open">
+        <button type="button" class="faq-q">
+          <span>Is the source code 100% unlocked and customizable?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes. Every package is delivered as clean, readable source code with zero obfuscation, so you can rebrand, modify features, and deploy for yourself or clients.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">
+          <span>How are international USD orders delivered?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Global purchases are processed via <strong>Polar.sh</strong> (Visa, Mastercard, Apple Pay). Once payment confirms, your Google Drive download link is automatically emailed to you and support is available at <strong data-order-email>dekamayooo@gmail.com</strong>.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">
+          <span>Are there any monthly or recurring fees?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">No. You pay <strong>once</strong> for lifetime access and a personal + commercial usage license.</div>
+      </div>
+    </div>
+  </section>
 
   <!-- FOOTER -->
   <footer class="site-footer">

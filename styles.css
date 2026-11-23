@@ -2188,6 +2188,72 @@ html, body {
   box-shadow: var(--shadow-sm);
 }
 
+/* ================= DARK VALUE & HOW-TO-ORDER BAND ================= */
+.dark-showcase-band {
+  background:
+    radial-gradient(ellipse 65% 55% at 15% 10%, rgba(79, 70, 229, 0.16), transparent 60%),
+    radial-gradient(ellipse 55% 50% at 88% 85%, rgba(16, 185, 129, 0.11), transparent 55%),
+    #0b0f19;
+  color: #f8fafc;
+  padding: 64px 0 68px;
+  margin-top: 56px;
+  border-top: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
+}
+
+.dark-showcase-band .section-block:first-child {
+  margin-top: 0;
+}
+
+.dark-showcase-band .section-header h2 {
+  color: #ffffff;
+}
+
+.dark-showcase-band .bento-box,
+.dark-showcase-band .step-card,
+.dark-showcase-band .custom-service-banner {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.11);
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+.dark-showcase-band .bento-box:hover,
+.dark-showcase-band .step-card:hover,
+.dark-showcase-band .custom-service-banner:hover {
+  background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(99, 102, 241, 0.55);
+}
+
+.dark-showcase-band .bento-box h3,
+.dark-showcase-band .step-card h3,
+.dark-showcase-band .custom-service-banner h3 {
+  color: #ffffff;
+}
+
+.dark-showcase-band .bento-box p,
+.dark-showcase-band .step-card p,
+.dark-showcase-band .custom-service-banner p {
+  color: #cbd5e1 !important;
+}
+
+.dark-showcase-band .bento-box > div:first-child {
+  color: #94a3b8 !important;
+}
+
+.dark-showcase-band .step-num {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.dark-showcase-band .custom-service-banner > div > div:first-child {
+  color: #818cf8 !important;
+}
+
+.faq-section-wrap {
+  padding-bottom: 56px;
+}
+
 .related-mini-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

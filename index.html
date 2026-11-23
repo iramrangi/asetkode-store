@@ -238,108 +238,113 @@
     <!-- DYNAMIC PRODUCT GRID -->
     <div class="product-grid" id="productGrid"></div>
     <div class="catalog-pagination" id="catalogPagination"></div>
-
-    <!-- BENTO ADVANTAGES SECTION -->
-    <section id="keunggulan" class="section-block">
-      <div class="section-header">
-        <h2>Keunggulan Paket Ddev Studio</h2>
-      </div>
-      <div class="bento-grid">
-        <div class="bento-box">
-          <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div>
-          <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Uji Langsung di Browser</h3>
-          <p style="font-size:0.83rem; color:var(--text-secondary);">Cek fitur Desktop &amp; HP sebelum membeli.</p>
-        </div>
-        <div class="bento-box">
-          <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / HARGA SATUAN</div>
-          <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Beli Sesuai Kebutuhan</h3>
-          <p style="font-size:0.83rem; color:var(--text-secondary);">Semua produk dijual satuan mulai Rp 39.000, sekali bayar tanpa langganan.</p>
-        </div>
-        <div class="bento-box">
-          <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div>
-          <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open Code &amp; Panduan</h3>
-          <p style="font-size:0.83rem; color:var(--text-secondary);">Tanpa enkripsi, lengkap dengan data uji &amp; lisensi komersial.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW TO ORDER: 3 STEPS -->
-    <section id="cara-order" class="section-block">
-      <div class="section-header">
-        <h2>Cara Beli dalam 3 Langkah</h2>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <span class="step-num">01</span>
-          <h3>Coba Demo &amp; Pilih</h3>
-          <p>Uji tombol <strong>Demo</strong> lalu klik <strong>Beli Instan</strong> atau masukkan ke Keranjang.</p>
-        </div>
-        <div class="step-card">
-          <span class="step-num">02</span>
-          <h3>Bayar QRIS / Kartu</h3>
-          <p>Scan <strong>QRIS</strong> (Indonesia) atau kartu via <strong>Polar.sh</strong> (Global USD).</p>
-        </div>
-        <div class="step-card">
-          <span class="step-num">03</span>
-          <h3>Terima File .ZIP</h3>
-          <p>Paket lengkap + panduan instalasi langsung masuk ke email Anda.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="standar-paket" class="section-block" style="display:none;"></section>
-
-    <!-- CUSTOM PROJECT BANNER -->
-    <div class="custom-service-banner" id="customOrderSection">
-      <div>
-        <div style="font-family:var(--font-mono); font-size:0.72rem; font-weight:800; color:var(--accent); margin-bottom:4px;">CUSTOM STUDIO</div>
-        <h3 style="font-size:1.08rem; font-weight:800; margin-bottom:4px;">Butuh Custom Program atau Modifikasi Fitur Khusus?</h3>
-        <p style="font-size:0.84rem; color:var(--text-secondary);">Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.</p>
-      </div>
-      <button type="button" class="btn btn-primary" id="customOrderBtn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <span class="custom-order-text">Konsultasi Custom Project</span>
-      </button>
-    </div>
-
-    <!-- INTERACTIVE FAQ -->
-    <section id="faq" class="section-block">
-      <div class="section-header">
-        <span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">FAQ</span>
-        <h2>Pertanyaan yang Sering Diajukan</h2>
-      </div>
-      <div class="faq-list" id="faqList">
-        <div class="faq-item open">
-          <button type="button" class="faq-q">
-            <span>Apakah source code 100% terbuka dan bebas diedit?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">Ya. Seluruh source code dikirim dalam format terbuka tanpa enkripsi (tidak dikunci ionCube/obfuscator), sehingga Anda bebas mengubah logo, warna, fitur, maupun menyesuaikannya untuk kebutuhan sendiri atau klien.</div>
-        </div>
-        <div class="faq-item">
-          <button type="button" class="faq-q">
-            <span>Apakah pemula tanpa keahlian coding bisa menggunakannya?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">Bisa. Produk unggulan seperti Aplikasi Kasir POS sudah Zero-Config (cukup klik file pembuka langsung jalan di browser), dan setiap paket disertai panduan instalasi langkah demi langkah dalam Bahasa Indonesia.</div>
-        </div>
-        <div class="faq-item">
-          <button type="button" class="faq-q">
-            <span>Bagaimana cara membeli dan menerima file produknya?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">Klik tombol <strong>Beli Instan</strong> atau checkout lewat keranjang belanja. Anda akan melihat tombol <strong>Kirim via Gmail Web</strong> / <strong>Buka Aplikasi Email</strong> dengan format order otomatis ke <strong data-order-email>dekamayooo@gmail.com</strong>. Setelah pembayaran terkonfirmasi, file <code>.ZIP</code> langsung dikirim ke email Anda.</div>
-        </div>
-        <div class="faq-item">
-          <button type="button" class="faq-q">
-            <span>Apakah ada biaya langganan bulanan atau tahunan?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-a">Tidak ada. Anda cukup membayar <strong>1 kali saja</strong> untuk memiliki source code dan lisensi pemakaian selamanya (personal maupun komersial).</div>
-        </div>
-      </div>
-    </section>
   </main>
+
+  <!-- DARK VALUE & HOW-TO-ORDER SHOWCASE BAND -->
+  <section class="dark-showcase-band">
+    <div class="container">
+      <!-- BENTO ADVANTAGES SECTION -->
+      <section id="keunggulan" class="section-block">
+        <div class="section-header">
+          <h2>Keunggulan Paket Ddev Studio</h2>
+        </div>
+        <div class="bento-grid">
+          <div class="bento-box">
+            <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div>
+            <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Uji Langsung di Browser</h3>
+            <p style="font-size:0.83rem; color:var(--text-secondary);">Cek fitur Desktop &amp; HP sebelum membeli.</p>
+          </div>
+          <div class="bento-box">
+            <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / HARGA SATUAN</div>
+            <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Beli Sesuai Kebutuhan</h3>
+            <p style="font-size:0.83rem; color:var(--text-secondary);">Semua produk dijual satuan mulai Rp 39.000, sekali bayar tanpa langganan.</p>
+          </div>
+          <div class="bento-box">
+            <div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div>
+            <h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open Code &amp; Panduan</h3>
+            <p style="font-size:0.83rem; color:var(--text-secondary);">Tanpa enkripsi, lengkap dengan data uji &amp; lisensi komersial.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW TO ORDER: 3 STEPS -->
+      <section id="cara-order" class="section-block">
+        <div class="section-header">
+          <h2>Cara Beli dalam 3 Langkah</h2>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">01</span>
+            <h3>Coba Demo &amp; Pilih</h3>
+            <p>Uji tombol <strong>Demo</strong> lalu klik <strong>Beli Instan</strong> atau masukkan ke Keranjang.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">02</span>
+            <h3>Bayar QRIS / Kartu</h3>
+            <p>Scan <strong>QRIS</strong> (Indonesia) atau kartu via <strong>Polar.sh</strong> (Global USD).</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">03</span>
+            <h3>Terima File .ZIP</h3>
+            <p>Paket lengkap + panduan instalasi langsung masuk ke email Anda.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="standar-paket" class="section-block" style="display:none;"></section>
+
+      <!-- CUSTOM PROJECT BANNER -->
+      <div class="custom-service-banner" id="customOrderSection">
+        <div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; font-weight:800; color:var(--accent); margin-bottom:4px;">CUSTOM STUDIO</div>
+          <h3 style="font-size:1.08rem; font-weight:800; margin-bottom:4px;">Butuh Custom Program atau Modifikasi Fitur Khusus?</h3>
+          <p style="font-size:0.84rem; color:var(--text-secondary);">Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="customOrderBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span class="custom-order-text">Konsultasi Custom Project</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE FAQ -->
+  <section id="faq" class="container section-block faq-section-wrap">
+    <div class="section-header">
+      <span class="brand-badge" style="font-size:0.72rem; padding:4px 12px;">FAQ</span>
+      <h2>Pertanyaan yang Sering Diajukan</h2>
+    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item open">
+        <button type="button" class="faq-q">
+          <span>Apakah source code 100% terbuka dan bebas diedit?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Ya. Seluruh source code dikirim dalam format terbuka tanpa enkripsi (tidak dikunci ionCube/obfuscator), sehingga Anda bebas mengubah logo, warna, fitur, maupun menyesuaikannya untuk kebutuhan sendiri atau klien.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">
+          <span>Apakah pemula tanpa keahlian coding bisa menggunakannya?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Bisa. Produk unggulan seperti Aplikasi Kasir POS sudah Zero-Config (cukup klik file pembuka langsung jalan di browser), dan setiap paket disertai panduan instalasi langkah demi langkah dalam Bahasa Indonesia.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">
+          <span>Bagaimana cara membeli dan menerima file produknya?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Klik tombol <strong>Beli Instan</strong> atau checkout lewat keranjang belanja. Anda akan melihat tombol <strong>Kirim via Gmail Web</strong> / <strong>Buka Aplikasi Email</strong> dengan format order otomatis ke <strong data-order-email>dekamayooo@gmail.com</strong>. Setelah pembayaran terkonfirmasi, file <code>.ZIP</code> langsung dikirim ke email Anda.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q">
+          <span>Apakah ada biaya langganan bulanan atau tahunan?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Tidak ada. Anda cukup membayar <strong>1 kali saja</strong> untuk memiliki source code dan lisensi pemakaian selamanya (personal maupun komersial).</div>
+      </div>
+    </div>
+  </section>
 
   <!-- FOOTER -->
   <footer class="site-footer">
