@@ -3,8 +3,8 @@
 Single source of visual truth for `https://asetkode-store.pages.dev/` (`/` ID & `/en/` Global USD). Synced with [styles.css](./styles.css).
 
 ## 1. Direction & Principles
-- **Aesthetic:** Editorial Commerce / Swiss Crisp + Stripe/Polar clarity. High-signal product typography, restrained surface hierarchy, interactive Live Demo proof upfront.
-- **Hierarchy:** Sticky glass navbar -> centered Hero with 3 stat tiles -> 2-column rotating Spotlight Showcase -> filterable Product Grid -> high-contrast Dark Showcase Band (`#keunggulan`, `#cara-order`, `#customOrderSection`) -> FAQ -> Footer.
+- **Aesthetic:** Editorial Commerce / Swiss Crisp + Stripe/Polar clarity. Subtle `26px` architectural dot-grid hero canvas, elevated signature spotlight card, clear primary-vs-secondary card CTA hierarchy, and high-contrast dark value showcase band.
+- **Hierarchy:** Sticky glass navbar -> dot-grid Hero with 3 hairline-accent stat tiles -> 2-column Spotlight Showcase (`radial-gradient` corner sheen) -> filterable Product Grid -> `.dark-showcase-band` (`#keunggulan`, `#cara-order`, `#customOrderSection`) -> FAQ -> Footer.
 - **Anti-slop bans:** No neon/rainbow gradients, no Lorem Ipsum, no `<= 4.5:1` badge text, no clipped mobile 2-col cards, no decorative bounce motion.
 
 ## 2. Color Tokens (Light & Dark, WCAG >= 4.5:1)
