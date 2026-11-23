@@ -2481,6 +2481,10 @@ html, body {
 
 .spotlight-media {
   position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
   border-radius: var(--radius-lg);
   overflow: hidden;
   aspect-ratio: 16 / 10;
@@ -2488,6 +2492,21 @@ html, body {
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-md);
   cursor: pointer;
+}
+
+.title-link-btn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  display: block;
 }
 
 .spotlight-media img {

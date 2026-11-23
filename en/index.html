@@ -95,7 +95,7 @@
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="search" id="searchInput" class="nav-search-input" placeholder="Search POS, travel, PHP, Python..." />
+        <input type="search" id="searchInput" class="nav-search-input" autocomplete="off" aria-label="Search source code and web apps" placeholder="Search POS, travel, PHP, Python..." />
       </div>
 
       <nav class="nav-menu">
@@ -393,7 +393,7 @@
   </footer>
 
   <!-- ================= 1. INTERACTIVE LIVE DEMO SIMULATOR MODAL ================= -->
-  <div class="backdrop" id="demoSimModal">
+  <div class="backdrop" id="demoSimModal" role="dialog" aria-modal="true" aria-labelledby="demoSimTitle">
     <div class="modal-window" style="max-width:1080px; height:88vh;">
       <div class="demo-sim-toolbar">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -421,7 +421,7 @@
   </div>
 
   <!-- ================= 2. PRODUCT DETAIL & FILE INSPECTOR MODAL ================= -->
-  <div class="backdrop" id="detailModal">
+  <div class="backdrop" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
     <div class="modal-window">
       <div class="modal-top">
         <div class="modal-top-title" id="detailModalTitle">Product Details</div>
@@ -432,10 +432,10 @@
   </div>
 
   <!-- ================= 3. SLIDE-OVER SHOPPING CART DRAWER ================= -->
-  <div class="backdrop" id="cartBackdrop">
+  <div class="backdrop" id="cartBackdrop" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
     <aside class="cart-drawer" id="cartDrawer" onclick="event.stopPropagation()">
       <div class="modal-top">
-        <div class="modal-top-title">Your Shopping Cart</div>
+        <div class="modal-top-title" id="cartDrawerTitle">Your Shopping Cart</div>
         <button type="button" class="close-x" id="closeCartBtn" aria-label="Close Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
       <div class="cart-items-list" id="cartItemsContainer"></div>
@@ -451,7 +451,7 @@
   </div>
 
   <!-- ================= 4. INSTANT CHECKOUT MODAL ================= -->
-  <div class="backdrop" id="checkoutModal">
+  <div class="backdrop" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
     <div class="modal-window" style="max-width:740px; height:86vh;">
       <div class="modal-top">
         <div class="modal-top-title" id="checkoutModalTitle">Checkout Details</div>
@@ -497,7 +497,7 @@
       <button type="button" class="ai-chip-btn js-ai-chip" data-chip-idx="2" data-prompt-id="Berapa kisaran harga satuan produk?" data-prompt-en="What is the individual price range in USD?">💰 Price Range</button>
     </div>
     <form class="ai-chat-form" id="aiChatForm">
-      <input type="text" class="ai-chat-input" id="aiChatInput" autocomplete="off" placeholder="Ask about apps, live demos, USD checkout, or license..." />
+      <input type="text" class="ai-chat-input" id="aiChatInput" autocomplete="off" aria-label="Message AI Assistant" placeholder="Ask about apps, live demos, USD checkout, or license..." />
       <button type="submit" class="ai-chat-send" id="aiChatSendBtn">Send</button>
     </form>
   </div>

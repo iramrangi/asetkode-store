@@ -1555,7 +1555,7 @@ function renderProductsGrid() {
       return `
         <article class="product-card" data-id="${p.id}">
           <div class="card-thumb">
-            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
+            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="360" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
             <button type="button" class="save-heart-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleWishlistById('${p.id}')" title="${disp.isEn ? 'Save product' : 'Simpan produk'}" aria-label="${disp.isEn ? 'Save product' : 'Simpan produk'}">${isSaved ? '♥' : '♡'}</button>
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             <div class="thumb-tags">
@@ -1575,7 +1575,7 @@ function renderProductsGrid() {
           </div>
 
           <div class="card-body">
-            <h3 class="card-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
+            <h3 class="card-title"><button type="button" class="title-link-btn" onclick="openDetailById('${p.id}')">${disp.title}</button></h3>
             <p class="card-desc">${disp.summary}</p>
 
             <div class="stack-row">
@@ -1667,16 +1667,16 @@ window.openCustomConsultModal = function () {
       </p>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
         <div>
-          <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Your Name' : 'Nama Anda'}</label>
-          <input id="custConsultName" type="text" placeholder="${isEn ? 'e.g. Alex / Acme Studio' : 'Misal: Budi / Toko Maju'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);" />
+          <label for="custConsultName" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Your Name' : 'Nama Anda'}</label>
+          <input id="custConsultName" type="text" autocomplete="name" placeholder="${isEn ? 'e.g. Alex / Acme Studio' : 'Misal: Budi / Toko Maju'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);" />
         </div>
         <div>
-          <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Email / WhatsApp' : 'Email / No. WhatsApp'}</label>
-          <input id="custConsultContact" type="text" placeholder="${isEn ? 'you@domain.com' : '0812xxx / email@domain.com'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);" />
+          <label for="custConsultContact" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Email / WhatsApp' : 'Email / No. WhatsApp'}</label>
+          <input id="custConsultContact" type="text" autocomplete="email" placeholder="${isEn ? 'you@domain.com' : '0812xxx / email@domain.com'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);" />
         </div>
       </div>
       <div>
-        <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Project Type' : 'Jenis Kebutuhan'}</label>
+        <label for="custConsultType" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Project Type' : 'Jenis Kebutuhan'}</label>
         <select id="custConsultType" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);">
           <option value="${isEn ? 'Customize Existing Ddev Studio App' : 'Modifikasi Aplikasi Ddev Studio'}">${isEn ? 'Customize Existing Ddev Studio App' : 'Modifikasi Aplikasi Ddev Studio (Logo/Fitur)'}</option>
           <option value="${isEn ? 'Build Custom Web / POS / Booking App' : 'Pembuatan Sistem Web / POS / Travel Baru'}">${isEn ? 'Build Custom Web / POS / Booking App' : 'Pembuatan Sistem Web / POS / Travel Baru'}</option>
@@ -1684,7 +1684,7 @@ window.openCustomConsultModal = function () {
         </select>
       </div>
       <div>
-        <label style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Feature & Requirement Details' : 'Detail Fitur / Deskripsi Singkat'}</label>
+        <label for="custConsultNotes" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Feature & Requirement Details' : 'Detail Fitur / Deskripsi Singkat'}</label>
         <textarea id="custConsultNotes" rows="4" placeholder="${isEn ? 'Describe features, deadline, or target budget...' : 'Ceritakan fitur yang diinginkan, estimasi waktu, atau produk referensi...'}" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary); resize:vertical;"></textarea>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:10px; padding-top:4px;">
@@ -1793,16 +1793,16 @@ function renderSpotlightSlide(animate = false) {
   if (animate) void slideEl.offsetWidth;
 
   slideEl.innerHTML = `
-    <div class="spotlight-media" onclick="openLiveDemoById('${p.id}')">
-      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" />
+    <button type="button" class="spotlight-media" onclick="openLiveDemoById('${p.id}')" aria-label="Preview Live Demo ${disp.title}">
+      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" decoding="async" />
       <span class="spotlight-media-badge">${cat}</span>
-    </div>
+    </button>
     <div class="spotlight-content">
       <div class="spotlight-eyebrow">
         <span class="spotlight-pill ${isNew ? 'is-new' : ''}">${tagLabel}</span>
         <span class="spotlight-stack">${stackText}</span>
       </div>
-      <h2 class="spotlight-title" onclick="openDetailById('${p.id}')">${disp.title}</h2>
+      <h2 class="spotlight-title"><button type="button" class="title-link-btn" onclick="openDetailById('${p.id}')">${disp.title}</button></h2>
       <p class="spotlight-desc">${disp.summary}</p>
       <div class="spotlight-metrics">
         <div>
@@ -2341,7 +2341,7 @@ function updateCartUI() {
           <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:4px;">${item.stack}</div>
           <div class="cart-item-price">${dispPrice}</div>
         </div>
-        <button type="button" class="close-x" onclick="removeCartItemById('${item.id}')" title="${isEn ? 'Remove' : 'Hapus'}">×</button>
+        <button type="button" class="close-x" onclick="removeCartItemById('${item.id}')" title="${isEn ? 'Remove' : 'Hapus'}" aria-label="${isEn ? 'Remove' : 'Hapus'}">×</button>
       </div>
     `;
       }
@@ -2575,9 +2575,9 @@ function buildBuiltInPaymentGatewayHTML(order) {
           <div class="title">${esc(order.title)}</div>
           <div class="price">${esc(order.price)}</div>
           <form id="mayarInitForm">
-            <input type="text" id="custName" placeholder="Nama Lengkap Anda" required />
-            <input type="email" id="custEmail" placeholder="Email aktif penerima file (.ZIP)" required />
-            <input type="tel" id="custPhone" placeholder="No. WhatsApp (opsional)" />
+            <input type="text" id="custName" aria-label="Nama Lengkap" autocomplete="name" placeholder="Nama Lengkap Anda" required />
+            <input type="email" id="custEmail" aria-label="Email aktif penerima file ZIP" autocomplete="email" inputmode="email" placeholder="Email aktif penerima file (.ZIP)" required />
+            <input type="tel" id="custPhone" aria-label="Nomor WhatsApp" autocomplete="tel" inputmode="tel" placeholder="No. WhatsApp (opsional)" />
             <button type="submit" class="btn" id="mayarCreateBtn">Lanjut Pembayaran Instan →</button>
           </form>
           <button type="button" class="btn-sec" id="showQrisDirectBtn">Atau Bayar Langsung via Scan QRIS</button>
@@ -2598,9 +2598,9 @@ function buildBuiltInPaymentGatewayHTML(order) {
           <div class="price">${esc(order.price)}</div>
           <div id="qrisReasonAlert" class="alert"></div>
           <div class="qris-box">
-            <img src="${esc(qrisAbsUrl)}" alt="QRIS Ddev Studio" />
+            <img src="${esc(qrisAbsUrl)}" alt="QRIS Ddev Studio" width="240" height="240" />
           </div>
-          <input type="email" id="buyerEmail" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
+          <input type="email" id="buyerEmail" aria-label="Email penerima file ZIP" autocomplete="email" inputmode="email" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
           <a id="qrisGmailBtn" class="btn btn-dark" href="${esc(gmailHref)}" target="_blank" rel="noopener">Sudah Scan Bayar? Konfirmasi via Gmail ↗</a>
           <a class="btn-sec" href="${esc(mailHref)}">Buka Aplikasi Email Lain</a>
           <div class="note">
