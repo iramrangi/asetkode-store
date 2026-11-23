@@ -1793,7 +1793,7 @@ function renderSpotlightSlide(animate = false) {
   if (animate) void slideEl.offsetWidth;
 
   slideEl.innerHTML = `
-    <button type="button" class="spotlight-media" onclick="openLiveDemoById('${p.id}')" aria-label="Preview Live Demo ${disp.title}">
+    <button type="button" class="spotlight-media" onclick="openLiveDemoById('${p.id}')" aria-label="${cat}: Preview Live Demo ${disp.title}">
       <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" decoding="async" />
       <span class="spotlight-media-badge">${cat}</span>
     </button>
