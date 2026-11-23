@@ -1,5 +1,6 @@
 # Ddev Studio Robots Policy
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: https://asetkode-store.pages.dev/sitemap.xml
