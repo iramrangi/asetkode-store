@@ -1802,7 +1802,7 @@ function renderSpotlightSlide(animate = false) {
         <span class="spotlight-pill ${isNew ? 'is-new' : ''}">${tagLabel}</span>
         <span class="spotlight-stack">${stackText}</span>
       </div>
-      <h3 class="spotlight-title" onclick="openDetailById('${p.id}')">${disp.title}</h3>
+      <h2 class="spotlight-title" onclick="openDetailById('${p.id}')">${disp.title}</h2>
       <p class="spotlight-desc">${disp.summary}</p>
       <div class="spotlight-metrics">
         <div>
@@ -1839,7 +1839,7 @@ function renderSpotlightSlide(animate = false) {
     dotsEl.innerHTML = spotlightPicks
       .map((item, idx) => {
         const itemDisp = getProdDisplay(item);
-        return `<button type="button" class="s-dot ${idx === spotlightActiveIdx ? 'active' : ''}" data-idx="${idx}" aria-label="${itemDisp.title}" aria-selected="${idx === spotlightActiveIdx ? 'true' : 'false'}"></button>`;
+        return `<button type="button" role="tab" class="s-dot ${idx === spotlightActiveIdx ? 'active' : ''}" data-idx="${idx}" aria-label="${itemDisp.title}" aria-selected="${idx === spotlightActiveIdx ? 'true' : 'false'}"></button>`;
       })
       .join('');
     dotsEl.querySelectorAll('.s-dot').forEach((btn) => {

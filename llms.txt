@@ -1,0 +1,16 @@
+# Ddev Studio Storefront
+
+> Marketplace of 26 commercial web applications, Laravel 12 MVC systems, PHP 8 + MySQL apps, Python automation scripts, Blogger XML themes, and 12 MIT-licensed free developer tools with interactive browser live demos.
+
+## Storefront Pages
+
+- [Indonesian Catalog (Main)](https://asetkode-store.pages.dev/): Full catalog of 26 commercial web apps and templates priced in IDR.
+- [Global English Storefront (USD)](https://asetkode-store.pages.dev/en/): International English storefront with Polar.sh USD checkout ($7–$29).
+- [12 Free Open-Source Tools (MIT)](https://asetkode-store.pages.dev/free/): Free MIT utilities, starter landing page, and CleanPress Blogger XML theme.
+
+## Featured Interactive Live Demos
+
+- [KaryaHR Pro Laravel 12 HRIS & Payroll Demo](https://asetkode-store.pages.dev/demo/laravel-hris/): Role-based HR, attendance CSV export, leave approval, and VRF-verified payroll slip simulator.
+- [NusantaraVoyage Travel Agency Booking Demo](https://asetkode-store.pages.dev/demo/travel/): Tour booking calculator, quota guards, and VRF E-Voucher generator.
+- [POS Cashier & Live Excel Inventory Demo](https://asetkode-store.pages.dev/demo/kasir/): Offline-first retail POS cashier with thermal receipt print and `.xlsx` export.
+- [Full XML Sitemap](https://asetkode-store.pages.dev/sitemap.xml): Complete list of canonical URLs and all 26 live demo pages.

@@ -12,6 +12,7 @@
   <link rel="alternate" hreflang="id" href="https://asetkode-store.pages.dev/" />
   <link rel="alternate" hreflang="en" href="https://asetkode-store.pages.dev/en/" />
   <link rel="alternate" hreflang="x-default" href="https://asetkode-store.pages.dev/" />
+  <link rel="ard" href="/.well-known/ard.json" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://asetkode-store.pages.dev/" />
   <meta property="og:locale" content="id_ID" />
@@ -86,9 +87,10 @@
       </nav>
 
       <div class="nav-actions">
-        <button type="button" class="icon-btn" id="headerSavedBtn" title="Produk Disimpan" aria-label="Produk Disimpan" style="padding:0 10px;gap:5px;font-weight:700;font-size:0.78rem;">♥ <span id="headerSavedNum">0</span></button>
-        <button type="button" class="icon-btn" id="langCurrencyBtn" title="Switch Language &amp; Currency (IDR / USD)" aria-label="Switch Language &amp; Currency" style="padding:0 10px;gap:5px;font-weight:800;font-size:0.78rem;">
-          <span id="langCurrencyFlag">🇮🇩</span>
+        <button type="button" class="icon-btn" id="headerSavedBtn" title="Produk Disimpan" style="padding:0 10px;gap:5px;font-weight:700;font-size:0.78rem;"><span class="sr-only">Produk Disimpan </span>♥ <span id="headerSavedNum">0</span></button>
+        <button type="button" class="icon-btn" id="langCurrencyBtn" title="Switch Language &amp; Currency (IDR / USD)" style="padding:0 10px;gap:5px;font-weight:800;font-size:0.78rem;">
+          <span class="sr-only">Bahasa &amp; Mata Uang </span>
+          <span id="langCurrencyFlag" aria-hidden="true">🇮🇩</span>
           <span id="langCurrencyLabel">IDR</span>
         </button>
         <button type="button" class="icon-btn theme-toggle-btn" id="themeBtn" title="Ganti Mode Gelap / Terang" aria-label="Ganti Mode Gelap / Terang">
@@ -164,7 +166,7 @@
           <div class="co-stat-lbl" id="coStat2">Sekali Bayar Selamanya</div>
         </div>
         <a href="free/" class="co-stat co-stat-free" id="coStatFreeLink">
-          <div class="co-stat-num" style="color:#059669;">12 Free</div>
+          <div class="co-stat-num" style="color:#047857;">12 Free</div>
           <div class="co-stat-lbl" id="coStat3">Coba Versi MIT Gratis &rarr;</div>
         </a>
       </div>
@@ -192,6 +194,7 @@
 
   <!-- MAIN STORE CATALOG -->
   <main class="container catalog-section" id="katalog">
+    <h2 class="sr-only">Daftar Katalog Produk</h2>
     <!-- CATEGORY FILTER CHIPS -->
     <div class="filter-bar" id="filterBar">
       <button type="button" class="filter-chip active" data-cat="all">Semua Karya</button>
@@ -339,11 +342,11 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <h4 data-brand-name>Ddev Studio</h4>
+          <h3 data-brand-name>Ddev Studio</h3>
           <p>Katalog source code aplikasi web, script otomatisasi, dan template UI modern siap pakai untuk mempercepat proyek developer dan digitalisasi UMKM.</p>
         </div>
         <div class="footer-col">
-          <h4>Navigasi Cepat</h4>
+          <h3>Navigasi Cepat</h3>
           <ul class="footer-links">
             <li><a href="#katalog">Katalog Produk</a></li>
             <li><a href="#keunggulan">Keunggulan Toko</a></li>
@@ -353,12 +356,12 @@
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Kontak &amp; Legalitas</h4>
+          <h3>Kontak &amp; Legalitas</h3>
           <ul class="footer-links">
             <li><a href="mailto:dekamayooo@gmail.com" data-order-mailto data-order-email>dekamayooo@gmail.com</a></li>
-            <li><a href="javascript:void(0)" onclick="openLegalModal('about')">Tentang Kami</a></li>
-            <li><a href="javascript:void(0)" onclick="openLegalModal('terms')">Syarat, Ketentuan &amp; Lisensi</a></li>
-            <li><a href="javascript:void(0)" onclick="openLegalModal('refund')">Kebijakan Refund &amp; Bantuan</a></li>
+            <li><a href="#tentang" onclick="event.preventDefault(); openLegalModal('about')">Tentang Kami</a></li>
+            <li><a href="#lisensi" onclick="event.preventDefault(); openLegalModal('terms')">Syarat, Ketentuan &amp; Lisensi</a></li>
+            <li><a href="#bantuan" onclick="event.preventDefault(); openLegalModal('refund')">Kebijakan Refund &amp; Bantuan</a></li>
           </ul>
         </div>
       </div>

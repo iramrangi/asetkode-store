@@ -14,7 +14,7 @@
 
   --text-primary: #0b0f19;
   --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-muted: #4b5563;
 
   --border-color: #e2e8f0;
   --border-strong: #cbd5e1;
@@ -257,23 +257,24 @@ button, input, select {
   gap: 6px;
   padding: 6px 12px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #065f46 0%, #047857 100%);
   color: #ffffff !important;
   font-weight: 800;
   font-size: 0.8rem;
   letter-spacing: 0.01em;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.28);
+  box-shadow: 0 4px 14px rgba(4, 120, 87, 0.28);
   transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
 }
 
 .nav-menu a.nav-free-btn:hover {
   color: #ffffff !important;
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.38);
+  box-shadow: 0 6px 18px rgba(4, 120, 87, 0.38);
 }
 
 .nav-free-count {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(6, 78, 59, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   color: #ffffff;
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -284,10 +285,10 @@ button, input, select {
 }
 
 .btn-free-hero {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #065f46 0%, #047857 100%);
   color: #ffffff;
-  border: 1px solid #059669;
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.24);
+  border: 1px solid #065f46;
+  box-shadow: 0 6px 16px rgba(4, 120, 87, 0.24);
 }
 
 .btn-free-hero:hover {
@@ -1045,7 +1046,7 @@ html[data-theme="dark"] .theme-icon-moon {
 .price-current {
   font-size: 1.24rem;
   font-weight: 800;
-  color: #059669;
+  color: #047857;
   font-family: var(--font-mono);
   white-space: nowrap;
 }
@@ -1833,6 +1834,19 @@ html, body {
   text-align: left;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.footer-col h3,
 .footer-col h4 {
   font-size: 0.84rem;
   font-weight: 800;
@@ -2550,7 +2564,7 @@ html, body {
 }
 
 .spotlight-metric-val.is-price {
-  color: #059669;
+  color: #047857;
 }
 
 html[data-theme="dark"] .spotlight-metric-val.is-price {
@@ -2628,22 +2642,36 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
 .spotlight-dots {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 2px;
   flex-wrap: wrap;
 }
 
 .s-dot {
+  min-width: 24px;
+  height: 24px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.s-dot::after {
+  content: '';
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  border: 0;
-  padding: 0;
   background: var(--border-strong);
-  cursor: pointer;
   transition: width 0.22s ease, background 0.22s ease;
 }
 
 .s-dot.active {
+  min-width: 32px;
+}
+
+.s-dot.active::after {
   width: 26px;
   background: var(--accent);
 }

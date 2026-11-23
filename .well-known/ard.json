@@ -1,0 +1,36 @@
+{
+  "specVersion": "0.91",
+  "host": {
+    "displayName": "Ddev Studio Storefront",
+    "identifier": "asetkode-store.pages.dev"
+  },
+  "entries": [
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:asetkode-store.pages.dev:docs:llms-guide",
+      "displayName": "Ddev Studio LLMs Catalog Guide",
+      "type": "text/markdown",
+      "url": "https://asetkode-store.pages.dev/llms.txt",
+      "description": "Structured Markdown overview of Ddev Studio commercial source code apps, MIT free tools, and interactive live demos.",
+      "representativeQueries": [
+        "Browse Ddev Studio source code apps and templates",
+        "Find MIT free web developer utilities",
+        "Check prices and live demo links for Ddev Studio products"
+      ],
+      "tags": ["source-code", "laravel", "php", "python", "blogger", "catalog"]
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:asetkode-store.pages.dev:catalog:sitemap",
+      "displayName": "Ddev Studio Product & Demo Sitemap",
+      "type": "application/xml",
+      "url": "https://asetkode-store.pages.dev/sitemap.xml",
+      "description": "Complete canonical sitemap covering Indonesian, English, MIT Free, and 26 interactive demo endpoints.",
+      "representativeQueries": [
+        "List all interactive live demo URLs on Ddev Studio",
+        "Find bilingual storefront URLs"
+      ],
+      "tags": ["sitemap", "demos", "urls"]
+    }
+  ]
+}
