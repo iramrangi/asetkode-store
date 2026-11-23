@@ -18,7 +18,7 @@
   <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='dbg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230b1020'/%3E%3Cstop offset='.55' stop-color='%23312e81'/%3E%3Cstop offset='1' stop-color='%234f46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' fill='url(%23dbg)'/%3E%3Cpath d='M16 14h17c10.5 0 16.5 6.5 16.5 18S43.5 50 33 50H16V14zm8 7.5v21h8.2c6.6 0 9.8-3.5 9.8-10.5s-3.2-10.5-9.8-10.5H24z' fill='%23fff'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml" />
   <style>
     .free-hero { padding: 44px 0 28px; text-align: center; }
-    .free-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.78rem; font-weight: 800; font-family: var(--font-mono); margin-bottom: 14px; }
+    .free-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; font-size: 0.78rem; font-weight: 800; font-family: var(--font-mono); margin-bottom: 14px; }
     html[data-theme="dark"] .free-pill { background: rgba(16, 185, 129, 0.14); color: #34d399; border-color: rgba(16, 185, 129, 0.35); }
     .free-title { font-size: clamp(1.75rem, 3.6vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.18; max-width: 780px; margin: 0 auto 12px; }
     .free-sub { color: var(--text-secondary); max-width: 650px; margin: 0 auto 22px; font-size: 0.98rem; }
@@ -32,7 +32,7 @@
     .free-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .free-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
     .free-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .free-tag { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .free-tag { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
     html[data-theme="dark"] .free-tag { background: rgba(16, 185, 129, 0.14); color: #34d399; border-color: rgba(16, 185, 129, 0.35); }
     .free-card h2 { font-size: 1.08rem; font-weight: 800; line-height: 1.3; }
     .free-card p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.6; flex: 1; }
@@ -58,13 +58,13 @@
       </a>
 
       <nav class="nav-menu">
-        <a href="../" id="navHome">Katalog Pro (25)</a>
+        <a href="../" id="navHome">Katalog Pro (26)</a>
         <a href="../en/" id="navEn">Global Store (EN)</a>
         <a href="https://github.com/iramrangi/asetkode-store/tree/main/free/apps" target="_blank" rel="noopener">GitHub MIT &#8599;</a>
       </nav>
 
       <div class="nav-actions">
-        <button type="button" class="icon-btn" id="langBtn" style="padding:0 11px;font-weight:800;">
+        <button type="button" class="icon-btn" id="langBtn" aria-label="Switch language ID / EN" style="padding:0 11px;font-weight:800;">
           <span id="langLabel">ID</span>
         </button>
         <button type="button" class="icon-btn theme-toggle-btn" id="themeBtn" aria-label="Theme">
@@ -82,7 +82,7 @@
       <p class="free-sub" id="heroSub">Bukan program dummy — seluruh 12 karya di bawah (termasuk Template Website &amp; Tema Blogger XML v3) berjalan penuh di browser tanpa login dan bebas diunduh kode sumbernya (MIT).</p>
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px;">
         <a href="#free-catalog" class="btn btn-primary" id="heroCta1">Jelajahi 12 Produk Gratis</a>
-        <a href="../" class="btn btn-outline" id="heroCta2">Lihat 25 Produk Flagship Pro &rarr;</a>
+        <a href="../" class="btn btn-outline" id="heroCta2">Lihat 26 Produk Flagship Pro &rarr;</a>
       </div>
     </section>
 
@@ -94,21 +94,21 @@
         <button type="button" class="free-tab" data-cat="dev" id="tabDev">Developer (4)</button>
         <button type="button" class="free-tab" data-cat="design" id="tabDesign">Desain &amp; SEO (2)</button>
       </div>
-      <input type="search" class="free-search" id="freeSearch" placeholder="Cari produk gratis..." />
+      <input type="search" class="free-search" id="freeSearch" autocomplete="off" aria-label="Cari produk gratis" placeholder="Cari produk gratis..." />
     </div>
 
     <section class="free-grid" id="free-catalog"></section>
 
     <section class="free-banner">
       <h2 style="font-size:1.35rem;font-weight:800;margin-bottom:8px;" id="bannerTitle">Butuh Sistem Siap Bisnis Skala Penuh?</h2>
-      <p style="color:var(--text-secondary);max-width:600px;margin:0 auto 18px;font-size:0.92rem;" id="bannerSub">Jika koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 25 aplikasi bisnis &amp; source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, dan Tema Blogger).</p>
+      <p style="color:var(--text-secondary);max-width:600px;margin:0 auto 18px;font-size:0.92rem;" id="bannerSub">Jika koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 26 aplikasi bisnis &amp; source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, HRIS Laravel, dan Tema Blogger).</p>
       <a href="../" class="btn btn-primary" id="bannerBtn">Buka Katalog Lengkap Ddev Studio &rarr;</a>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;">
-      <span>&copy; 2026 Ddev Studio &bull; 10 MIT Open Source Tools</span>
+      <span>&copy; 2026 Ddev Studio &bull; 12 MIT Open Source Tools</span>
       <div style="display:flex;gap:16px;">
         <a href="../">Katalog Utama (ID)</a>
         <a href="../en/">Global Store (EN)</a>
@@ -311,7 +311,7 @@
     function render() {
       document.documentElement.lang = isEn ? 'en' : 'id';
       document.getElementById('langLabel').textContent = isEn ? 'EN' : 'ID';
-      document.getElementById('navHome').textContent = isEn ? 'Pro Catalog (25)' : 'Katalog Pro (25)';
+      document.getElementById('navHome').textContent = isEn ? 'Pro Catalog (26)' : 'Katalog Pro (26)';
       document.getElementById('navHome').href = isEn ? '../en/' : '../';
       document.getElementById('heroPill').textContent = isEn ? '12 FREE PRODUCTS • MIT OPEN SOURCE' : '12 PRODUK GRATIS • MIT OPEN SOURCE';
       document.getElementById('heroTitle').textContent = isEn
@@ -321,7 +321,7 @@
         ? 'No dummy stubs — all 12 products (including full HTML Landing Page & Blogger XML v3 Theme) run in browser with zero login and free MIT source download.'
         : 'Bukan program dummy — seluruh 12 karya di bawah (termasuk Template Website & Tema Blogger XML v3) berjalan penuh di browser tanpa login dan bebas diunduh kode sumbernya (MIT).';
       document.getElementById('heroCta1').textContent = isEn ? 'Explore 12 Free Products' : 'Jelajahi 12 Produk Gratis';
-      document.getElementById('heroCta2').textContent = isEn ? 'Browse 25 Pro Products →' : 'Lihat 25 Produk Flagship Pro →';
+      document.getElementById('heroCta2').textContent = isEn ? 'Browse 26 Pro Products →' : 'Lihat 26 Produk Flagship Pro →';
       document.getElementById('heroCta2').href = isEn ? '../en/' : '../';
       document.getElementById('tabAll').textContent = isEn ? 'All (12)' : 'Semua (12)';
       document.getElementById('tabTpl').textContent = isEn ? 'Web & Blogger (2)' : 'Web & Blogger (2)';
@@ -331,8 +331,8 @@
       document.getElementById('freeSearch').placeholder = isEn ? 'Search free products...' : 'Cari produk gratis...';
       document.getElementById('bannerTitle').textContent = isEn ? 'Need Full Production Business Software?' : 'Butuh Sistem Siap Bisnis Skala Penuh?';
       document.getElementById('bannerSub').textContent = isEn
-        ? 'If these 12 open-source products help your workflow, explore 25 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, Invoicing, & Blogger Themes).'
-        : 'Jika 12 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 25 aplikasi bisnis & source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, E-Commerce, Antrian, dan Tema Blogger).';
+        ? 'If these 12 open-source products help your workflow, explore 26 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, HRIS Laravel, Invoicing, & Blogger Themes).'
+        : 'Jika 12 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 26 aplikasi bisnis & source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, HRIS Laravel, E-Commerce, Antrian, dan Tema Blogger).';
       document.getElementById('bannerBtn').textContent = isEn ? 'Open Full Ddev Studio Catalog →' : 'Buka Katalog Lengkap Ddev Studio →';
       document.getElementById('bannerBtn').href = isEn ? '../en/' : '../';
 
@@ -344,6 +344,10 @@
       });
 
       const grid = document.getElementById('free-catalog');
+      if (!filtered.length) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:42px 20px;background:var(--bg-surface);border:1px dashed var(--border-strong);border-radius:16px;"><h2 style="font-size:1.08rem;font-weight:800;margin-bottom:6px;">${isEn ? 'No Matching Free Tool' : 'Produk Gratis Tidak Ditemukan'}</h2><p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:14px;">${isEn ? 'Try another search keyword or view all 12 tools.' : 'Coba kata kunci lain atau tampilkan semua 12 produk.'}</p><button type="button" class="btn btn-primary" onclick="searchQ='';activeCat='all';document.getElementById('freeSearch').value='';document.querySelectorAll('.free-tab').forEach(b=>b.classList.toggle('active',b.getAttribute('data-cat')==='all'));render();">${isEn ? 'Show All 12 Tools' : 'Tampilkan Semua (12)'}</button></div>`;
+        return;
+      }
       grid.innerHTML = filtered.map((t) => {
         const launchHref = t.file + (isEn ? '?lang=en' : '');
         const dlHref = t.dlFile || t.file;
@@ -352,7 +356,7 @@
         return `
           <article class="free-card">
             <div class="free-card-top">
-              <div class="free-icon">${t.icon}</div>
+              <div class="free-icon" aria-hidden="true">${t.icon}</div>
               <span class="free-tag">MIT &bull; FREE</span>
             </div>
             <h2>${isEn ? t.titleEn : t.titleId}</h2>

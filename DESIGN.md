@@ -40,10 +40,11 @@ Single source of visual truth for `https://asetkode-store.pages.dev/` (`/` ID & 
   - `<= 540px`: compact `.hero .co-stat` row (`min-height: 54px`)
 
 ## 5. Component Anatomy
-- **Buttons (`.btn`, `.icon-btn`, `.btn-card`):** Radii `--radius-sm` (`10px`) or pill (`999px`); desktop `.btn` padding `11px 20px`; `.icon-btn` `38px` (`40px` mobile); icon buttons require `aria-label`.
+- **Buttons (`.btn`, `.btn-outline`, `.icon-btn`, `.btn-card`):** Radii `--radius-sm` (`10px`) or pill (`999px`); desktop `.btn` padding `11px 20px`; `.icon-btn` `38px` (`40px` mobile); icon buttons require `aria-label`.
 - **Product Cards (`.product-card`):** `14px` radius, `1px` `--border-color`, `16/9` thumbnail (`width="640" height="360"`, lazy/async), `.title-link-btn` inside `<h3>` for keyboard activation, 2-row footer with `.price-current` + 3 desktop / 2 mobile CTAs.
-- **Spotlight Showcase:** `22px` radius (`--radius-xl`), `0.94fr / 1.06fr` split, `<button class="spotlight-media">` (`16/10`, `640x400`) with `${cat}` included in `aria-label` (WCAG 2.5.3), `24px x 24px` `.s-dot` `role="tab"` touch targets.
-- **Dialogs & Forms:** Every modal uses `role="dialog" aria-modal="true" aria-labelledby`, closes on `Escape` and backdrop click; all inputs have `<label for>` or `aria-label` + semantic `autocomplete`/`inputmode`.
+- **Spotlight Showcase:** `22px` radius (`--radius-xl`), `0.94fr / 1.06fr` split, `<button class="spotlight-media">` (`16/10`, `640x400`, `fetchpriority="high"`) with `${cat}` included in `aria-label` (WCAG 2.5.3), `24px x 24px` `.s-dot` `role="tab"` with Left/Right arrow keyboard nav.
+- **Showcase Bento & /free/ Portal:** Reusable `.bento-kicker` / `.bento-title` / `.bento-copy` & `.custom-*` typography utilities; `/free/` MIT cards use `#065f46` pills (`>= 7:1`), `.btn-outline` secondary actions, `aria-hidden="true"` icons, and explicit empty-search fallback.
+- **Dialogs, FAQ & Forms:** Every modal uses `role="dialog" aria-modal="true" aria-labelledby`, focuses close control on open, closes on `Escape`/backdrop click, and restores focus to trigger; FAQ triggers sync `aria-expanded`; all inputs have `<label for>` or `aria-label` + semantic `autocomplete`/`inputmode`.
 
 ## 6. Motion & Verification Guardrails
 - **Transitions:** Subtle `0.16s–0.22s ease` hover lifts (`translateY(-1px to -4px)`); full `@media (prefers-reduced-motion: reduce)` disable rule.

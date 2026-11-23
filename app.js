@@ -1794,7 +1794,7 @@ function renderSpotlightSlide(animate = false) {
 
   slideEl.innerHTML = `
     <button type="button" class="spotlight-media" onclick="openLiveDemoById('${p.id}')" aria-label="${cat}: Preview Live Demo ${disp.title}">
-      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" decoding="async" />
+      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" fetchpriority="high" decoding="async" />
       <span class="spotlight-media-badge">${cat}</span>
     </button>
     <div class="spotlight-content">
@@ -1846,6 +1846,15 @@ function renderSpotlightSlide(animate = false) {
       btn.addEventListener('click', () => {
         spotlightActiveIdx = Number(btn.getAttribute('data-idx')) || 0;
         renderSpotlightSlide(true);
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const nextIdx = (spotlightActiveIdx + (e.key === 'ArrowRight' ? 1 : -1) + total) % total;
+        spotlightActiveIdx = nextIdx;
+        renderSpotlightSlide(true);
+        const focusBtn = dotsEl.querySelector(`.s-dot[data-idx="${nextIdx}"]`);
+        if (focusBtn) focusBtn.focus();
       });
     });
   }
@@ -2773,8 +2782,25 @@ function initHeroStudioAndROI() {
 }
 
 // ================= 8. MODAL, THEME & TOOLBAR EVENTS =================
+let lastModalFocusEl = null;
+
+function initModalFocusRestore() {
+  document.querySelectorAll('.backdrop').forEach((bd) => {
+    new MutationObserver(() => {
+      if (bd.classList.contains('open')) {
+        if (document.activeElement && !bd.contains(document.activeElement)) {
+          lastModalFocusEl = document.activeElement;
+        }
+        const closeBtn = bd.querySelector('.close-x');
+        if (closeBtn) setTimeout(() => closeBtn.focus(), 10);
+      }
+    }).observe(bd, { attributes: true, attributeFilter: ['class'] });
+  });
+}
+
 window.closeModal = function (id) {
   const el = document.getElementById(id);
+  const wasOpen = el && el.classList.contains('open');
   if (el) el.classList.remove('open');
   if (id === 'checkoutModal') {
     const iframe = document.getElementById('checkoutIframe');
@@ -2782,6 +2808,11 @@ window.closeModal = function (id) {
       iframe.src = 'about:blank';
       iframe.removeAttribute('srcdoc');
     }
+  }
+  if (wasOpen && lastModalFocusEl && typeof lastModalFocusEl.focus === 'function') {
+    const target = lastModalFocusEl;
+    lastModalFocusEl = null;
+    setTimeout(() => target.focus(), 10);
   }
 };
 
@@ -2847,13 +2878,22 @@ function applySiteBranding() {
 }
 
 function initFaqAccordion() {
+  initModalFocusRestore();
   document.querySelectorAll('#faqList .faq-q').forEach((btn) => {
+    const item = btn.closest('.faq-item');
+    btn.setAttribute('aria-expanded', item && item.classList.contains('open') ? 'true' : 'false');
     btn.addEventListener('click', () => {
-      const item = btn.closest('.faq-item');
       if (!item) return;
       const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('#faqList .faq-item').forEach((el) => el.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
+      document.querySelectorAll('#faqList .faq-item').forEach((el) => {
+        el.classList.remove('open');
+        const qBtn = el.querySelector('.faq-q');
+        if (qBtn) qBtn.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
     });
   });
 }

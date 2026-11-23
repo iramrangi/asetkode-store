@@ -551,7 +551,8 @@ html[data-theme="dark"] .theme-icon-moon {
 
 .btn-ghost,
 .btn-surface,
-.btn-amber {
+.btn-amber,
+.btn-outline {
   background: var(--bg-surface);
   color: var(--text-primary);
   border: 1px solid var(--border-strong);
@@ -559,10 +560,18 @@ html[data-theme="dark"] .theme-icon-moon {
 
 .btn-ghost:hover,
 .btn-surface:hover,
-.btn-amber:hover {
+.btn-amber:hover,
+.btn-outline:hover {
   border-color: var(--text-primary);
   background: var(--bg-elevated);
 }
+
+.bento-kicker { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 800; margin-bottom: 6px; color: var(--text-muted); }
+.bento-title { font-size: 0.96rem; font-weight: 800; margin-bottom: 4px; }
+.bento-copy { font-size: 0.83rem; color: var(--text-secondary); }
+.custom-kicker { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+.custom-title { font-size: 1.08rem; font-weight: 800; margin-bottom: 4px; }
+.custom-copy { font-size: 0.84rem; color: var(--text-secondary); }
 
 .hero-metrics {
   display: grid;
