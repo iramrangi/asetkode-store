@@ -1255,7 +1255,7 @@ const FALLBACK_PRODUCTS = [
     "oldPrice": "Rp 449.000",
     "priceUsd": "$29",
     "oldPriceUsd": "$59",
-    "usdPaymentUrl": "",
+    "usdPaymentUrl": "https://buy.polar.sh/polar_cl_yDiCmcxEiVb15GOLipwKRIMLHWZSuPjZihApg32DLlC",
     "paymentUrl": "#checkout-mayar",
     "demoUrl": "demo/laravel-hris/",
     "postUrl": "https://asetkode.blogspot.com/",
