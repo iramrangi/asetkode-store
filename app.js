@@ -2480,8 +2480,12 @@ function launchCheckoutGateway(order) {
   if (modal) modal.classList.add('open');
 }
 
+function escAiHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function buildGlobalUsdCheckoutHTML(order) {
-  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const esc = escAiHtml;
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}body{margin:0;padding:24px;background:#f8fafc;color:#0f172a;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.06);}.badge{display:inline-block;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:10px;}h2{margin:0 0 6px;font-size:19px;}.price{font-size:24px;font-weight:800;color:#059669;margin-bottom:12px;}.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}.pill{font-size:12px;font-weight:700;padding:4px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#334155;}.btn{display:block;text-align:center;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:700;font-size:14px;margin-bottom:10px;}.btn-primary{background:#1d4ed8;color:#fff;}.btn-sec{background:#fff;color:#0f172a;border:1px solid #cbd5e1;}.note{font-size:12px;color:#64748b;line-height:1.5;background:#f1f5f9;padding:12px;border-radius:10px;}</style></head>
   <body><div class="card"><span class="badge">GLOBAL USD CHECKOUT</span><h2>${esc(order.title)}</h2><div class="price">${esc(order.price)} USD</div><div class="pills"><span class="pill">Polar.sh Ready</span><span class="pill">Visa / Mastercard</span><span class="pill">Apple Pay</span><span class="pill">PayPal</span></div>${Array.isArray(order.polarItems) && order.polarItems.length > 1
@@ -2500,7 +2504,7 @@ function buildEmailOrderHTML(order) {
   const subject = params.get('subject') || `Order ${order.title}`;
   const body = params.get('body') || `Halo Admin, saya ingin membeli ${order.title} (${order.price}).`;
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const esc = escAiHtml;
 
   return `<!DOCTYPE html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -2542,7 +2546,7 @@ function buildEmailOrderHTML(order) {
 }
 
 function buildBuiltInPaymentGatewayHTML(order) {
-  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const esc = escAiHtml;
   const subj = `Konfirmasi Bayar QRIS (${order.price}): ${order.title}`;
   const baseBody = `Halo Admin ${SITE_CONFIG.brandName},\n\nSaya sudah melakukan pembayaran QRIS untuk:\n- Produk: ${order.title}\n- Total: ${order.price}\n`;
   const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
@@ -2734,57 +2738,6 @@ function buildBuiltInPaymentGatewayHTML(order) {
       </script>
     </body>
     </html>`;
-}
-
-// ================= 7. HERO ROI CALCULATOR & STUDIO TABS =================
-const ROI_DATA = {
-  pos: {
-    customCost: 'Rp 4.500.000', customTime: 'Waktu: 28 Hari Kerja', asetPrice: 'Rp 69.000', savingsText: 'Anda Hemat Rp 4.431.000 (98%) & 28 Hari Coding!',
-    customCostEn: '$390', customTimeEn: 'Time: 28 Working Days', asetPriceEn: '$12', savingsTextEn: 'Save $378 (97%) & 28 Coding Days!'
-  },
-  ecom: {
-    customCost: 'Rp 5.800.000', customTime: 'Waktu: 35 Hari Kerja', asetPrice: 'Rp 169.000', savingsText: 'Anda Hemat Rp 5.631.000 (97%) & 35 Hari Coding!',
-    customCostEn: '$490', customTimeEn: 'Time: 35 Working Days', asetPriceEn: '$25', savingsTextEn: 'Save $465 (95%) & 35 Coding Days!'
-  },
-  saas: {
-    customCost: 'Rp 2.200.000', customTime: 'Waktu: 14 Hari Kerja', asetPrice: 'Rp 79.000', savingsText: 'Anda Hemat Rp 2.121.000 (96%) & 14 Hari Coding!',
-    customCostEn: '$240', customTimeEn: 'Time: 14 Working Days', asetPriceEn: '$14', savingsTextEn: 'Save $226 (94%) & 14 Coding Days!'
-  },
-  bot: {
-    customCost: 'Rp 3.000.000', customTime: 'Waktu: 18 Hari Kerja', asetPrice: 'Rp 99.000', savingsText: 'Anda Hemat Rp 2.901.000 (96%) & 18 Hari Coding!',
-    customCostEn: '$290', customTimeEn: 'Time: 18 Working Days', asetPriceEn: '$15', savingsTextEn: 'Save $275 (95%) & 18 Coding Days!'
-  }
-};
-
-function updateRoiCalculatorUI() {
-  const roiSelect = document.getElementById('roiProjectSelect');
-  if (!roiSelect) return;
-  const info = ROI_DATA[roiSelect.value] || ROI_DATA.pos;
-  const isEn = currentLocale === 'en';
-  const cCost = document.getElementById('roiCustomCost');
-  const cTime = document.getElementById('roiCustomTime');
-  const aPrice = document.getElementById('roiAsetPrice');
-  const sTxt = document.getElementById('roiSavingsText');
-  if (cCost) cCost.textContent = isEn ? info.customCostEn : info.customCost;
-  if (cTime) cTime.textContent = isEn ? info.customTimeEn : info.customTime;
-  if (aPrice) aPrice.textContent = isEn ? info.asetPriceEn : info.asetPrice;
-  if (sTxt) sTxt.textContent = isEn ? info.savingsTextEn : info.savingsText;
-}
-
-function initHeroStudioAndROI() {
-  document.querySelectorAll('.studio-tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const target = tab.getAttribute('data-tab');
-      document.querySelectorAll('.studio-tab').forEach((t) => t.classList.remove('active'));
-      document.querySelectorAll('.studio-panel').forEach((p) => p.classList.remove('active'));
-      tab.classList.add('active');
-      const panel = document.getElementById(target);
-      if (panel) panel.classList.add('active');
-    });
-  });
-
-  const roiSelect = document.getElementById('roiProjectSelect');
-  if (roiSelect) roiSelect.addEventListener('change', updateRoiCalculatorUI);
 }
 
 // ================= 8. MODAL, THEME & TOOLBAR EVENTS =================
@@ -3044,65 +2997,17 @@ function applyStorefrontLocaleUI() {
   if (heroCtas[2]) heroCtas[2].textContent = isEn ? 'How to Buy →' : 'Cara Order →';
 
   const openPill = document.getElementById('catalogOpenPill');
-  const openTitle = document.getElementById('catalogOpenTitle');
-  const openSub = document.getElementById('catalogOpenSub');
   const co1 = document.getElementById('coStat1');
   const coP = document.getElementById('coStatPriceNum');
   const co2 = document.getElementById('coStat2');
   const co3 = document.getElementById('coStat3');
   const coFreeLink = document.getElementById('coStatFreeLink');
   if (openPill) openPill.textContent = isEn ? 'OFFICIAL CATALOG • 26 PRO APPS' : 'KATALOG RESMI • 26 APLIKASI PRO';
-  if (openTitle) openTitle.textContent = isEn
-    ? 'Pick Production-Ready Source Code to Ship Faster'
-    : 'Pilih Source Code Siap Pakai untuk Mempercepat Proyek & Bisnis Anda';
-  setLocalizedInner(
-    openSub,
-    isEn,
-    'Skip weeks of boilerplate coding. Every app includes responsive UI, an <strong>interactive browser Live Demo</strong>, 100% unencrypted source code, and transparent one-time pricing with zero subscriptions.'
-  );
   if (co1) co1.textContent = isEn ? 'Ready-to-Run Apps' : 'Aplikasi Siap Pakai';
   if (coP) coP.textContent = isEn ? '$7+ USD' : 'Rp 39rb+';
   if (co2) co2.textContent = isEn ? 'One-Time License' : 'Sekali Bayar Selamanya';
   if (co3) co3.textContent = isEn ? 'Try MIT Free Tools →' : 'Coba Versi MIT Gratis →';
   if (coFreeLink) coFreeLink.setAttribute('href', resolveStoreAssetUrl('free/') + (isEn ? '?lang=en' : ''));
-
-  const studioTabs = document.querySelectorAll('.studio-tab');
-  if (studioTabs[0]) studioTabs[0].textContent = isEn ? 'ROI Calculator' : 'Kalkulator Hemat';
-  if (studioTabs[1]) studioTabs[1].textContent = isEn ? '.ZIP Contents' : 'Isi File .ZIP';
-  if (studioTabs[2]) studioTabs[2].textContent = isEn ? 'Stack' : 'GitHub × Blogger';
-
-  setLocalizedInner(
-    document.getElementById('tab-zip'),
-    isEn,
-    '<div style="font-size:0.75rem; color:#a1a1aa; margin-bottom:10px;">Standard folder structure inside every <code>.zip</code>:</div>' +
-    '<ul class="zip-tree"><li class="zip-row"><span>/full-source-code/ (Unencrypted)</span><span class="zip-badge">Editable</span></li>' +
-    '<li class="zip-row"><span>/database/schema_sample.sql</span><span class="zip-badge">Ready</span></li>' +
-    '<li class="zip-row"><span>SETUP_GUIDE_EN_ID.md</span><span class="zip-badge">English + ID</span></li>' +
-    '<li class="zip-row"><span>COMMERCIAL_LICENSE.txt</span><span class="zip-badge">Included</span></li></ul>'
-  );
-  setLocalizedInner(
-    document.getElementById('tab-arch'),
-    isEn,
-    '<div style="font-size:0.75rem; color:#a1a1aa; margin-bottom:10px;">Global Commerce Architecture:</div>' +
-    '<ul class="zip-tree"><li class="zip-row"><span>Storefront: Cloudflare Edge SPA</span><span class="zip-badge">Ultra Fast</span></li>' +
-    '<li class="zip-row"><span>Live Demos: 25 Interactive Sandboxes</span><span class="zip-badge">Online</span></li>' +
-    '<li class="zip-row"><span>Global USD: Polar.sh (Card / Apple Pay)</span><span class="zip-badge">Verified</span></li>' +
-    '<li class="zip-row"><span>Delivery: Auto .ZIP Email Dispatch</span><span class="zip-badge">24/7 Active</span></li></ul>'
-  );
-
-  setLocalizedInner(document.querySelector('label[for="roiProjectSelect"]'), isEn, 'Choose your software project:');
-  const roiOpts = document.querySelectorAll('#roiProjectSelect option');
-  if (roiOpts[0]) roiOpts[0].textContent = isEn ? 'POS Cashier & Warehouse Inventory Web App' : 'Aplikasi Kasir & Inventori Toko (POS)';
-  if (roiOpts[1]) roiOpts[1].textContent = isEn ? 'Online Store & E-Commerce Catalog System' : 'Website Toko Online & Katalog Checkout QRIS';
-  if (roiOpts[2]) roiOpts[2].textContent = isEn ? 'SaaS / Agency Landing Page Template' : 'Landing Page SaaS / Company Profile';
-  if (roiOpts[3]) roiOpts[3].textContent = isEn ? 'Python Scraper & Automated Reporter Bot' : 'Bot Otomatisasi Scraper & Laporan Python';
-  const roiScratchLbl = document.querySelector('#tab-roi .roi-card:first-child > div:first-child');
-  setLocalizedInner(roiScratchLbl, isEn, 'Build from Scratch / Agency');
-  const roiBestTitle = document.querySelector('#tab-roi .roi-card.best > div:first-child');
-  setLocalizedInner(roiBestTitle, isEn, 'Use <span data-brand-name>Ddev Studio</span> Code');
-  const roiBestTime = document.querySelector('#tab-roi .roi-card.best > div:last-child');
-  setLocalizedInner(roiBestTime, isEn, 'Setup: Ready in 10 Mins');
-  updateRoiCalculatorUI();
 
   const filterAllChip = document.querySelector('#filterBar [data-cat="all"]');
   if (filterAllChip) filterAllChip.textContent = isEn ? 'All Products' : 'Semua Karya';
@@ -3118,12 +3023,6 @@ function applyStorefrontLocaleUI() {
   if (sortOpts[1]) sortOpts[1].textContent = isEn ? 'Lowest Price' : 'Harga Terendah';
   if (sortOpts[2]) sortOpts[2].textContent = isEn ? 'Highest Price' : 'Harga Tertinggi';
   if (sortOpts[3]) sortOpts[3].textContent = isEn ? 'Biggest Discount' : 'Diskon Terbesar';
-
-  document.querySelectorAll('.hero-inline-trust span').forEach((sp, i) => {
-    const enT = ['✓ 100% Open Source', '✓ Live Demo Ready', '✓ Commercial License'];
-    const idT = ['✓ 100% Open Code', '✓ Live Demo Browser', '✓ Lisensi Komersial'];
-    sp.textContent = isEn ? enT[i] : idT[i];
-  });
 
   setLocalizedInner(
     document.getElementById('keunggulan'),
@@ -3343,9 +3242,7 @@ let aiAssistantBooted = false;
 let aiChatHistoryState = [];
 let aiServerGeminiFlag = null;
 
-function escAiHtml(str) {
-  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+// Deduplicated into top-level escAiHtml() above
 
 function addAiChatMessage(role, htmlText, actionButtons) {
   const aiMessages = document.getElementById('aiChatMessages');
@@ -3816,7 +3713,6 @@ window.observeMotionTargets = function (selector) {
 document.addEventListener('DOMContentLoaded', () => {
   applySiteBranding();
   initThemeToggle();
-  initHeroStudioAndROI();
   initFeaturedCarouselControls();
   initFaqAccordion();
   loadCartFromStorage();
