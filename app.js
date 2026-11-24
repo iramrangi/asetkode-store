@@ -1807,7 +1807,10 @@ function renderSpotlightSlide(animate = false) {
     });
   }
 
-  if (!animate && slideEl.dataset.spotKey === curSpotKey && slideEl.querySelector('.spotlight-media img')) {
+  const existingMedia = slideEl.querySelector('.spotlight-media');
+  const existingContent = slideEl.querySelector('.spotlight-content');
+  const sameProdExisting = !animate && slideEl.dataset.spotKey && slideEl.dataset.spotKey.split('|')[0] === p.id && existingMedia && existingContent && existingMedia.querySelector('img');
+  if (!animate && slideEl.dataset.spotKey === curSpotKey && existingMedia && existingMedia.querySelector('img')) {
     return;
   }
   slideEl.dataset.spotKey = curSpotKey;
@@ -1828,15 +1831,7 @@ function renderSpotlightSlide(animate = false) {
       ? (disp.isEn ? 'BEST SELLER' : 'PRODUK UNGGULAN')
       : (disp.isEn ? `SPOTLIGHT #${spotlightActiveIdx + 1}` : `SOROTAN #${spotlightActiveIdx + 1}`);
 
-  slideEl.classList.remove('is-animating');
-  if (animate) void slideEl.offsetWidth;
-
-  slideEl.innerHTML = `
-    <button type="button" class="spotlight-media" data-act="open-demo" data-id="${p.id}" aria-label="${cat}: Preview Live Demo ${disp.title}">
-      <img src="${resolveSmallThumbUrl(p.thumbnailUrl)}" srcset="${resolveSmallThumbUrl(p.thumbnailUrl)} 480w, ${resolveStoreAssetUrl(p.thumbnailUrl)} 960w" sizes="(max-width: 640px) 92vw, 560px" alt="${disp.title}" width="480" height="300" loading="eager" fetchpriority="high" decoding="sync" />
-      <span class="spotlight-media-badge">${cat}</span>
-    </button>
-    <div class="spotlight-content">
+  const contentInnerHtml = `
       <div class="spotlight-eyebrow">
         <span class="spotlight-pill ${isNew ? 'is-new' : ''}">${tagLabel}</span>
         <span class="spotlight-stack">${stackText}</span>
@@ -1859,13 +1854,32 @@ function renderSpotlightSlide(animate = false) {
       <div class="spotlight-actions">
         <button type="button" class="spotlight-btn-demo" data-act="open-demo" data-id="${p.id}">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-          <span>${disp.isEn ? 'Preview Live Demo' : 'Preview Live Demo'}</span>
+          <span>Preview Live Demo</span>
         </button>
         <button type="button" class="spotlight-btn-buy" data-act="buy" data-id="${p.id}">
-          ${disp.isEn ? `Buy Source Code` : `Beli Source Code`}
+          ${disp.isEn ? 'Buy Source Code' : 'Beli Source Code'}
         </button>
       </div>
-    </div>
+  `;
+
+  if (sameProdExisting) {
+    // Preserve SSR/loaded <img> node across ID<->EN switch so Chrome never discards the LCP element
+    existingMedia.setAttribute('aria-label', `${cat}: Preview Live Demo ${disp.title}`);
+    const badgeEl = existingMedia.querySelector('.spotlight-media-badge');
+    if (badgeEl) badgeEl.textContent = cat;
+    existingContent.innerHTML = contentInnerHtml;
+    return;
+  }
+
+  slideEl.classList.remove('is-animating');
+  if (animate) void slideEl.offsetWidth;
+
+  slideEl.innerHTML = `
+    <button type="button" class="spotlight-media" data-act="open-demo" data-id="${p.id}" aria-label="${cat}: Preview Live Demo ${disp.title}">
+      <img src="${resolveSmallThumbUrl(p.thumbnailUrl)}" srcset="${resolveSmallThumbUrl(p.thumbnailUrl)} 480w, ${resolveStoreAssetUrl(p.thumbnailUrl)} 960w" sizes="(max-width: 640px) 92vw, 560px" alt="${disp.title}" width="480" height="300" loading="eager" fetchpriority="high" decoding="async" />
+      <span class="spotlight-media-badge">${cat}</span>
+    </button>
+    <div class="spotlight-content">${contentInnerHtml}</div>
   `;
 
   if (animate) slideEl.classList.add('is-animating');
