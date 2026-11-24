@@ -7,7 +7,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://asetkode-store.pages.dev/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://asetkode-store.pages.dev/" />
     <changefreq>weekly</changefreq>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -16,7 +16,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://asetkode-store.pages.dev/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://asetkode-store.pages.dev/" />
     <changefreq>weekly</changefreq>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <priority>1.0</priority>
   </url>
   <url><loc>https://asetkode-store.pages.dev/demo/kasir/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -45,5 +45,17 @@
   <url><loc>https://asetkode-store.pages.dev/demo/blogger-docs/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://asetkode-store.pages.dev/demo/travel/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://asetkode-store.pages.dev/demo/laravel-hris/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://asetkode-store.pages.dev/free/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/</loc><changefreq>weekly</changefreq><lastmod>2026-11-24</lastmod><priority>0.9</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/bio-card-builder.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/color-contrast-palette.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/free-cleanpress-blogger-demo.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/free-starter-landing-page.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/hpp-margin-calculator.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/invoice-lite-starter.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/json-csv-sql-converter.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/markdown-html-studio.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/meta-seo-og-generator.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/pomodoro-focus-tracker.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/regex-tester-cheat-sheet.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
+  <url><loc>https://asetkode-store.pages.dev/free/apps/wa-order-link-builder.html</loc><changefreq>monthly</changefreq><lastmod>2026-11-24</lastmod><priority>0.7</priority></url>
 </urlset>

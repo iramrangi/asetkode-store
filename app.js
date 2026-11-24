@@ -1525,7 +1525,7 @@ function renderProductsGrid() {
       <div style="grid-column: 1 / -1; text-align:center; padding:56px 20px; background:var(--bg-surface); border:1px dashed var(--border-strong); border-radius:16px;">
         <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:6px;">${isEnEmpty ? 'No Products Found' : 'Produk Tidak Ditemukan'}</h3>
         <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:16px;">${isEnEmpty ? 'Try another search keyword or show all categories.' : 'Coba gunakan kata kunci lain atau tampilkan semua kategori.'}</p>
-        <button type="button" class="btn btn-primary" onclick="resetCatalogFilter()">${isEnEmpty ? 'Show All Products' : 'Tampilkan Semua Karya'}</button>
+        <button type="button" class="btn btn-primary" data-act="reset-filter">${isEnEmpty ? 'Show All Products' : 'Tampilkan Semua Karya'}</button>
       </div>
     `;
     renderCatalogPagination(0, 1, 0, 0);
@@ -1557,14 +1557,14 @@ function renderProductsGrid() {
       return `
         <article class="product-card" data-id="${p.id}">
           <div class="card-thumb">
-            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="360" loading="${idx < 8 ? 'eager' : 'lazy'}" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
-            <button type="button" class="save-heart-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleWishlistById('${p.id}')" title="${disp.isEn ? 'Save product' : 'Simpan produk'}" aria-label="${disp.isEn ? 'Save product' : 'Simpan produk'}">${isSaved ? '♥' : '♡'}</button>
+            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="360" loading="${idx < 8 ? 'eager' : 'lazy'}" decoding="async" />
+            <button type="button" class="save-heart-btn ${isSaved ? 'saved' : ''}" data-act="toggle-wishlist" data-id="${p.id}" title="${disp.isEn ? 'Save product' : 'Simpan produk'}" aria-label="${disp.isEn ? 'Save product' : 'Simpan produk'}">${isSaved ? '♥' : '♡'}</button>
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             <div class="card-hover-overlay">
-              <button type="button" class="overlay-btn primary" onclick="openLiveDemoById('${p.id}')">
+              <button type="button" class="overlay-btn primary" data-act="open-demo" data-id="${p.id}">
                 Live Demo
               </button>
-              <button type="button" class="overlay-btn" onclick="openDetailById('${p.id}')">
+              <button type="button" class="overlay-btn" data-act="open-detail" data-id="${p.id}">
                 ${disp.isEn ? 'Details' : 'Detail'}
               </button>
             </div>
@@ -1575,7 +1575,7 @@ function renderProductsGrid() {
               <span>${primaryCat}</span>
               <span class="card-ver-tag">${shortVer}</span>
             </div>
-            <h3 class="card-title"><button type="button" class="title-link-btn" onclick="openDetailById('${p.id}')">${disp.title}</button></h3>
+            <h3 class="card-title"><button type="button" class="title-link-btn" data-act="open-detail" data-id="${p.id}">${disp.title}</button></h3>
             <p class="card-desc">${disp.summary}</p>
             <div class="card-stack-line" title="${p.stack}">${stackLine || 'HTML5 · JS'}</div>
 
@@ -1588,13 +1588,13 @@ function renderProductsGrid() {
               </div>
 
               <div class="card-actions">
-                <button type="button" class="btn-card" onclick="openLiveDemoById('${p.id}')" title="${disp.isEn ? 'Launch Interactive Demo' : 'Coba Live Demo'}">
+                <button type="button" class="btn-card" data-act="open-demo" data-id="${p.id}" title="${disp.isEn ? 'Launch Interactive Demo' : 'Coba Live Demo'}">
                   Demo
                 </button>
-                <button type="button" class="btn-card buy" onclick="openInstantCheckoutById('${p.id}')">
+                <button type="button" class="btn-card buy" data-act="buy" data-id="${p.id}">
                   ${disp.isEn ? 'Buy' : 'Beli'}
                 </button>
-                <button type="button" class="btn-card btn-card-cart ${inCart ? 'in-cart' : ''}" onclick="toggleCartItemById('${p.id}')" title="${cartTitle}" aria-label="${cartTitle}">
+                <button type="button" class="btn-card btn-card-cart ${inCart ? 'in-cart' : ''}" data-act="toggle-cart" data-id="${p.id}" title="${cartTitle}" aria-label="${cartTitle}">
                   ${inCart
                     ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
                     : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'}
@@ -1637,14 +1637,14 @@ function renderCatalogPagination(totalItems, totalPages, startIdx, pageCount) {
     : `Menampilkan ${fromNum}–${toNum} dari ${totalItems} produk (Halaman ${currentCatalogPage} dari ${totalPages})`;
   const pageButtons = Array.from({ length: totalPages }, (_, idx) => {
     const pNum = idx + 1;
-    return `<button type="button" class="page-btn ${pNum === currentCatalogPage ? 'active' : ''}" onclick="goToCatalogPage(${pNum})">${pNum}</button>`;
+    return `<button type="button" class="page-btn ${pNum === currentCatalogPage ? 'active' : ''}" data-act="goto-page" data-page="${pNum}">${pNum}</button>`;
   }).join('');
   pagEl.innerHTML = `
     <div class="catalog-page-info">${infoText}</div>
     <div class="catalog-page-controls">
-      <button type="button" class="page-btn" ${currentCatalogPage <= 1 ? 'disabled' : ''} onclick="goToCatalogPage(${currentCatalogPage - 1})">${isEn ? '← Previous' : '← Sebelumnya'}</button>
+      <button type="button" class="page-btn" ${currentCatalogPage <= 1 ? 'disabled' : ''} data-act="goto-page" data-page="${currentCatalogPage - 1}">${isEn ? '← Previous' : '← Sebelumnya'}</button>
       ${pageButtons}
-      <button type="button" class="page-btn next-cta" ${currentCatalogPage >= totalPages ? 'disabled' : ''} onclick="goToCatalogPage(${currentCatalogPage + 1})">${isEn ? 'View Next Page →' : 'Lihat Halaman Selanjutnya →'}</button>
+      <button type="button" class="page-btn next-cta" ${currentCatalogPage >= totalPages ? 'disabled' : ''} data-act="goto-page" data-page="${currentCatalogPage + 1}">${isEn ? 'View Next Page →' : 'Lihat Halaman Selanjutnya →'}</button>
     </div>
   `;
 }
@@ -1799,7 +1799,7 @@ function renderSpotlightSlide(animate = false) {
   if (animate) void slideEl.offsetWidth;
 
   slideEl.innerHTML = `
-    <button type="button" class="spotlight-media" onclick="openLiveDemoById('${p.id}')" aria-label="${cat}: Preview Live Demo ${disp.title}">
+    <button type="button" class="spotlight-media" data-act="open-demo" data-id="${p.id}" aria-label="${cat}: Preview Live Demo ${disp.title}">
       <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" loading="eager" fetchpriority="high" decoding="sync" />
       <span class="spotlight-media-badge">${cat}</span>
     </button>
@@ -1808,7 +1808,7 @@ function renderSpotlightSlide(animate = false) {
         <span class="spotlight-pill ${isNew ? 'is-new' : ''}">${tagLabel}</span>
         <span class="spotlight-stack">${stackText}</span>
       </div>
-      <h2 class="spotlight-title"><button type="button" class="title-link-btn" onclick="openDetailById('${p.id}')">${disp.title}</button></h2>
+      <h2 class="spotlight-title"><button type="button" class="title-link-btn" data-act="open-detail" data-id="${p.id}">${disp.title}</button></h2>
       <p class="spotlight-desc">${disp.summary}</p>
       <div class="spotlight-metrics">
         <div>
@@ -1824,11 +1824,11 @@ function renderSpotlightSlide(animate = false) {
         </div>
       </div>
       <div class="spotlight-actions">
-        <button type="button" class="spotlight-btn-demo" onclick="openLiveDemoById('${p.id}')">
+        <button type="button" class="spotlight-btn-demo" data-act="open-demo" data-id="${p.id}">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
           <span>${disp.isEn ? 'Preview Live Demo' : 'Preview Live Demo'}</span>
         </button>
-        <button type="button" class="spotlight-btn-buy" onclick="openInstantCheckoutById('${p.id}')">
+        <button type="button" class="spotlight-btn-buy" data-act="buy" data-id="${p.id}">
           ${disp.isEn ? `Buy Source Code` : `Beli Source Code`}
         </button>
       </div>
@@ -2235,18 +2235,18 @@ window.openDetailById = function (productId) {
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-              <button type="button" class="btn btn-ghost" onclick="closeModal('detailModal'); openLiveDemoById('${prod.id}')">
+              <button type="button" class="btn btn-ghost" data-act="open-demo" data-id="${prod.id}">
                 Live Demo
               </button>
-              <button type="button" class="btn btn-primary" onclick="closeModal('detailModal'); openInstantCheckoutById('${prod.id}')">
+              <button type="button" class="btn btn-primary" data-act="buy" data-id="${prod.id}">
                 ${disp.isEn ? 'Buy &amp; Download' : 'Beli &amp; Download'}
               </button>
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" onclick="toggleWishlistById('${prod.id}'); openDetailById('${prod.id}')">
+              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" data-act="toggle-wishlist-detail" data-id="${prod.id}">
                 ${wishlistState.includes(prod.id) ? (disp.isEn ? '♥ Saved' : '♥ Disimpan') : (disp.isEn ? '♡ Save' : '♡ Simpan')}
               </button>
-              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" onclick="copyProductLinkById('${prod.id}')">
+              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" data-act="copy-link" data-id="${prod.id}">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                 <span>${disp.isEn ? 'Copy Link' : 'Salin Link'}</span>
               </button>
@@ -2357,7 +2357,7 @@ function updateCartUI() {
           <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:4px;">${item.stack}</div>
           <div class="cart-item-price">${dispPrice}</div>
         </div>
-        <button type="button" class="close-x" onclick="removeCartItemById('${item.id}')" title="${isEn ? 'Remove' : 'Hapus'}" aria-label="${isEn ? 'Remove' : 'Hapus'}">×</button>
+        <button type="button" class="close-x" data-act="remove-cart" data-id="${item.id}" title="${isEn ? 'Remove' : 'Hapus'}" aria-label="${isEn ? 'Remove' : 'Hapus'}">×</button>
       </div>
     `;
       }
@@ -2538,7 +2538,7 @@ function buildEmailOrderHTML(order) {
       <div>Kirim email pemesanan ke admin untuk mendapatkan detail pembayaran (Transfer / QRIS) dan file produk ZIP dikirim langsung ke email Anda.</div>
       <div class="email-row">
         <span id="admEmail">${esc(email)}</span>
-        <button class="copy-btn" type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText('${esc(email)}');this.textContent='Tersalin!';setTimeout(()=>this.textContent='Salin',1800)">Salin</button>
+        <button class="copy-btn" type="button" data-copy-email="${esc(email)}">Salin</button>
       </div>
     </div>
     <div class="actions">
@@ -2547,6 +2547,7 @@ function buildEmailOrderHTML(order) {
     </div>
     <div class="note">Format pesan &amp; subjek order sudah terisi otomatis.</div>
   </div>
+  <script src="${esc(new URL(resolveStoreAssetUrl('checkout-frame.js?v=20261124k'), (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/')).href)}"></script>
 </body></html>`;
 }
 
@@ -2556,12 +2557,22 @@ function buildBuiltInPaymentGatewayHTML(order) {
   const baseBody = `Halo Admin ${SITE_CONFIG.brandName},\n\nSaya sudah melakukan pembayaran QRIS untuk:\n- Produk: ${order.title}\n- Total: ${order.price}\n`;
   const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
   const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
-  const qrisAbsUrl = new URL(resolveStoreAssetUrl('qris-ddev-studio.jpg'), (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/')).href;
+  const baseOrigin = (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/');
+  const qrisAbsUrl = new URL(resolveStoreAssetUrl('qris-ddev-studio.jpg'), baseOrigin).href;
+  const frameJsUrl = new URL(resolveStoreAssetUrl('checkout-frame.js?v=20261124k'), baseOrigin).href;
   const gasUrl = String(SITE_CONFIG.gasWebAppUrl || '').trim();
   const basePriceNum = parsePriceNum(order.price);
   const orderItems = Array.isArray(order.items) && order.items.length
     ? order.items
     : [{ id: order.id || 'prod', name: order.title, price: basePriceNum, quantity: 1 }];
+  const payloadJson = JSON.stringify({
+    gasUrl: gasUrl,
+    orderTitle: order.title,
+    orderItems: orderItems,
+    baseBody: baseBody,
+    orderEmailTo: SITE_CONFIG.orderEmail,
+    subj: subj
+  }).replace(/</g, '\\u003c');
 
   return `<!DOCTYPE html>
     <html lang="id">
@@ -2635,112 +2646,8 @@ function buildBuiltInPaymentGatewayHTML(order) {
           <div class="note">Salinan link download juga otomatis dikirim ke email Anda.</div>
         </div>
       </div>
-      <script>
-        var gasUrl = ${JSON.stringify(gasUrl).replace(/<\/script/gi, '<\\/script')};
-        var orderTitle = ${JSON.stringify(order.title).replace(/<\/script/gi, '<\\/script')};
-        var orderItems = ${JSON.stringify(orderItems).replace(/<\/script/gi, '<\\/script')};
-        var baseBody = ${JSON.stringify(baseBody).replace(/<\/script/gi, '<\\/script')};
-        var orderEmailTo = ${JSON.stringify(SITE_CONFIG.orderEmail).replace(/<\/script/gi, '<\\/script')};
-        var subj = ${JSON.stringify(subj).replace(/<\/script/gi, '<\\/script')};
-
-        function syncGmailHref(val) {
-          var v = String(val || '').trim();
-          var btn = document.getElementById('qrisGmailBtn');
-          if (!btn) return;
-          var b = baseBody + (v ? '- Email Penerima .ZIP: ' + v + '\\n' : '') + '\\nTerlampir bukti bayar QRIS saya. Terima kasih!';
-          btn.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(orderEmailTo) + '&su=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(b);
-        }
-
-        function switchToQris(prefillEmail, reasonText) {
-          document.getElementById('stepMayarForm').style.display = 'none';
-          document.getElementById('stepMayarWait').style.display = 'none';
-          document.getElementById('stepQrisFallback').style.display = 'block';
-          var emInput = document.getElementById('buyerEmail');
-          if (emInput && prefillEmail) {
-            emInput.value = prefillEmail;
-            syncGmailHref(prefillEmail);
-          }
-          var al = document.getElementById('qrisReasonAlert');
-          if (al && reasonText) {
-            al.textContent = reasonText;
-            al.style.display = 'block';
-          }
-        }
-
-        document.getElementById('buyerEmail').addEventListener('input', function () {
-          syncGmailHref(this.value);
-        });
-        document.getElementById('showQrisDirectBtn').addEventListener('click', function () {
-          switchToQris(document.getElementById('custEmail').value, '');
-        });
-
-        var pollTimer = null;
-        function startStatusPolling(oid, statusToken) {
-          if (pollTimer) clearInterval(pollTimer);
-          var sigQ = statusToken ? ('&sig=' + encodeURIComponent(statusToken)) : '';
-          pollTimer = setInterval(function () {
-            fetch(gasUrl + '?action=status&orderId=' + encodeURIComponent(oid) + sigQ)
-              .then(function (r) { return r.json(); })
-              .then(function (st) {
-                if (st && st.status === 'PAID') {
-                  clearInterval(pollTimer);
-                  document.getElementById('stepMayarWait').style.display = 'none';
-                  document.getElementById('stepPaidSuccess').style.display = 'block';
-                  var wrap = document.getElementById('paidLinksWrap');
-                  wrap.innerHTML = (st.downloadLinks || []).map(function (d) {
-                    var safeUrl = /^https:\/\//i.test(String(d.url || '').trim()) ? String(d.url).trim() : '#';
-                    var safeName = String(d.name || 'File .ZIP').replace(/[&<>"]/g, function(ch) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]; });
-                    var safeHref = safeUrl.replace(/[&<>"]/g, function(ch) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]; });
-                    return '<a class="dl-btn" href="' + safeHref + '" target="_blank" rel="noopener">⬇ Unduh: ' + safeName + '</a>';
-                  }).join('');
-                }
-              })
-              .catch(function () {});
-          }, 5000);
-        }
-
-        document.getElementById('mayarInitForm').addEventListener('submit', function (e) {
-          e.preventDefault();
-          var name = document.getElementById('custName').value.trim();
-          var email = document.getElementById('custEmail').value.trim();
-          var phone = document.getElementById('custPhone').value.trim();
-          var btn = document.getElementById('mayarCreateBtn');
-          if (!gasUrl) {
-            switchToQris(email, '');
-            return;
-          }
-          btn.disabled = true;
-          btn.textContent = 'Menyiapkan Invoice...';
-          fetch(gasUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-              action: 'create',
-              customerName: name,
-              customerEmail: email,
-              customerPhone: phone,
-              productTitle: orderTitle,
-              items: orderItems
-            })
-          })
-            .then(function (r) { return r.json(); })
-            .then(function (res) {
-              if (res && res.ok && res.paymentUrl) {
-                document.getElementById('stepMayarForm').style.display = 'none';
-                document.getElementById('stepMayarWait').style.display = 'block';
-                document.getElementById('waitOrderLabel').textContent = 'Order ID: ' + res.orderId;
-                document.getElementById('mayarPayAnchor').href = res.paymentUrl;
-                try { window.open(res.paymentUrl, '_blank', 'noopener'); } catch (err) {}
-                startStatusPolling(res.orderId, res.statusToken || '');
-              } else {
-                switchToQris(email, 'Gateway Mayar sedang menunggu aktivasi — silakan bayar cepat via QRIS resmi di bawah ini.');
-              }
-            })
-            .catch(function () {
-              switchToQris(email, 'Silakan selesaikan pembayaran cepat via QRIS Ddev Studio di bawah ini.');
-            });
-        });
-      </script>
+      <script type="application/json" id="checkoutPayload">${payloadJson}</script>
+      <script src="${esc(frameJsUrl)}"></script>
     </body>
     </html>`;
 }
@@ -3218,7 +3125,7 @@ function buildRelatedProductsHtml(prod, isEn) {
         ${related.map((r) => {
           const d = getProdDisplay(r);
           return `
-            <button type="button" class="related-mini-card" onclick="openDetailById('${r.id}')">
+            <button type="button" class="related-mini-card" data-act="open-detail" data-id="${r.id}">
               <div style="font-size:0.78rem; font-weight:800; line-height:1.35; margin-bottom:4px;">${escAiHtml(d.title)}</div>
               <div style="font-size:0.76rem; font-weight:800; color:#059669; font-family:var(--font-mono);">${escAiHtml(d.price)}</div>
             </button>
@@ -3746,6 +3653,50 @@ document.addEventListener('DOMContentLoaded', () => {
   applyStorefrontLocaleUI();
   initMotionSystem();
   syncFromBloggerCloud();
+
+  const productGridEl = document.getElementById('productGrid');
+  if (productGridEl) {
+    productGridEl.addEventListener('error', (e) => {
+      const img = e.target;
+      if (img && img.tagName === 'IMG' && !img.dataset.fallbackApplied) {
+        img.dataset.fallbackApplied = '1';
+        img.src = 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';
+      }
+    }, true);
+  }
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!btn || btn.disabled) return;
+    const act = btn.getAttribute('data-act');
+    const id = btn.getAttribute('data-id') || '';
+    if (act === 'reset-filter') {
+      window.resetCatalogFilter();
+    } else if (act === 'toggle-wishlist') {
+      e.stopPropagation();
+      window.toggleWishlistById(id);
+    } else if (act === 'toggle-wishlist-detail') {
+      window.toggleWishlistById(id);
+      window.openDetailById(id);
+    } else if (act === 'open-demo') {
+      if (btn.closest('#detailModal')) window.closeModal('detailModal');
+      window.openLiveDemoById(id);
+    } else if (act === 'open-detail') {
+      window.openDetailById(id);
+    } else if (act === 'buy') {
+      if (btn.closest('#detailModal')) window.closeModal('detailModal');
+      window.openInstantCheckoutById(id);
+    } else if (act === 'toggle-cart') {
+      window.toggleCartItemById(id);
+    } else if (act === 'copy-link') {
+      window.copyProductLinkById(id);
+    } else if (act === 'remove-cart') {
+      window.removeCartItemById(id);
+    } else if (act === 'goto-page') {
+      const pNum = parseInt(btn.getAttribute('data-page'), 10);
+      if (!Number.isNaN(pNum)) window.goToCatalogPage(pNum);
+    }
+  });
   try {
     const deepProd = new URLSearchParams(window.location.search).get('product');
     if (deepProd && productsState.some((p) => p.id === deepProd)) {
