@@ -2636,18 +2636,18 @@ function buildBuiltInPaymentGatewayHTML(order) {
         </div>
       </div>
       <script>
-        var gasUrl = ${JSON.stringify(gasUrl)};
-        var orderTitle = ${JSON.stringify(order.title)};
-        var orderItems = ${JSON.stringify(orderItems)};
-        var baseBody = ${JSON.stringify(baseBody)};
-        var orderEmailTo = ${JSON.stringify(SITE_CONFIG.orderEmail)};
-        var subj = ${JSON.stringify(subj)};
+        var gasUrl = ${JSON.stringify(gasUrl).replace(/<\/script/gi, '<\\/script')};
+        var orderTitle = ${JSON.stringify(order.title).replace(/<\/script/gi, '<\\/script')};
+        var orderItems = ${JSON.stringify(orderItems).replace(/<\/script/gi, '<\\/script')};
+        var baseBody = ${JSON.stringify(baseBody).replace(/<\/script/gi, '<\\/script')};
+        var orderEmailTo = ${JSON.stringify(SITE_CONFIG.orderEmail).replace(/<\/script/gi, '<\\/script')};
+        var subj = ${JSON.stringify(subj).replace(/<\/script/gi, '<\\/script')};
 
         function syncGmailHref(val) {
           var v = String(val || '').trim();
           var btn = document.getElementById('qrisGmailBtn');
           if (!btn) return;
-          var b = baseBody + (v ? '- Email Penerima .ZIP: ' + v + '\n' : '') + '\nTerlampir bukti bayar QRIS saya. Terima kasih!';
+          var b = baseBody + (v ? '- Email Penerima .ZIP: ' + v + '\\n' : '') + '\\nTerlampir bukti bayar QRIS saya. Terima kasih!';
           btn.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(orderEmailTo) + '&su=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(b);
         }
 
