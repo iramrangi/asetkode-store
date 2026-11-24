@@ -1539,31 +1539,27 @@ function renderProductsGrid() {
   const pagedList = list.slice(startIdx, startIdx + CATALOG_PAGE_SIZE);
 
   grid.innerHTML = pagedList
-    .map((p) => {
+    .map((p, idx) => {
       const disp = getProdDisplay(p);
       const disc = getDiscountPercent(p.price, p.oldPrice);
       const inCart = cartState.some((c) => c.id === p.id);
       const isSaved = wishlistState.includes(p.id);
-      const hasRealDemo = Boolean(p.demoUrl && !p.demoUrl.startsWith('http'));
-      const stackChips = p.stack
+      const primaryCat = localizeCategoryTag((p.categories && p.categories[0]) || 'Web App', disp.isEn);
+      const stackLine = p.stack
         .split('+')
         .map((s) => s.trim())
         .filter(Boolean)
-        .slice(0, 2);
+        .slice(0, 2)
+        .join(' · ');
       const shortVer = String(p.version || 'v1.0').split(' ')[0];
+      const cartTitle = inCart ? (disp.isEn ? 'Remove from Cart' : 'Hapus dari Keranjang') : (disp.isEn ? 'Add to Cart' : 'Tambah ke Keranjang');
 
       return `
         <article class="product-card" data-id="${p.id}">
           <div class="card-thumb">
-            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="360" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
+            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="360" loading="${idx < 8 ? 'eager' : 'lazy'}" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80';" />
             <button type="button" class="save-heart-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleWishlistById('${p.id}')" title="${disp.isEn ? 'Save product' : 'Simpan produk'}" aria-label="${disp.isEn ? 'Save product' : 'Simpan produk'}">${isSaved ? '♥' : '♡'}</button>
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
-            <div class="thumb-tags">
-              ${p.categories
-                .slice(0, 1)
-                .map((cat) => `<span class="thumb-tag">${localizeCategoryTag(cat, disp.isEn)}</span>`)
-                .join('')}
-            </div>
             <div class="card-hover-overlay">
               <button type="button" class="overlay-btn primary" onclick="openLiveDemoById('${p.id}')">
                 Live Demo
@@ -1575,12 +1571,13 @@ function renderProductsGrid() {
           </div>
 
           <div class="card-body">
+            <div class="card-eyebrow">
+              <span>${primaryCat}</span>
+              <span class="card-ver-tag">${shortVer}</span>
+            </div>
             <h3 class="card-title"><button type="button" class="title-link-btn" onclick="openDetailById('${p.id}')">${disp.title}</button></h3>
             <p class="card-desc">${disp.summary}</p>
-
-            <div class="stack-row">
-              ${stackChips.map((st) => `<span class="stack-chip">${st}</span>`).join('')}
-            </div>
+            <div class="card-stack-line" title="${p.stack}">${stackLine || 'HTML5 · JS'}</div>
 
             <div class="card-footer">
               <div class="price-row">
@@ -1588,18 +1585,19 @@ function renderProductsGrid() {
                   <span class="price-current">${disp.price}</span>
                   ${disp.oldPrice ? `<span class="price-old">${disp.oldPrice}</span>` : ''}
                 </div>
-                <span class="verified-pill">${shortVer}</span>
               </div>
 
               <div class="card-actions">
                 <button type="button" class="btn-card" onclick="openLiveDemoById('${p.id}')" title="${disp.isEn ? 'Launch Interactive Demo' : 'Coba Live Demo'}">
                   Demo
                 </button>
-                <button type="button" class="btn-card" onclick="toggleCartItemById('${p.id}')" title="${disp.isEn ? 'Add to Cart' : 'Tambah ke Keranjang'}">
-                  ${inCart ? (disp.isEn ? '✓ Added' : '✓ Di Cart') : (disp.isEn ? '+ Cart' : '+ Cart')}
-                </button>
                 <button type="button" class="btn-card buy" onclick="openInstantCheckoutById('${p.id}')">
                   ${disp.isEn ? 'Buy' : 'Beli'}
+                </button>
+                <button type="button" class="btn-card btn-card-cart ${inCart ? 'in-cart' : ''}" onclick="toggleCartItemById('${p.id}')" title="${cartTitle}" aria-label="${cartTitle}">
+                  ${inCart
+                    ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
+                    : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'}
                 </button>
               </div>
             </div>
@@ -2183,8 +2181,8 @@ window.openDetailById = function (productId) {
     bodyEl.innerHTML = `
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:22px; align-items:start;">
         <div>
-          <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border-color); margin-bottom:16px;">
-            <img src="${resolveStoreAssetUrl(prod.thumbnailUrl)}" alt="${disp.title}" style="width:100%; height:230px; object-fit:cover; display:block;" />
+          <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border-color); background:var(--bg-elevated); aspect-ratio:16/10; margin-bottom:16px;">
+            <img src="${resolveStoreAssetUrl(prod.thumbnailUrl)}" alt="${disp.title}" style="width:100%; height:100%; object-fit:cover; display:block;" />
           </div>
           <div style="background:#09090b; border:1px solid #27272a; border-radius:12px; padding:14px; color:#fafafa;">
             <div style="font-size:0.74rem; font-weight:800; color:#a1a1aa; margin-bottom:8px; font-family:var(--font-mono);">${disp.isEn ? 'WHAT\x27S INCLUDED (.ZIP BUNDLE):' : 'ISI PAKET UNDUHAN (.ZIP):'}</div>
@@ -2200,9 +2198,9 @@ window.openDetailById = function (productId) {
         </div>
 
         <div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
-            ${prod.categories.map((c) => `<span class="brand-badge">${localizeCategoryTag(c, disp.isEn)}</span>`).join('')}
-            <span class="verified-pill">${prod.version}</span>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+            <span class="spotlight-pill">${localizeCategoryTag(prod.categories[0] || 'Web App', disp.isEn)}</span>
+            <span style="font-family:var(--font-mono); font-size:0.74rem; color:var(--text-muted);">${prod.version}${prod.categories.length > 1 ? ' · ' + prod.categories.slice(1, 3).map((c) => localizeCategoryTag(c, disp.isEn)).join(' · ') : ''}</span>
           </div>
 
           <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.65;">
@@ -2241,7 +2239,8 @@ window.openDetailById = function (productId) {
                 ${wishlistState.includes(prod.id) ? (disp.isEn ? '♥ Saved' : '♥ Disimpan') : (disp.isEn ? '♡ Save' : '♡ Simpan')}
               </button>
               <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" onclick="copyProductLinkById('${prod.id}')">
-                ${disp.isEn ? '🔗 Copy Link' : '🔗 Salin Link'}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <span>${disp.isEn ? 'Copy Link' : 'Salin Link'}</span>
               </button>
             </div>
           </div>
@@ -3025,21 +3024,21 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.querySelector('.hero-title'),
     isEn,
-    'Production Web Apps &amp; Templates <span class="gradient-text">Ready to Ship</span>'
+    'Production Web Apps &amp; Templates <span class="hero-accent">Ready to Ship</span>'
   );
   setLocalizedInner(
     document.querySelector('.hero-desc'),
     isEn,
-    'Test <strong>Live Demos</strong> right in your browser, pay once in USD, and download the complete <code>.ZIP</code> package.'
+    'Test every <strong>interactive Live Demo</strong> directly in your browser. 100% unencrypted source code, pay once with zero subscriptions, and download the complete <code>.ZIP</code> package.'
   );
   const heroCtas = document.querySelectorAll('.hero-cta-row a');
-  if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Browse Products →' : 'Lihat Semua Produk →';
+  if (heroCtas[0]) heroCtas[0].textContent = isEn ? 'Browse All Products →' : 'Lihat Semua Produk →';
   if (heroCtas[1]) {
     const heroFreeTxt = heroCtas[1].querySelector('.hero-free-text');
     if (heroFreeTxt) heroFreeTxt.textContent = isEn ? '12 Free Products (MIT)' : '12 Produk Gratis (MIT)';
     heroCtas[1].setAttribute('href', resolveStoreAssetUrl('free/') + (isEn ? '?lang=en' : ''));
   }
-  if (heroCtas[2]) heroCtas[2].textContent = isEn ? 'How to Buy' : 'Cara Order';
+  if (heroCtas[2]) heroCtas[2].textContent = isEn ? 'How to Buy →' : 'Cara Order →';
 
   const openPill = document.getElementById('catalogOpenPill');
   const openTitle = document.getElementById('catalogOpenTitle');

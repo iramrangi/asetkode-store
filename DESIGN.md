@@ -3,9 +3,9 @@
 Single source of visual truth for `https://asetkode-store.pages.dev/` (`/` ID & `/en/` Global USD). Synced with [styles.css](./styles.css).
 
 ## 1. Direction & Principles
-- **Aesthetic:** Editorial Commerce / Swiss Crisp + Stripe/Polar clarity. Subtle `26px` architectural dot-grid hero canvas, elevated signature spotlight card, clear primary-vs-secondary card CTA hierarchy, and high-contrast dark value showcase band.
-- **Hierarchy:** Sticky glass navbar -> dot-grid Hero with 3 hairline-accent stat tiles -> 2-column Spotlight Showcase (`radial-gradient` corner sheen) -> filterable Product Grid -> `.dark-showcase-band` (`#keunggulan`, `#cara-order`, `#customOrderSection`) -> FAQ -> Footer.
-- **Anti-slop bans:** No neon/rainbow gradients, no Lorem Ipsum, no `<= 4.5:1` badge text, no clipped mobile 2-col cards, no decorative bounce motion.
+- **Aesthetic:** Editorial Commerce / Swiss Crisp + Stripe/Polar clarity. Subtle `24px` dot-grid hero canvas, compact single-fold Hero framing full 2-column Spotlight Showcase above the fold on desktop, disciplined solid accent CTAs, clean uniform card grid, and high-contrast dark value showcase band.
+- **Hierarchy:** Sticky glass navbar (`64px`, strict 2-row `<= 104px` on mobile) -> compact dot-grid Hero with `.hero-meta-strip` spec bar -> 2-column Spotlight Showcase -> single-row/horizontal-scroll Filter Rail + uniform Product Grid -> `.dark-showcase-band` -> FAQ -> Footer.
+- **Anti-slop bans:** No multi-color headline gradient text, no indigo-cyan launcher gradients, no neon rings, no `<= 4.5:1` badge text, no clipped mobile 2-col cards, no redundant stacked hero stat boxes.
 
 ## 2. Color Tokens (Light & Dark, WCAG >= 4.5:1)
 | Token / Role | Light (`:root`) | Dark (`html[data-theme="dark"]`) | Usage |
