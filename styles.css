@@ -264,6 +264,9 @@ div[id] {
 }
 
 .nav-menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
   white-space: nowrap;
 }
 
@@ -570,6 +573,8 @@ html[data-theme="dark"] .hero-accent {
 }
 
 .hero-meta-link {
+  min-height: 28px;
+  padding: 2px 4px;
   color: var(--text-primary);
   font-weight: 700;
 }
@@ -1340,7 +1345,17 @@ html, body {
   }
   .promo-ribbon {
     padding: 6px 10px;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
+  }
+  .promo-ribbon-inner {
+    flex-wrap: nowrap;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .promo-ribbon-inner > span:not(.promo-pill) {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* --- Hero --- */
@@ -1725,8 +1740,17 @@ html, body {
   letter-spacing: 0.04em;
 }
 
-.footer-col p,
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 0;
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.footer-col p {
   font-size: 0.83rem;
   color: var(--text-secondary);
   line-height: 1.65;
@@ -1736,7 +1760,7 @@ html, body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
 }
 
 .footer-links a:hover {

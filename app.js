@@ -1773,6 +1773,11 @@ function renderSpotlightSlide(animate = false) {
   const total = spotlightPicks.length;
   spotlightActiveIdx = ((spotlightActiveIdx % total) + total) % total;
   const p = spotlightPicks[spotlightActiveIdx];
+  const curSpotKey = `${p.id}|${currentLocale}`;
+  if (!animate && slideEl.dataset.spotKey === curSpotKey && slideEl.querySelector('.spotlight-media img')) {
+    return;
+  }
+  slideEl.dataset.spotKey = curSpotKey;
   const disp = getProdDisplay(p);
   const cat = localizeCategoryTag((p.categories && p.categories[0]) || 'Web App', disp.isEn);
   const disc = getDiscountPercent(p.price, p.oldPrice);
@@ -1795,7 +1800,7 @@ function renderSpotlightSlide(animate = false) {
 
   slideEl.innerHTML = `
     <button type="button" class="spotlight-media" onclick="openLiveDemoById('${p.id}')" aria-label="${cat}: Preview Live Demo ${disp.title}">
-      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" fetchpriority="high" decoding="async" />
+      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" loading="eager" fetchpriority="high" decoding="sync" />
       <span class="spotlight-media-badge">${cat}</span>
     </button>
     <div class="spotlight-content">
@@ -3063,12 +3068,16 @@ function applyStorefrontLocaleUI() {
     isEn,
     'Production-ready web apps, automation scripts, Blogger XML themes, and UI kits crafted to ship business &amp; developer projects faster.'
   );
-  setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(2) h4'), isEn, 'Quick Links');
+  setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(2) h3, .site-footer .footer-grid > div:nth-child(2) h4'), isEn, 'Quick Links');
   const fLinks1 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(2) a');
   if (fLinks1[0]) fLinks1[0].textContent = isEn ? 'Product Catalog' : 'Katalog Produk';
   if (fLinks1[1]) fLinks1[1].textContent = isEn ? 'Why Ddev Studio' : 'Keunggulan Toko';
   if (fLinks1[2]) fLinks1[2].textContent = isEn ? 'How to Order' : 'Cara Pemesanan';
-  setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(3) h4'), isEn, 'Contact & Legal');
+  if (fLinks1[3]) fLinks1[3].textContent = 'FAQ';
+  if (fLinks1[4] && fLinks1[4].hasAttribute('data-blogger-link')) {
+    fLinks1[4].textContent = isEn ? 'Blog & Articles ↗' : 'Blog & Artikel ↗';
+  }
+  setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(3) h3, .site-footer .footer-grid > div:nth-child(3) h4'), isEn, 'Contact & Legal');
   const fLinks2 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(3) a');
   if (fLinks2[1]) fLinks2[1].textContent = isEn ? 'About Us' : 'Tentang Kami';
   if (fLinks2[2]) fLinks2[2].textContent = isEn ? 'Terms & Commercial License' : 'Syarat, Ketentuan & Lisensi';
@@ -3836,6 +3845,15 @@ document.addEventListener('DOMContentLoaded', () => {
       window.openCustomConsultModal();
     });
   }
+
+  document.querySelectorAll('[data-legal]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof window.openLegalModal === 'function') {
+        window.openLegalModal(link.getAttribute('data-legal') || 'about');
+      }
+    });
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css?v=20261124e" />
+  <link rel="stylesheet" href="../styles.css?v=20261124f" />
   <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='dbg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230b1020'/%3E%3Cstop offset='.55' stop-color='%231e3a8a'/%3E%3Cstop offset='1' stop-color='%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' fill='url(%23dbg)'/%3E%3Cpath d='M16 14h17c10.5 0 16.5 6.5 16.5 18S43.5 50 33 50H16V14zm8 7.5v21h8.2c6.6 0 9.8-3.5 9.8-10.5s-3.2-10.5-9.8-10.5H24z' fill='%23fff'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml" />
   <style>
     .free-hero { padding: 44px 0 28px; text-align: center; }
@@ -38,7 +38,17 @@
     .free-card p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.6; flex: 1; }
     .free-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
     .free-upsell { font-size: 0.77rem; padding: 9px 12px; border-radius: 10px; background: var(--bg-elevated); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .free-upsell a { color: var(--accent); font-weight: 700; white-space: nowrap; }
+    .free-upsell a { display: inline-flex; align-items: center; min-height: 28px; padding: 2px 4px; color: var(--accent); font-weight: 700; white-space: nowrap; }
+    .free-nav-pro { display: none; }
+    @media (max-width: 1100px) {
+      .free-nav-pro { display: inline-flex; height: 34px; padding: 0 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); font-size: 0.76rem; font-weight: 700; align-items: center; white-space: nowrap; }
+    }
+    @media (max-width: 640px) {
+      .free-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; max-width: 100%; padding-bottom: 4px; }
+      .free-tabs::-webkit-scrollbar { display: none; }
+      .free-tab { flex: 0 0 auto; white-space: nowrap; font-size: 0.78rem; padding: 7px 12px; }
+      .free-search { width: 100%; min-width: 0; font-size: 16px; }
+    }
     .free-banner { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 28px; text-align: center; margin-bottom: 48px; }
   </style>
 </head>
@@ -64,6 +74,7 @@
       </nav>
 
       <div class="nav-actions">
+        <a href="../" class="free-nav-pro" id="mobileProLink">&larr; Pro (26)</a>
         <button type="button" class="icon-btn" id="langBtn" aria-label="Switch language ID / EN" style="padding:0 11px;font-weight:800;">
           <span id="langLabel">ID</span>
         </button>
@@ -313,6 +324,11 @@
       document.getElementById('langLabel').textContent = isEn ? 'EN' : 'ID';
       document.getElementById('navHome').textContent = isEn ? 'Pro Catalog (26)' : 'Katalog Pro (26)';
       document.getElementById('navHome').href = isEn ? '../en/' : '../';
+      const mobPro = document.getElementById('mobileProLink');
+      if (mobPro) {
+        mobPro.textContent = isEn ? '← Pro (26)' : '← Toko (26)';
+        mobPro.href = isEn ? '../en/' : '../';
+      }
       document.getElementById('heroPill').textContent = isEn ? '12 FREE PRODUCTS • MIT OPEN SOURCE' : '12 PRODUK GRATIS • MIT OPEN SOURCE';
       document.getElementById('heroTitle').textContent = isEn
         ? '12 Free Open-Source Web Templates, Blogger Themes & Tools'
