@@ -35,8 +35,9 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261124h" />
+  <link rel="preload" as="image" href="demo/laravel-hris/thumb-480.webp" imagesrcset="demo/laravel-hris/thumb-480.webp 480w, demo/laravel-hris/screenshot.webp 960w" imagesizes="(max-width: 640px) 92vw, 560px" fetchpriority="high" />
+  <link id="gfontLink" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=optional" rel="stylesheet" media="print" />
+  <link rel="stylesheet" href="styles.css?v=20261124n" />
   <!-- HIGH-RES SQUARE FAVICON (DDEV STUDIO) -->
   <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='dbg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230b1020'/%3E%3Cstop offset='.55' stop-color='%231e3a8a'/%3E%3Cstop offset='1' stop-color='%231d4ed8'/%3E%3C/linearGradient%3E%3ClinearGradient id='dac' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%2334d399'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='0' fill='url(%23dbg)'/%3E%3Cpath d='M16 14h17c10.5 0 16.5 6.5 16.5 18S43.5 50 33 50H16V14zm8 7.5v21h8.2c6.6 0 9.8-3.5 9.8-10.5s-3.2-10.5-9.8-10.5H24z' fill='%23ffffff'/%3E%3Cpath d='M28 38.5L33.5 25.5' stroke='url(%23dac)' stroke-width='3.6' stroke-linecap='round'/%3E%3Crect x='45.5' y='11' width='6' height='6' rx='1.5' fill='url(%23dac)'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml" />
   <link href="favicon.png" rel="alternate icon" sizes="256x256" type="image/png" />
@@ -163,9 +164,39 @@
   <!-- FEATURED PRODUCT SPOTLIGHT SLIDER -->
   <section class="container spotlight-section-wrap">
     <div class="spotlight-showcase" id="featuredCarouselSection">
-      <div class="spotlight-slide" id="spotlightSlide"></div>
+      <div class="spotlight-slide" id="spotlightSlide" data-spot-key="prod-26|id">
+        <button type="button" class="spotlight-media" data-act="open-demo" data-id="prod-26" aria-label="Web App: Preview Live Demo Sistem HRIS, Absensi, Cuti &amp; Payroll Karyawan (KaryaHR Pro Laravel 12)">
+          <img src="demo/laravel-hris/thumb-480.webp" srcset="demo/laravel-hris/thumb-480.webp 480w, demo/laravel-hris/screenshot.webp 960w" sizes="(max-width: 640px) 92vw, 560px" alt="Sistem HRIS, Absensi, Cuti &amp; Payroll Karyawan (KaryaHR Pro Laravel 12)" width="480" height="300" loading="eager" fetchpriority="high" decoding="sync" />
+          <span class="spotlight-media-badge">Web App</span>
+        </button>
+        <div class="spotlight-content">
+          <div class="spotlight-eyebrow">
+            <span class="spotlight-pill is-new">RILIS TERBARU</span>
+            <span class="spotlight-stack">Laravel 12 (PHP 8.2) &bull; Eloquent ORM &bull; Blade</span>
+          </div>
+          <h2 class="spotlight-title"><button type="button" class="title-link-btn" data-act="open-detail" data-id="prod-26">Sistem HRIS, Absensi, Cuti &amp; Payroll Karyawan (KaryaHR Pro Laravel 12)</button></h2>
+          <p class="spotlight-desc">Aplikasi web HRIS &amp; penggajian berbasis framework Laravel 12 MVC asli (bukan PHP biasa). Lengkap dengan Multi-Role Auth (Admin HR, Manager, Karyawan), Direktori Departemen &amp; Karyawan, Check-In/Out Absensi + Ekspor CSV Excel, Workflow Persetujuan Cuti Anti-Double Approve, serta Mesin Hitung Payroll Server-Side &amp; Cetak Slip Gaji A4 bertanda tangan HMAC VRF-.</p>
+          <div class="spotlight-metrics">
+            <div>
+              <div class="spotlight-metric-val is-price"><span>Rp 189.000</span><span class="spotlight-old-price">Rp 449.000</span></div>
+              <div class="spotlight-metric-lbl">Sekali Bayar &bull; Hemat 58%</div>
+            </div>
+            <div>
+              <div class="spotlight-metric-val">100% Open Code</div>
+              <div class="spotlight-metric-lbl">File .ZIP Lengkap &amp; Live Demo</div>
+            </div>
+          </div>
+          <div class="spotlight-actions">
+            <button type="button" class="spotlight-btn-demo" data-act="open-demo" data-id="prod-26">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              <span>Preview Live Demo</span>
+            </button>
+            <button type="button" class="spotlight-btn-buy" data-act="buy" data-id="prod-26">Beli Source Code</button>
+          </div>
+        </div>
+      </div>
       <div class="spotlight-bar">
-        <div class="spotlight-dots" id="spotlightDots" role="tablist" aria-label="Pilih produk sorotan"></div>
+        <div class="spotlight-dots" id="spotlightDots" role="tablist" aria-label="Pilih produk sorotan"><button type="button" role="tab" class="s-dot active" data-idx="0" aria-label="Slide 1" aria-selected="true"></button></div>
         <div class="carousel-nav">
           <span class="carousel-counter" id="carouselCounter">01 / 10</span>
           <button type="button" class="carousel-arrow" id="carouselPrevBtn" aria-label="Produk Sebelumnya">
@@ -472,6 +503,6 @@
 
   <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
-  <script src="app.js?v=20261124m"></script>
+  <script src="app.js?v=20261124n" defer></script>
 </body>
 </html>

@@ -282,4 +282,6 @@
     isEn = !isEn;
     render();
   });
+  const gfLink = document.getElementById('gfontLink');
+  if (gfLink && gfLink.media !== 'all') gfLink.media = 'all';
   render();

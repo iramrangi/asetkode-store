@@ -1361,6 +1361,7 @@ html, body {
   /* --- Hero --- */
   .hero {
     padding: 20px 0 22px;
+    min-height: 368px;
   }
   .status-pill {
     font-size: 0.68rem;
@@ -2654,7 +2655,11 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
   .spotlight-slide {
     grid-template-columns: 1fr;
     gap: 20px;
-    min-height: auto;
+    min-height: 455px;
+  }
+  .spotlight-dots {
+    min-height: 28px;
+    align-items: center;
   }
 }
 
@@ -2762,13 +2767,21 @@ html[data-theme="dark"] .navbar.is-scrolled {
   animation: ddevPulseCalm 2.6s ease-in-out infinite;
 }
 
-/* Staggered hero entrance (GPU opacity + translateY only, zero CLS) */
-.hero .status-pill { animation: ddevFadeUp 0.36s cubic-bezier(0.22, 1, 0.36, 1) 0ms both; }
-.hero .hero-title { animation: ddevFadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 45ms both; }
-.hero .hero-desc { animation: ddevFadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 90ms both; }
-.hero .hero-cta-row { animation: ddevFadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 135ms both; }
-.hero .hero-meta-strip { animation: ddevFadeUp 0.42s cubic-bezier(0.22, 1, 0.36, 1) 180ms both; }
-.spotlight-showcase { animation: ddevFadeUp 0.44s cubic-bezier(0.22, 1, 0.36, 1) 210ms both; }
+/* Staggered hero entrance (GPU translateY only at opacity 1 so FCP/LCP paint instantaneously) */
+@keyframes ddevShiftIn {
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.hero .status-pill { animation: ddevShiftIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.hero .hero-title { animation: ddevShiftIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.hero .hero-desc { animation: ddevShiftIn 0.34s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.hero .hero-cta-row { animation: ddevShiftIn 0.36s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.hero .hero-meta-strip { animation: ddevShiftIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.spotlight-showcase { animation: ddevShiftIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
 /* Tactile press micro-interactions */
 .btn:active,

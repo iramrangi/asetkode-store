@@ -27,6 +27,9 @@ function normalizeLocalDemoUrl(url) {
   const m = raw.match(/^https?:\/\/(?:[a-z0-9-]+\.)?asetkode-store\.pages\.dev\/(demo\/.*)$/i);
   return m ? m[1] : raw;
 }
+function resolveSmallThumbUrl(url) {
+  return resolveStoreAssetUrl(String(url || '').replace(/screenshot\.webp$/i, 'thumb-480.webp'));
+}
 function resolveStoreAssetUrl(url) {
   const raw = normalizeLocalDemoUrl(url);
   if (!raw || raw.startsWith('#') || raw.startsWith('/') || /^(https?:|data:|mailto:)/i.test(raw)) return raw;
@@ -1554,10 +1557,12 @@ function renderProductsGrid() {
       const shortVer = String(p.version || 'v1.0').split(' ')[0];
       const cartTitle = inCart ? (disp.isEn ? 'Remove from Cart' : 'Hapus dari Keranjang') : (disp.isEn ? 'Add to Cart' : 'Tambah ke Keranjang');
 
+      const lgThumb = resolveStoreAssetUrl(p.thumbnailUrl);
+      const smThumb = resolveSmallThumbUrl(p.thumbnailUrl);
       return `
         <article class="product-card" data-id="${p.id}">
           <div class="card-thumb">
-            <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="360" loading="${idx < 8 ? 'eager' : 'lazy'}" decoding="async" />
+            <img src="${smThumb}" srcset="${smThumb} 480w, ${lgThumb} 960w" sizes="(max-width: 640px) 46vw, 320px" alt="${disp.title}" width="480" height="300" loading="${idx < 2 ? 'eager' : 'lazy'}" decoding="async" />
             <button type="button" class="save-heart-btn ${isSaved ? 'saved' : ''}" data-act="toggle-wishlist" data-id="${p.id}" title="${disp.isEn ? 'Save product' : 'Simpan produk'}" aria-label="${disp.isEn ? 'Save product' : 'Simpan produk'}">${isSaved ? '♥' : '♡'}</button>
             ${disc > 0 ? `<span class="discount-pill">${disp.isEn ? 'SAVE' : 'HEMAT'} ${disc}%</span>` : ''}
             <div class="card-hover-overlay">
@@ -1774,6 +1779,34 @@ function renderSpotlightSlide(animate = false) {
   spotlightActiveIdx = ((spotlightActiveIdx % total) + total) % total;
   const p = spotlightPicks[spotlightActiveIdx];
   const curSpotKey = `${p.id}|${currentLocale}`;
+
+  if (counterEl) {
+    counterEl.textContent = `${String(spotlightActiveIdx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  }
+  if (dotsEl) {
+    dotsEl.innerHTML = spotlightPicks
+      .map((item, idx) => {
+        const itemDisp = getProdDisplay(item);
+        return `<button type="button" role="tab" class="s-dot ${idx === spotlightActiveIdx ? 'active' : ''}" data-idx="${idx}" aria-label="${itemDisp.title}" aria-selected="${idx === spotlightActiveIdx ? 'true' : 'false'}"></button>`;
+      })
+      .join('');
+    dotsEl.querySelectorAll('.s-dot').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        spotlightActiveIdx = Number(btn.getAttribute('data-idx')) || 0;
+        renderSpotlightSlide(true);
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const nextIdx = (spotlightActiveIdx + (e.key === 'ArrowRight' ? 1 : -1) + total) % total;
+        spotlightActiveIdx = nextIdx;
+        renderSpotlightSlide(true);
+        const focusBtn = dotsEl.querySelector(`.s-dot[data-idx="${nextIdx}"]`);
+        if (focusBtn) focusBtn.focus();
+      });
+    });
+  }
+
   if (!animate && slideEl.dataset.spotKey === curSpotKey && slideEl.querySelector('.spotlight-media img')) {
     return;
   }
@@ -1800,7 +1833,7 @@ function renderSpotlightSlide(animate = false) {
 
   slideEl.innerHTML = `
     <button type="button" class="spotlight-media" data-act="open-demo" data-id="${p.id}" aria-label="${cat}: Preview Live Demo ${disp.title}">
-      <img src="${resolveStoreAssetUrl(p.thumbnailUrl)}" alt="${disp.title}" width="640" height="400" loading="eager" fetchpriority="high" decoding="sync" />
+      <img src="${resolveSmallThumbUrl(p.thumbnailUrl)}" srcset="${resolveSmallThumbUrl(p.thumbnailUrl)} 480w, ${resolveStoreAssetUrl(p.thumbnailUrl)} 960w" sizes="(max-width: 640px) 92vw, 560px" alt="${disp.title}" width="480" height="300" loading="eager" fetchpriority="high" decoding="sync" />
       <span class="spotlight-media-badge">${cat}</span>
     </button>
     <div class="spotlight-content">
@@ -1836,34 +1869,6 @@ function renderSpotlightSlide(animate = false) {
   `;
 
   if (animate) slideEl.classList.add('is-animating');
-
-  if (counterEl) {
-    counterEl.textContent = `${String(spotlightActiveIdx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
-  }
-
-  if (dotsEl) {
-    dotsEl.innerHTML = spotlightPicks
-      .map((item, idx) => {
-        const itemDisp = getProdDisplay(item);
-        return `<button type="button" role="tab" class="s-dot ${idx === spotlightActiveIdx ? 'active' : ''}" data-idx="${idx}" aria-label="${itemDisp.title}" aria-selected="${idx === spotlightActiveIdx ? 'true' : 'false'}"></button>`;
-      })
-      .join('');
-    dotsEl.querySelectorAll('.s-dot').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        spotlightActiveIdx = Number(btn.getAttribute('data-idx')) || 0;
-        renderSpotlightSlide(true);
-      });
-      btn.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-        e.preventDefault();
-        const nextIdx = (spotlightActiveIdx + (e.key === 'ArrowRight' ? 1 : -1) + total) % total;
-        spotlightActiveIdx = nextIdx;
-        renderSpotlightSlide(true);
-        const focusBtn = dotsEl.querySelector(`.s-dot[data-idx="${nextIdx}"]`);
-        if (focusBtn) focusBtn.focus();
-      });
-    });
-  }
 }
 
 function renderFeaturedCarousel() {
@@ -3619,11 +3624,12 @@ function initMotionSystem() {
 
   const checkVisibleReveals = () => {
     const vh = window.innerHeight || 900;
-    document.querySelectorAll('.reveal-item:not(.is-visible)').forEach((el) => {
-      if (el.getBoundingClientRect().top < vh + 60) {
-        el.classList.add('is-visible');
-        if (ddevMotionObserver) ddevMotionObserver.unobserve(el);
-      }
+    const pending = [...document.querySelectorAll('.reveal-item:not(.is-visible)')];
+    if (!pending.length) return;
+    const visible = pending.filter((el) => el.getBoundingClientRect().top < vh + 60);
+    visible.forEach((el) => {
+      el.classList.add('is-visible');
+      if (ddevMotionObserver) ddevMotionObserver.unobserve(el);
     });
   };
   window.addEventListener('scroll', checkVisibleReveals, { passive: true });
@@ -3641,12 +3647,16 @@ window.observeMotionTargets = function (selector, immediate = false) {
     return;
   }
   const vh = window.innerHeight || 900;
+  // Batch ALL geometric reads BEFORE any DOM class/style writes to avoid forced reflows
+  const pending = [];
   nodes.forEach((el, idx) => {
     if (el.classList.contains('is-visible')) return;
+    pending.push({ el, idx, inView: el.getBoundingClientRect().top < vh + 60 });
+  });
+  pending.forEach(({ el, idx, inView }) => {
     el.classList.add('reveal-item');
     el.style.setProperty('--reveal-delay', `${Math.min((idx % 4) * 30, 90)}ms`);
-    const rect = el.getBoundingClientRect();
-    if (rect.top < vh + 60) {
+    if (inView) {
       requestAnimationFrame(() => el.classList.add('is-visible'));
     } else {
       ddevMotionObserver.observe(el);
@@ -3655,6 +3665,8 @@ window.observeMotionTargets = function (selector, immediate = false) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  const gfLink = document.getElementById('gfontLink');
+  if (gfLink && gfLink.media !== 'all') gfLink.media = 'all';
   applySiteBranding();
   initThemeToggle();
   initFeaturedCarouselControls();
