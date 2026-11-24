@@ -151,7 +151,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/kasir/screenshot.png",
+    "thumbnailUrl": "demo/kasir/screenshot.webp",
     "summary": "Aplikasi Point of Sale (Kasir Toko) dan Manajemen Inventaris Gudang modern berbasis web yang berjalan langsung di browser tanpa instalasi server rumit (Zero-Config). Dilengkapi fitur sinkronisasi dua arah otomatis dengan Microsoft Excel (.xlsx), pencarian barcode scanner, cetak struk thermal 58mm & 80mm, multi pembayaran (Tunai, QRIS, Kasbon), serta kartu stok gudang.",
     "summaryEn": "Zero-Config web Point of Sale (POS) and warehouse inventory app with two-way Excel (.xlsx) sync, barcode scanner support, 58mm/80mm thermal receipts, multi-payment modes, and stock ledger.",
     "features": [
@@ -199,7 +199,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial (Unlimited Project)",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/umkm/screenshot.png",
+    "thumbnailUrl": "demo/umkm/screenshot.webp",
     "summary": "Template Landing Page siap pakai untuk kedai kopi, resto, dan usaha UMKM lokal. Dilengkapi integrasi order langsung ke WhatsApp dengan rincian menu otomatis, filter katalog menu, integrasi Google Maps, mode gelap/terang, dan panduan kustomisasi tanpa coding.",
     "summaryEn": "Ready-to-deploy responsive landing page for cafes, restaurants, and local businesses with interactive menu filtering, direct WhatsApp order formatting, dark/light mode, and zero coding customization.",
     "features": [
@@ -243,7 +243,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/scraper/screenshot.png",
+    "thumbnailUrl": "demo/scraper/screenshot.webp",
     "summary": "Kumpulan script otomatisasi Python siap pakai untuk mengambil, membersihkan, dan mengekspor data web secara terjadwal ke file Excel (.xlsx), CSV, maupun Google Sheets.",
     "summaryEn": "Modular Python 3.10+ automation script to scrape, clean, and export structured web data on schedule to Excel (.xlsx), CSV, or Google Sheets with auto-retry and User-Agent rotation.",
     "features": [
@@ -286,7 +286,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/ecommerce/screenshot.png",
+    "thumbnailUrl": "demo/ecommerce/screenshot.webp",
     "summary": "Source code platform toko online dan katalog produk lengkap dengan keranjang belanja interaktif, perhitungan ongkos kirim otomatis, manajemen pesanan, dan integrasi pembayaran QRIS & Virtual Account.",
     "summaryEn": "Full PHP 8 & MySQL PDO e-commerce platform with multi-category product catalog, live cart, product variants, discount vouchers, admin order dashboard, and QRIS/global payment webhook support.",
     "features": [
@@ -333,7 +333,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial (Unlimited)",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/dashboard-ui/screenshot.png",
+    "thumbnailUrl": "demo/dashboard-ui/screenshot.webp",
     "summary": "Template Admin Dashboard profesional dengan 25+ komponen halaman siap pakai, grafik analitik interaktif, tabel data responsif, dan fitur Dark/Light Mode instan. Cocok untuk backend aplikasi Laravel, Node.js, maupun Python.",
     "summaryEn": "Multi-page SaaS & admin analytics dashboard template featuring interactive SVG charts, CRUD data tables, form components, printable invoices, auth screens, and Dark/Light themes.",
     "features": [
@@ -378,7 +378,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/bot-responder/screenshot.png",
+    "thumbnailUrl": "demo/bot-responder/screenshot.webp",
     "summary": "Source code bot otomatisasi Python untuk mengirim notifikasi transaksi, laporan harian database/Excel, pemantauan server, serta balasan menu otomatis secara real-time.",
     "summaryEn": "Python asyncio Telegram bot with custom regex auto-reply rules, inline keyboards, external webhook report receiver, and CSV activity export.",
     "features": [
@@ -422,7 +422,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/finansial/screenshot.png",
+    "thumbnailUrl": "demo/finansial/screenshot.webp",
     "summary": "Template website Link-in-Bio modern dan super ringan dengan skor 100 PageSpeed. Bebas biaya langganan bulanan selamanya, bisa di-hosting 100% gratis di GitHub Pages, Vercel, atau Netlify. Lengkap dengan integrasi WhatsApp, medsos, katalog produk, dan mode gelap/terang.",
     "summaryEn": "Offline-ready financial tracker & budget planner with 4 KPI cards, category spending donut chart, budget limits, savings goal calculator, and CSV export.",
     "features": [
@@ -465,7 +465,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/pdf-converter/screenshot.png",
+    "thumbnailUrl": "demo/pdf-converter/screenshot.webp",
     "summary": "Script otomatisasi Python siap pakai untuk mengonversi dokumen PDF ke format Word (.docx) atau tabel Excel (.xlsx) tanpa watermark, tanpa batasan jumlah halaman, dan tanpa risiko kebocoran data karena semua proses berjalan 100% lokal di komputer Anda.",
     "summaryEn": "Python tool to extract tables and text from native and scanned PDFs into formatted Word (.docx) or Excel (.xlsx) files with both CLI and Tkinter GUI modes.",
     "features": [
@@ -511,7 +511,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/undangan/screenshot.png",
+    "thumbnailUrl": "demo/undangan/screenshot.webp",
     "summary": "Template website undangan digital pernikahan atau event modern dengan desain aesthetic dan fitur premium. Sangat cocok bagi Anda yang ingin membuka jasa pembuatan undangan online atau untuk acara pernikahan sendiri.",
     "summaryEn": "Elegant digital wedding invitation template with custom guest URL parameters, gallery, countdown timer, background audio player, and RSVP form.",
     "features": [
@@ -557,7 +557,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/bot-tagihan/screenshot.png",
+    "thumbnailUrl": "demo/bot-tagihan/screenshot.webp",
     "summary": "Bot otomatisasi yang terhubung langsung dengan Google Sheets. Bot akan membaca tanggal jatuh tempo tagihan, jadwal sewa, atau agenda penting, lalu secara otomatis mengirimkan pesan pengingat ke chat atau grup Telegram tanpa perlu repot cek spreadsheet manual setiap hari.",
     "summaryEn": "Automated Python billing reminder bot that tracks due dates (H-3, H-0, overdue) from CSV or Google Sheets and pushes formatted alerts to Telegram.",
     "features": [
@@ -601,7 +601,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/absensi/screenshot.png",
+    "thumbnailUrl": "demo/absensi/screenshot.webp",
     "summary": "Aplikasi absensi praktis dan instan tanpa alat fingerprint mahal. Karyawan atau siswa cukup melakukan scan QR Code dinamis menggunakan kamera smartphone masing-masing untuk mencatat kehadiran secara akurat.",
     "summaryEn": "PHP 8 PDO + MySQL attendance web app with browser camera QR scanning (BarcodeDetector + USB scanner), late threshold calculation, printable QR ID cards, and Excel/CSV export.",
     "features": [
@@ -644,7 +644,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/payment-kit/screenshot.png",
+    "thumbnailUrl": "demo/payment-kit/screenshot.webp",
     "summary": "Modul starter kit siap pakai untuk menerima pembayaran otomatis QRIS, GoPay, OVO, ShopeePay, dan Virtual Account bank (BCA, BNI, BRI, Mandiri) di website Anda. Dilengkapi endpoint webhook otomatis yang mengubah status order jadi LUNAS detik itu juga.",
     "summaryEn": "Production-ready PHP integration starter kit for invoice creation, MySQL transaction logging, signature verification webhooks, and sandbox testing.",
     "features": [
@@ -688,7 +688,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/kasir-php/screenshot.png",
+    "thumbnailUrl": "demo/kasir-php/screenshot.webp",
     "summary": "Aplikasi kasir penjualan dan manajemen stok barang versi ringan tanpa framework rumit. Sangat mudah dipahami bagi pemula yang baru belajar PHP atau UMKM yang membutuhkan sistem kasir simpel tanpa perlu instal Node.js atau Composer.",
     "summaryEn": "Lightweight PHP & MySQL point-of-sale application for retail shops with barcode product lookup, automatic stock deduction, daily sales reports, and 58mm thermal printing.",
     "features": [
@@ -733,7 +733,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial (Unlimited Project)",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/agency/screenshot.png",
+    "thumbnailUrl": "demo/agency/screenshot.webp",
     "summary": "Desain web Company Profile & Agensi Digital modern dengan tata letak bersih, dark/light mode, portofolio interaktif, tabel paket layanan, dan form kontak cepat. Cocok untuk bisnis jasa, studio kreatif, dan freelancer.",
     "summaryEn": "High-converting agency & company profile landing page with service tiers, portfolio showcase, testimonials, FAQ accordion, Dark/Light mode, and easy config.js setup.",
     "features": [
@@ -777,7 +777,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/biolink/screenshot.png",
+    "thumbnailUrl": "demo/biolink/screenshot.webp",
     "summary": "Template desain web portfolio pribadi sekaligus halaman Link-in-Bio profesional untuk developer, desainer, content creator, dan pekerja lepas. Tampil elegan dan cepat diakses dari bio Instagram/TikTok.",
     "summaryEn": "Self-hosted link-in-bio & creator portfolio card with bento stats, project showcase modals, service rate cards, .vcf contact download, and zero monthly fees.",
     "features": [
@@ -820,7 +820,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/antrian/screenshot.png",
+    "thumbnailUrl": "demo/antrian/screenshot.webp",
     "summary": "Program antrian digital berbasis web untuk klinik, apotek, bengkel, loket pelayanan, dan toko servis. Dilengkapi layar monitor antrian, tombol panggil suara otomatis bahasa Indonesia, dan cetak nomor antrian.",
     "summaryEn": "Zero-Config queue management app with Operator console, synced TV waiting-room display, ticket kiosk thermal print, Web Speech voice calling, and CSV logs.",
     "features": [
@@ -864,7 +864,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial (Unlimited Project)",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/uikit/screenshot.png",
+    "thumbnailUrl": "demo/uikit/screenshot.webp",
     "summary": "Koleksi 42 komponen desain web interaktif siap copy-paste untuk proyek Toko Online & SaaS (Navigation, Hero CTA, Product Card & Cart, SaaS Pricing Table, Auth/Checkout Forms, Dashboard KPI & Table, hingga FAQ/Modal/Footer) lengkap dengan Token Warna & Dark Mode.",
     "summaryEn": "42 responsive, copy-paste-ready UI components across 7 categories with CSS design tokens, 4 brand accent presets, Dark/Light mode, and 1-click HTML/CSS code copy.",
     "features": [
@@ -907,7 +907,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/invoice/screenshot.png",
+    "thumbnailUrl": "demo/invoice/screenshot.webp",
     "summary": "Aplikasi pembuat Invoice tagihan, Penawaran Harga (Quotation), dan Kwitansi resmi siap cetak A4 PDF yang berjalan langsung di browser tanpa server/XAMPP (Zero-Config). Dilengkapi konverter nominal Terbilang bahasa Indonesia otomatis, hitung PPN 11% & PPh 23 opsional, stempel SVG LUNAS/BELUM LUNAS, konversi Penawaran ke Invoice 1-klik, dan kirim ringkasan tagihan ke WhatsApp.",
     "summaryEn": "Offline-first invoicing, quotation, and receipt generator with live A4 preview, automatic tax/discount math, SVG Paid stamps, 1-click quote-to-invoice conversion, and CSV export.",
     "features": [
@@ -952,7 +952,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/booking/screenshot.png",
+    "thumbnailUrl": "demo/booking/screenshot.webp",
     "summary": "Sistem reservasi online dan manajemen jadwal janji temu pelanggan siap pakai untuk klinik, dokter gigi, barbershop, salon kecantikan, bengkel servis, maupun studio konsultasi. Dilengkapi proteksi anti double-booking per staf/terapis, unduh tiket kalender (.ics), panel admin resepsionis, dan reminder WhatsApp 1-klik.",
     "summaryEn": "Client booking and appointment dashboard with 4 business presets, anti-double-booking per staff slot, .ICS calendar download, and receptionist analytics.",
     "features": [
@@ -998,7 +998,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/laundry/screenshot.png",
+    "thumbnailUrl": "demo/laundry/screenshot.webp",
     "summary": "Aplikasi kasir khusus usaha laundry kiloan dan satuan (bedcover, sepatu, jas, karpet) lengkap dengan board manajemen produksi 5 tahap, pelacakan status cucian pelanggan real-time, notifikasi WhatsApp 'Cucian Siap Diambil', dan cetak struk nota thermal 58mm/80mm tanpa perlu server.",
     "summaryEn": "Dedicated laundry POS supporting weight (kg) & per-item orders, 5-stage production Kanban board, customer order tracker, 58/80mm thermal receipts, and CSV reports.",
     "features": [
@@ -1043,7 +1043,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/blogger-news/screenshot.png",
+    "thumbnailUrl": "demo/blogger-news/screenshot.webp",
     "summary": "Template Blogger XML Layouts v3 bergaya editorial untuk portal berita online, majalah digital, maupun blog media teknologi. Dilengkapi Breaking News Ticker otomatis dari feed JSON, layout Hero Headline Majalah 3 kolom, widget Trending/Popular Posts, estimasi waktu baca, Daftar Isi otomatis, Mode Baca Nyaman & Dark Mode, serta Schema JSON-LD NewsArticle.",
     "summaryEn": "Valid Blogger Layouts v3 XML theme built for news portals and online magazines featuring a breaking news ticker, 3-column editorial hero, auto TOC, Reader Mode, Dark Mode, and NewsArticle Schema.",
     "features": [
@@ -1087,7 +1087,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/blogger-toko/screenshot.png",
+    "thumbnailUrl": "demo/blogger-toko/screenshot.webp",
     "summary": "Ubah blog Blogger gratis menjadi website toko online profesional tanpa biaya hosting bulanan. Dilengkapi parser postingan pintar (.toko-meta-data & tag singkat harga/coret/stok/varian), hitung diskon otomatis, keranjang belanja persisten (Slide-over Cart Drawer), pilihan kurir ongkir, checkout terformat ke WhatsApp Admin maupun link bayar Mayar/QRIS.",
     "summaryEn": "Turn Blogger into an online store with zero hosting cost: structured post price/variant parser, persistent cart drawer, automatic discount math, WhatsApp & global checkout support.",
     "features": [
@@ -1131,7 +1131,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/blogger-portfolio/screenshot.png",
+    "thumbnailUrl": "demo/blogger-portfolio/screenshot.webp",
     "summary": "Template Blogger bergaya Swiss Editorial Minimalis yang dirancang khusus untuk UI/UX Designer, Web Developer, Freelancer, Fotografer, maupun Konsultan kreatif. Ubah setiap postingan Blogger menjadi halaman Studi Kasus (Case Study) portofolio lengkap, dengan profil Hero, Pengalaman Kerja, Layanan & Tarif, serta formulir kirim brief WhatsApp tanpa perlu membayar hosting tahunan.",
     "summaryEn": "Editorial Swiss-grid Blogger XML theme for designers, developers, and freelancers with label-based case studies, services & rates, printable CV layout, and Dark Mode.",
     "features": [
@@ -1175,7 +1175,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/blogger-docs/screenshot.png",
+    "thumbnailUrl": "demo/blogger-docs/screenshot.webp",
     "summary": "Template Blogger kelas developer yang terinspirasi Nextra, Mintlify, dan Tailwind Docs. Mengubah Blogger menjadi situs dokumentasi API, knowledge base SaaS, catatan engineering, atau blog tutorial pemrograman profesional dengan layout 3 kolom (Sidebar Grup Collapsible per Label, Konten Artikel + Tombol Salin Kode otomatis, dan Daftar Isi kanan dengan ScrollSpy).",
     "summaryEn": "Developer-grade 3-column Blogger XML theme featuring collapsible label sidebar, Ctrl+K JSON feed search, copy-code buttons, callout blocks, ScrollSpy TOC, and TechArticle Schema.",
     "features": [
@@ -1220,7 +1220,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/travel/screenshot.png",
+    "thumbnailUrl": "demo/travel/screenshot.webp",
     "summary": "Platform website agen travel & sistem reservasi paket wisata siap pakai dengan 8 paket destinasi unggulan, kalkulator biaya otomatis, E-Voucher verifikasi anti-palsu (kode tanda tangan VRF-), integrasi WhatsApp, serta Admin Panel pengelola paket & pesanan ber-PIN keamanan.",
     "summaryEn": "Production-ready tour & travel agency storefront featuring 8 illustrated tour packages, dynamic pax & date booking calculator, tamper-evident VRF E-Vouchers, WhatsApp checkout, and PIN-protected Admin Panel.",
     "features": [
@@ -1264,7 +1264,7 @@ const FALLBACK_PRODUCTS = [
     "license": "Personal & Komersial",
     "openMode": "modal",
     "demoType": "live_frame",
-    "thumbnailUrl": "demo/laravel-hris/screenshot.png",
+    "thumbnailUrl": "demo/laravel-hris/screenshot.webp",
     "summary": "Aplikasi web HRIS & penggajian berbasis framework Laravel 12 MVC asli (bukan PHP biasa). Lengkap dengan Multi-Role Auth (Admin HR, Manager, Karyawan), Direktori Departemen & Karyawan, Check-In/Out Absensi + Ekspor CSV Excel, Workflow Persetujuan Cuti Anti-Double Approve, serta Mesin Hitung Payroll Server-Side & Cetak Slip Gaji A4 bertanda tangan HMAC VRF-.",
     "summaryEn": "Production-grade Laravel 12 MVC HRIS & Payroll application featuring Role-Based Access Control (Admin HR, Manager, Employee), Department & Staff CRUD, Daily Attendance Check-In/Out with UTF-8 BOM CSV export, Leave Balance Approval Workflow, and Server-Side Payroll Engine with printable VRF-verified Pay Slips.",
     "features": [
@@ -3724,7 +3724,7 @@ window.observeMotionTargets = function (selector) {
   nodes.forEach((el, idx) => {
     if (el.classList.contains('is-visible')) return;
     el.classList.add('reveal-item');
-    el.style.setProperty('--reveal-delay', `${Math.min((idx % 4) * 45, 180)}ms`);
+    el.style.setProperty('--reveal-delay', `${Math.min((idx % 4) * 30, 90)}ms`);
     const rect = el.getBoundingClientRect();
     if (rect.top < vh + 60) {
       requestAnimationFrame(() => el.classList.add('is-visible'));
@@ -3808,6 +3808,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cartBackdrop = document.getElementById('cartBackdrop');
   if (cartBackdrop) cartBackdrop.addEventListener('click', () => closeModal('cartBackdrop'));
+
+  const cartDrawer = document.getElementById('cartDrawer');
+  if (cartDrawer) cartDrawer.addEventListener('click', (e) => e.stopPropagation());
 
   const checkoutCartBtn = document.getElementById('checkoutCartBtn');
   if (checkoutCartBtn) {
