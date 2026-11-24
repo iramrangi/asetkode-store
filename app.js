@@ -2562,7 +2562,10 @@ function buildEmailOrderHTML(order) {
 function buildBuiltInPaymentGatewayHTML(order) {
   const esc = escAiHtml;
   const subj = `Konfirmasi Bayar QRIS (${order.price}): ${order.title}`;
-  const baseBody = `Halo Admin ${SITE_CONFIG.brandName},\n\nSaya sudah melakukan pembayaran QRIS untuk:\n- Produk: ${order.title}\n- Total: ${order.price}\n`;
+  const itemSummaryLine = (Array.isArray(order.items) && order.items.length > 1)
+    ? `- Rincian: ${order.stack || order.items.map((x) => x.name).join(', ')}\n`
+    : '';
+  const baseBody = `Halo Admin ${SITE_CONFIG.brandName},\n\nSaya sudah melakukan pembayaran QRIS untuk:\n- Produk: ${order.title}\n${itemSummaryLine}- Total: ${order.price}\n`;
   const mailHref = `mailto:${SITE_CONFIG.orderEmail}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
   const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
   const baseOrigin = (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/');
@@ -3419,7 +3422,7 @@ function sendToAiAssistant(rawText) {
   addAiChatMessage('user', escAiHtml(text), []);
 
   const gasUrl = String(SITE_CONFIG.gasWebAppUrl || '').trim();
-  const orderIdMatch = text.match(/DDV-\d{4,8}-\d{2,4}/i);
+  const orderIdMatch = text.match(/(?:DDV|USD)-[A-Z0-9]{4,10}-[A-Z0-9]{2,10}/i);
 
   // 1. Live Order ID status check
   if (orderIdMatch && gasUrl) {
@@ -3437,6 +3440,8 @@ function sendToAiAssistant(rawText) {
             : `Pesanan <code>${escAiHtml(oid)}</code> tidak ditemukan. Pastikan format Order ID benar atau hubungi <strong>${escAiHtml(SITE_CONFIG.orderEmail)}</strong>.`, []);
           return;
         }
+        const prodTagEn = st.productTitle ? ` (<strong>${escAiHtml(st.productTitle)}</strong>)` : '';
+        const prodTagId = st.productTitle ? ` untuk <strong>${escAiHtml(st.productTitle)}</strong>` : '';
         if (st.status === 'PAID') {
           const btns = (st.downloadLinks || [])
             .filter((d) => /^https:\/\//i.test(String(d && d.url || '').trim()))
@@ -3447,11 +3452,11 @@ function sendToAiAssistant(rawText) {
             }));
           const msgHtml = btns.length > 0
             ? (isEn
-              ? `Order <code>${escAiHtml(oid)}</code> (<strong>${escAiHtml(st.productTitle)}</strong>) is <strong>PAID</strong>! Download your files below:`
-              : `Pesanan <code>${escAiHtml(oid)}</code> untuk <strong>${escAiHtml(st.productTitle)}</strong> sudah <strong>LUNAS (PAID)</strong>! Silakan unduh lewat tombol di bawah:`)
+              ? `Order <code>${escAiHtml(oid)}</code>${prodTagEn} is <strong>PAID</strong>! Download your files below:`
+              : `Pesanan <code>${escAiHtml(oid)}</code>${prodTagId} sudah <strong>LUNAS (PAID)</strong>! Silakan unduh lewat tombol di bawah:`)
             : (isEn
-              ? `Order <code>${escAiHtml(oid)}</code> (<strong>${escAiHtml(st.productTitle)}</strong>) is <strong>PAID</strong>! Download links were emailed to you — include your checkout email with <code>${escAiHtml(oid)}</code> here to unlock links directly.`
-              : `Pesanan <code>${escAiHtml(oid)}</code> untuk <strong>${escAiHtml(st.productTitle)}</strong> sudah <strong>LUNAS (PAID)</strong>! Link <code>.ZIP</code> dikirim ke email Anda — ketik <code>${escAiHtml(oid)} email@anda.com</code> jika ingin memunculkan link di sini.`);
+              ? `Order <code>${escAiHtml(oid)}</code>${prodTagEn} is <strong>PAID</strong>! Download links were emailed to you — include your checkout email with <code>${escAiHtml(oid)}</code> here to unlock links directly.`
+              : `Pesanan <code>${escAiHtml(oid)}</code>${prodTagId} sudah <strong>LUNAS (PAID)</strong>! Link <code>.ZIP</code> dikirim ke email Anda — ketik <code>${escAiHtml(oid)} email@anda.com</code> jika ingin memunculkan link di sini.`);
           addAiChatMessage('bot', msgHtml, btns);
         } else {
           addAiChatMessage('bot', isEn
@@ -3797,9 +3802,16 @@ document.addEventListener('DOMContentLoaded', () => {
         price: formatUsd(c.priceUsdNum || idrToCleanUsdNum(c.priceNum)),
         url: c.usdPaymentUrl || SITE_CONFIG.usdStoreUrl
       })) : [];
+      const orderItems = cartState.map((c) => ({
+        id: c.id,
+        name: isEn ? (c.titleEn || c.title) : c.title,
+        price: isEn ? (c.priceUsdNum || idrToCleanUsdNum(c.priceNum)) : (c.priceNum || parsePriceNum(c.price)),
+        quantity: 1
+      }));
       launchCheckoutGateway({
         title: orderTitle,
         price: totalStr,
+        items: orderItems,
         paymentUrl: isEn
           ? (cartState.length === 1 ? (cartState[0].usdPaymentUrl || SITE_CONFIG.usdStoreUrl) : (polarItemsList[0]?.url || SITE_CONFIG.usdStoreUrl))
           : (cartState.length === 1 ? cartState[0].paymentUrl : '#checkout-mayar'),
