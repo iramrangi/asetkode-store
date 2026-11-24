@@ -3153,7 +3153,7 @@ function applyStorefrontLocaleUI() {
   updateCartUI();
   syncThemeBtnTitle();
   if (typeof window.observeMotionTargets === 'function') {
-    window.observeMotionTargets('.bento-box, .step-card, .custom-service-banner, .faq-item');
+    window.observeMotionTargets('.bento-box, .step-card, .custom-service-banner, .faq-item', Boolean(ddevMotionObserver));
   }
 }
 
@@ -3712,11 +3712,11 @@ function initMotionSystem() {
   window.observeMotionTargets('.bento-box, .step-card, .custom-service-banner, .faq-item, #productGrid .product-card');
 }
 
-window.observeMotionTargets = function (selector) {
+window.observeMotionTargets = function (selector, immediate = false) {
   const nodes = document.querySelectorAll(selector);
   if (!nodes.length) return;
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced || !ddevMotionObserver) {
+  if (immediate || reduced || !ddevMotionObserver) {
     nodes.forEach((el) => el.classList.add('is-visible'));
     return;
   }
