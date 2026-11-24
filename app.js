@@ -2664,10 +2664,11 @@ function buildBuiltInPaymentGatewayHTML(order) {
         });
 
         var pollTimer = null;
-        function startStatusPolling(oid) {
+        function startStatusPolling(oid, statusToken) {
           if (pollTimer) clearInterval(pollTimer);
+          var sigQ = statusToken ? ('&sig=' + encodeURIComponent(statusToken)) : '';
           pollTimer = setInterval(function () {
-            fetch(gasUrl + '?action=status&orderId=' + encodeURIComponent(oid))
+            fetch(gasUrl + '?action=status&orderId=' + encodeURIComponent(oid) + sigQ)
               .then(function (r) { return r.json(); })
               .then(function (st) {
                 if (st && st.status === 'PAID') {
@@ -2676,7 +2677,10 @@ function buildBuiltInPaymentGatewayHTML(order) {
                   document.getElementById('stepPaidSuccess').style.display = 'block';
                   var wrap = document.getElementById('paidLinksWrap');
                   wrap.innerHTML = (st.downloadLinks || []).map(function (d) {
-                    return '<a class="dl-btn" href="' + d.url + '" target="_blank" rel="noopener">⬇ Unduh: ' + (d.name || 'File .ZIP') + '</a>';
+                    var safeUrl = /^https:\/\//i.test(String(d.url || '').trim()) ? String(d.url).trim() : '#';
+                    var safeName = String(d.name || 'File .ZIP').replace(/[&<>"]/g, function(ch) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]; });
+                    var safeHref = safeUrl.replace(/[&<>"]/g, function(ch) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]; });
+                    return '<a class="dl-btn" href="' + safeHref + '" target="_blank" rel="noopener">⬇ Unduh: ' + safeName + '</a>';
                   }).join('');
                 }
               })
@@ -2716,7 +2720,7 @@ function buildBuiltInPaymentGatewayHTML(order) {
                 document.getElementById('waitOrderLabel').textContent = 'Order ID: ' + res.orderId;
                 document.getElementById('mayarPayAnchor').href = res.paymentUrl;
                 try { window.open(res.paymentUrl, '_blank', 'noopener'); } catch (err) {}
-                startStatusPolling(res.orderId);
+                startStatusPolling(res.orderId, res.statusToken || '');
               } else {
                 switchToQris(email, 'Gateway Mayar sedang menunggu aktivasi — silakan bayar cepat via QRIS resmi di bawah ini.');
               }
@@ -3594,8 +3598,10 @@ function sendToAiAssistant(rawText) {
   // 1. Live Order ID status check
   if (orderIdMatch && gasUrl) {
     const oid = orderIdMatch[0].toUpperCase();
+    const emailMatch = text.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i);
+    const emailQ = emailMatch ? `&email=${encodeURIComponent(emailMatch[0].toLowerCase())}` : '';
     const typingEl = addAiChatMessage('bot', `<em>${isEn ? 'Checking order' : 'Mengecek status pesanan'} ${escAiHtml(oid)}...</em>`, []);
-    fetch(`${gasUrl}?action=status&orderId=${encodeURIComponent(oid)}`)
+    fetch(`${gasUrl}?action=status&orderId=${encodeURIComponent(oid)}${emailQ}`)
       .then((r) => r.json())
       .then((st) => {
         if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
@@ -3606,14 +3612,21 @@ function sendToAiAssistant(rawText) {
           return;
         }
         if (st.status === 'PAID') {
-          const btns = (st.downloadLinks || []).map((d) => ({
-            label: (isEn ? '⬇ Download: ' : '⬇ Unduh: ') + String(d.name || 'File').slice(0, 32),
-            href: d.url,
-            primary: true
-          }));
-          addAiChatMessage('bot', isEn
-            ? `Order <code>${escAiHtml(oid)}</code> (<strong>${escAiHtml(st.productTitle)}</strong>) is <strong>PAID</strong>! Download your files below:`
-            : `Pesanan <code>${escAiHtml(oid)}</code> untuk <strong>${escAiHtml(st.productTitle)}</strong> sudah <strong>LUNAS (PAID)</strong>! Silakan unduh lewat tombol di bawah:`, btns);
+          const btns = (st.downloadLinks || [])
+            .filter((d) => /^https:\/\//i.test(String(d && d.url || '').trim()))
+            .map((d) => ({
+              label: (isEn ? '⬇ Download: ' : '⬇ Unduh: ') + String(d.name || 'File').slice(0, 32),
+              href: String(d.url).trim(),
+              primary: true
+            }));
+          const msgHtml = btns.length > 0
+            ? (isEn
+              ? `Order <code>${escAiHtml(oid)}</code> (<strong>${escAiHtml(st.productTitle)}</strong>) is <strong>PAID</strong>! Download your files below:`
+              : `Pesanan <code>${escAiHtml(oid)}</code> untuk <strong>${escAiHtml(st.productTitle)}</strong> sudah <strong>LUNAS (PAID)</strong>! Silakan unduh lewat tombol di bawah:`)
+            : (isEn
+              ? `Order <code>${escAiHtml(oid)}</code> (<strong>${escAiHtml(st.productTitle)}</strong>) is <strong>PAID</strong>! Download links were emailed to you — include your checkout email with <code>${escAiHtml(oid)}</code> here to unlock links directly.`
+              : `Pesanan <code>${escAiHtml(oid)}</code> untuk <strong>${escAiHtml(st.productTitle)}</strong> sudah <strong>LUNAS (PAID)</strong>! Link <code>.ZIP</code> dikirim ke email Anda — ketik <code>${escAiHtml(oid)} email@anda.com</code> jika ingin memunculkan link di sini.`);
+          addAiChatMessage('bot', msgHtml, btns);
         } else {
           addAiChatMessage('bot', isEn
             ? `Order <code>${escAiHtml(oid)}</code> is currently <strong>PENDING PAYMENT</strong>.`

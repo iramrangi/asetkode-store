@@ -123,7 +123,11 @@ Instagram Resmi | https://instagram.com/iramrangi_dev</textarea>
     }
     function safeUrl(u) {
       const s = String(u || '').trim();
-      return /^(https?:|mailto:)/i.test(s) ? s : '#';
+      return /^(https?:\/\/|mailto:)/i.test(s) ? s : '#';
+    }
+    function safeColor(c) {
+      const s = String(c || '').trim();
+      return /^(#[0-9a-f]{3}|#[0-9a-f]{6})$/i.test(s) ? s : '#4f46e5';
     }
     function getData() {
       const links = document.getElementById('inLinks').value.split(/\r?\n/).map((line) => {
@@ -135,7 +139,7 @@ Instagram Resmi | https://instagram.com/iramrangi_dev</textarea>
         role: document.getElementById('inRole').value.trim(),
         bio: document.getElementById('inBio').value.trim(),
         email: document.getElementById('inEmail').value.trim(),
-        color: document.getElementById('inColor').value || '#4f46e5',
+        color: safeColor(document.getElementById('inColor').value),
         links
       };
     }
