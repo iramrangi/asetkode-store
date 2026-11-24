@@ -1,6 +1,6 @@
 /* ==========================================================================
    DDEV DIGITAL STOREFRONT — MODERN COMMERCE EDITION
-   Design System: Indigo (#4f46e5) + Royal Blue (#2563eb) + Emerald (#059669)
+   Design System: Cobalt Blue (#1d4ed8) + Azure (#2563eb) + Emerald (#059669)
    ========================================================================== */
 
 :root {
@@ -18,11 +18,11 @@
 
   --border-color: #e2e8f0;
   --border-strong: #cbd5e1;
-  --border-hover: #4f46e5;
+  --border-hover: #1d4ed8;
 
-  --accent: #4f46e5;
+  --accent: #1d4ed8;
   --accent-fg: #ffffff;
-  --accent-soft: #eef2ff;
+  --accent-soft: #eff6ff;
 
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -52,11 +52,11 @@ html[data-theme="dark"] {
 
   --border-color: #1e293b;
   --border-strong: #334155;
-  --border-hover: #6366f1;
+  --border-hover: #3b82f6;
 
-  --accent: #6366f1;
+  --accent: #2563eb;
   --accent-fg: #ffffff;
-  --accent-soft: rgba(99, 102, 241, 0.16);
+  --accent-soft: rgba(37, 99, 235, 0.16);
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.7);
@@ -442,12 +442,12 @@ html[data-theme="dark"] .theme-icon-moon {
   padding: clamp(18px, 2.2vw, 26px) 0 clamp(16px, 2vw, 22px);
   border-bottom: 1px solid var(--border-color);
   background-color: var(--bg-surface);
-  background-image: radial-gradient(rgba(79, 70, 229, 0.1) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(29, 78, 216, 0.1) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 html[data-theme="dark"] .hero {
-  background-image: radial-gradient(rgba(165, 180, 252, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(147, 197, 253, 0.08) 1px, transparent 1px);
 }
 
 .hero-grid {
@@ -491,7 +491,7 @@ html[data-theme="dark"] .hero {
 }
 
 html[data-theme="dark"] .status-pill-badge {
-  color: #a5b4fc;
+  color: #93c5fd;
 }
 
 .pulse-dot {
@@ -517,7 +517,7 @@ html[data-theme="dark"] .status-pill-badge {
 
 html[data-theme="dark"] .hero-accent,
 html[data-theme="dark"] .gradient-text {
-  color: #818cf8;
+  color: #60a5fa;
 }
 
 .hero-desc {
@@ -635,12 +635,12 @@ html[data-theme="dark"] .mono-num.is-free {
   background: var(--accent);
   color: #ffffff;
   border-color: var(--accent);
-  box-shadow: 0 6px 16px -6px rgba(79, 70, 229, 0.45);
+  box-shadow: 0 6px 16px -6px rgba(29, 78, 216, 0.42);
 }
 
 .btn-primary:hover {
-  background: #4338ca;
-  border-color: #4338ca;
+  background: #1e40af;
+  border-color: #1e40af;
   transform: translateY(-1px);
 }
 
@@ -843,9 +843,9 @@ html[data-theme="dark"] .mono-num.is-free {
 /* ================= VIP BUNDLE BANNER ================= */
 .bundle-banner {
   margin-top: 14px;
-  background: linear-gradient(135deg, #0b0f19 0%, #1e1b4b 55%, #064e3b 100%);
+  background: linear-gradient(135deg, #0b0f19 0%, #1e3a8a 55%, #064e3b 100%);
   color: #ffffff;
-  border: 1px solid rgba(99, 102, 241, 0.35);
+  border: 1px solid rgba(59, 130, 246, 0.35);
   border-radius: var(--radius-lg);
   padding: clamp(14px, 2vw, 20px) clamp(18px, 3vw, 26px);
   display: flex;
@@ -944,7 +944,7 @@ html[data-theme="dark"] .mono-num.is-free {
   background: var(--accent);
   color: var(--accent-fg);
   border-color: var(--accent);
-  box-shadow: 0 6px 16px -4px rgba(79, 70, 229, 0.42);
+  box-shadow: 0 6px 16px -4px rgba(29, 78, 216, 0.36);
 }
 
 .toolbar-row {
@@ -1121,7 +1121,7 @@ html[data-theme="dark"] .mono-num.is-free {
 }
 
 html[data-theme="dark"] .card-eyebrow {
-  color: #a5b4fc;
+  color: #93c5fd;
 }
 
 .card-ver-tag {
@@ -1285,8 +1285,8 @@ html[data-theme="dark"] .btn-card-cart.in-cart {
 }
 
 .btn-card.buy:hover {
-  background: #4338ca;
-  border-color: #4338ca;
+  background: #1e40af;
+  border-color: #1e40af;
 }
 
 /* ================= INTERACTIVE MODALS & DRAWERS ================= */
@@ -2244,7 +2244,7 @@ html[data-theme="dark"] .ai-chat-launcher {
 
 .ai-chat-head {
   padding: 13px 16px;
-  background: linear-gradient(135deg, #0b1020 0%, #312e81 100%);
+  background: linear-gradient(135deg, #0b1020 0%, #1e3a8a 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -2290,7 +2290,7 @@ html[data-theme="dark"] .ai-chat-launcher {
 
 .ai-msg-user {
   align-self: flex-end;
-  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+  background: #1d4ed8;
   color: #ffffff;
   border-bottom-right-radius: 4px;
 }
@@ -2456,7 +2456,7 @@ html[data-theme="dark"] .ai-chat-launcher {
 /* ================= DARK VALUE & HOW-TO-ORDER BAND ================= */
 .dark-showcase-band {
   background:
-    radial-gradient(ellipse 65% 55% at 15% 10%, rgba(79, 70, 229, 0.2), transparent 60%),
+    radial-gradient(ellipse 65% 55% at 15% 10%, rgba(37, 99, 235, 0.18), transparent 60%),
     radial-gradient(ellipse 55% 50% at 88% 85%, rgba(16, 185, 129, 0.14), transparent 55%),
     #0b0f19;
   color: #f8fafc;
@@ -2488,7 +2488,7 @@ html[data-theme="dark"] .ai-chat-launcher {
 .dark-showcase-band .step-card:hover,
 .dark-showcase-band .custom-service-banner:hover {
   background: rgba(255, 255, 255, 0.075);
-  border-color: rgba(99, 102, 241, 0.55);
+  border-color: rgba(59, 130, 246, 0.55);
 }
 
 .dark-showcase-band .bento-box h3,
@@ -2508,9 +2508,9 @@ html[data-theme="dark"] .ai-chat-launcher {
   display: inline-block;
   padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(99, 102, 241, 0.16);
-  border: 1px solid rgba(165, 180, 252, 0.28);
-  color: #a5b4fc !important;
+  background: rgba(37, 99, 235, 0.18);
+  border: 1px solid rgba(147, 197, 253, 0.3);
+  color: #93c5fd !important;
   margin-bottom: 10px;
 }
 
@@ -2521,12 +2521,12 @@ html[data-theme="dark"] .ai-chat-launcher {
 }
 
 .dark-showcase-band .custom-service-banner {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.18) 0%, rgba(16, 185, 129, 0.1) 100%);
-  border-color: rgba(129, 140, 248, 0.36);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(16, 185, 129, 0.1) 100%);
+  border-color: rgba(96, 165, 250, 0.36);
 }
 
 .dark-showcase-band .custom-service-banner > div > div:first-child {
-  color: #818cf8 !important;
+  color: #60a5fa !important;
 }
 
 .faq-section-wrap {
@@ -2672,7 +2672,7 @@ html[data-theme="dark"] .ai-chat-launcher {
   margin-top: 0;
   margin-bottom: 16px;
   background:
-    radial-gradient(ellipse 55% 60% at 96% 8%, rgba(79, 70, 229, 0.06), transparent 65%),
+    radial-gradient(ellipse 55% 60% at 96% 8%, rgba(29, 78, 216, 0.06), transparent 65%),
     var(--bg-surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-xl);
@@ -2781,7 +2781,7 @@ html[data-theme="dark"] .ai-chat-launcher {
   border-radius: 999px;
   background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(79, 70, 229, 0.22);
+  border: 1px solid rgba(29, 78, 216, 0.22);
 }
 
 .spotlight-pill.is-new {
@@ -2791,8 +2791,8 @@ html[data-theme="dark"] .ai-chat-launcher {
 }
 
 html[data-theme="dark"] .spotlight-pill {
-  color: #a5b4fc;
-  border-color: rgba(165, 180, 252, 0.3);
+  color: #93c5fd;
+  border-color: rgba(147, 197, 253, 0.3);
 }
 
 html[data-theme="dark"] .spotlight-pill.is-new {
@@ -3052,7 +3052,7 @@ html[data-theme="dark"] .spotlight-metric-val.is-price {
   border-radius: 999px;
   background: var(--bg-surface);
   color: var(--accent);
-  border: 1px solid rgba(79, 70, 229, 0.25);
+  border: 1px solid rgba(29, 78, 216, 0.25);
   margin-bottom: 14px;
 }
 

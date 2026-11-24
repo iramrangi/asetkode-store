@@ -16,7 +16,7 @@ Single source of visual truth for `https://asetkode-store.pages.dev/` (`/` ID & 
 | `--border-color` / `--border-strong` | `#e2e8f0` / `#cbd5e1` | `#1e293b` / `#334155` | 1px hairlines & button strokes |
 | `--text-primary` | `#0b0f19` | `#f8fafc` | Headings, active copy |
 | `--text-secondary` / `--text-muted` | `#475569` / `#4b5563` | `#cbd5e1` / `#94a3b8` | Descriptions, metadata (`>= 4.5:1`) |
-| `--accent` / `--accent-soft` | `#4f46e5` / `#eef2ff` | `#6366f1` / `rgba(99,102,241,.16)` | Primary brand Indigo & active pills (`#a5b4fc` pill text in dark) |
+| `--accent` / `--accent-soft` | `#1d4ed8` / `#eff6ff` | `#2563eb` / `rgba(37,99,235,.16)` | Primary Cobalt Blue & active pills (`#93c5fd` pill text in dark) |
 | Price / Free MIT Emerald | `#047857` / `#065f46` | `#34d399` / `#6ee7b7` | Prices, `.is-free` stat, `.spotlight-pill.is-new`, MIT badges |
 | Promo / Dark Band Ink | `#b45309 -> #9a3412` pill | `#0b0f19` band / `#cbd5e1` copy | Top announcement pill (`>= 5.02:1`), `.dark-showcase-band` |
 
