@@ -2242,15 +2242,23 @@ window.openDetailById = function (productId) {
                 ${disp.isEn ? 'Buy &amp; Download' : 'Beli &amp; Download'}
               </button>
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" data-act="toggle-wishlist-detail" data-id="${prod.id}">
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-bottom:12px;">
+              <button type="button" class="btn btn-ghost" style="padding:8px 8px; font-size:0.76rem;" data-act="toggle-cart" data-id="${prod.id}">
+                ${cartState.some((c) => c.id === prod.id) ? (disp.isEn ? '✓ In Cart' : '✓ Di Keranjang') : (disp.isEn ? '+ Add Cart' : '+ Keranjang')}
+              </button>
+              <button type="button" class="btn btn-ghost" style="padding:8px 8px; font-size:0.76rem;" data-act="toggle-wishlist-detail" data-id="${prod.id}">
                 ${wishlistState.includes(prod.id) ? (disp.isEn ? '♥ Saved' : '♥ Disimpan') : (disp.isEn ? '♡ Save' : '♡ Simpan')}
               </button>
-              <button type="button" class="btn btn-ghost" style="padding:8px 10px; font-size:0.78rem;" data-act="copy-link" data-id="${prod.id}">
+              <button type="button" class="btn btn-ghost" style="padding:8px 8px; font-size:0.76rem;" data-act="copy-link" data-id="${prod.id}">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                <span>${disp.isEn ? 'Copy Link' : 'Salin Link'}</span>
+                <span>${disp.isEn ? 'Copy' : 'Salin'}</span>
               </button>
             </div>
+            <ul style="list-style:none; border-top:1px solid var(--border-color); padding-top:10px; display:grid; gap:4px; font-size:0.74rem; color:var(--text-secondary);">
+              <li>✓ ${disp.isEn ? 'Full .ZIP &amp; setup guide delivered to your email' : 'File .ZIP lengkap &amp; panduan dikirim ke email'}</li>
+              <li>✓ ${disp.isEn ? '100% open source code (unencrypted, commercial rights)' : '100% kode sumber terbuka (bebas enkripsi, lisensi komersial)'}</li>
+              <li>✓ ${disp.isEn ? 'Installation help &amp; bug fix guarantee' : 'Gratis bantuan instalasi &amp; garansi file berjalan'}</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -2369,8 +2377,8 @@ function updateCartUI() {
 
   if (hintEl) {
     hintEl.textContent = isEn
-      ? `✓ Transparent individual pricing (${cartState.length} ${cartState.length === 1 ? 'item' : 'items'})`
-      : `✓ Harga satuan transparan (${cartState.length} produk)`;
+      ? `✓ Transparent pricing (${cartState.length} ${cartState.length === 1 ? 'item' : 'items'}) • .ZIP & license delivered via email`
+      : `✓ Harga satuan transparan (${cartState.length} produk) • File .ZIP dikirim via email setelah lunas`;
   }
 
   if (totalEl) totalEl.textContent = fmtTotal(finalTotal);
@@ -2887,7 +2895,7 @@ function applyStorefrontLocaleUI() {
   if (cartSpan) cartSpan.textContent = isEn ? 'Cart' : 'Keranjang';
 
   const heroStatusText = document.getElementById('heroStatusText');
-  if (heroStatusText) heroStatusText.textContent = isEn ? 'Try Live Demo in Browser • Global USD Checkout Ready' : 'Coba Aplikasi di Browser • Order Cepat via Email';
+  if (heroStatusText) heroStatusText.textContent = isEn ? 'Try Live Demo in Browser • Instant Polar.sh Card / PayPal + .ZIP' : 'Coba Live Demo • Checkout QRIS & Kirim .ZIP Otomatis';
 
   setLocalizedInner(
     document.querySelector('.hero-title'),
@@ -3687,7 +3695,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn.closest('#detailModal')) window.closeModal('detailModal');
       window.openInstantCheckoutById(id);
     } else if (act === 'toggle-cart') {
+      const fromDetail = Boolean(btn.closest('#detailModal'));
+      if (fromDetail && !cartState.some((c) => c.id === id)) window.closeModal('detailModal');
       window.toggleCartItemById(id);
+      if (fromDetail && document.getElementById('detailModal')?.classList.contains('open')) window.openDetailById(id);
     } else if (act === 'copy-link') {
       window.copyProductLinkById(id);
     } else if (act === 'remove-cart') {
