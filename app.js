@@ -3758,10 +3758,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeCartBtn) closeCartBtn.addEventListener('click', () => closeModal('cartBackdrop'));
 
   const cartBackdrop = document.getElementById('cartBackdrop');
-  if (cartBackdrop) cartBackdrop.addEventListener('click', () => closeModal('cartBackdrop'));
-
-  const cartDrawer = document.getElementById('cartDrawer');
-  if (cartDrawer) cartDrawer.addEventListener('click', (e) => e.stopPropagation());
+  if (cartBackdrop) {
+    cartBackdrop.addEventListener('click', (e) => {
+      if (e.target === cartBackdrop) closeModal('cartBackdrop');
+    });
+  }
 
   const checkoutCartBtn = document.getElementById('checkoutCartBtn');
   if (checkoutCartBtn) {
