@@ -1608,6 +1608,9 @@ function renderProductsGrid() {
     .join('');
   renderCatalogPagination(totalItems, totalPages, startIdx, pagedList.length);
   renderFeaturedCarousel();
+  if (typeof window.observeMotionTargets === 'function') {
+    window.observeMotionTargets('#productGrid .product-card');
+  }
 }
 
 function renderCatalogPagination(totalItems, totalPages, startIdx, pageCount) {
@@ -3758,6 +3761,58 @@ function initAiAssistantWidget() {
   }
 }
 
+let ddevMotionObserver = null;
+
+function initMotionSystem() {
+  const nav = document.querySelector('.navbar');
+  if (nav) {
+    const syncNavScroll = () => {
+      nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    };
+    window.addEventListener('scroll', syncNavScroll, { passive: true });
+    syncNavScroll();
+  }
+
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) return;
+
+  document.documentElement.classList.add('has-motion');
+  ddevMotionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        ddevMotionObserver.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.06, rootMargin: '0px 0px -24px 0px' }
+  );
+
+  window.observeMotionTargets('.bento-box, .step-card, .custom-service-banner, .faq-item, #productGrid .product-card');
+}
+
+window.observeMotionTargets = function (selector) {
+  const nodes = document.querySelectorAll(selector);
+  if (!nodes.length) return;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !ddevMotionObserver) {
+    nodes.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+  const vh = window.innerHeight || 900;
+  nodes.forEach((el, idx) => {
+    if (el.classList.contains('is-visible')) return;
+    el.classList.add('reveal-item');
+    el.style.setProperty('--reveal-delay', `${Math.min((idx % 4) * 45, 180)}ms`);
+    const rect = el.getBoundingClientRect();
+    if (rect.top < vh * 0.96) {
+      requestAnimationFrame(() => el.classList.add('is-visible'));
+    } else {
+      ddevMotionObserver.observe(el);
+    }
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   applySiteBranding();
   initThemeToggle();
@@ -3766,9 +3821,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   loadCartFromStorage();
   loadWishlistFromStorage();
-  applyStorefrontLocaleUI();
   initBackToTopAndSavedBtn();
   initAiAssistantWidget();
+  initMotionSystem();
+  applyStorefrontLocaleUI();
   syncFromBloggerCloud();
   try {
     const deepProd = new URLSearchParams(window.location.search).get('product');
