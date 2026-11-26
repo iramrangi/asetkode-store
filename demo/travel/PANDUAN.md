@@ -1,6 +1,6 @@
 # Panduan NusantaraVoyage Pro — Website Agen Travel, Katalog Paket Wisata & Booking E-Voucher
 
-Dikembangkan oleh **Ddev Studio** ([https://asetkode.blogspot.com](https://asetkode.blogspot.com))
+Dikembangkan oleh **Ddev Kit** ([https://asetkode.blogspot.com](https://asetkode.blogspot.com))
 
 Website agen perjalanan siap pakai & komersial untuk biro tour & travel (**Open Trip**, **Private Tour**, **Honeymoon**, **Halal Tour**, hingga **Corporate Gathering**). Berbasis **HTML5, CSS3, dan Vanilla JavaScript (100% Zero-Config & Offline-Ready)** — berjalan langsung di browser tanpa server PHP/Node.js, tanpa database eksternal, dan tanpa ketergantungan link gambar luar.
 

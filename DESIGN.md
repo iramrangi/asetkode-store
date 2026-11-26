@@ -1,4 +1,4 @@
-# Ddev Studio Storefront — `DESIGN.md`
+# Ddev Kit Storefront — `DESIGN.md`
 
 Single source of visual truth for `https://asetkode-store.pages.dev/` (`/` ID & `/en/` Global USD). Synced with [styles.css](./styles.css).
 

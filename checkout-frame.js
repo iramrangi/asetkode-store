@@ -125,7 +125,7 @@
             }
           })
           .catch(function () {
-            switchToQris(email, 'Silakan selesaikan pembayaran cepat via QRIS Ddev Studio di bawah ini.');
+            switchToQris(email, 'Silakan selesaikan pembayaran cepat via QRIS Ddev Kit di bawah ini.');
           });
       });
     }

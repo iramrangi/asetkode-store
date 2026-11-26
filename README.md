@@ -1,11 +1,11 @@
-# Ddev Studio — Ready-to-Use Web Apps, Source Codes & Automation Scripts
+# Ddev Kit — Ready-to-Use Web Apps, Source Codes & Automation Scripts
 
 [![Storefront ID](https://img.shields.io/badge/Storefront_ID-asetkode--store.pages.dev-111827?style=for-the-badge)](https://asetkode-store.pages.dev/)
 [![Global Store EN/USD](https://img.shields.io/badge/Global_EN_%2F_USD-asetkode--store.pages.dev%2Fen%2F-4f46e5?style=for-the-badge)](https://asetkode-store.pages.dev/en/)
 
-**Ddev Studio** adalah marketplace source code aplikasi web, tema Blogger XML, sistem kasir POS, dan skrip otomatisasi Python siap pakai — lengkap dengan **Interactive Live Demo** langsung di browser sebelum membeli.
+**Ddev Kit** adalah marketplace source code aplikasi web, tema Blogger XML, sistem kasir POS, dan skrip otomatisasi Python siap pakai — lengkap dengan **Interactive Live Demo** langsung di browser sebelum membeli.
 
-**Ddev Studio (Global):** Marketplace of **25 production-ready web apps, PHP & JavaScript source codes, Blogger XML themes, and Python automation tools**. Every product includes an interactive live sandbox, 100% unencrypted source code, bilingual documentation (`EN + ID`), and a Personal & Commercial license with instant `.ZIP` email delivery via **Polar.sh** (`$7 – $25 USD`) or Indonesian **QRIS** (`Rp 39.000 – Rp 169.000`).
+**Ddev Kit (Global):** Marketplace of **25 production-ready web apps, PHP & JavaScript source codes, Blogger XML themes, and Python automation tools**. Every product includes an interactive live sandbox, 100% unencrypted source code, bilingual documentation (`EN + ID`), and a Personal & Commercial license with instant `.ZIP` email delivery via **Polar.sh** (`$7 – $25 USD`) or Indonesian **QRIS** (`Rp 39.000 – Rp 169.000`).
 
 ---
 

@@ -1,4 +1,4 @@
-# Ddev Studio Storefront
+# Ddev Kit Storefront
 
 > Marketplace of 26 commercial web applications, Laravel 12 MVC systems, PHP 8 + MySQL apps, Python automation scripts, Blogger XML themes, and 12 MIT-licensed free developer tools with interactive browser live demos.
 

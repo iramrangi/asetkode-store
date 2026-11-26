@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Ddev Studio — Universal ?lang=en Live Demo Localizer
+   Ddev Kit — Universal ?lang=en Live Demo Localizer
    Activates ONLY when URL contains ?lang=en (zero impact on Indonesian view)
    ========================================================================== */
 (function () {

@@ -216,9 +216,9 @@
     document.getElementById('freeSearch').placeholder = isEn ? 'Search free products...' : 'Cari produk gratis...';
     document.getElementById('bannerTitle').textContent = isEn ? 'Need Full Production Business Software?' : 'Butuh Sistem Siap Bisnis Skala Penuh?';
     document.getElementById('bannerSub').textContent = isEn
-      ? 'If these 12 open-source products help your workflow, explore 26 unlocked Ddev Studio commercial source codes (Travel Booking, POS Cashier, HRIS Laravel, Invoicing, & Blogger Themes).'
-      : 'Jika 12 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 26 aplikasi bisnis & source code lengkap Ddev Studio (Web Travel, Kasir POS Excel, HRIS Laravel, E-Commerce, Antrian, dan Tema Blogger).';
-    document.getElementById('bannerBtn').textContent = isEn ? 'Open Full Ddev Studio Catalog →' : 'Buka Katalog Lengkap Ddev Studio →';
+      ? 'If these 12 open-source products help your workflow, explore 26 unlocked Ddev Kit commercial source codes (Travel Booking, POS Cashier, HRIS Laravel, Invoicing, & Blogger Themes).'
+      : 'Jika 12 koleksi open source gratis di atas bermanfaat untuk Anda, lihat juga 26 aplikasi bisnis & source code lengkap Ddev Kit (Web Travel, Kasir POS Excel, HRIS Laravel, E-Commerce, Antrian, dan Tema Blogger).';
+    document.getElementById('bannerBtn').textContent = isEn ? 'Open Full Ddev Kit Catalog →' : 'Buka Katalog Lengkap Ddev Kit →';
     document.getElementById('bannerBtn').href = isEn ? '../en/' : '../';
 
     const q = searchQ.toLowerCase().trim();

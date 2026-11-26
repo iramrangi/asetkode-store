@@ -1,4 +1,4 @@
-# Ddev Studio Robots Policy
+# Ddev Kit Robots Policy
 User-agent: *
 Allow: /
 

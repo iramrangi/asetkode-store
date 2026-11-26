@@ -1,5 +1,5 @@
 /**
- * Ddev Studio Headless Storefront — Pure Monochrome (Hitam Putih) Edition
+ * Ddev Kit Headless Storefront — Pure Monochrome (Hitam Putih) Edition
  * - Auto-syncs products from https://asetkode.blogspot.com/ via JSONP (zero CORS issues)
  * - Built-in Interactive Live Demo Simulator (Desktop / Tablet / Mobile viewports)
  * - Multi-item Shopping Cart with transparent individual unit pricing
@@ -9,7 +9,7 @@
 // ================= 0. CENTRALIZED SITE & BRAND CONFIGURATION =================
 // Ubah konfigurasi di bawah ini saat ganti nama brand, pasang domain baru, atau aktifkan payment gateway.
 const SITE_CONFIG = {
-  brandName: 'Ddev Studio',
+  brandName: 'Ddev Kit',
   brandBadge: 'STORE',
   orderEmail: 'dekamayooo@gmail.com',
   paymentMode: 'mayar', // otomatis membuka link Mayar bila tersedia di data-payment-url, atau fallback email jika masih mailto:
@@ -1684,7 +1684,7 @@ window.openCustomConsultModal = function () {
       <div>
         <label for="custConsultType" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px;">${isEn ? 'Project Type' : 'Jenis Kebutuhan'}</label>
         <select id="custConsultType" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-primary);">
-          <option value="${isEn ? 'Customize Existing Ddev Studio App' : 'Modifikasi Aplikasi Ddev Studio'}">${isEn ? 'Customize Existing Ddev Studio App' : 'Modifikasi Aplikasi Ddev Studio (Logo/Fitur)'}</option>
+          <option value="${isEn ? 'Customize Existing Ddev Kit App' : 'Modifikasi Aplikasi Ddev Kit'}">${isEn ? 'Customize Existing Ddev Kit App' : 'Modifikasi Aplikasi Ddev Kit (Logo/Fitur)'}</option>
           <option value="${isEn ? 'Build Custom Web / POS / Booking App' : 'Pembuatan Sistem Web / POS / Travel Baru'}">${isEn ? 'Build Custom Web / POS / Booking App' : 'Pembuatan Sistem Web / POS / Travel Baru'}</option>
           <option value="${isEn ? 'Custom Blogger XML Theme / Integration' : 'Integrasi Payment Gateway / API / Blogger'}">${isEn ? 'Custom Blogger XML Theme / API Integration' : 'Integrasi Payment Gateway / API / Blogger'}</option>
         </select>
@@ -1709,10 +1709,10 @@ window.openCustomConsultModal = function () {
     const ct = (document.getElementById('custConsultContact')?.value || '').trim() || '-';
     const tp = document.getElementById('custConsultType')?.value || 'Custom Project';
     const nt = (document.getElementById('custConsultNotes')?.value || '').trim() || '-';
-    const subj = `Custom Project Inquiry: ${tp} - Ddev Studio`;
+    const subj = `Custom Project Inquiry: ${tp} - Ddev Kit`;
     const body = isEn
-      ? `Hi Ddev Studio Team,\n\nI would like to request a custom project:\n- Name: ${nm}\n- Contact: ${ct}\n- Type: ${tp}\n- Details:\n${nt}\n\nLooking forward to your quote and timeline.`
-      : `Halo Tim Ddev Studio,\n\nSaya ingin konsultasi pembuatan/modifikasi custom project:\n- Nama: ${nm}\n- Kontak: ${ct}\n- Jenis Kebutuhan: ${tp}\n- Detail Kebutuhan:\n${nt}\n\nMohon info estimasi biaya dan waktu pengerjaannya. Terima kasih!`;
+      ? `Hi Ddev Kit Team,\n\nI would like to request a custom project:\n- Name: ${nm}\n- Contact: ${ct}\n- Type: ${tp}\n- Details:\n${nt}\n\nLooking forward to your quote and timeline.`
+      : `Halo Tim Ddev Kit,\n\nSaya ingin konsultasi pembuatan/modifikasi custom project:\n- Nama: ${nm}\n- Kontak: ${ct}\n- Jenis Kebutuhan: ${tp}\n- Detail Kebutuhan:\n${nt}\n\nMohon info estimasi biaya dan waktu pengerjaannya. Terima kasih!`;
     return { subj, body };
   };
 
@@ -2574,7 +2574,7 @@ function buildEmailOrderHTML(order) {
     </div>
     <div class="note">Format pesan &amp; subjek order sudah terisi otomatis.</div>
   </div>
-  <script src="${esc(new URL(resolveStoreAssetUrl('checkout-frame.js?v=20261124k'), (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/')).href)}"></script>
+  <script src="${esc(new URL(resolveStoreAssetUrl('checkout-frame.js?v=20261126a'), (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/')).href)}"></script>
 </body></html>`;
 }
 
@@ -2589,7 +2589,7 @@ function buildBuiltInPaymentGatewayHTML(order) {
   const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE_CONFIG.orderEmail)}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(baseBody + 'Mohon kirimkan file .ZIP ke email ini. Terima kasih!')}`;
   const baseOrigin = (typeof window !== 'undefined' && window.location ? window.location.href : 'https://asetkode-store.pages.dev/');
   const qrisAbsUrl = new URL(resolveStoreAssetUrl('qris-ddev-studio.jpg'), baseOrigin).href;
-  const frameJsUrl = new URL(resolveStoreAssetUrl('checkout-frame.js?v=20261124k'), baseOrigin).href;
+  const frameJsUrl = new URL(resolveStoreAssetUrl('checkout-frame.js?v=20261126a'), baseOrigin).href;
   const gasUrl = String(SITE_CONFIG.gasWebAppUrl || '').trim();
   const basePriceNum = parsePriceNum(order.price);
   const orderItems = Array.isArray(order.items) && order.items.length
@@ -2659,7 +2659,7 @@ function buildBuiltInPaymentGatewayHTML(order) {
           <div class="price">${esc(order.price)}</div>
           <div id="qrisReasonAlert" class="alert"></div>
           <div class="qris-box">
-            <img src="${esc(qrisAbsUrl)}" alt="QRIS Ddev Studio" width="240" height="240" />
+            <img src="${esc(qrisAbsUrl)}" alt="QRIS Ddev Kit" width="240" height="240" />
           </div>
           <input type="email" id="buyerEmail" aria-label="Email penerima file ZIP" autocomplete="email" inputmode="email" placeholder="Masukkan Email penerima file (.ZIP) Anda" />
           <a id="qrisGmailBtn" class="btn btn-dark" href="${esc(gmailHref)}" target="_blank" rel="noopener">Sudah Scan Bayar? Konfirmasi via Gmail ↗</a>
@@ -2969,7 +2969,7 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(
     document.getElementById('keunggulan'),
     isEn,
-    '<div class="section-header"><h2>Why Ddev Studio?</h2></div><div class="bento-grid">' +
+    '<div class="section-header"><h2>Why Ddev Kit?</h2></div><div class="bento-grid">' +
     '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">01 / LIVE DEMO</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Test Before Buying</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Preview Desktop &amp; Mobile workflows live in browser.</p></div>' +
     '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">02 / PAY PER APP</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">Transparent Individual Pricing</h3><p style="font-size:0.83rem; color:var(--text-secondary);">Buy only the tools you need from $7 USD with lifetime access.</p></div>' +
     '<div class="bento-box"><div style="font-family:var(--font-mono); font-size:0.74rem; font-weight:800; margin-bottom:6px; color:var(--text-muted);">03 / UNLOCKED .ZIP</div><h3 style="font-size:0.96rem; font-weight:800; margin-bottom:4px;">100% Open &amp; Licensed</h3><p style="font-size:0.83rem; color:var(--text-secondary);">No obfuscation, includes sample data &amp; commercial rights.</p></div></div>'
@@ -3008,7 +3008,7 @@ function applyStorefrontLocaleUI() {
   setLocalizedInner(document.querySelector('.site-footer .footer-grid > div:nth-child(2) h3, .site-footer .footer-grid > div:nth-child(2) h4'), isEn, 'Quick Links');
   const fLinks1 = document.querySelectorAll('.site-footer .footer-grid > div:nth-child(2) a');
   if (fLinks1[0]) fLinks1[0].textContent = isEn ? 'Product Catalog' : 'Katalog Produk';
-  if (fLinks1[1]) fLinks1[1].textContent = isEn ? 'Why Ddev Studio' : 'Keunggulan Toko';
+  if (fLinks1[1]) fLinks1[1].textContent = isEn ? 'Why Ddev Kit' : 'Keunggulan Toko';
   if (fLinks1[2]) fLinks1[2].textContent = isEn ? 'How to Order' : 'Cara Pemesanan';
   if (fLinks1[3]) fLinks1[3].textContent = 'FAQ';
   if (fLinks1[4] && fLinks1[4].hasAttribute('data-blogger-link')) {
@@ -3048,7 +3048,7 @@ function applyStorefrontLocaleUI() {
     if (h3) h3.textContent = isEn ? 'Need Custom Software or Tailored Features?' : 'Butuh Custom Program atau Modifikasi Fitur Khusus?';
     if (p) p.textContent = isEn
       ? 'Our team can customize branding, integrate APIs, or build bespoke web systems for your business.'
-      : 'Tim Ddev Studio siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.';
+      : 'Tim Ddev Kit siap bantu penyesuaian logo, domain, atau pembuatan sistem web khusus bisnis Anda.';
     if (a) {
       const txtEl = a.querySelector('.custom-order-text');
       if (txtEl) txtEl.textContent = isEn ? 'Request Custom Project' : 'Konsultasi Custom Project';
@@ -3064,7 +3064,7 @@ function applyStorefrontLocaleUI() {
   const aiLauncherLbl = document.getElementById('aiLauncherLabel');
   if (aiLauncherLbl) aiLauncherLbl.textContent = isEn ? 'AI Assistant' : 'Asisten AI';
   const aiHeadTitle = document.getElementById('aiHeadTitle');
-  if (aiHeadTitle) aiHeadTitle.textContent = isEn ? 'Ddev Studio AI Assistant' : 'Asisten AI Ddev Studio';
+  if (aiHeadTitle) aiHeadTitle.textContent = isEn ? 'Ddev Kit AI Assistant' : 'Asisten AI Ddev Kit';
   const aiHeadSub = document.getElementById('aiHeadSub');
   if (aiHeadSub) aiHeadSub.textContent = isEn ? 'Product Finder, Live Demos & USD Checkout' : 'Bantu Pilih Produk, Demo & Cara Bayar';
   const aiIn = document.getElementById('aiChatInput');
@@ -3293,7 +3293,7 @@ function buildStorefrontAiFallback(userText) {
     return {
       html: isEn
         ? 'Global buyers pay securely in <strong>USD</strong> via <strong>Polar.sh</strong> (Visa, Mastercard, Apple Pay). Click <strong>Buy Now</strong> or checkout from your Cart, and your Google Drive <code>.ZIP</code> link is delivered automatically after payment.'
-        : 'Pembayaran bisa lewat:<br/>&#8226; <strong>Indonesia (IDR):</strong> Scan <strong>QRIS Ddev Studio</strong> (DANA, GoPay, OVO, ShopeePay, m-Banking) lewat tombol <strong>Beli Instan</strong> + konfirmasi email (gateway otomatis Mayar juga disiapkan).<br/>&#8226; <strong>Global (USD):</strong> Kartu/Apple Pay otomatis via <strong>Polar.sh</strong>.',
+        : 'Pembayaran bisa lewat:<br/>&#8226; <strong>Indonesia (IDR):</strong> Scan <strong>QRIS Ddev Kit</strong> (DANA, GoPay, OVO, ShopeePay, m-Banking) lewat tombol <strong>Beli Instan</strong> + konfirmasi email (gateway otomatis Mayar juga disiapkan).<br/>&#8226; <strong>Global (USD):</strong> Kartu/Apple Pay otomatis via <strong>Polar.sh</strong>.',
       actions: []
     };
   }
@@ -3302,8 +3302,8 @@ function buildStorefrontAiFallback(userText) {
   if (/(bundle|bundling|vip|hemat|diskon|discount|promo|249|\$49|all\s+2[45]|2[45]\s+produk|berapa\s+harga|kisaran\s+harga|daftar\s+harga|paling\s+murah|termurah|cheapest|price\s+range|how\s+much)/i.test(q)) {
     return {
       html: isEn
-        ? 'All 25 products at <strong>Ddev Studio</strong> are sold individually at transparent unit prices ranging from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access, commercial license — no bundle packages). Pick any tool you need from the catalog!'
-        : 'Seluruh 25 produk di <strong>Ddev Studio</strong> dijual dengan <strong>harga satuan transparan mulai Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa paket bundling & tanpa biaya langganan). Silakan pilih langsung produk yang sesuai kebutuhan Anda!',
+        ? 'All 25 products at <strong>Ddev Kit</strong> are sold individually at transparent unit prices ranging from <strong>$7 to $25 USD</strong> (one-time payment, lifetime access, commercial license — no bundle packages). Pick any tool you need from the catalog!'
+        : 'Seluruh 25 produk di <strong>Ddev Kit</strong> dijual dengan <strong>harga satuan transparan mulai Rp 39.000 hingga Rp 169.000</strong> (sekali bayar selamanya, tanpa paket bundling & tanpa biaya langganan). Silakan pilih langsung produk yang sesuai kebutuhan Anda!',
       actions: [{
         label: isEn ? '📋 Browse Catalog' : '📋 Lihat Katalog Produk',
         primary: true,
@@ -3363,7 +3363,7 @@ function buildStorefrontAiFallback(userText) {
     return {
       html: (isEn
         ? `Here are our top-selling tools right now:<br/><br/>${listHtml}<br/><br/>Tell me what you want to build (e.g. <em>POS cashier, Python scraper, admin dashboard, or booking app</em>) for a tailored pick!`
-        : `Berikut beberapa produk unggulan <strong>Ddev Studio</strong>:<br/><br/>${listHtml}<br/><br/>Sebutkan kebutuhan Anda (misalnya <em>kasir toko, web UMKM, absensi QR, antrian, atau bot Python</em>) agar saya pilihkan yang paling pas!`),
+        : `Berikut beberapa produk unggulan <strong>Ddev Kit</strong>:<br/><br/>${listHtml}<br/><br/>Sebutkan kebutuhan Anda (misalnya <em>kasir toko, web UMKM, absensi QR, antrian, atau bot Python</em>) agar saya pilihkan yang paling pas!`),
       actions: acts
     };
   }
@@ -3576,8 +3576,8 @@ function toggleAiChatWindow(forceOpen) {
     addAiChatMessage(
       'bot',
       isEn
-        ? 'Hi! I\'m the <strong>Ddev Studio AI Assistant</strong>. Ask me to recommend an app, check individual USD pricing ($7–$25), or explain <strong>USD checkout via Polar.sh</strong>.'
-        : 'Halo! Saya <strong>Asisten AI Ddev Studio</strong>. Saya bisa bantu carikan source code yang pas, cek harga satuan, jelaskan cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
+        ? 'Hi! I\'m the <strong>Ddev Kit AI Assistant</strong>. Ask me to recommend an app, check individual USD pricing ($7–$25), or explain <strong>USD checkout via Polar.sh</strong>.'
+        : 'Halo! Saya <strong>Asisten AI Ddev Kit</strong>. Saya bisa bantu carikan source code yang pas, cek harga satuan, jelaskan cara bayar <strong>QRIS / Polar.sh</strong>, atau cek status <strong>Order ID (<code>DDV-...</code>)</strong>.',
       []
     );
   }
